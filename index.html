@@ -124,7 +124,7 @@
     }
     .section-header-left { max-width: 520px; }
     .cards-grid {
-      display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px;
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
     }
     .exp-card {
       border-radius: var(--radius); overflow: hidden;
@@ -140,8 +140,9 @@
       background-size: cover !important; background-position: center !important;
     }
     .exp-card:hover .card-img-bg { transform: scale(1.06); }
-    .ci-kayak  { background: url('images/scorpion-islet-beach-1.PNG') center center / cover no-repeat; }
-    .ci-sunset { background: url('images/golden-hour-7.JPG') center center / cover no-repeat; }
+    .ci-golden-mirror { background: url('images/golden-hour-hero.JPG') center 55% / cover no-repeat; }
+    .ci-scorpios      { background: url('images/scorpios-secret-island-scene-1.png') center 40% / cover no-repeat; }
+    .ci-tabledeau     { background: url('images/table-deau-two-couples.png') center 38% / cover no-repeat; }
     .card-badge {
       position: absolute; top: 16px; left: 16px;
       background: rgba(8,16,12,0.7); backdrop-filter: blur(8px);
@@ -394,7 +395,8 @@
     /* RESPONSIVE */
     @media (max-width: 960px) {
       .intro-strip-inner { grid-template-columns: repeat(3,1fr); padding: 0 24px; }
-      .cards-grid, .reviews-grid { grid-template-columns: 1fr; }
+      .cards-grid { grid-template-columns: 1fr; }
+      .reviews-grid { grid-template-columns: 1fr; }
       .bay-grid, .about-grid { grid-template-columns: 1fr; gap: 48px; }
       .booking-inner { flex-direction: column; transform: translateY(-14px); }
       .booking-field { border-right: none; border-bottom: 1px solid var(--border-w); }
@@ -431,7 +433,7 @@
   <div class="hero-overlay"></div>
   <div class="hero-content">
     <span class="hero-eyebrow">Savannes Bay · Micoud · Saint Lucia</span>
-    <h1 class="hero-title">Where the<br/><em>mangroves</em><br/>meet the sea</h1>
+    <h1 class="hero-title">Where Nature Whispers<br/>and <em>Souls Listen</em></h1>
     <span class="hero-tagline tagline">Nature Whispers · Souls Listen</span>
     <p class="hero-sub">Guided eco-kayak tours through one of the Caribbean's most pristine protected bays — a sanctuary for nature, community, and conscious living.</p>
     <div class="hero-actions">
@@ -454,9 +456,9 @@
     <div class="booking-field">
       <label>Experience</label>
       <select>
-        <option>Savannes Bay Eco Kayak Tour</option>
-        <option>Sunset Kayak Experience</option>
-        <option>Private Group Tour</option>
+        <option>Bay Serenity · Golden Mirror</option>
+        <option>Scorpio's Secret</option>
+        <option>Table d'Eau (Coming Soon)</option>
       </select>
     </div>
     <div class="booking-field">
@@ -511,16 +513,17 @@
   <div class="container">
     <div class="section-header reveal">
       <div class="section-header-left">
-        <span class="eyebrow">What We Offer</span>
-        <h2 class="section-title">Guided <em>experiences</em><br/>in Savannes Bay</h2>
+        <span class="eyebrow">The SHER Collection</span>
+        <h2 class="section-title">Three <em>experiences</em><br/>on the same bay</h2>
       </div>
     </div>
     <div class="cards-grid">
 
+      <!-- Card 1: Bay Serenity · Golden Mirror -->
       <a href="pages/golden-mirror.html" class="exp-card reveal">
         <div class="card-img">
-          <div class="card-img-bg ci-kayak"></div>
-          <span class="card-badge signature">Signature Tour</span>
+          <div class="card-img-bg ci-golden-mirror"></div>
+          <span class="card-badge signature">Sunrise Kayak</span>
         </div>
         <div class="card-body">
           <div class="card-meta">
@@ -528,12 +531,12 @@
               <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
               4.98
             </div>
-            <span class="card-reviews">14 reviews</span>
+            <span class="card-reviews">Max 6 guests</span>
           </div>
-          <h3 class="card-title">Savannes Bay Eco Kayak Experience</h3>
-          <p class="card-desc">Paddle through pristine mangrove corridors, observe sea moss cultivation, and land on Scorpion Island.</p>
+          <h3 class="card-title">Bay Serenity · Golden Mirror</h3>
+          <p class="card-desc">A sunrise kayak experience on Savannes Bay. Before the world wakes, the bay becomes a mirror of gold.</p>
           <div class="card-footer">
-            <div class="card-price">USD $85 <span>/ person</span></div>
+            <div class="card-price">USD $150 <span>/ person</span></div>
             <div class="card-duration">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
               2 hours
@@ -542,26 +545,53 @@
         </div>
       </a>
 
-      <a href="pages/golden-mirror.html" class="exp-card reveal" style="transition-delay:0.12s">
+      <!-- Card 2: Scorpio's Secret -->
+      <a href="pages/scorpios-secret.html" class="exp-card reveal" style="transition-delay:0.10s">
         <div class="card-img">
-          <div class="card-img-bg ci-sunset"></div>
+          <div class="card-img-bg ci-scorpios"></div>
+          <span class="card-badge">Couples · Private</span>
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <div class="card-rating">
+              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              Private
+            </div>
+            <span class="card-reviews">By appointment</span>
+          </div>
+          <h3 class="card-title">Scorpio's Secret</h3>
+          <p class="card-desc">A private island canoe experience for couples. One couple only. Champagne, photography, and Scorpion Islet.</p>
+          <div class="card-footer">
+            <div class="card-price">From $420 <span>/ couple</span></div>
+            <div class="card-duration">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              2–3 hours
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <!-- Card 3: Table d'Eau -->
+      <a href="pages/table-deau.html" class="exp-card reveal" style="transition-delay:0.20s">
+        <div class="card-img">
+          <div class="card-img-bg ci-tabledeau"></div>
           <span class="card-badge">Coming Soon</span>
         </div>
         <div class="card-body">
           <div class="card-meta">
             <div class="card-rating">
               <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              New
+              2026
             </div>
-            <span class="card-reviews">Be the first</span>
+            <span class="card-reviews">Register interest</span>
           </div>
-          <h3 class="card-title">Sunset Romance Kayak</h3>
-          <p class="card-desc">A private evening paddle for two as the Caribbean sun sets over Savannes Bay. Includes champagne.</p>
+          <h3 class="card-title">Table d'Eau</h3>
+          <p class="card-desc">Luxury floating dining on Savannes Bay. White linen, champagne, and Saint Lucian cuisine at golden hour.</p>
           <div class="card-footer">
-            <div class="card-price">USD $140 <span>/ couple</span></div>
+            <div class="card-price" style="color:var(--text-dim);font-size:13px">Launching 2026</div>
             <div class="card-duration">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-              1.5 hours
+              Evening
             </div>
           </div>
         </div>
