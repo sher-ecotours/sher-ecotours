@@ -180,8 +180,9 @@
 
     /* THE BAY */
     #the-bay {
-      background: var(--green) url('images/savannes-bay-on-the-point-green.PNG') center center / cover no-repeat;
-      background-blend-mode: multiply;
+      background:
+        linear-gradient(rgba(8,16,12,0.28), rgba(8,16,12,0.28)),
+        url('images/savannes-bay-on-the-point-green.PNG') center 30% / cover no-repeat;
       padding: 120px 0; overflow: hidden;
     }
     .bay-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
@@ -498,8 +499,8 @@
       <div class="intro-item-label">Signature tour duration</div>
     </div>
     <div class="intro-item reveal" style="transition-delay:0.1s">
-      <div class="intro-item-num">14</div>
-      <div class="intro-item-label">Max guests per session</div>
+      <div class="intro-item-num">6</div>
+      <div class="intro-item-label">Maximum guests per tour</div>
     </div>
     <div class="intro-item reveal" style="transition-delay:0.2s">
       <div class="intro-item-num">100%</div>
@@ -608,15 +609,15 @@
       <div class="bay-left reveal">
         <span class="eyebrow">Our Location</span>
         <h2 class="section-title">Savannes Bay —<br/><em>the south's</em><br/>best kept secret</h2>
-        <p class="section-body" style="margin-top:20px">A protected coastal ecosystem in the Micoud district of Saint Lucia, where mangrove forests, sea moss cultivation, and Scorpion Island create one of the Caribbean's most ecologically rich environments. Calm waters year-round. Accessible only by kayak.</p>
+        <p class="section-body" style="margin-top:20px">A protected coastal ecosystem in the Micoud district of Saint Lucia, where mangrove forests, sea moss cultivation, and Scorpion Islet create one of the Caribbean's most ecologically rich environments. Calm waters year-round. Accessible only by guided kayak or canoe.</p>
         <div class="bay-stats">
           <div class="bay-stat">
             <div class="bay-stat-num">2 hrs</div>
             <div class="bay-stat-label">Signature tour duration</div>
           </div>
           <div class="bay-stat">
-            <div class="bay-stat-num">14</div>
-            <div class="bay-stat-label">Max guests per session</div>
+            <div class="bay-stat-num">6</div>
+            <div class="bay-stat-label">Maximum guests per tour</div>
           </div>
           <div class="bay-stat">
             <div class="bay-stat-num">4</div>
@@ -656,8 +657,8 @@
             <li class="route-stop">
               <div class="stop-num">4</div>
               <div class="stop-info">
-                <div class="stop-name">Scorpion Island Landing</div>
-                <div class="stop-desc">Controlled landing on the island's sandy beach for quiet reflection and scenic immersion.</div>
+                <div class="stop-name">Scorpion Islet Landing</div>
+                <div class="stop-desc">Controlled, exclusive access to the islet's private beach. One landing per day. Maximum 4 guests.</div>
               </div>
             </li>
           </ul>
