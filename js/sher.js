@@ -86,7 +86,6 @@ function _buildFooter() {
       <div>
         <span class="footer-col-title">Experiences</span>
         <ul class="footer-col-links">
-          <li><a href="${_R}index.html#experiences">Eco Kayak Tour</a></li>
           <li><a href="${_R}${_P}golden-mirror.html">Bay Serenity · Golden Mirror</a></li>
           <li><a href="${_R}${_P}scorpios-secret.html">Scorpio's Secret</a></li>
           <li><a href="${_R}${_P}scorpios-secret.html#sanctuary">Scorpio's Sanctuary</a></li>
