@@ -151,10 +151,144 @@ function _initReveal() {
   els.forEach(el => obs.observe(el));
 }
 
+// ============================================================
+// AUDIO — Ambient Birdsong
+// Place audio/birdsong.mp3 in the repository root audio/ folder.
+// The toggle button is always visible; audio will play as soon
+// as the browser has received a prior user gesture.
+// ============================================================
+
+const _audioSrc = _inPages ? '../audio/birdsong.mp3' : 'audio/birdsong.mp3';
+let   _bird        = null;   // Audio element
+let   _birdReady   = false;  // Element initialised
+let   _birdPlaying = false;  // Currently audible
+let   _birdFadeId  = null;   // setInterval handle for fade
+
+// SVGs injected into the toggle button
+const _iconOn  = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>`;
+const _iconOff = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>`;
+
+function _initBird() {
+  if (_birdReady) return;
+  _bird = new Audio(_audioSrc);
+  _bird.loop    = true;
+  _bird.volume  = 0;
+  _bird.preload = 'auto';
+  _birdReady    = true;
+}
+
+function _fadeIn(targetVol, durationMs) {
+  targetVol  = targetVol  || 0.25;
+  durationMs = durationMs || 2000;
+  if (!_bird) return;
+  clearInterval(_birdFadeId);
+  const steps   = 50;
+  const stepMs  = durationMs / steps;
+  const stepVol = targetVol / steps;
+
+  _bird.play().then(() => {
+    _birdPlaying = true;
+    _syncToggleUI();
+    _birdFadeId = setInterval(() => {
+      _bird.volume = Math.min(_bird.volume + stepVol, targetVol);
+      if (_bird.volume >= targetVol - 0.001) clearInterval(_birdFadeId);
+    }, stepMs);
+  }).catch(() => {
+    // Browser blocked autoplay — toggle button remains visible for manual start
+  });
+}
+
+function _fadeOut(durationMs) {
+  durationMs = durationMs || 800;
+  if (!_bird) return;
+  clearInterval(_birdFadeId);
+  const startVol = _bird.volume;
+  const steps    = 30;
+  const stepMs   = durationMs / steps;
+  const stepVol  = startVol  / steps;
+
+  _birdFadeId = setInterval(() => {
+    _bird.volume = Math.max(_bird.volume - stepVol, 0);
+    if (_bird.volume <= 0.001) {
+      clearInterval(_birdFadeId);
+      _bird.pause();
+      _bird.volume  = 0;
+      _birdPlaying  = false;
+      _syncToggleUI();
+    }
+  }, stepMs);
+}
+
+function _tryPlay() {
+  _initBird();
+  if (!_birdPlaying) _fadeIn();
+}
+
+// Called by the toggle button
+function _toggleBird() {
+  _initBird();
+  if (_birdPlaying) {
+    _fadeOut();
+  } else {
+    _fadeIn();
+  }
+}
+
+function _syncToggleUI() {
+  const btn = document.getElementById('audio-toggle');
+  if (!btn) return;
+  if (_birdPlaying) {
+    btn.classList.add('playing');
+    btn.setAttribute('aria-label', 'Mute ambient birdsong');
+    btn.innerHTML = _iconOn;
+  } else {
+    btn.classList.remove('playing');
+    btn.setAttribute('aria-label', 'Play ambient birdsong');
+    btn.innerHTML = _iconOff;
+  }
+}
+
+function _injectAudioToggle() {
+  const btn = document.createElement('button');
+  btn.id = 'audio-toggle';
+  btn.setAttribute('aria-label', 'Play ambient birdsong');
+  btn.innerHTML = _iconOff;
+  btn.addEventListener('click', _toggleBird);
+  document.body.appendChild(btn);
+}
+
+function _initAudioTriggers() {
+  const path = window.location.pathname;
+
+  // ── Tour pages: attempt autoplay on load (requires prior browser gesture) ──
+  const tourPages = ['golden-mirror.html', 'scorpios-secret.html', 'table-deau.html'];
+  if (tourPages.some(p => path.includes(p))) {
+    _initBird();
+    _fadeIn();  // Will silently fail if browser blocks; toggle remains available
+  }
+
+  // ── Tour card clicks on index.html ──
+  document.querySelectorAll('.exp-card').forEach(card => {
+    card.addEventListener('click', _tryPlay);
+  });
+
+  // ── CTA buttons: Book · Reserve · Discover · Enquire ──
+  const triggerRx = /\b(Book|Reserve|Discover|Enquire)\b/i;
+  document.querySelectorAll(
+    'a.btn-primary, a.btn-outline, button.btn-primary, button.btn-outline, a.nav-cta'
+  ).forEach(el => {
+    if (triggerRx.test(el.textContent || '')) {
+      el.addEventListener('click', _tryPlay);
+    }
+  });
+}
+
 // ===== BOOT =====
 document.addEventListener('DOMContentLoaded', () => {
   _buildNav();
   _buildFooter();
   _initNavScroll();
   _initReveal();
+  _injectAudioToggle();
+  _initAudioTriggers();
 });
