@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>SHER · Eco Sanctuary — Savannes Bay, Saint Lucia</title>
-  <meta name="description" content="Guided eco-kayak tours through Savannes Bay, Saint Lucia. A RAMSAR-protected wetland, mangrove corridor, and Scorpion Island. Respectful. Quiet. Intentional."/>
+  <meta name="description" content="Guided eco-kayak tours through Savannes Bay, Saint Lucia. A RAMSAR-protected wetland, mangrove corridor, and Scorpion Islet. Respectful. Quiet. Intentional."/>
   <link rel="icon" type="image/x-icon" href="favicon.ico"/>
   <link rel="shortcut icon" href="favicon.ico"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -349,49 +349,32 @@
     .cta-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
     .cta-tagline { display: block; margin-bottom: 4px; }
 
-    /* BOOKING BAR */
+    /* ENQUIRY BAR */
     #booking-bar {
       background: var(--green);
+      border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
-      padding: 0 48px; position: relative; z-index: 50;
+      padding: 0 48px;
     }
-    .booking-inner {
+    .enquiry-bar {
       max-width: var(--max-w); margin: 0 auto;
-      display: flex; align-items: stretch;
-      border: 1px solid var(--border); border-radius: var(--radius);
-      overflow: hidden; transform: translateY(-26px);
-      background: var(--green); box-shadow: 0 16px 56px rgba(0,0,0,0.5);
+      transform: translateY(-28px);
+      background: var(--green); border: 1px solid var(--border);
+      border-radius: var(--radius); box-shadow: 0 16px 56px rgba(0,0,0,0.5);
     }
-    .booking-field {
-      flex: 1; padding: 20px 24px;
-      border-right: 1px solid var(--border-w);
-      cursor: pointer; transition: background 0.2s;
+    .enquiry-bar-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 32px; padding: 28px 36px;
     }
-    .booking-field:last-of-type { border-right: none; }
-    .booking-field:hover { background: rgba(212,168,67,0.05); }
-    .booking-field label {
-      display: block; font-size: 9px; font-weight: 400;
-      text-transform: uppercase; letter-spacing: 0.20em;
-      color: var(--gold); margin-bottom: 5px;
+    .enquiry-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px; font-weight: 400;
+      color: var(--sand); margin-bottom: 6px;
     }
-    .booking-field input, .booking-field select {
-      width: 100%; border: none; outline: none;
-      font-family: 'Jost', sans-serif; font-weight: 300;
-      font-size: 13px; color: var(--sand);
-      background: transparent; cursor: pointer;
+    .enquiry-sub {
+      font-size: 13px; font-weight: 300;
+      color: var(--text-dim); line-height: 1.6;
     }
-    .booking-field select option { background: var(--green); color: var(--sand); }
-    .booking-field input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.7); }
-    .booking-submit {
-      background: var(--gold); color: var(--bg);
-      border: none; cursor: pointer; padding: 0 36px;
-      font-family: 'Jost', sans-serif;
-      font-size: 11px; font-weight: 400; letter-spacing: 0.14em;
-      text-transform: uppercase;
-      transition: background 0.3s;
-      display: flex; align-items: center; gap: 10px;
-    }
-    .booking-submit:hover { background: var(--gold-lt); }
 
     /* RESPONSIVE */
     @media (max-width: 960px) {
@@ -411,12 +394,14 @@
       .p-stat-divider { width: 80px; height: 1px; }
       .p-badge { min-width: 100%; }
       #booking-bar { padding: 0 24px; }
+      .enquiry-bar-inner { flex-direction: column; align-items: flex-start; gap: 20px; padding: 24px; }
       #cta { padding: 90px 24px; }
     }
     @media (max-width: 560px) {
       .intro-strip-inner { grid-template-columns: 1fr; gap: 28px; }
       .intro-item + .intro-item::before { display: none; }
       .bay-stats { grid-template-columns: 1fr 1fr; }
+      .enquiry-bar-inner .btn-primary { width: 100%; justify-content: center; }
     }
   </style>
 </head>
@@ -434,7 +419,7 @@
   <div class="hero-overlay"></div>
   <div class="hero-content">
     <span class="hero-eyebrow">Savannes Bay · Micoud · Saint Lucia</span>
-    <h1 class="hero-title">Where Nature Whispers<br/>and <em>Souls Listen</em></h1>
+    <h1 class="hero-title">Where Nature Whispers and <em>Souls Listen</em></h1>
     <span class="hero-tagline tagline">Nature Whispers · Souls Listen</span>
     <p class="hero-sub">Guided eco-kayak tours through one of the Caribbean's most pristine protected bays — a sanctuary for nature, community, and conscious living.</p>
     <div class="hero-actions">
@@ -453,41 +438,17 @@
 
 <!-- BOOKING BAR -->
 <section id="booking-bar">
-  <div class="booking-inner">
-    <div class="booking-field">
-      <label>Experience</label>
-      <select>
-        <option>Bay Serenity · Golden Mirror</option>
-        <option>Scorpio's Secret</option>
-        <option>Table d'Eau (Coming Soon)</option>
-      </select>
+  <div class="enquiry-bar">
+    <div class="enquiry-bar-inner">
+      <div class="enquiry-text">
+        <p class="enquiry-heading">All experiences are arranged by appointment</p>
+        <p class="enquiry-sub">Write to us with your preferred date and experience — we confirm within 24 hours.</p>
+      </div>
+      <a href="mailto:bookings@safehavenecotours.com?subject=Experience%20Enquiry%20%E2%80%94%20SHER%20Eco%20Sanctuary" class="btn-primary">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Enquire to Book
+      </a>
     </div>
-    <div class="booking-field">
-      <label>Date</label>
-      <input type="date"/>
-    </div>
-    <div class="booking-field">
-      <label>Guests</label>
-      <select>
-        <option>1 guest</option>
-        <option>2 guests</option>
-        <option>3 guests</option>
-        <option>4+ guests</option>
-      </select>
-    </div>
-    <div class="booking-field">
-      <label>Time Slot</label>
-      <select>
-        <option>8:00 AM</option>
-        <option>10:00 AM</option>
-        <option>2:00 PM</option>
-        <option>4:00 PM</option>
-      </select>
-    </div>
-    <button class="booking-submit">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      Search
-    </button>
   </div>
 </section>
 
@@ -674,7 +635,7 @@
     <div class="protected-header reveal">
       <span class="eyebrow">Internationally Recognised</span>
       <h2 class="section-title">A sanctuary protected<br/>by <em>international law</em></h2>
-      <p class="section-body" style="margin-top:16px">Savannes Bay and Scorpion Island sit within one of the Caribbean's most formally protected coastal environments — recognised at both national and international level. This is not a marketing claim. It is enshrined in law.</p>
+      <p class="section-body" style="margin-top:16px">Savannes Bay and Scorpion Islet sit within one of the Caribbean's most formally protected coastal environments — recognised at both national and international level. This is not a marketing claim. It is enshrined in law.</p>
     </div>
     <div class="protected-badges reveal">
       <div class="p-badge">
@@ -700,7 +661,7 @@
           <svg viewBox="0 0 48 48" fill="none"><path d="M24 6C24 6 8 16 8 28C8 36 15 42 24 42C33 42 40 36 40 28C40 16 24 6 24 6Z" stroke="#d4a843" stroke-width="1.5" fill="none"/><path d="M24 42V26M24 26L17 20M24 26L31 20" stroke="#d4a843" stroke-width="1.2"/></svg>
         </div>
         <div class="p-badge-text">
-          <div class="p-badge-title">Scorpion Island Marine Reserve</div>
+          <div class="p-badge-title">Scorpion Islet Marine Reserve</div>
           <div class="p-badge-sub">Nature Reserve &middot; Marine Reserve &middot; Legally Protected</div>
         </div>
       </div>
@@ -718,13 +679,13 @@
       </div>
       <div class="p-card reveal" style="transition-delay:0.2s">
         <div class="p-card-num">03</div>
-        <h3 class="p-card-title">Protected in perpetuity — what that means for investors</h3>
+        <h3 class="p-card-title">Protected in perpetuity — what that means for the bay</h3>
         <p class="p-card-body">The PSEPA and RAMSAR designations provide a guarantee that no competing development, industrial activity, or environmental degradation can legally occur within or adjacent to the bay. Your investment is surrounded by law — not just landscape.</p>
       </div>
       <div class="p-card reveal" style="transition-delay:0.3s">
         <div class="p-card-num">04</div>
         <h3 class="p-card-title">Kayak tours formally recognised in the management plan</h3>
-        <p class="p-card-body">The PSEPA Management Plan specifically recognises guided kayak tours to Scorpion Island as an approved activity. SHER operates not in spite of this designation — but in full alignment with it.</p>
+        <p class="p-card-body">The PSEPA Management Plan specifically recognises guided kayak tours to Scorpion Islet as an approved activity. SHER operates not in spite of this designation — but in full alignment with it.</p>
       </div>
     </div>
     <div class="protected-stat-bar reveal" style="margin-top:2px">
@@ -784,7 +745,7 @@
           <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
           <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
         </div>
-        <p class="review-text">"Scorpion Island was a revelation. We've been to Saint Lucia four times and never knew this existed. The guides were professional, warm, and genuinely passionate."</p>
+        <p class="review-text">"Scorpion Islet was a revelation. We've been to Saint Lucia four times and never knew this existed. The guides were professional, warm, and genuinely passionate."</p>
         <div class="review-author">
           <div class="review-avatar">MD</div>
           <div>
@@ -826,7 +787,7 @@
         <div>
           <div class="av-block av-b2"></div>
           <div class="av-b4" style="margin-top:12px;border-radius:var(--radius-sm);overflow:hidden;display:flex;align-items:center;justify-content:center;aspect-ratio:3/4;background:var(--green);border:1px solid var(--border)">
-            <span style="font-size:11px;color:var(--text-dim);text-align:center;padding:20px;line-height:1.7">More photos<br/>coming soon</span>
+            
           </div>
         </div>
       </div>
@@ -890,6 +851,9 @@
 <script src="js/sher.js"></script>
 </body>
 </html>
+
+
+
 
 
 
