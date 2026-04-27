@@ -105,9 +105,9 @@ function _buildFooter() {
         <span class="footer-col-title">Contact</span>
         <ul class="footer-col-links">
           <li><a href="mailto:bookings@safehavenecotours.com">Email Us</a></li>
-          <li><a href="${_R}index.html#about">Safety Standards</a></li>
-          <li><a href="${_R}index.html#about">Environmental Policy</a></li>
-          <li><a href="#">Press Enquiries</a></li>
+          <li><a href="${_R}${_P}safety-standards.html">Safety Standards</a></li>
+          <li><a href="${_R}${_P}environmental-policy.html">Environmental Policy</a></li>
+          <li><a href="${_R}${_P}press.html">Press Enquiries</a></li>
         </ul>
       </div>
     </div>
@@ -248,12 +248,31 @@ function _syncToggleUI() {
   }
 }
 
+// Track last touch time to prevent double-fire on iOS (touchstart + click)
+let _lastTouchMs = 0;
+
 function _injectAudioToggle() {
   const btn = document.createElement('button');
-  btn.id = 'audio-toggle';
+  btn.id    = 'audio-toggle';
+  btn.type  = 'button';
   btn.setAttribute('aria-label', 'Play ambient birdsong');
   btn.innerHTML = _iconOff;
-  btn.addEventListener('click', _toggleBird);
+
+  // iOS Safari: touchstart fires before click and avoids the 300ms delay.
+  // preventDefault() stops the synthetic click from also firing.
+  btn.addEventListener('touchstart', function(e) {
+    e.preventDefault();
+    _lastTouchMs = Date.now();
+    _toggleBird();
+  }, { passive: false });
+
+  // Desktop: click fires normally.
+  // iOS: skip if touchstart already handled this interaction.
+  btn.addEventListener('click', function() {
+    if (Date.now() - _lastTouchMs < 600) return;
+    _toggleBird();
+  });
+
   document.body.appendChild(btn);
 }
 
@@ -264,12 +283,16 @@ function _initAudioTriggers() {
   const tourPages = ['golden-mirror.html', 'scorpios-secret.html', 'table-deau.html'];
   if (tourPages.some(p => path.includes(p))) {
     _initBird();
-    _fadeIn();  // Will silently fail if browser blocks; toggle remains available
+    _fadeIn();  // Silently respects browser autoplay policy; toggle is always available
   }
 
   // ── Tour card clicks on index.html ──
   document.querySelectorAll('.exp-card').forEach(card => {
-    card.addEventListener('click', _tryPlay);
+    card.addEventListener('touchstart', function() { _lastTouchMs = Date.now(); _tryPlay(); }, { passive: true });
+    card.addEventListener('click', function() {
+      if (Date.now() - _lastTouchMs < 600) return;
+      _tryPlay();
+    });
   });
 
   // ── CTA buttons: Book · Reserve · Discover · Enquire ──
@@ -278,7 +301,11 @@ function _initAudioTriggers() {
     'a.btn-primary, a.btn-outline, button.btn-primary, button.btn-outline, a.nav-cta'
   ).forEach(el => {
     if (triggerRx.test(el.textContent || '')) {
-      el.addEventListener('click', _tryPlay);
+      el.addEventListener('touchstart', function() { _lastTouchMs = Date.now(); _tryPlay(); }, { passive: true });
+      el.addEventListener('click', function() {
+        if (Date.now() - _lastTouchMs < 600) return;
+        _tryPlay();
+      });
     }
   });
 }
