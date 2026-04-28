@@ -282,6 +282,28 @@
     }
     .p-stat-divider { width: 1px; height: 80px; background: var(--border); flex-shrink: 0; }
 
+    /* CONSERVATION CODE */
+    #conservation-code { padding: 110px 0; }
+    .code-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 0;
+    }
+    .code-rule {
+      background: var(--green); border: 1px solid var(--border-w);
+      border-radius: var(--radius); padding: 36px 32px;
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .code-rule:hover { border-color: var(--border); background: var(--gold-dim); }
+    .code-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 40px; font-weight: 300;
+      color: rgba(212,168,67,0.22); line-height: 1; margin-bottom: 14px;
+    }
+    .code-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px; font-weight: 400; color: var(--sand);
+      margin-bottom: 10px; line-height: 1.2;
+    }
+    .code-body { font-size: 14px; font-weight: 300; color: var(--text-dim); line-height: 1.85; }
     /* TESTIMONIALS */
     #testimonials { padding: 110px 0; }
     .reviews-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 52px; }
@@ -381,6 +403,7 @@
       .intro-strip-inner { grid-template-columns: repeat(3,1fr); padding: 0 24px; }
       .cards-grid { grid-template-columns: 1fr; }
       .reviews-grid { grid-template-columns: 1fr; }
+      .code-grid { grid-template-columns: 1fr; }
       .bay-grid, .about-grid { grid-template-columns: 1fr; gap: 48px; }
       .booking-inner { flex-direction: column; transform: translateY(-14px); }
       .booking-field { border-right: none; border-bottom: 1px solid var(--border-w); }
@@ -446,7 +469,7 @@
       </div>
       <a href="mailto:bookings@safehavenecotours.com?subject=Experience%20Enquiry%20%E2%80%94%20SHER%20Eco%20Sanctuary" class="btn-primary">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-        Enquire to Book
+        Request a Private Tour Window
       </a>
     </div>
   </div>
@@ -671,7 +694,7 @@
         </div>
         <div class="p-badge-text">
           <div class="p-badge-title">Scorpion Islet Marine Reserve</div>
-          <div class="p-badge-sub">Nature Reserve &middot; Marine Reserve &middot; Legally Protected</div>
+          <div class="p-badge-sub">Part of Saint Lucia&rsquo;s protected coastal network &middot; Controlled-access conservation site</div>
         </div>
       </div>
     </div>
@@ -689,7 +712,7 @@
       <div class="p-card reveal" style="transition-delay:0.2s">
         <div class="p-card-num">03</div>
         <h3 class="p-card-title">Protected in perpetuity — what that means for the bay</h3>
-        <p class="p-card-body">The PSEPA and RAMSAR designations provide a guarantee that no competing development, industrial activity, or environmental degradation can legally occur within or adjacent to the bay. Your investment is surrounded by law — not just landscape.</p>
+        <p class="p-card-body">The PSEPA and Ramsar designations create a strong conservation framework around the bay, supporting low-impact, non-extractive activities while discouraging incompatible development and environmental degradation.</p>
       </div>
       <div class="p-card reveal" style="transition-delay:0.3s">
         <div class="p-card-num">04</div>
@@ -721,12 +744,55 @@
   </div>
 </section>
 
+
+<!-- CONSERVATION CODE -->
+<section id="conservation-code">
+  <div class="container">
+    <div class="reveal" style="text-align:center;margin-bottom:56px">
+      <span class="eyebrow">On the Water</span>
+      <h2 class="section-title">Conservation <em>Code</em></h2>
+      <p class="section-body" style="max-width:560px;margin:16px auto 0">Every SHER guest agrees to observe the following rules before entering the bay. These are not guidelines — they are conditions of the experience.</p>
+    </div>
+    <div class="code-grid">
+      <div class="code-rule reveal">
+        <div class="code-num">01</div>
+        <div class="code-title">Silence on the Water</div>
+        <div class="code-body">No loud music, amplified sound, or disruptive noise while on the bay. The bay's wildlife — birds, fish, and mangrove fauna — are sensitive to sound disturbance. Quiet is part of the experience.</div>
+      </div>
+      <div class="code-rule reveal" style="transition-delay:0.06s">
+        <div class="code-num">02</div>
+        <div class="code-title">Leave No Trace</div>
+        <div class="code-body">All waste returns to shore with us. Nothing — packaging, food, or incidental litter — enters the water or bay environment. Guides conduct a final check before departure.</div>
+      </div>
+      <div class="code-rule reveal" style="transition-delay:0.12s">
+        <div class="code-num">03</div>
+        <div class="code-title">No Contact with Mangroves</div>
+        <div class="code-body">Kayaks and canoes maintain strict buffer distance from mangrove root systems. No physical contact with mangrove vegetation, roots, or substrate. The mangrove corridor is a marine nursery — we observe it only.</div>
+      </div>
+      <div class="code-rule reveal" style="transition-delay:0.18s">
+        <div class="code-num">04</div>
+        <div class="code-title">No Wildlife Disturbance</div>
+        <div class="code-body">No feeding, touching, chasing, or deliberately disturbing wildlife. Observation is passive and at a respectful distance. Bird nesting areas, feeding zones, and fish aggregations are given full clearance.</div>
+      </div>
+      <div class="code-rule reveal" style="transition-delay:0.24s">
+        <div class="code-num">05</div>
+        <div class="code-title">No Unsanctioned Landings</div>
+        <div class="code-body">Island landings are permitted only at the designated access point on Scorpion Islet, with a maximum of four guests per visit, one landing per day. No guest may enter interior vegetation or remove any natural material from the island.</div>
+      </div>
+      <div class="code-rule reveal" style="transition-delay:0.30s">
+        <div class="code-num">06</div>
+        <div class="code-title">Guide-Led Movement Only</div>
+        <div class="code-body">All movement on the water follows the guide's route and instructions. Independent paddling beyond the designated area is not permitted. The guide's decision on conditions, routes, and stops is final.</div>
+      </div>
+    </div>
+  </div>
+</section>
 <!-- TESTIMONIALS -->
 <section id="testimonials">
   <div class="container">
     <div class="reveal">
-      <span class="eyebrow">Guest Reviews</span>
-      <h2 class="section-title">What guests <em>say</em></h2>
+      <span class="eyebrow">Early Impressions</span>
+      <h2 class="section-title">What early visitors <em>observed</em></h2>
     </div>
     <div class="reviews-grid">
       <div class="review-card reveal">
@@ -821,7 +887,7 @@
             <div class="commit-dot"></div>
             <div>
               <div class="commit-title">Fully Certified</div>
-              <div class="commit-body">SLASPA permitted, tourism registered, Coast Guard compliant. Your safety is non-negotiable.</div>
+              <div class="commit-body">Operated under required permits, tourism registration, and Coast Guard safety standards. Your safety is non-negotiable.</div>
             </div>
           </div>
           <div class="commitment">
@@ -861,6 +927,7 @@
 <script src="js/sher.js"></script>
 </body>
 </html>
+
 
 
 
