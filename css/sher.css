@@ -391,3 +391,156 @@ html, body { overflow-x: hidden; max-width: 100%; }
   #site-nav { padding: 0 16px; }
   #site-footer { padding: 48px 16px 24px; }
 }
+
+/* ============================================================
+   ANNOUNCEMENT BANNER
+   ============================================================ */
+#sher-banner {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 300;
+  background: var(--gold); color: #08100c;
+  display: flex; align-items: center; justify-content: center;
+  min-height: 44px; padding: 10px 56px;
+  font-family: 'Jost', sans-serif;
+  font-size: 11px; font-weight: 400; letter-spacing: 0.09em;
+  text-align: center; line-height: 1.5;
+}
+#sher-banner-close {
+  position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+  background: none; border: none; cursor: pointer;
+  color: #08100c; font-size: 18px; line-height: 1;
+  padding: 8px; opacity: 0.60; transition: opacity 0.2s;
+  touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+}
+#sher-banner-close:hover { opacity: 1; }
+@media (max-width: 560px) {
+  #sher-banner { font-size: 10px; padding: 10px 44px; letter-spacing: 0.05em; }
+}
+
+/* ============================================================
+   BOOKING MODALS
+   ============================================================ */
+.sher-modal-overlay {
+  position: fixed; inset: 0; z-index: 1000;
+  background: rgba(0,0,0,0.85);
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px; box-sizing: border-box;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.28s ease;
+}
+.sher-modal-overlay.open { opacity: 1; pointer-events: all; }
+.sher-modal {
+  background: #0c1f14;
+  border: 1px solid #d4a843;
+  border-radius: 14px;
+  padding: 40px 44px;
+  width: 100%; max-width: 560px;
+  max-height: 88vh; overflow-y: auto;
+  position: relative;
+  transform: translateY(22px);
+  transition: transform 0.28s ease;
+}
+.sher-modal-overlay.open .sher-modal { transform: translateY(0); }
+.sher-modal-close {
+  position: absolute; top: 14px; right: 16px;
+  background: none; border: none; cursor: pointer;
+  color: #d4a843; font-size: 22px; line-height: 1;
+  padding: 6px; display: flex; align-items: center; justify-content: center;
+  opacity: 0.75; transition: opacity 0.2s;
+  touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+}
+.sher-modal-close:hover { opacity: 1; }
+.sher-modal-eyebrow {
+  font-family: 'Jost', sans-serif;
+  font-size: 9px; font-weight: 400; letter-spacing: 0.28em;
+  text-transform: uppercase; color: #d4a843;
+  margin-bottom: 8px; display: block;
+}
+.sher-modal-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px; font-weight: 400; color: #f0e6c8;
+  line-height: 1.15; margin-bottom: 6px;
+}
+.sher-modal-price {
+  font-size: 13px; font-weight: 300;
+  color: rgba(240,230,200,0.48);
+  margin-bottom: 22px; padding-bottom: 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.06); line-height: 1.55;
+}
+.sher-modal-field {
+  display: flex; flex-direction: column; gap: 7px; margin-bottom: 14px;
+}
+.sher-modal-label {
+  font-family: 'Jost', sans-serif;
+  font-size: 10px; font-weight: 400; letter-spacing: 0.16em;
+  text-transform: uppercase; color: #d4a843;
+}
+.sher-modal-input,
+.sher-modal-select,
+.sher-modal-textarea {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px; padding: 12px 15px;
+  font-family: 'Jost', sans-serif;
+  font-size: 14px; font-weight: 300;
+  color: #ffffff; outline: none; width: 100%;
+  transition: border-color 0.25s;
+  -webkit-appearance: none; appearance: none;
+}
+.sher-modal-input:focus,
+.sher-modal-select:focus,
+.sher-modal-textarea:focus { border-color: rgba(212,168,67,0.50); }
+.sher-modal-input::placeholder,
+.sher-modal-textarea::placeholder { color: rgba(255,255,255,0.28); }
+.sher-modal-select { cursor: pointer; }
+.sher-modal-select option { background: #0c1f14; color: #f0e6c8; }
+.sher-modal-textarea { resize: vertical; min-height: 80px; }
+.sher-modal-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.sher-modal-actions { margin-top: 22px; }
+.sher-modal-submit {
+  width: 100%; display: flex; align-items: center; justify-content: center; gap: 9px;
+  background: #d4a843; color: #08100c;
+  padding: 15px 28px; border-radius: 50px; border: none; cursor: pointer;
+  font-family: 'Jost', sans-serif;
+  font-size: 12px; font-weight: 500; letter-spacing: 0.18em;
+  text-transform: uppercase; text-decoration: none;
+  transition: background 0.25s, transform 0.2s;
+  touch-action: manipulation;
+}
+.sher-modal-submit:hover { background: #e8c870; transform: translateY(-1px); }
+.sher-modal-note {
+  font-size: 11px; font-weight: 300;
+  color: rgba(240,230,200,0.36);
+  line-height: 1.65; margin-top: 14px; text-align: center;
+}
+/* Card-level book trigger */
+.card-book-btn {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; margin-top: 14px; padding: 12px 20px;
+  background: var(--gold); color: #08100c;
+  border: none; border-radius: 50px; cursor: pointer;
+  font-family: 'Jost', sans-serif;
+  font-size: 11px; font-weight: 500; letter-spacing: 0.18em;
+  text-transform: uppercase; transition: background 0.25s, transform 0.2s;
+  touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+}
+.card-book-btn:hover { background: var(--gold-lt); transform: translateY(-1px); }
+/* Tour-page Check Availability button */
+.sher-book-trigger {
+  display: flex; align-items: center; justify-content: center; gap: 9px;
+  background: var(--gold); color: #08100c;
+  padding: 16px 34px; border-radius: 50px; min-height: 50px; border: none;
+  font-family: 'Jost', sans-serif;
+  font-size: 12px; font-weight: 500; letter-spacing: 0.20em;
+  text-transform: uppercase; cursor: pointer; width: 100%;
+  transition: background 0.3s, transform 0.25s, box-shadow 0.3s;
+  touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+}
+.sher-book-trigger:hover {
+  background: var(--gold-lt); transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(212,168,67,0.30);
+}
+@media (max-width: 600px) {
+  .sher-modal-overlay { align-items: flex-end; padding: 0; }
+  .sher-modal { padding: 28px 20px 36px; border-radius: 14px 14px 0 0; max-height: 92vh; }
+  .sher-modal-row { grid-template-columns: 1fr; }
+}

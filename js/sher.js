@@ -1,7 +1,19 @@
+// FYGARO PAYMENT LINKS — replace placeholders when live account is approved
+// Golden Mirror:        https://fygaro.com/pay/GOLDEN-MIRROR-PLACEHOLDER
+// Scorpio's Secret:     https://fygaro.com/pay/SCORPIOS-SECRET-PLACEHOLDER
+// Scorpio's Sanctuary:  https://fygaro.com/pay/SCORPIOS-SANCTUARY-PLACEHOLDER
+
 /* ============================================================
    SHER · Eco Sanctuary — Shared Site Script
    safehavenecotours.com
    ============================================================ */
+
+// ===== FYGARO PAYMENT URL CONSTANTS =====
+const _FYGARO = {
+  goldenMirror:       'https://fygaro.com/pay/GOLDEN-MIRROR-PLACEHOLDER',
+  scorpiosSecret:     'https://fygaro.com/pay/SCORPIOS-SECRET-PLACEHOLDER',
+  scorpiosSanctuary:  'https://fygaro.com/pay/SCORPIOS-SANCTUARY-PLACEHOLDER',
+};
 
 // ===== PATH DETECTION =====
 const _inPages = /\/pages\//.test(window.location.pathname);
@@ -311,6 +323,192 @@ function _initAudioTriggers() {
   });
 }
 
+// ===== ANNOUNCEMENT BANNER =====
+function _initBanner() {
+  if (sessionStorage.getItem('sher_banner_dismissed') === '1') return;
+  const b = document.createElement('div');
+  b.id = 'sher-banner';
+  b.innerHTML = 'Bookings now open for 2026 &middot; Secure your experience today &middot; Payment processed by FYGARO &middot; Confirmed within 4 hours' +
+    '<button id="sher-banner-close" aria-label="Dismiss">&#x2715;</button>';
+  document.body.insertBefore(b, document.body.firstChild);
+  const nav = document.getElementById('site-nav');
+  if (nav) nav.style.top = b.offsetHeight + 'px';
+  document.getElementById('sher-banner-close').addEventListener('click', _dismissBanner);
+}
+function _dismissBanner() {
+  sessionStorage.setItem('sher_banner_dismissed', '1');
+  const b = document.getElementById('sher-banner');
+  if (b) b.remove();
+  const nav = document.getElementById('site-nav');
+  if (nav) nav.style.top = '0';
+}
+
+// ===== BOOKING MODALS =====
+function _buildModals() {
+  const svg_card = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>`;
+  const svg_mail = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>`;
+  const close = (id) => `<button class="sher-modal-close" onclick="closeSherModal('${id}')" aria-label="Close">&#x2715;</button>`;
+  const field = (lbl, inner) => `<div class="sher-modal-field"><label class="sher-modal-label">${lbl}</label>${inner}</div>`;
+  const input = (id, type, ph) => `<input class="sher-modal-input" id="${id}" type="${type}" placeholder="${ph}"/>`;
+  const sel   = (id, opts) => `<select class="sher-modal-select" id="${id}"><option value="" disabled selected>Select…</option>${opts}</select>`;
+  const row   = (a, b) => `<div class="sher-modal-row">${a}${b}</div>`;
+
+  const wrap = document.createElement('div');
+  wrap.id = 'sher-modals';
+  wrap.innerHTML = `
+
+  <!-- ── GOLDEN MIRROR ── -->
+  <div class="sher-modal-overlay" id="modal-golden-mirror" onclick="_modalBg(event,'golden-mirror')">
+    <div class="sher-modal">
+      ${close('golden-mirror')}
+      <span class="sher-modal-eyebrow">Book Your Experience</span>
+      <h2 class="sher-modal-title">Bay Serenity &middot; Golden Mirror</h2>
+      <p class="sher-modal-price">USD $150 per person &middot; Sunrise Kayak &middot; Maximum 6 guests</p>
+      ${field('Preferred Date', `<input class="sher-modal-input" id="gm-date" type="date"/>`)}
+      ${field('Number of Guests', sel('gm-guests','<option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option>'))}
+      ${field('Full Name', input('gm-name','text','Your full name'))}
+      ${row(
+        field('Email Address', input('gm-email','email','your@email.com')),
+        field('WhatsApp Number', input('gm-phone','tel','+1 758 000 0000'))
+      )}
+      ${field('Any Special Requests (optional)', `<textarea class="sher-modal-textarea" id="gm-notes" placeholder="Dietary requirements, occasions, accessibility needs…"></textarea>`)}
+      <div class="sher-modal-actions">
+        <a href="${_FYGARO.goldenMirror}" class="sher-modal-submit" target="_blank" rel="noopener">
+          ${svg_card} Proceed to Payment
+        </a>
+      </div>
+      <p class="sher-modal-note">We will confirm your booking within 4 hours. Payment is processed securely through FYGARO.</p>
+    </div>
+  </div>
+
+  <!-- ── SCORPIO'S SECRET ── -->
+  <div class="sher-modal-overlay" id="modal-scorpios-secret" onclick="_modalBg(event,'scorpios-secret')">
+    <div class="sher-modal">
+      ${close('scorpios-secret')}
+      <span class="sher-modal-eyebrow">Reserve Your Experience</span>
+      <h2 class="sher-modal-title">Scorpio&rsquo;s Secret</h2>
+      <p class="sher-modal-price">USD $420 flat rate per couple &middot; All-inclusive &middot; One couple only</p>
+      ${field('Preferred Date', `<input class="sher-modal-input" id="ss-date" type="date"/>`)}
+      ${field('Occasion', sel('ss-occasion','<option>Proposal</option><option>Wedding / Newlyweds</option><option>Vow Renewal</option><option>Love Revelation</option><option>Anniversary</option><option>Other</option>'))}
+      ${row(
+        field('Your Name', input('ss-name1','text','Your name')),
+        field('Your Partner\'s Name', input('ss-name2','text','Partner\'s name'))
+      )}
+      ${row(
+        field('Email Address', input('ss-email','email','your@email.com')),
+        field('WhatsApp Number', input('ss-phone','tel','+1 758 000 0000'))
+      )}
+      ${field('Any Special Arrangements', `<textarea class="sher-modal-textarea" id="ss-notes" placeholder="Details seen only by your SHER guide…"></textarea>`)}
+      <div class="sher-modal-actions">
+        <a href="${_FYGARO.scorpiosSecret}" class="sher-modal-submit" target="_blank" rel="noopener">
+          ${svg_card} Proceed to Payment
+        </a>
+      </div>
+      <p class="sher-modal-note">This experience is completely private. Details shared here are seen only by your SHER guide.</p>
+    </div>
+  </div>
+
+  <!-- ── SCORPIO'S SANCTUARY ── -->
+  <div class="sher-modal-overlay" id="modal-scorpios-sanctuary" onclick="_modalBg(event,'scorpios-sanctuary')">
+    <div class="sher-modal">
+      ${close('scorpios-sanctuary')}
+      <span class="sher-modal-eyebrow">Reserve Your Experience</span>
+      <h2 class="sher-modal-title">Scorpio&rsquo;s Sanctuary</h2>
+      <p class="sher-modal-price">USD $600 flat rate &middot; Two couples &middot; All-inclusive &middot; Shared booking only</p>
+      ${field('Preferred Date', `<input class="sher-modal-input" id="san-date" type="date"/>`)}
+      ${field('Occasion', sel('san-occasion','<option>Wedding / Newlyweds</option><option>Anniversary</option><option>Celebration</option><option>Other</option>'))}
+      ${row(
+        field('Couple 1 — Name', input('san-c1a','text','Name')),
+        field('Couple 1 — Partner', input('san-c1b','text','Partner\'s name'))
+      )}
+      ${row(
+        field('Couple 2 — Name', input('san-c2a','text','Name')),
+        field('Couple 2 — Partner', input('san-c2b','text','Partner\'s name'))
+      )}
+      ${row(
+        field('Email Address', input('san-email','email','your@email.com')),
+        field('WhatsApp Number', input('san-phone','tel','+1 758 000 0000'))
+      )}
+      ${field('Any Special Arrangements (optional)', `<textarea class="sher-modal-textarea" id="san-notes" placeholder="Let us know anything that would help us arrange your experience…"></textarea>`)}
+      <div class="sher-modal-actions">
+        <a href="${_FYGARO.scorpiosSanctuary}" class="sher-modal-submit" target="_blank" rel="noopener">
+          ${svg_card} Proceed to Payment
+        </a>
+      </div>
+      <p class="sher-modal-note">Both couples must book together. Strangers are never paired.</p>
+    </div>
+  </div>
+
+  <!-- ── TABLE D'EAU ── -->
+  <div class="sher-modal-overlay" id="modal-table-deau" onclick="_modalBg(event,'table-deau')">
+    <div class="sher-modal">
+      ${close('table-deau')}
+      <span class="sher-modal-eyebrow">Register Your Interest</span>
+      <h2 class="sher-modal-title">Be Among the First</h2>
+      <p class="sher-modal-price">Table d&rsquo;Eau &middot; Launching 2026 &middot; No payment required now</p>
+      ${field('Full Name', input('td-name','text','Your full name'))}
+      ${field('Email Address', input('td-email','email','your@email.com'))}
+      ${field('You Are', sel('td-prop','<option>Staying at a resort</option><option>Villa guest</option><option>Local resident</option><option>Other</option>'))}
+      ${field('Preferred Experience', sel('td-exp','<option>Table d\'Eau Intime — one couple</option><option>Table d\'Eau Célébration — two couples</option>'))}
+      ${field('Anything you would like us to know (optional)', `<textarea class="sher-modal-textarea" id="td-notes" placeholder="Occasion, special requirements, questions…"></textarea>`)}
+      <div class="sher-modal-actions">
+        <button class="sher-modal-submit" onclick="_submitTableDeau()">
+          ${svg_mail} Register My Interest
+        </button>
+      </div>
+      <p class="sher-modal-note">No payment required now. We will contact you personally when Table d&rsquo;Eau opens.</p>
+    </div>
+  </div>
+  `;
+  document.body.appendChild(wrap);
+}
+
+function openSherModal(id) {
+  const el = document.getElementById('modal-' + id);
+  if (!el) return;
+  el.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeSherModal(id) {
+  const el = document.getElementById('modal-' + id);
+  if (!el) return;
+  el.classList.remove('open');
+  document.body.style.overflow = '';
+}
+function _modalBg(e, id) {
+  if (e.target === document.getElementById('modal-' + id)) closeSherModal(id);
+}
+function _submitTableDeau() {
+  const name  = (document.getElementById('td-name')  || {}).value || '';
+  const email = (document.getElementById('td-email') || {}).value || '';
+  const prop  = (document.getElementById('td-prop')  || {}).value || '';
+  const exp   = (document.getElementById('td-exp')   || {}).value || '';
+  const notes = (document.getElementById('td-notes') || {}).value || '';
+  const body  = [
+    "Table d'Eau Interest Registration",
+    '─────────────────────────',
+    'Name: ' + name,
+    'Email: ' + email,
+    'Guest type: ' + prop,
+    'Preferred experience: ' + exp,
+    '',
+    'Notes:',
+    notes || '(none)',
+  ].join('\n');
+  window.location.href = 'mailto:bookings@safehavenecotours.com'
+    + '?subject=' + encodeURIComponent("Table d'Eau Interest — " + name)
+    + '&body=' + encodeURIComponent(body);
+}
+
+// Close any open modal on ESC
+document.addEventListener('keydown', function(e) {
+  if (e.key !== 'Escape') return;
+  document.querySelectorAll('.sher-modal-overlay.open').forEach(function(el) {
+    el.classList.remove('open');
+  });
+  document.body.style.overflow = '';
+});
+
 // ===== BOOT =====
 document.addEventListener('DOMContentLoaded', () => {
   _buildNav();
@@ -319,4 +517,6 @@ document.addEventListener('DOMContentLoaded', () => {
   _initReveal();
   _injectAudioToggle();
   _initAudioTriggers();
+  _buildModals();
+  _initBanner();
 });
