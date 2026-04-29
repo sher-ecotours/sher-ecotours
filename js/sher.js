@@ -373,9 +373,9 @@ function _buildModals() {
       )}
       ${field('Any Special Requests (optional)', `<textarea class="sher-modal-textarea" id="gm-notes" placeholder="Dietary requirements, occasions, accessibility needs…"></textarea>`)}
       <div class="sher-modal-actions">
-        <a href="${_FYGARO.goldenMirror}" class="sher-modal-submit" target="_blank" rel="noopener">
+        <button class="sher-modal-submit" onclick="_fygaroPay('golden-mirror',_FYGARO.goldenMirror,this)">
           ${svg_card} Proceed to Payment
-        </a>
+        </button>
       </div>
       <p class="sher-modal-note">We will confirm your booking within 4 hours. Payment is processed securely through FYGARO.</p>
     </div>
@@ -400,9 +400,9 @@ function _buildModals() {
       )}
       ${field('Any Special Arrangements', `<textarea class="sher-modal-textarea" id="ss-notes" placeholder="Details seen only by your SHER guide…"></textarea>`)}
       <div class="sher-modal-actions">
-        <a href="${_FYGARO.scorpiosSecret}" class="sher-modal-submit" target="_blank" rel="noopener">
+        <button class="sher-modal-submit" onclick="_fygaroPay('scorpios-secret',_FYGARO.scorpiosSecret,this)">
           ${svg_card} Proceed to Payment
-        </a>
+        </button>
       </div>
       <p class="sher-modal-note">This experience is completely private. Details shared here are seen only by your SHER guide.</p>
     </div>
@@ -431,9 +431,9 @@ function _buildModals() {
       )}
       ${field('Any Special Arrangements (optional)', `<textarea class="sher-modal-textarea" id="san-notes" placeholder="Let us know anything that would help us arrange your experience…"></textarea>`)}
       <div class="sher-modal-actions">
-        <a href="${_FYGARO.scorpiosSanctuary}" class="sher-modal-submit" target="_blank" rel="noopener">
+        <button class="sher-modal-submit" onclick="_fygaroPay('scorpios-sanctuary',_FYGARO.scorpiosSanctuary,this)">
           ${svg_card} Proceed to Payment
-        </a>
+        </button>
       </div>
       <p class="sher-modal-note">Both couples must book together. Strangers are never paired.</p>
     </div>
@@ -461,6 +461,29 @@ function _buildModals() {
   </div>
   `;
   document.body.appendChild(wrap);
+}
+
+function _fygaroPay(modalId, url, btn) {
+  if (url.indexOf('PLACEHOLDER') !== -1) {
+    // Pre-launch: show holding message, disable button, auto-close
+    btn.innerHTML = 'Enquiry Received';
+    btn.disabled  = true;
+    btn.style.cssText += ';opacity:0.55;cursor:default;transform:none;box-shadow:none';
+
+    var actions = btn.parentNode;
+    var msg = document.createElement('p');
+    msg.style.cssText = 'color:#d4a843;font-style:italic;font-family:"Cormorant Garamond",serif;' +
+      'font-size:14px;line-height:1.75;margin-top:18px;text-align:center';
+    msg.innerHTML = 'Thank you for your interest. Our secure payment system is being finalised. ' +
+      'We will contact you within 4 hours to confirm your booking and arrange payment. ' +
+      'You can also reach us directly on WhatsApp: ' +
+      '<a href="https://wa.me/17587165206" style="color:#d4a843" target="_blank" rel="noopener">+1&nbsp;758&nbsp;716&nbsp;5206</a>';
+    actions.appendChild(msg);
+
+    setTimeout(function () { closeSherModal(modalId); }, 5000);
+  } else {
+    window.open(url, '_blank', 'noopener');
+  }
 }
 
 function openSherModal(id) {
