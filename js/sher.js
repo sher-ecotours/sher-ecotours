@@ -108,6 +108,7 @@ function _buildFooter() {
           <li><a href="${_R}${_P}safety-standards.html">Safety Standards</a></li>
           <li><a href="${_R}${_P}environmental-policy.html">Environmental Policy</a></li>
           <li><a href="${_R}${_P}press.html">Press Enquiries</a></li>
+          <li><a href="${_R}${_P}partners.html" style="opacity:0.45;font-size:11px">Partner Portal</a></li>
         </ul>
       </div>
     </div>
