@@ -304,29 +304,31 @@
       margin-bottom: 10px; line-height: 1.2;
     }
     .code-body { font-size: 14px; font-weight: 300; color: var(--text-dim); line-height: 1.85; }
-    /* TESTIMONIALS */
-    #testimonials { padding: 110px 0; }
-    .reviews-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 52px; }
-    .review-card {
-      padding: 30px; border-radius: var(--radius);
-      background: var(--green); border: 1px solid var(--border-w);
+    /* BAY SPEAKS */
+    #bay-speaks {
+      background: var(--green);
+      padding: 100px 48px;
+      text-align: center;
     }
-    .review-stars { display: flex; gap: 3px; margin-bottom: 16px; }
-    .review-stars svg { width: 13px; height: 13px; fill: var(--gold); }
-    .review-text {
+    .bay-speaks-accent {
+      width: 60px; height: 1px;
+      background: var(--gold);
+      margin: 0 auto 44px;
+    }
+    .bay-speaks-accent.bottom { margin: 44px auto 0; }
+    .bay-speaks-quote {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 18px; font-weight: 300; font-style: italic;
-      color: var(--sand); line-height: 1.65; margin-bottom: 20px;
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 300; color: var(--sand);
+      line-height: 1.2; margin-bottom: 28px;
     }
-    .review-author { display: flex; align-items: center; gap: 12px; }
-    .review-avatar {
-      width: 38px; height: 38px; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 13px; font-weight: 400; color: var(--bg);
-      background: var(--gold); flex-shrink: 0;
+    .bay-speaks-sub {
+      font-family: 'Jost', sans-serif;
+      font-size: 13px; font-weight: 300;
+      color: var(--text-dim); letter-spacing: 0.06em;
+      max-width: 480px; margin: 0 auto 40px;
+      line-height: 1.8;
     }
-    .review-name { font-size: 12px; font-weight: 400; color: var(--sand); }
-    .review-origin { font-size: 11px; color: var(--text-dim); font-weight: 300; }
 
     /* ABOUT */
     #about { padding: 120px 0; }
@@ -402,7 +404,7 @@
     @media (max-width: 960px) {
       .intro-strip-inner { grid-template-columns: repeat(3,1fr); padding: 0 24px; }
       .cards-grid { grid-template-columns: 1fr; }
-      .reviews-grid { grid-template-columns: 1fr; }
+      /* reviews-grid removed */
       .code-grid { grid-template-columns: 1fr; }
       .bay-grid, .about-grid { grid-template-columns: 1fr; gap: 48px; }
       .booking-inner { flex-direction: column; transform: translateY(-14px); }
@@ -787,67 +789,18 @@
     </div>
   </div>
 </section>
-<!-- TESTIMONIALS -->
-<section id="testimonials">
-  <div class="container">
-    <div class="reveal">
-      <span class="eyebrow">Early Impressions</span>
-      <h2 class="section-title">What early visitors <em>observed</em></h2>
-    </div>
-    <div class="reviews-grid">
-      <div class="review-card reveal">
-        <div class="review-stars">
-          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-        </div>
-        <p class="review-text">"The most peaceful thing I did in Saint Lucia. The guide's knowledge of the mangroves was extraordinary — I left feeling genuinely connected to this place."</p>
-        <div class="review-author">
-          <div class="review-avatar">SJ</div>
-          <div>
-            <div class="review-name">Sarah J.</div>
-            <div class="review-origin">Toronto, Canada</div>
-          </div>
-        </div>
-      </div>
-      <div class="review-card reveal" style="transition-delay:0.1s">
-        <div class="review-stars">
-          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-        </div>
-        <p class="review-text">"Scorpion Islet was a revelation. We've been to Saint Lucia four times and never knew this existed. The guides were professional, warm, and genuinely passionate."</p>
-        <div class="review-author">
-          <div class="review-avatar">MD</div>
-          <div>
-            <div class="review-name">Marcus D.</div>
-            <div class="review-origin">London, UK</div>
-          </div>
-        </div>
-      </div>
-      <div class="review-card reveal" style="transition-delay:0.2s">
-        <div class="review-stars">
-          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-        </div>
-        <p class="review-text">"As a wellness traveller, this is everything I look for — calm water, nature immersion, no crowds, and a team that genuinely cares about the environment."</p>
-        <div class="review-author">
-          <div class="review-avatar">NF</div>
-          <div>
-            <div class="review-name">Nadia F.</div>
-            <div class="review-origin">Miami, USA</div>
-          </div>
-        </div>
-      </div>
-    </div>
+<!-- BAY SPEAKS -->
+<section id="bay-speaks">
+  <div class="bay-speaks-accent reveal"></div>
+  <div class="reveal" style="transition-delay:0.1s">
+    <p class="bay-speaks-quote">The bay speaks for itself.<br/>Come and listen.</p>
+    <p class="bay-speaks-sub">SHER &middot; Eco Sanctuary opens for guided tours in 2026. Reserve your experience now and be among the first to arrive.</p>
+    <a href="mailto:bookings@safehavenecotours.com?subject=Private%20Tour%20Window%20%E2%80%94%20SHER%20Eco%20Sanctuary" class="btn-primary" style="display:inline-flex">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      Request a Private Tour Window
+    </a>
   </div>
+  <div class="bay-speaks-accent bottom reveal" style="transition-delay:0.2s"></div>
 </section>
 
 <!-- ABOUT -->
@@ -886,8 +839,8 @@
           <div class="commitment">
             <div class="commit-dot"></div>
             <div>
-              <div class="commit-title">Fully Certified</div>
-              <div class="commit-body">Operated under required permits, tourism registration, and Coast Guard safety standards. Your safety is non-negotiable.</div>
+              <div class="commit-title">Safety First</div>
+              <div class="commit-body">We only operate under the strictest compliance of all safety and regulatory requirements.</div>
             </div>
           </div>
           <div class="commitment">
