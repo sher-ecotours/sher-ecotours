@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Work With Us — SHER Eco Sanctuary</title>
+  <meta name="description" content="Join the SHER team on Savannes Bay. Guide, hospitality, and operations roles at Safe Haven Eco Tours, Saint Lucia."/>
+  <meta name="robots" content="noindex, nofollow"/>
+  <link rel="icon" type="image/png" sizes="16x16" href="../images/favicon-16.png"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="../images/favicon-32.png"/>
+  <link rel="icon" type="image/png" sizes="48x48" href="../images/favicon-48.png"/>
+  <link rel="apple-touch-icon" sizes="180x180" href="../images/favicon-180-apple-touch.png"/>
+  <link rel="stylesheet" href="../css/sher.css"/>
+  <style>
+    /* ===== PAGE-SPECIFIC: CAREERS ===== */
+
+    #page-hero {
+      background:
+        linear-gradient(rgba(8,16,12,0.72), rgba(8,16,12,0.72)),
+        url('../images/savannes-bay-on-the-point-green.PNG') center 35% / cover no-repeat;
+      padding: 150px 48px 90px;
+      text-align: center;
+    }
+    #page-hero .section-title { margin: 0 auto; }
+    #page-hero .section-body { margin: 18px auto 0; text-align: center; max-width: 500px; }
+
+    /* INTRO */
+    #intro { padding: 90px 0 80px; }
+    .intro-wrap { max-width: 760px; margin: 0 auto; }
+    .intro-wrap .section-body { max-width: 100%; font-size: 17px; line-height: 2.0; margin-top: 20px; }
+
+    /* ROLES */
+    #roles { padding: 0 0 100px; }
+    .roles-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 52px; }
+    .role-card {
+      background: var(--green); border: 1px solid var(--border-w);
+      border-radius: var(--radius); padding: 36px 30px;
+      display: flex; flex-direction: column;
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .role-card:hover { border-color: var(--border); background: var(--gold-dim); }
+    .role-icon {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--gold-dim); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--gold); margin-bottom: 20px;
+    }
+    .role-icon svg { width: 18px; height: 18px; }
+    .role-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px; font-weight: 400;
+      color: var(--sand); margin-bottom: 10px; line-height: 1.2;
+    }
+    .role-type {
+      font-size: 10px; font-weight: 300; color: var(--gold);
+      letter-spacing: 0.20em; text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+    .role-desc { font-size: 13px; font-weight: 300; color: var(--text-dim); line-height: 1.85; flex: 1; }
+    .role-requirements { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border-w); }
+    .role-req-title { font-size: 10px; font-weight: 400; color: var(--gold); letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 10px; }
+    .role-req-list { list-style: none; }
+    .role-req-list li {
+      font-size: 12px; font-weight: 300; color: var(--text-dim);
+      padding: 5px 0; display: flex; align-items: flex-start; gap: 8px; line-height: 1.5;
+    }
+    .role-req-list li::before {
+      content: '—'; color: var(--gold); flex-shrink: 0; margin-top: 1px;
+    }
+
+    /* APPLICATION FORM */
+    #apply { padding: 90px 0 120px; background: var(--green); border-top: 1px solid var(--border); }
+    .apply-wrap { max-width: 680px; margin: 0 auto; }
+    .apply-form { margin-top: 48px; display: flex; flex-direction: column; gap: 20px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .form-group { display: flex; flex-direction: column; gap: 8px; }
+    .form-label { font-size: 11px; font-weight: 300; color: var(--text-dim); letter-spacing: 0.12em; text-transform: uppercase; }
+    .form-input, .form-select, .form-textarea {
+      background: rgba(255,255,255,0.04); border: 1px solid var(--border-w);
+      border-radius: var(--radius-sm); color: var(--sand);
+      font-family: 'Jost', sans-serif; font-size: 14px; font-weight: 300;
+      padding: 13px 16px; outline: none;
+      transition: border-color 0.25s; width: 100%;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: rgba(212,168,67,0.45); }
+    .form-select { appearance: none; cursor: pointer; }
+    .form-textarea { min-height: 130px; resize: vertical; line-height: 1.7; }
+    .form-submit {
+      background: var(--gold); color: #08100c;
+      border: none; border-radius: 50px;
+      font-family: 'Jost', sans-serif; font-size: 12px; font-weight: 500;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      padding: 16px 36px; cursor: pointer; align-self: flex-start;
+      transition: background 0.3s, transform 0.25s;
+    }
+    .form-submit:hover { background: var(--gold-lt); transform: translateY(-2px); }
+    .form-note { font-size: 11px; font-weight: 300; color: var(--text-dim); line-height: 1.7; margin-top: 4px; }
+
+    @media (max-width: 960px) {
+      .roles-grid { grid-template-columns: 1fr; }
+      #page-hero { padding: 120px 24px 72px; }
+    }
+    @media (max-width: 640px) {
+      .form-row { grid-template-columns: 1fr; }
+      #apply { padding: 72px 0 80px; }
+      .apply-wrap { padding: 0 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="mobile-menu"></div>
+<nav id="site-nav"></nav>
+
+<!-- HERO -->
+<section id="page-hero">
+  <span class="eyebrow" style="display:block;text-align:center">Join the Team</span>
+  <h1 class="section-title" style="text-align:center">Work on the <em>bay</em></h1>
+  <p class="section-body">We are building something rare — a conservation-led ecotourism operation on one of the Caribbean's most protected bays. If that matters to you, we would like to meet you.</p>
+</section>
+
+<!-- INTRO -->
+<section id="intro">
+  <div class="container">
+    <div class="intro-wrap reveal">
+      <span class="eyebrow">Who We Are Looking For</span>
+      <h2 class="section-title">People who care about <em>this place</em></h2>
+      <p class="section-body">SHER is a small, intentional team. We are not looking for tourism industry veterans who will bring resort habits to the bay. We are looking for people who understand that Savannes Bay is extraordinary — and who want to be part of protecting it while sharing it.</p>
+      <p class="section-body" style="margin-top:18px">We train every guide ourselves. We set our own standards, higher than the industry minimum. We work early mornings and we work in the heat. And we believe completely in what we are doing.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ROLES -->
+<section id="roles">
+  <div class="container">
+    <div class="reveal">
+      <span class="eyebrow">Open Roles</span>
+      <h2 class="section-title">Current <em>opportunities</em></h2>
+    </div>
+    <div class="roles-grid">
+
+      <!-- Eco Guide -->
+      <div class="role-card reveal">
+        <div class="role-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12a9 9 0 1 0 18 0 9 9 0 0 0-18 0"/><path d="M12 8v4l3 3"/></svg>
+        </div>
+        <div class="role-title">Eco Guide</div>
+        <div class="role-type">Full-time · Micoud, Saint Lucia</div>
+        <p class="role-desc">Lead guided kayak and canoe tours on Savannes Bay. Interpret the bay's ecology, enforce the Conservation Code, and deliver an experience that guests remember for years. You are the reason guests return.</p>
+        <div class="role-requirements">
+          <div class="role-req-title">We are looking for</div>
+          <ul class="role-req-list">
+            <li>Strong swimmer; comfortable on open water in all conditions</li>
+            <li>Genuine knowledge of or interest in the bay's ecology</li>
+            <li>Calm, authoritative, and warm — in that order</li>
+            <li>Saint Lucian or resident with right to work</li>
+            <li>First aid certification preferred — we will support you to obtain it</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Guest Experience -->
+      <div class="role-card reveal" style="transition-delay:0.1s">
+        <div class="role-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div class="role-title">Guest Experience &amp; Concierge</div>
+        <div class="role-type">Part-time · Remote &amp; On-site</div>
+        <p class="role-desc">Handle enquiries, coordinate bookings, and ensure every guest arrives prepared and every resort partner is looked after. You are the first person guests hear from and the reason their expectations are managed well before they reach the bay.</p>
+        <div class="role-requirements">
+          <div class="role-req-title">We are looking for</div>
+          <ul class="role-req-list">
+            <li>Excellent written English — clear, warm, and professional</li>
+            <li>Organised and reliable with email and WhatsApp communication</li>
+            <li>Experience in hospitality, travel, or customer-facing roles preferred</li>
+            <li>Availability during early mornings for pre-tour coordination</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Operations -->
+      <div class="role-card reveal" style="transition-delay:0.2s">
+        <div class="role-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="role-title">Bay Operations &amp; Maintenance</div>
+        <div class="role-type">Part-time · Micoud, Saint Lucia</div>
+        <p class="role-desc">Keep the bay base running — equipment checks, kayak and canoe maintenance, safety gear inspection, and pre-tour setup. You are the person nobody sees, but everything depends on you. The guide can only deliver because you have done your work first.</p>
+        <div class="role-requirements">
+          <div class="role-req-title">We are looking for</div>
+          <ul class="role-req-list">
+            <li>Mechanically minded — experience with small watercraft preferred</li>
+            <li>Early riser; comfortable starting before 4:30 AM on tour days</li>
+            <li>Based in or near Micoud</li>
+            <li>Dependable — this role is the foundation everything else sits on</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- APPLICATION FORM -->
+<section id="apply">
+  <div class="container">
+    <div class="apply-wrap">
+      <div class="reveal">
+        <span class="eyebrow">Apply</span>
+        <h2 class="section-title">Tell us about <em>yourself</em></h2>
+        <p class="section-body" style="margin-top:14px;max-width:100%">Fill in the form below. We read every application personally. If we think there is a fit, we will be in touch within a week.</p>
+      </div>
+      <form class="apply-form reveal" id="careers-form" style="transition-delay:0.15s" onsubmit="submitCareersForm(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="cf-name">Full Name</label>
+            <input class="form-input" id="cf-name" type="text" placeholder="Your full name" required/>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="cf-phone">WhatsApp Number</label>
+            <input class="form-input" id="cf-phone" type="tel" placeholder="+1 758 000 0000"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="cf-email">Email Address</label>
+          <input class="form-input" id="cf-email" type="email" placeholder="your@email.com" required/>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="cf-role">Role You Are Applying For</label>
+          <select class="form-select" id="cf-role" required>
+            <option value="" disabled selected>Select a role…</option>
+            <option>Eco Guide</option>
+            <option>Guest Experience &amp; Concierge</option>
+            <option>Bay Operations &amp; Maintenance</option>
+            <option>Other — please describe below</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="cf-statement">Why do you want to work on the bay?</label>
+          <textarea class="form-textarea" id="cf-statement" placeholder="Tell us what draws you to this work — in your own words. No CV required here." required></textarea>
+        </div>
+        <div>
+          <button class="form-submit" type="submit">Send Application</button>
+          <p class="form-note" style="margin-top:12px">Your application goes directly to the SHER team. We do not share your details with anyone else.</p>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer id="site-footer"></footer>
+
+<script src="../js/sher.js"></script>
+<script>
+function submitCareersForm(e) {
+  e.preventDefault();
+  const name      = document.getElementById('cf-name').value.trim();
+  const email     = document.getElementById('cf-email').value.trim();
+  const phone     = document.getElementById('cf-phone').value.trim();
+  const role      = document.getElementById('cf-role').value;
+  const statement = document.getElementById('cf-statement').value.trim();
+  const subject   = encodeURIComponent('[CAREERS] Application: ' + role);
+  const body      = encodeURIComponent(
+    'Name: ' + name + '\n' +
+    'Email: ' + email + '\n' +
+    'WhatsApp: ' + (phone || 'Not provided') + '\n' +
+    'Role: ' + role + '\n\n' +
+    'Why they want to work on the bay:\n' + statement
+  );
+  window.location.href = 'mailto:bookings@safehavenecotours.com?subject=' + subject + '&body=' + body;
+}
+</script>
+</body>
+</html>

@@ -11,6 +11,7 @@
 // ===== FYGARO PAYMENT URL CONSTANTS =====
 const _FYGARO = {
   goldenMirror:       'https://fygaro.com/pay/GOLDEN-MIRROR-PLACEHOLDER',
+  calmReflections:    'https://fygaro.com/pay/CALM-REFLECTIONS-PLACEHOLDER',
   scorpiosSecret:     'https://fygaro.com/pay/SCORPIOS-SECRET-PLACEHOLDER',
   scorpiosSanctuary:  'https://fygaro.com/pay/SCORPIOS-SANCTUARY-PLACEHOLDER',
 };
@@ -38,6 +39,7 @@ function _buildNav() {
       <img src="${_R}images/SHER-CREAM-300px.png" alt="SHER · Eco Sanctuary" style="height:80px;width:auto;margin-bottom:8px"/>
       <a href="${_R}index.html" onclick="toggleMobileMenu()">Home</a>
       <a href="${_R}${_P}golden-mirror.html" onclick="toggleMobileMenu()">Golden Mirror</a>
+      <a href="${_R}${_P}calm-reflections.html" onclick="toggleMobileMenu()">Calm Reflections</a>
       <a href="${_R}${_P}scorpios-secret.html" onclick="toggleMobileMenu()">Scorpio's Secret</a>
       <a href="${_R}${_P}table-deau.html" onclick="toggleMobileMenu()">Table d'Eau</a>
       <a href="${book}" class="btn-primary" onclick="toggleMobileMenu()">Book Now</a>
@@ -53,6 +55,7 @@ function _buildNav() {
       <ul class="nav-links">
         <li><a href="${_R}index.html">Home</a></li>
         <li><a href="${_R}${_P}golden-mirror.html">Golden Mirror</a></li>
+        <li><a href="${_R}${_P}calm-reflections.html">Calm Reflections</a></li>
         <li><a href="${_R}${_P}scorpios-secret.html">Scorpio's Secret</a></li>
         <li><a href="${_R}${_P}table-deau.html">Table d'Eau</a></li>
         <li><a href="${book}" class="nav-cta">Book Now</a></li>
@@ -96,6 +99,7 @@ function _buildFooter() {
         <span class="footer-col-title">Experiences</span>
         <ul class="footer-col-links">
           <li><a href="${_R}${_P}golden-mirror.html">Bay Serenity · Golden Mirror</a></li>
+          <li><a href="${_R}${_P}calm-reflections.html">Bay Serenity · Calm Reflections</a></li>
           <li><a href="${_R}${_P}scorpios-secret.html">Scorpio's Secret</a></li>
           <li><a href="${_R}${_P}scorpios-secret.html#sanctuary">Scorpio's Sanctuary</a></li>
           <li><a href="${_R}${_P}table-deau.html">Table d'Eau</a></li>
@@ -126,7 +130,7 @@ function _buildFooter() {
       <div class="footer-bottom-links">
         <a href="#">Privacy Policy</a>
         <a href="#">Terms of Use</a>
-        <a href="#">Booking T&Cs</a>
+        <a href="${_R}${_P}booking-terms.html">Booking T&Cs</a>
       </div>
     </div>
   `;
@@ -360,7 +364,7 @@ function _buildModals() {
       ${close('golden-mirror')}
       <span class="sher-modal-eyebrow">Book Your Experience</span>
       <h2 class="sher-modal-title">Bay Serenity &middot; Golden Mirror</h2>
-      <p class="sher-modal-price">USD $150 per person &middot; Sunrise Kayak &middot; Maximum 6 guests</p>
+      <p class="sher-modal-price">USD $180 per person &middot; Sunrise Kayak &middot; Maximum 6 guests</p>
       ${field('Preferred Date', `<input class="sher-modal-input" id="gm-date" type="date"/>`)}
       ${field('Number of Guests', sel('gm-guests','<option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option>'))}
       ${field('Full Name', input('gm-name','text','Your full name'))}
@@ -371,6 +375,30 @@ function _buildModals() {
       ${field('Any Special Requests (optional)', `<textarea class="sher-modal-textarea" id="gm-notes" placeholder="Dietary requirements, occasions, accessibility needs…"></textarea>`)}
       <div class="sher-modal-actions">
         <button class="sher-modal-submit" onclick="_fygaroPay('golden-mirror',_FYGARO.goldenMirror,this)">
+          ${svg_card} Proceed to Payment
+        </button>
+      </div>
+      <p class="sher-modal-note">We will confirm your booking within 4 hours. Payment is processed securely through FYGARO.</p>
+    </div>
+  </div>
+
+  <!-- ── CALM REFLECTIONS ── -->
+  <div class="sher-modal-overlay" id="modal-calm-reflections" onclick="_modalBg(event,'calm-reflections')">
+    <div class="sher-modal">
+      ${close('calm-reflections')}
+      <span class="sher-modal-eyebrow">Book Your Experience</span>
+      <h2 class="sher-modal-title">Bay Serenity &middot; Calm Reflections</h2>
+      <p class="sher-modal-price">USD $150 per person &middot; Mid-Morning Kayak &middot; Maximum 6 guests</p>
+      ${field('Preferred Date', `<input class="sher-modal-input" id="cr-date" type="date"/>`)}
+      ${field('Number of Guests', sel('cr-guests','<option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option>'))}
+      ${field('Full Name', input('cr-name','text','Your full name'))}
+      ${row(
+        field('Email Address', input('cr-email','email','your@email.com')),
+        field('WhatsApp Number', input('cr-phone','tel','+1 758 000 0000'))
+      )}
+      ${field('Any Special Requests (optional)', `<textarea class="sher-modal-textarea" id="cr-notes" placeholder="Dietary requirements, occasions, accessibility needs…"></textarea>`)}
+      <div class="sher-modal-actions">
+        <button class="sher-modal-submit" onclick="_fygaroPay('calm-reflections',_FYGARO.calmReflections,this)">
           ${svg_card} Proceed to Payment
         </button>
       </div>

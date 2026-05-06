@@ -139,7 +139,7 @@
     }
     .section-header-left { max-width: 520px; }
     .cards-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px;
     }
     .exp-card {
       border-radius: var(--radius); overflow: hidden;
@@ -158,6 +158,7 @@
     .ci-golden-mirror { background: url('images/golden-hour-hero.JPG') center 55% / cover no-repeat; }
     .ci-scorpios      { background: url('images/scorpios-secret-island-scene-1.png') center 40% / cover no-repeat; }
     .ci-tabledeau     { background: url('images/table-deau-two-couples.png') center 38% / cover no-repeat; }
+    .ci-calm          { background: url('images/bay-turqoise-clear-water.jpg') center 45% / cover no-repeat; }
     .card-badge {
       position: absolute; top: 16px; left: 16px;
       background: rgba(8,16,12,0.7); backdrop-filter: blur(8px);
@@ -506,7 +507,7 @@
     </div>
     <div class="intro-item reveal" style="transition-delay:0.2s">
       <div class="intro-item-num">100%</div>
-      <div class="intro-item-label">Non-motorised · zero emission</div>
+      <div class="intro-item-label">Zero-emission on the water</div>
     </div>
   </div>
 </section>
@@ -517,7 +518,7 @@
     <div class="section-header reveal">
       <div class="section-header-left">
         <span class="eyebrow">The SHER Collection</span>
-        <h2 class="section-title">Three <em>experiences</em><br/>on the same bay</h2>
+        <h2 class="section-title">Four <em>experiences</em><br/>on the same bay</h2>
       </div>
     </div>
     <div class="cards-grid">
@@ -539,7 +540,7 @@
           <h3 class="card-title">Bay Serenity · Golden Mirror</h3>
           <p class="card-desc">A sunrise kayak experience on Savannes Bay. Before the world wakes, the bay becomes a mirror of gold.</p>
           <div class="card-footer">
-            <div class="card-price">USD $150 <span>/ person</span></div>
+            <div class="card-price">USD $180 <span>/ person</span></div>
             <div class="card-duration">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
               2 hours
@@ -607,6 +608,36 @@
           </div>
           <div role="button" tabindex="0" class="card-book-btn" style="background:transparent;border:1px solid rgba(212,168,67,0.45);color:var(--gold)" onclick="event.stopPropagation();openSherModal('table-deau')">
             Register Interest
+          </div>
+        </div>
+      </a>
+
+      <!-- Card 4: Bay Serenity · Calm Reflections -->
+      <a href="pages/calm-reflections.html" class="exp-card reveal" style="transition-delay:0.30s">
+        <div class="card-img">
+          <div class="card-img-bg ci-calm"></div>
+          <span class="card-badge">Mid-Morning Kayak</span>
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <div class="card-rating">
+              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              4.97
+            </div>
+            <span class="card-reviews">Max 6 guests</span>
+          </div>
+          <h3 class="card-title">Bay Serenity · Calm Reflections</h3>
+          <p class="card-desc">A mid-morning kayak on Savannes Bay. The rush of dawn has passed. The bay finds its own quiet, and so do you.</p>
+          <div class="card-footer">
+            <div class="card-price">USD $150 <span>/ person</span></div>
+            <div class="card-duration">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              2 hours
+            </div>
+          </div>
+          <div role="button" tabindex="0" class="card-book-btn" onclick="event.stopPropagation();openSherModal('calm-reflections')">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+            Book Now
           </div>
         </div>
       </a>
