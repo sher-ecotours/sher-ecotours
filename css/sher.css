@@ -139,9 +139,16 @@ section { position: relative; }
 .nav-logo {
   display: flex; align-items: center;
   text-decoration: none; line-height: 1;
+  background: none; border: none; padding: 0;
 }
 .nav-logo-img {
-  height: 54px; width: auto; display: block;
+  height: 64px; width: auto; display: block;
+  opacity: 0.92;
+  background: none; border: none; border-radius: 0;
+  padding: 0; box-shadow: none;
+}
+@media (max-width: 768px) {
+  .nav-logo-img { height: 52px; }
 }
 
 .nav-links {
