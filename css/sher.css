@@ -137,20 +137,11 @@ section { position: relative; }
 }
 
 .nav-logo {
-  display: flex; flex-direction: column; gap: 0;
+  display: flex; align-items: center;
   text-decoration: none; line-height: 1;
 }
-.nav-logo-name {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 22px; font-weight: 500;
-  color: var(--white); letter-spacing: 0.1em;
-  transition: color 0.4s;
-}
-.nav-logo-sub {
-  font-family: 'Jost', sans-serif;
-  font-size: 8px; font-weight: 300;
-  color: var(--gold); letter-spacing: 0.32em;
-  text-transform: uppercase; margin-top: 1px;
+.nav-logo-img {
+  height: 54px; width: auto; display: block;
 }
 
 .nav-links {
@@ -240,6 +231,10 @@ section { position: relative; }
   font-style: italic; font-weight: 300;
   font-size: 16px; color: var(--gold);
   margin-bottom: 18px; display: block; letter-spacing: 0.05em;
+}
+.footer-logo-img {
+  height: 110px; width: auto; display: block;
+  margin-bottom: 14px;
 }
 .footer-desc {
   font-size: 13px; font-weight: 300;

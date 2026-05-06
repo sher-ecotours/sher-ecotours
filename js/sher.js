@@ -35,7 +35,7 @@ function _buildNav() {
   if (mobileMenu) {
     mobileMenu.innerHTML = `
       <button id="mobile-close" onclick="toggleMobileMenu()" aria-label="Close menu">&#x2715;</button>
-      <span class="tagline">Nature Whispers · Souls Listen</span>
+      <img src="${_R}images/SHER-logo-gold-on-green.png" alt="SHER · Eco Sanctuary" style="height:80px;width:auto;margin-bottom:8px"/>
       <a href="${_R}index.html" onclick="toggleMobileMenu()">Home</a>
       <a href="${_R}${_P}golden-mirror.html" onclick="toggleMobileMenu()">Golden Mirror</a>
       <a href="${_R}${_P}scorpios-secret.html" onclick="toggleMobileMenu()">Scorpio's Secret</a>
@@ -48,8 +48,7 @@ function _buildNav() {
   if (siteNav) {
     siteNav.innerHTML = `
       <a href="${_R}index.html" class="nav-logo">
-        <span class="nav-logo-name">SHER</span>
-        <span class="nav-logo-sub">Eco Sanctuary</span>
+        <img src="${_R}images/SHER-logo-gold-on-green.png" alt="SHER · Eco Sanctuary" class="nav-logo-img"/>
       </a>
       <ul class="nav-links">
         <li><a href="${_R}index.html">Home</a></li>
@@ -85,9 +84,7 @@ function _buildFooter() {
   footer.innerHTML = `
     <div class="footer-inner">
       <div>
-        <div class="footer-brand-name">SHER</div>
-        <span class="footer-brand-sub">Eco Sanctuary</span>
-        <p class="footer-tagline-line">Nature Whispers · Souls Listen</p>
+        <img src="${_R}images/SHER-logo-gold-on-green.png" alt="SHER · Eco Sanctuary" class="footer-logo-img"/>
         <p class="footer-location">Savannes Bay · Micoud · Saint Lucia</p>
         <a href="mailto:bookings@safehavenecotours.com" class="footer-email">bookings@safehavenecotours.com</a>
         <div class="footer-social">
