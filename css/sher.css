@@ -156,14 +156,14 @@ section { position: relative; }
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0;
-  height: 45%;
+  height: 50%;
   z-index: 1;
   pointer-events: none;
   background: linear-gradient(
     to bottom,
-    rgba(0, 0, 0, 0.62) 0%,
-    rgba(0, 0, 0, 0.28) 40%,
-    rgba(0, 0, 0, 0.00) 70%
+    rgba(0, 0, 0, 0.50) 0%,
+    rgba(0, 0, 0, 0.18) 30%,
+    rgba(0, 0, 0, 0.00) 55%
   );
 }
 
