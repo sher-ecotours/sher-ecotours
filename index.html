@@ -15,6 +15,19 @@
   <style>
     /* ===== PAGE-SPECIFIC: HOMEPAGE ===== */
 
+    /* Hide navbar logo on homepage — large centered hero mark used instead */
+    .nav-logo { display: none; }
+
+    /* Centered hero logo mark */
+    .hero-logo-mark {
+      display: block; margin: 0 auto 24px;
+      height: 160px; width: auto;
+      opacity: 0.95; position: relative;
+    }
+    @media (max-width: 768px) {
+      .hero-logo-mark { height: 110px; margin-bottom: 16px; }
+    }
+
     /* HERO */
     #hero {
       position: relative; height: 100vh; min-height: 720px;
@@ -445,6 +458,7 @@
   <div class="hero-bg"></div>
   <div class="hero-overlay"></div>
   <div class="hero-content">
+    <img src="images/SHER-CREAM-300px.png" alt="SHER · Eco Sanctuary" class="hero-logo-mark"/>
     <span class="hero-eyebrow">Savannes Bay · Micoud · Saint Lucia</span>
     <h1 class="hero-title">Where Nature Whispers and <em>Souls Listen</em></h1>
     <span class="hero-tagline tagline">Nature Whispers · Souls Listen</span>
