@@ -1,7 +1,32 @@
 [build]
   publish = "."
 
+# ── PWA: service worker must never be served from cache ──────────────────────
+[[headers]]
+  for = "/tms-app/service-worker.js"
+  [headers.values]
+    Cache-Control          = "no-cache, no-store, must-revalidate"
+    Service-Worker-Allowed = "/tms-app/"
+
+# ── PWA: manifest and app shell — short cache so updates land quickly ─────────
+[[headers]]
+  for = "/tms-app/manifest.json"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+
+[[headers]]
+  for = "/tms-app/index.html"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+
+# ── PWA: static assets (JS, CSS, icons) — cacheable ──────────────────────────
+[[headers]]
+  for = "/tms-app/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+# ── Main site: catch-all for SPA-style direct links ──────────────────────────
 [[redirects]]
   from = "/*"
-  to = "/index.html"
+  to   = "/index.html"
   status = 200
