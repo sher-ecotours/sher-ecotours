@@ -284,9 +284,14 @@ function onSHERFormSubmit(e) {
       // Form 6 — Daily Morning Log
       _handleMorningLog(vals, e);
 
+    } else if (vals['Available from']) {
+      // Form 2 — Guest Date Flexibility & Waitlist
+      // Must be checked before Form 1 — both share Full Name, WhatsApp, and experience fields
+      _handleFlexibilityWaitlist(vals, e);
+
     } else if (vals['Full Name'] && vals['Which experience are you interested in?'] &&
                vals['WhatsApp / Phone Number']) {
-      // Form 1 — Guest Enquiry (has WhatsApp field; Form 2 also has it but different experience field)
+      // Form 1 — Guest Enquiry
       _handleEnquiry(vals, e);
 
     } else if (vals['Overall experience rating']) {
@@ -371,6 +376,53 @@ Respond within 24 hours.`;
       guests, occasion, source, 'New', '', '', '', '', notes
     ]);
   }
+}
+
+
+// ══════════════════════════════════════════════════════════════════════════════
+// FORM 2 HANDLER — FLEXIBILITY WAITLIST ACKNOWLEDGEMENT
+// ══════════════════════════════════════════════════════════════════════════════
+
+function _handleFlexibilityWaitlist(vals, e) {
+  const name       = _firstVal(vals, 'Full Name');
+  const email      = _firstVal(vals, 'Email Address');
+  const experience = _firstVal(vals, 'Which experience are you interested in?');
+  const from       = _firstVal(vals, 'Available from');
+  const until      = _firstVal(vals, 'Available until');
+  const flexibility = _firstVal(vals, 'How would you like us to contact you?');
+  const firstName  = name.split(' ')[0];
+
+  if (!email) return;
+
+  // Warm acknowledgement to guest
+  MailApp.sendEmail({
+    to     : email,
+    subject: 'We have noted your dates — SHER Eco Sanctuary',
+    body   : `Dear ${firstName},
+
+Thank you — we have added you to our availability list for ${experience}.
+
+We will be in touch personally the moment a slot opens that matches your window (${from} to ${until}). You will hear from us before any public announcement.
+
+In the meantime, you are welcome to explore the bay at ${WEBSITE_URL}.
+
+SHER Eco Sanctuary
+Savannes Bay · Micoud · Saint Lucia`
+  });
+
+  // Internal notification
+  MailApp.sendEmail({
+    to     : SHER_EMAIL,
+    subject: 'Waitlist — ' + name + ' · ' + experience,
+    body   : `New flexibility waitlist entry.
+
+Name:        ${name}
+Email:       ${email}
+Experience:  ${experience}
+Window:      ${from} to ${until}
+Contact:     ${flexibility}
+WhatsApp:    ${_firstVal(vals, 'WhatsApp / Phone Number') || 'Not provided'}`
+  });
 }
 
 
