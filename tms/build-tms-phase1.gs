@@ -37,6 +37,118 @@ function buildSHERTMSPhase1() {
   Logger.log('Open View → Execution log for all form URLs.');
 }
 
+// ─── STANDALONE REPAIR: run this if Form 6 is not writing to Weather Log ────
+//
+// HOW TO USE:
+//   1. Open the project in script.google.com
+//   2. Paste your SHER TMS MASTER DATABASE spreadsheet ID below
+//   3. Click Run → repairForm6Link
+//   4. Approve permissions when prompted
+//   5. Check View → Execution log for confirmation
+
+function repairForm6Link() {
+  // ↓ Replace with your actual spreadsheet ID (from the URL of the master sheet)
+  const SPREADSHEET_ID = 'PASTE_YOUR_SPREADSHEET_ID_HERE';
+
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+
+  // Find the Form 6 response sheet (Google names it "Form Responses N")
+  let responseSheet = null;
+  for (const s of ss.getSheets()) {
+    if (s.getName().startsWith('Form Responses') || s.getName().includes('Morning Log')) {
+      responseSheet = s;
+    }
+  }
+
+  if (!responseSheet) {
+    Logger.log('ERROR: No Form Responses sheet found. Make sure Form 6 has been linked ' +
+               'to this spreadsheet via the Responses tab → Link to Sheets.');
+    return;
+  }
+
+  // Rename to make the data source clear
+  responseSheet.setName('FORM 6 RESPONSES — WEATHER LOG');
+  responseSheet.setTabColor('#2a5a48');
+  Logger.log('Renamed response sheet to: FORM 6 RESPONSES — WEATHER LOG');
+
+  // Install the onFormSubmit trigger that copies each response to 8. WEATHER LOG
+  _installForm6Trigger(ss);
+
+  Logger.log('Form 6 → Weather Log link is now active.');
+  Logger.log('Test by submitting a Form 6 response — a new row will appear in 8. WEATHER LOG.');
+}
+
+// ─── TRIGGER INSTALLER ───────────────────────────────────────────────────────
+
+function _installForm6Trigger(ss) {
+  // Remove any existing Form 6 triggers to avoid duplicates
+  ScriptApp.getProjectTriggers().forEach(t => {
+    if (t.getHandlerFunction() === 'onForm6Submit') {
+      ScriptApp.deleteTrigger(t);
+    }
+  });
+
+  ScriptApp.newTrigger('onForm6Submit')
+    .forSpreadsheet(ss)
+    .onFormSubmit()
+    .create();
+
+  Logger.log('onForm6Submit trigger installed on spreadsheet: ' + ss.getName());
+}
+
+// ─── FORM 6 SUBMIT HANDLER ───────────────────────────────────────────────────
+//
+// Fires on every form submission to this spreadsheet.
+// Copies Form 6 response rows into 8. WEATHER LOG in the correct column order.
+
+function onForm6Submit(e) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const weatherLog = ss.getSheetByName('8. WEATHER LOG');
+  if (!weatherLog) return; // Safety — sheet must exist
+
+  const r = e.namedValues; // { 'Question title': ['Answer'] }
+
+  // Map form answers to Weather Log columns (must match _sheet8_WeatherLog headers)
+  const row = [
+    new Date(),                                                        // Date
+    _firstVal(r, 'Experience(s) Delivered Today')                      // Departure Time (derived)
+      .includes('Calm Reflections') ? '9:00 AM' : '5:15 AM',
+    _firstVal(r, 'Sky Condition at Departure'),                        // Sky Condition
+    _firstVal(r, 'Experience Mode').split(' —')[0],                    // Experience Delivered (short)
+    '',                                                                // Reason for Modification
+    _firstVal(r, 'Was a Mystic Morning Bundle issued?'),               // Mystic Morning Bundle Issued
+    _firstVal(r, 'Number of Guests'),                                  // Number of Guests (Mystic)
+    _firstVal(r, 'Was a Mystic Morning Bundle issued?') === 'Yes'
+      ? 'Yes' : 'No',                                                  // Conservation Triggered
+    _firstVal(r, 'Was a Mystic Morning Bundle issued?') === 'Yes'
+      ? '25' : '0',                                                    // Conservation Amount EC$ (EC$25/guest)
+    _firstVal(r, 'Water Condition'),                                   // Water Condition
+    _firstVal(r, 'Wildlife or Bay Observation (optional)'),            // Wildlife Notable
+    _firstVal(r, 'Guide Notes (free text)')                            // Guide Notes
+  ];
+
+  weatherLog.appendRow(row);
+
+  // If Mystic Morning — also log to Conservation Fund sheet (Sheet 9)
+  if (_firstVal(r, 'Was a Mystic Morning Bundle issued?') === 'Yes') {
+    const conservFund = ss.getSheetByName('9. CONSERVATION FUND');
+    if (conservFund) {
+      const guests     = parseInt(_firstVal(r, 'Number of Guests')) || 0;
+      const amountEC   = guests * 25;
+      const amountUSD  = Math.round(amountEC / 2.7 * 100) / 100;
+      conservFund.appendRow([
+        new Date(), '', 'Mystic Morning transition',
+        amountEC, amountUSD, '', 'No', '', '', 'No', ''
+      ]);
+    }
+  }
+}
+
+function _firstVal(namedValues, key) {
+  const entry = namedValues[key];
+  return (entry && entry[0]) ? entry[0].trim() : '';
+}
+
 
 // ─── DRIVE FOLDER STRUCTURE ─────────────────────────────────────────────────
 
@@ -722,8 +834,25 @@ function _buildForm6(ss, folder) {
     .setTitle('Guide Notes (free text)')
     .setHelpText('Used for monthly review and storytelling development. What happened today?');
 
+  // Link form to spreadsheet — Google creates a "Form Responses N" tab automatically
   form.setDestination(FormApp.DestinationType.SPREADSHEET, ss.getId());
   DriveApp.getFileById(form.getId()).moveTo(folder);
+
+  // Wait briefly for Google to create the response sheet, then rename it
+  Utilities.sleep(2000);
+  const allSheets = ss.getSheets();
+  for (const s of allSheets) {
+    if (s.getName().startsWith('Form Responses')) {
+      s.setName('FORM 6 RESPONSES — WEATHER LOG');
+      s.setTabColor('#2a5a48');
+      break;
+    }
+  }
+
+  // Install trigger: every Form 6 submission copies the row into 8. WEATHER LOG
+  _installForm6Trigger(ss);
+
   Logger.log('Form 6 (Daily Morning Log): ' + form.getPublishedUrl());
+  Logger.log('Form 6 → 8. WEATHER LOG trigger installed. Link confirmed active.');
   return form;
 }
