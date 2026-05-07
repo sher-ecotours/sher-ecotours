@@ -4,150 +4,415 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <meta name="robots" content="noindex, nofollow">
-  <title>SHER Operations</title>
+  <title>SHER · Operations</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Jost:wght@300;400;500&display=swap"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: white;
-      color: #1A1A2E;
+    :root {
+      --bg:        #08100c;
+      --surface:   #0c1f14;
+      --surface-2: #0f2618;
+      --gold:      #d4a843;
+      --gold-lt:   #e8c870;
+      --gold-dim:  rgba(212,168,67,0.12);
+      --gold-border:rgba(212,168,67,0.18);
+      --teal:      #1A7A6E;
+      --teal-lt:   #21988b;
+      --sand:      #f0e6c8;
+      --text:      rgba(240,230,200,0.82);
+      --text-dim:  rgba(240,230,200,0.40);
+      --border:    rgba(212,168,67,0.13);
+      --red:       #c0392b;
+      --red-bg:    rgba(192,57,43,0.13);
+      --red-border:rgba(192,57,43,0.40);
     }
 
-    /* HEADER */
+    html { height: 100%; }
+
+    body {
+      min-height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Jost', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-weight: 300;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      padding-bottom: 148px;
+    }
+
+    /* ── HEADER ─────────────────────────────────────── */
     .ops-header {
       position: sticky;
       top: 0;
-      z-index: 10;
-      background: #1A7A6E;
-      padding: 16px 20px;
+      z-index: 100;
+      background: rgba(8,16,12,0.96);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 20px;
+      height: 64px;
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
-    .ops-header-title { color: white; font-weight: bold; font-size: 18px; }
-    .ops-header-date  { color: white; font-size: 14px; }
 
-    /* CONTENT */
-    main { padding: 20px 16px 40px; max-width: 600px; margin: 0 auto; }
-
-    /* SECTION LABEL */
-    .section-label {
-      display: block;
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      font-weight: 600;
-      margin: 24px 0 10px;
+    .ops-brand {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
     }
-    .section-label:first-child { margin-top: 0; }
-    .label-gold { color: #B8962E; }
-    .label-teal { color: #1A7A6E; }
+    .ops-brand-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 400;
+      color: var(--gold);
+      letter-spacing: 0.12em;
+      line-height: 1;
+    }
+    .ops-brand-sub {
+      font-family: 'Jost', sans-serif;
+      font-size: 9px;
+      font-weight: 400;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+    .ops-date {
+      font-size: 12px;
+      font-weight: 300;
+      letter-spacing: 0.06em;
+      color: var(--text-dim);
+      text-align: right;
+    }
 
-    /* BUTTONS */
-    a.ops-btn {
-      display: block;
-      width: 100%;
-      padding: 16px 20px;
-      font-size: 16px;
+    /* ── LAYOUT ─────────────────────────────────────── */
+    main {
+      padding: 28px 16px 0;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    /* ── SECTIONS ───────────────────────────────────── */
+    .ops-section { margin-bottom: 36px; }
+
+    .ops-section-label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 9px;
       font-weight: 500;
-      border: 1px solid #ccc;
-      border-radius: 8px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .ops-section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .label-gold { color: var(--gold); }
+    .label-teal { color: var(--teal-lt); }
+
+    /* ── BUTTONS ────────────────────────────────────── */
+    a.ops-btn {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      width: 100%;
+      min-height: 62px;
+      padding: 14px 16px 14px 0;
       margin-bottom: 8px;
-      text-align: left;
-      background: white;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
       text-decoration: none;
-      color: #1A1A2E;
-      min-height: 52px;
+      color: var(--text);
       cursor: pointer;
+      overflow: hidden;
+      position: relative;
+      transition: background 0.18s, border-color 0.18s;
       -webkit-tap-highlight-color: transparent;
     }
-    a.ops-btn:active { background: #f0f0f0; }
-    a.ops-btn.incident { border-left: 4px solid #C0392B; }
+    a.ops-btn:active {
+      background: var(--surface-2);
+    }
 
-    /* EMERGENCY PANEL */
-    .emergency {
-      background: #1A7A6E;
-      color: white;
-      padding: 20px;
-      margin-top: 32px;
+    /* Coloured left accent strip */
+    .ops-btn-accent {
+      flex-shrink: 0;
+      width: 3px;
+      align-self: stretch;
+      border-radius: 0 2px 2px 0;
     }
-    .emergency-title {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      opacity: 0.75;
-      margin-bottom: 14px;
+    .accent-gold { background: var(--gold); }
+    .accent-teal { background: var(--teal); }
+    .accent-red  { background: var(--red); }
+
+    .ops-btn-body { flex: 1; }
+    .ops-btn-title {
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--sand);
+      line-height: 1.3;
     }
-    .emergency-item { font-size: 14px; margin-bottom: 10px; line-height: 1.5; }
-    .emergency-item:last-child { margin-bottom: 0; }
-    .emergency-item strong {
+    .ops-btn-sub {
       display: block;
       font-size: 11px;
-      font-weight: 600;
-      opacity: 0.7;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
+      font-weight: 300;
+      color: var(--text-dim);
+      margin-top: 2px;
+      line-height: 1.4;
     }
-    .emergency-item a { color: white; text-decoration: none; }
+    .ops-btn-arrow {
+      flex-shrink: 0;
+      margin-right: 4px;
+      color: var(--text-dim);
+    }
+
+    /* Incident — distinct urgency */
+    a.ops-btn.incident {
+      background: var(--red-bg);
+      border-color: var(--red-border);
+    }
+    a.ops-btn.incident .ops-btn-title {
+      color: #e07060;
+      font-weight: 500;
+    }
+    a.ops-btn.incident .ops-btn-sub  { color: rgba(224,112,96,0.60); }
+    a.ops-btn.incident .ops-btn-arrow { color: #e07060; }
+    a.ops-btn.incident:active { background: rgba(192,57,43,0.22); }
+
+    /* ── EMERGENCY PANEL ────────────────────────────── */
+    .ops-emergency {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      z-index: 200;
+      background: #060f09;
+      border-top: 1px solid rgba(192,57,43,0.30);
+    }
+
+    .ops-emergency-911 {
+      background: var(--red);
+      padding: 8px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .ops-emergency-911-label {
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.75);
+    }
+    .ops-emergency-911-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      font-weight: 500;
+      color: #ffffff;
+      letter-spacing: 0.08em;
+      text-decoration: none;
+    }
+
+    .ops-emergency-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      padding: 10px 20px 14px;
+      border-top: 1px solid rgba(255,255,255,0.04);
+    }
+    .ops-emergency-item {
+      padding: 4px 0;
+    }
+    .ops-emergency-key {
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      display: block;
+      margin-bottom: 1px;
+    }
+    .ops-emergency-val {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--text);
+    }
+    .ops-emergency-val a { color: var(--text); text-decoration: none; }
+
+    /* ── ARROW SVG ──────────────────────────────────── */
+    .chevron { width: 16px; height: 16px; }
   </style>
 </head>
 <body>
 
-<div class="ops-header">
-  <span class="ops-header-title">SHER Operations</span>
-  <span class="ops-header-date" id="js-date"></span>
-</div>
+<!-- HEADER -->
+<header class="ops-header">
+  <div class="ops-brand">
+    <span class="ops-brand-name">SHER</span>
+    <span class="ops-brand-sub">Operations Hub</span>
+  </div>
+  <span class="ops-date" id="js-date"></span>
+</header>
 
 <main>
 
-  <span class="section-label label-gold">Pre-Tour</span>
-  <a href="https://docs.google.com/forms/d/e/1FAIpQLScob25dx2NBW9Avp696Ew5wPJJGTl7FPTmK-iLSTYFwszDbgg/viewform" target="_blank" rel="noopener" class="ops-btn">Daily Pre-Launch &amp; Go/No-Go</a>
-  <a href="https://docs.google.com/forms/d/e/1FAIpQLSeZPujPd5V760a5Q4e_B4dDJNBJ6qu4RcROtCUW9EFosUeWeA/viewform" target="_blank" rel="noopener" class="ops-btn">Equipment Inspection</a>
+  <!-- ── PRE-TOUR ── -->
+  <div class="ops-section">
+    <div class="ops-section-label label-gold">Pre-Tour</div>
 
-  <span class="section-label label-teal">Guests</span>
-  <a href="https://docs.google.com/forms/d/e/1FAIpQLSdc2cdqx37mtyrdc81EHiA6VbL1b6jcBnfifvuq14BAYcVSAA/viewform" target="_blank" rel="noopener" class="ops-btn">Guest Enquiry Form</a>
-  <a href="https://docs.google.com/forms/d/e/1FAIpQLSdIsHO7g5qBFM0fDn1p-aD8woXWZroaXRezZ_PMM5Nc2_nLMw/viewform" target="_blank" rel="noopener" class="ops-btn">Guest Waiver &amp; Health Screening</a>
-  <a href="https://docs.google.com/forms/d/e/1FAIpQLSdrZvqa5oRg8P7JOJqs_T1-Ie2XQL6qPpoLnksukNGirZ7yvQ/viewform" target="_blank" rel="noopener" class="ops-btn">Booking Confirmation (internal)</a>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLScob25dx2NBW9Avp696Ew5wPJJGTl7FPTmK-iLSTYFwszDbgg/viewform"
+       target="_blank" rel="noopener" class="ops-btn">
+      <span class="ops-btn-accent accent-gold"></span>
+      <span class="ops-btn-body">
+        <span class="ops-btn-title">Daily Pre-Launch &amp; Go/No-Go</span>
+        <span class="ops-btn-sub">Complete before every departure</span>
+      </span>
+      <svg class="chevron ops-btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+    </a>
 
-  <span class="section-label label-teal">During &amp; After Tour</span>
-  <a href="https://docs.google.com/forms/d/e/1FAIpQLSevmNpy4vH_BZFdCiA66flzHL4KVJFrL-DFuzLTPzkDIYtCHw/viewform" target="_blank" rel="noopener" class="ops-btn">Post-Tour Reset &amp; Daily Log</a>
-  <a href="https://docs.google.com/forms/d/e/1FAIpQLScm7XWkJZlc27MkBGROjdog30WJS-t0DLfXTMSpiR_I1_EgIQ/viewform" target="_blank" rel="noopener" class="ops-btn incident">Report an Incident</a>
-  <a href="https://docs.google.com/forms/d/e/1FAIpQLScob25dx2NBW9Avp696Ew5wPJJGTl7FPTmK-iLSTYFwszDbgg/viewform" target="_blank" rel="noopener" class="ops-btn">Morning Log &amp; Post-Experience Notes</a>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSeZPujPd5V760a5Q4e_B4dDJNBJ6qu4RcROtCUW9EFosUeWeA/viewform"
+       target="_blank" rel="noopener" class="ops-btn">
+      <span class="ops-btn-accent accent-gold"></span>
+      <span class="ops-btn-body">
+        <span class="ops-btn-title">Equipment Inspection</span>
+        <span class="ops-btn-sub">Full fleet — kayaks, PFDs, radio, first aid</span>
+      </span>
+      <svg class="chevron ops-btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+    </a>
+  </div>
 
-  <span class="section-label label-teal">Records</span>
-  <a href="https://docs.google.com/forms/d/e/1FAIpQLSc3BVBYcpC7KoOCMSrbDtEeva27B_rPbxLS8_W25oFlI0eZ_w/viewform" target="_blank" rel="noopener" class="ops-btn">Guide Training Record</a>
-  <a href="https://docs.google.com/spreadsheets/d/1dXD23ZTwmr5J5XMK3heDI3EDKz3Vcu_nku4GxXp1T2Y/edit" target="_blank" rel="noopener" class="ops-btn">Open Master Spreadsheet</a>
+  <!-- ── GUESTS ── -->
+  <div class="ops-section">
+    <div class="ops-section-label label-teal">Guests</div>
 
-  <div class="emergency">
-    <div class="emergency-title">Emergency Reference</div>
-    <div class="emergency-item">
-      <strong>Emergency</strong>
-      <a href="tel:911">911</a>
-    </div>
-    <div class="emergency-item">
-      <strong>Coast Guard</strong>
-      VHF Channel 16
-    </div>
-    <div class="emergency-item">
-      <strong>Kemble</strong>
-      <a href="tel:+17587165206">(758) 716-5206</a>
-    </div>
-    <div class="emergency-item">
-      <strong>Email</strong>
-      <a href="mailto:bookings@safehavenecotours.com">bookings@safehavenecotours.com</a>
-    </div>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdc2cdqx37mtyrdc81EHiA6VbL1b6jcBnfifvuq14BAYcVSAA/viewform"
+       target="_blank" rel="noopener" class="ops-btn">
+      <span class="ops-btn-accent accent-teal"></span>
+      <span class="ops-btn-body">
+        <span class="ops-btn-title">Guest Enquiry Form</span>
+        <span class="ops-btn-sub">Form 1 — website-facing, new booking requests</span>
+      </span>
+      <svg class="chevron ops-btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+    </a>
+
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdIsHO7g5qBFM0fDn1p-aD8woXWZroaXRezZ_PMM5Nc2_nLMw/viewform"
+       target="_blank" rel="noopener" class="ops-btn">
+      <span class="ops-btn-accent accent-teal"></span>
+      <span class="ops-btn-body">
+        <span class="ops-btn-title">Guest Waiver &amp; Health Screening</span>
+        <span class="ops-btn-sub">Send to guest after booking is confirmed</span>
+      </span>
+      <svg class="chevron ops-btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+    </a>
+
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdrZvqa5oRg8P7JOJqs_T1-Ie2XQL6qPpoLnksukNGirZ7yvQ/viewform"
+       target="_blank" rel="noopener" class="ops-btn">
+      <span class="ops-btn-accent accent-teal"></span>
+      <span class="ops-btn-body">
+        <span class="ops-btn-title">Booking Confirmation</span>
+        <span class="ops-btn-sub">Internal — triggers guest confirmation email</span>
+      </span>
+      <svg class="chevron ops-btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+    </a>
+  </div>
+
+  <!-- ── DURING & AFTER TOUR ── -->
+  <div class="ops-section">
+    <div class="ops-section-label label-teal">During &amp; After Tour</div>
+
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSevmNpy4vH_BZFdCiA66flzHL4KVJFrL-DFuzLTPzkDIYtCHw/viewform"
+       target="_blank" rel="noopener" class="ops-btn">
+      <span class="ops-btn-accent accent-teal"></span>
+      <span class="ops-btn-body">
+        <span class="ops-btn-title">Post-Tour Reset &amp; Daily Log</span>
+        <span class="ops-btn-sub">Complete at end of operating day</span>
+      </span>
+      <svg class="chevron ops-btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+    </a>
+
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLScm7XWkJZlc27MkBGROjdog30WJS-t0DLfXTMSpiR_I1_EgIQ/viewform"
+       target="_blank" rel="noopener" class="ops-btn incident">
+      <span class="ops-btn-accent accent-red"></span>
+      <span class="ops-btn-body">
+        <span class="ops-btn-title">Report an Incident</span>
+        <span class="ops-btn-sub">Level 1 – 3 · submit as soon as safe to do so</span>
+      </span>
+      <svg class="chevron ops-btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+    </a>
+
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLScob25dx2NBW9Avp696Ew5wPJJGTl7FPTmK-iLSTYFwszDbgg/viewform"
+       target="_blank" rel="noopener" class="ops-btn">
+      <span class="ops-btn-accent accent-teal"></span>
+      <span class="ops-btn-body">
+        <span class="ops-btn-title">Morning Log &amp; Post-Experience Notes</span>
+        <span class="ops-btn-sub">Same form — covers the post-experience section</span>
+      </span>
+      <svg class="chevron ops-btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+    </a>
+  </div>
+
+  <!-- ── RECORDS ── -->
+  <div class="ops-section">
+    <div class="ops-section-label label-teal">Records</div>
+
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSc3BVBYcpC7KoOCMSrbDtEeva27B_rPbxLS8_W25oFlI0eZ_w/viewform"
+       target="_blank" rel="noopener" class="ops-btn">
+      <span class="ops-btn-accent accent-teal"></span>
+      <span class="ops-btn-body">
+        <span class="ops-btn-title">Guide Training Record</span>
+        <span class="ops-btn-sub">Induction · competency assessments · shadow tours</span>
+      </span>
+      <svg class="chevron ops-btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+    </a>
+
+    <a href="https://docs.google.com/spreadsheets/d/1dXD23ZTwmr5J5XMK3heDI3EDKz3Vcu_nku4GxXp1T2Y/edit"
+       target="_blank" rel="noopener" class="ops-btn">
+      <span class="ops-btn-accent accent-teal"></span>
+      <span class="ops-btn-body">
+        <span class="ops-btn-title">Open Master Spreadsheet</span>
+        <span class="ops-btn-sub">SHER TMS — Master Database 2026</span>
+      </span>
+      <svg class="chevron ops-btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+    </a>
   </div>
 
 </main>
+
+<!-- EMERGENCY PANEL — fixed, always visible -->
+<div class="ops-emergency">
+  <div class="ops-emergency-911">
+    <span class="ops-emergency-911-label">Emergency Services</span>
+    <a href="tel:911" class="ops-emergency-911-num">911</a>
+  </div>
+  <div class="ops-emergency-grid">
+    <div class="ops-emergency-item">
+      <span class="ops-emergency-key">Coast Guard</span>
+      <span class="ops-emergency-val">VHF Channel 16</span>
+    </div>
+    <div class="ops-emergency-item">
+      <span class="ops-emergency-key">Ops Lead — Kemble</span>
+      <span class="ops-emergency-val"><a href="tel:+17587165206">(758) 716-5206</a></span>
+    </div>
+    <div class="ops-emergency-item">
+      <span class="ops-emergency-key">Email</span>
+      <span class="ops-emergency-val"><a href="mailto:bookings@safehavenecotours.com">bookings@safehavenecotours.com</a></span>
+    </div>
+  </div>
+</div>
 
 <script>
   (function () {
     var d = new Date();
     var days   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    var months = ['January','February','March','April','May','June',
+                  'July','August','September','October','November','December'];
     document.getElementById('js-date').textContent =
-      days[d.getDay()] + ' ' + d.getDate() + ' ' + months[d.getMonth()];
+      days[d.getDay()] + '\n' + d.getDate() + ' ' + months[d.getMonth()];
   }());
 </script>
 
