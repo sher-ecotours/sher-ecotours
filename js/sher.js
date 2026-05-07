@@ -14,7 +14,7 @@
 // const _WAITLIST_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSdHOMyMc4nDExA6nI045wnr5-L9QoSncOO6L2SbtbippnWokg/viewform';
 
 // ===== TMS WEB APP ENDPOINT — paste deployed Google Apps Script URL here =====
-const _TMS_ENDPOINT = 'PASTE_WEB_APP_URL_HERE';
+const _TMS_ENDPOINT = 'https://script.google.com/a/macros/safehavenecotours.com/s/AKfycbz0qTpXRM7vUPoXfThEK8AkbU5-f8S73d8hc-I73xTTbtwWrvxdWNYEBGCSDTfW4ts-/exec';
 
 // ===== FYGARO PAYMENT URL CONSTANTS =====
 const _FYGARO = {
