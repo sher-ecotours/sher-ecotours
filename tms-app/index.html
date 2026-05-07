@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <meta name="theme-color" content="#1A7A6E"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+  <meta name="apple-mobile-web-app-title" content="SHER Guide"/>
+  <title>SHER Guide</title>
+  <link rel="manifest" href="manifest.json"/>
+  <link rel="apple-touch-icon" href="icons/icon-192.svg"/>
+  <link rel="stylesheet" href="app.css"/>
+</head>
+<body>
+
+<div class="app" id="app">
+
+  <!-- Queue banner -->
+  <div class="queue-banner" id="queue-banner">Submissions queued — will send when connected.</div>
+
+  <!-- Header -->
+  <header class="app-header" id="app-header">
+    <div class="header-title" id="header-title">SHER Guide</div>
+    <div class="header-date" id="header-date"></div>
+  </header>
+
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <!-- Screen 1 — Home                                                       -->
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <section class="screen active" id="screen-home">
+
+    <div class="section-label">Today's Experiences</div>
+
+    <div class="bookings-area">
+      <div id="bookings-container">
+        <div class="loading-state">
+          <div class="spinner"></div>
+          <span>Loading bookings&hellip;</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="bookings-meta" class="bookings-meta" style="display:none">
+      <span id="bookings-cache-note"></span>
+      <button class="refresh-btn" onclick="loadBookings()">Refresh</button>
+    </div>
+
+    <div class="section-label">Quick Actions</div>
+
+    <div class="quick-actions">
+
+      <button class="action-btn" data-screen="prelaunch">
+        <div class="action-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="15" y2="16"/></svg>
+        </div>
+        <div class="action-text">
+          <div class="action-title">Pre-Launch Log</div>
+          <div class="action-sub">Morning conditions &amp; tour log</div>
+        </div>
+        <div class="action-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>
+      </button>
+
+      <button class="action-btn" data-screen="equipment">
+        <div class="action-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+        <div class="action-text">
+          <div class="action-title">Equipment Check</div>
+          <div class="action-sub">Pre-launch inspection</div>
+        </div>
+        <div class="action-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>
+      </button>
+
+      <button class="action-btn action-btn--incident" data-screen="incident">
+        <div class="action-icon-wrap action-icon-wrap--incident">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <div class="action-text">
+          <div class="action-title">Incident Report</div>
+          <div class="action-sub">Log any incident immediately</div>
+        </div>
+        <div class="action-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>
+      </button>
+
+      <button class="action-btn" data-screen="reset">
+        <div class="action-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+        </div>
+        <div class="action-text">
+          <div class="action-title">Post-Tour Reset</div>
+          <div class="action-sub">End of day confirmation</div>
+        </div>
+        <div class="action-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>
+      </button>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <!-- Screen 2 — Pre-Launch Log (Form 6)                                    -->
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <section class="screen" id="screen-prelaunch">
+    <form id="form-prelaunch" class="form" novalidate>
+
+      <div class="section-label">Today's Tour</div>
+
+      <div class="form-section">
+        <div class="form-group">
+          <label class="form-label" for="f6-experience">Experience(s) Delivered Today <span class="req">*</span></label>
+          <div class="select-wrap">
+            <select class="form-select" id="f6-experience" required>
+              <option value="">Select experience&hellip;</option>
+              <option>Bay Serenity &middot; Golden Mirror</option>
+              <option>Bay Serenity &middot; Calm Reflections</option>
+              <option>Mystic Morning (overcast transition)</option>
+              <option>Scorpio&rsquo;s Secret</option>
+              <option>Scorpio&rsquo;s Sanctuary</option>
+              <option>Local Celebration</option>
+              <option>School Conservation Programme</option>
+              <option>No experience today &mdash; day off / cancelled</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="f6-guests">Number of Guests <span class="req">*</span></label>
+          <div class="select-wrap">
+            <select class="form-select" id="f6-guests" required>
+              <option value="">Select&hellip;</option>
+              <option>1</option><option>2</option><option>3</option>
+              <option>4</option><option>5</option><option>6</option>
+              <option>7</option><option>8</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-label">Conditions</div>
+
+      <div class="form-section">
+        <div class="form-group">
+          <label class="form-label" for="f6-sky">Sky Condition at Departure <span class="req">*</span></label>
+          <div class="select-wrap">
+            <select class="form-select" id="f6-sky" required>
+              <option value="">Select&hellip;</option>
+              <option>Clear</option>
+              <option>Partly cloudy</option>
+              <option>Overcast</option>
+              <option>Drizzle</option>
+              <option>Rain</option>
+              <option>Threatening</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="f6-water">Water Condition <span class="req">*</span></label>
+          <div class="select-wrap">
+            <select class="form-select" id="f6-water" required>
+              <option value="">Select&hellip;</option>
+              <option>Calm</option>
+              <option>Light chop</option>
+              <option>Moderate</option>
+              <option>Rough</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="f6-mode">Experience Mode <span class="req">*</span></label>
+          <div class="select-wrap">
+            <select class="form-select" id="f6-mode" required>
+              <option value="">Select&hellip;</option>
+              <option>Golden Mirror &mdash; clear sky, sunrise on the water</option>
+              <option>Mystic Morning &mdash; cloud transition, bundle issued</option>
+              <option>Calm Reflections &mdash; mid-morning, conditions good</option>
+              <option>Modified &mdash; experience adjusted for conditions</option>
+              <option>Cancelled &mdash; unsafe conditions</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-label">Operations</div>
+
+      <div class="form-section">
+        <div class="form-group">
+          <label class="form-label" for="f6-mystic">Mystic Morning Bundle Issued? <span class="req">*</span></label>
+          <div class="select-wrap">
+            <select class="form-select" id="f6-mystic" required>
+              <option value="">Select&hellip;</option>
+              <option>Yes</option>
+              <option>No</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="f6-equip-condition">Equipment Condition Check <span class="req">*</span></label>
+          <div class="select-wrap">
+            <select class="form-select" id="f6-equip-condition" required>
+              <option value="">Select&hellip;</option>
+              <option>All good &mdash; nothing to report</option>
+              <option>One item needs attention &mdash; describe below</option>
+              <option>Safety concern &mdash; describe below</option>
+            </select>
+          </div>
+        </div>
+        <div class="conditional-wrap" id="f6-equip-notes-wrap">
+          <label class="form-label" for="f6-equip-notes">Equipment Notes</label>
+          <textarea class="form-textarea" id="f6-equip-notes" placeholder="Describe the item and issue&hellip;"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="f6-mood">Guest Mood at End of Experience <span class="req">*</span></label>
+          <div class="select-wrap">
+            <select class="form-select" id="f6-mood" required>
+              <option value="">Select&hellip;</option>
+              <option>Delighted</option>
+              <option>Happy</option>
+              <option>Neutral</option>
+              <option>Disappointed</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-label">Notes</div>
+
+      <div class="form-section">
+        <div class="form-group">
+          <label class="form-label" for="f6-wildlife">Wildlife or Bay Observation (optional)</label>
+          <textarea class="form-textarea" id="f6-wildlife" placeholder="Any notable sighting &mdash; turtles, rare birds, unusual activity&hellip;"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="f6-guide-notes">Guide Notes (free text)</label>
+          <textarea class="form-textarea" id="f6-guide-notes" placeholder="What happened today? Used for monthly review."></textarea>
+        </div>
+      </div>
+
+      <button type="submit" class="submit-btn">Submit Morning Log</button>
+
+    </form>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <!-- Screen 3 — Equipment Inspection (Form 7)                              -->
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <section class="screen" id="screen-equipment">
+    <form id="form-equipment" class="form" novalidate>
+
+      <div class="section-label">Guide</div>
+      <div class="form-section">
+        <div class="form-group">
+          <label class="form-label" for="f7-guide">Your Name <span class="req">*</span></label>
+          <input class="form-input" id="f7-guide" type="text" placeholder="Full name" required autocomplete="name"/>
+        </div>
+      </div>
+
+      <div class="section-label">Watercraft</div>
+      <div class="form-section">
+        <label class="check-item">
+          <input type="checkbox" data-field="Kayak-01 cleared"/>
+          <span class="check-text">Kayak-01 &mdash; inspected and cleared</span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" data-field="Kayak-02 cleared"/>
+          <span class="check-text">Kayak-02 &mdash; inspected and cleared</span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" data-field="Kayak-03 cleared"/>
+          <span class="check-text">Kayak-03 &mdash; inspected and cleared</span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" data-field="Guide kayak cleared"/>
+          <span class="check-text">Guide kayak &mdash; inspected and cleared</span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" data-field="Electric canoe cleared"/>
+          <span class="check-text">Electric canoe &mdash; inspected and cleared</span>
+        </label>
+      </div>
+
+      <div class="section-label">Safety Equipment</div>
+      <div class="form-section">
+        <label class="check-item">
+          <input type="checkbox" data-field="PFDs checked"/>
+          <span class="check-text">PFDs &mdash; all 6 present and in good condition</span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" data-field="First aid kit checked"/>
+          <span class="check-text">First aid kit &mdash; stocked and accessible</span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" data-field="Safety equipment checked"/>
+          <span class="check-text">Safety signalling equipment &mdash; present and functional</span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" data-field="Communication device checked"/>
+          <span class="check-text">Communication device &mdash; charged and operational</span>
+        </label>
+      </div>
+
+      <div class="section-label">Launch Readiness</div>
+      <div class="form-section">
+        <label class="check-item">
+          <input type="checkbox" data-field="Paddles checked"/>
+          <span class="check-text">Paddles &mdash; all present and undamaged</span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" data-field="Refreshment kit prepared"/>
+          <span class="check-text">Refreshment kit &mdash; prepared and loaded</span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" data-field="Bay conditions assessed"/>
+          <span class="check-text">Bay conditions &mdash; visually assessed</span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" data-field="Launch area clear"/>
+          <span class="check-text">Launch area &mdash; clear and ready</span>
+        </label>
+      </div>
+
+      <div class="section-label">Status</div>
+      <div class="form-section">
+        <div class="form-group">
+          <label class="form-label" for="f7-flagged">Any Item Flagged? <span class="req">*</span></label>
+          <div class="select-wrap">
+            <select class="form-select" id="f7-flagged" required>
+              <option value="">Select&hellip;</option>
+              <option value="No">No &mdash; all clear</option>
+              <option value="Yes">Yes &mdash; issue identified</option>
+            </select>
+          </div>
+        </div>
+        <div class="conditional-wrap" id="f7-notes-wrap">
+          <label class="form-label" for="f7-notes">Inspection Notes</label>
+          <textarea class="form-textarea" id="f7-notes" placeholder="Describe the flagged item and condition&hellip;"></textarea>
+        </div>
+      </div>
+
+      <button type="submit" class="submit-btn">Submit Equipment Check</button>
+
+    </form>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <!-- Screen 4 — Incident Report (Form 8)                                   -->
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <section class="screen" id="screen-incident">
+    <form id="form-incident" class="form" novalidate>
+
+      <div class="section-label">Incident Level <span style="color:var(--red)">*</span></div>
+
+      <div class="form-section" style="border-color:rgba(192,57,43,0.3)">
+        <div class="level-selector">
+          <div class="level-opt">
+            <input type="radio" name="f8-level" id="f8-level-1" value="1"/>
+            <label for="f8-level-1">
+              <span class="level-num">1</span>
+              <span class="level-label">Minor</span>
+            </label>
+          </div>
+          <div class="level-opt">
+            <input type="radio" name="f8-level" id="f8-level-2" value="2"/>
+            <label for="f8-level-2">
+              <span class="level-num">2</span>
+              <span class="level-label">Moderate</span>
+            </label>
+          </div>
+          <div class="level-opt">
+            <input type="radio" name="f8-level" id="f8-level-3" value="3"/>
+            <label for="f8-level-3">
+              <span class="level-num">3</span>
+              <span class="level-label">Emergency</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-label">Details</div>
+
+      <div class="form-section">
+        <div class="form-group">
+          <label class="form-label" for="f8-datetime">Date &amp; Time <span class="req">*</span></label>
+          <input class="form-input" id="f8-datetime" type="datetime-local" required/>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="f8-guide">Your Name <span class="req">*</span></label>
+          <input class="form-input" id="f8-guide" type="text" placeholder="Full name" required autocomplete="name"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="f8-type">Incident Type <span class="req">*</span></label>
+          <div class="select-wrap">
+            <select class="form-select" id="f8-type" required>
+              <option value="">Select&hellip;</option>
+              <option>Guest injury</option>
+              <option>Equipment failure</option>
+              <option>Wildlife encounter</option>
+              <option>Weather emergency</option>
+              <option>Guest health issue</option>
+              <option>Near miss</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="f8-location">Location <span class="req">*</span></label>
+          <input class="form-input" id="f8-location" type="text" placeholder="Where did this occur?" required/>
+        </div>
+      </div>
+
+      <div class="section-label">What Happened</div>
+
+      <div class="form-section">
+        <div class="form-group">
+          <label class="form-label" for="f8-description">Description <span class="req">*</span></label>
+          <textarea class="form-textarea" id="f8-description" placeholder="Describe what happened&hellip;" required style="min-height:110px"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="f8-guests-involved">Guests Involved? <span class="req">*</span></label>
+          <div class="select-wrap">
+            <select class="form-select" id="f8-guests-involved" required>
+              <option value="">Select&hellip;</option>
+              <option value="No">No</option>
+              <option value="Yes">Yes</option>
+            </select>
+          </div>
+        </div>
+        <div class="conditional-wrap" id="f8-guest-names-wrap">
+          <label class="form-label" for="f8-guest-names">Guest Name(s)</label>
+          <input class="form-input" id="f8-guest-names" type="text" placeholder="Names of guests involved"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="f8-action">Immediate Action Taken <span class="req">*</span></label>
+          <textarea class="form-textarea" id="f8-action" placeholder="What did you do immediately after the incident?" required></textarea>
+        </div>
+      </div>
+
+      <div class="section-label">Escalation</div>
+
+      <div class="form-section">
+        <div class="form-group">
+          <label class="form-label" for="f8-medical">Medical Attention Required? <span class="req">*</span></label>
+          <div class="select-wrap">
+            <select class="form-select" id="f8-medical" required>
+              <option value="">Select&hellip;</option>
+              <option>No</option>
+              <option>Yes &mdash; first aid given on site</option>
+              <option>Yes &mdash; medical services called</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="f8-external">External Services Contacted <span class="req">*</span></label>
+          <div class="select-wrap">
+            <select class="form-select" id="f8-external" required>
+              <option value="">Select&hellip;</option>
+              <option>None</option>
+              <option>SHER management notified</option>
+              <option>Police</option>
+              <option>Medical services</option>
+              <option>Coast Guard</option>
+              <option>Multiple services</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" class="submit-btn submit-btn--incident">Submit Incident Report</button>
+
+    </form>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <!-- Screen 5 — Post-Tour Reset (Form 9)                                   -->
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <section class="screen" id="screen-reset">
+    <form id="form-reset" class="form" novalidate>
+
+      <div class="section-label">Guide</div>
+      <div class="form-section">
+        <div class="form-group">
+          <label class="form-label" for="f9-guide">Your Name <span class="req">*</span></label>
+          <input class="form-input" id="f9-guide" type="text" placeholder="Full name" required autocomplete="name"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="f9-experience">Experience Delivered Today <span class="req">*</span></label>
+          <div class="select-wrap">
+            <select class="form-select" id="f9-experience" required>
+              <option value="">Select&hellip;</option>
+              <option>Bay Serenity &middot; Golden Mirror</option>
+              <option>Bay Serenity &middot; Calm Reflections</option>
+              <option>Mystic Morning</option>
+              <option>Scorpio&rsquo;s Secret</option>
+              <option>Scorpio&rsquo;s Sanctuary</option>
+              <option>Local Celebration</option>
+              <option>School Conservation Programme</option>
+              <option>No experience today</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-label">End-of-Day Confirmation</div>
+      <div class="form-section">
+        <p style="font-size:13px;color:var(--text-2);margin-bottom:12px;line-height:1.5">Confirm each item before completing the day.</p>
+        <label class="check-item">
+          <input type="checkbox" id="f9-check-guests" class="required-check"/>
+          <span class="check-text">All guests safely returned to shore</span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" id="f9-check-equipment" class="required-check"/>
+          <span class="check-text">Equipment returned and stowed</span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" id="f9-check-kayaks" class="required-check"/>
+          <span class="check-text">Kayaks rinsed and secured</span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" id="f9-check-pfds" class="required-check"/>
+          <span class="check-text">PFDs dried and stored</span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" id="f9-check-launch" class="required-check"/>
+          <span class="check-text">Launch area cleared</span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" id="f9-check-access" class="required-check"/>
+          <span class="check-text">Gates and access secured</span>
+        </label>
+      </div>
+
+      <div class="section-label">Found Items &amp; Notes</div>
+      <div class="form-section">
+        <div class="form-group">
+          <label class="form-label" for="f9-lost-property">Lost Property Found? <span class="req">*</span></label>
+          <div class="select-wrap">
+            <select class="form-select" id="f9-lost-property" required>
+              <option value="">Select&hellip;</option>
+              <option value="No">No</option>
+              <option value="Yes">Yes &mdash; item found</option>
+            </select>
+          </div>
+        </div>
+        <div class="conditional-wrap" id="f9-lost-desc-wrap">
+          <label class="form-label" for="f9-lost-desc">Lost Property Description</label>
+          <textarea class="form-textarea" id="f9-lost-desc" placeholder="Describe the item(s) found&hellip;"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="f9-notes">Guide Notes (optional)</label>
+          <textarea class="form-textarea" id="f9-notes" placeholder="Anything worth noting for the record&hellip;"></textarea>
+        </div>
+      </div>
+
+      <button type="submit" class="submit-btn">Complete Day</button>
+
+    </form>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <!-- Bottom Navigation                                                      -->
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <nav class="bottom-nav" id="bottom-nav">
+
+    <button class="tab-btn active" data-screen="home" aria-label="Home">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>Home</span>
+    </button>
+
+    <button class="tab-btn" data-screen="prelaunch" aria-label="Pre-Launch Log">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="15" y2="16"/></svg>
+      <span>Pre-Launch</span>
+    </button>
+
+    <button class="tab-btn" data-screen="equipment" aria-label="Equipment Check">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      <span>Equipment</span>
+    </button>
+
+    <button class="tab-btn tab-btn--incident" data-screen="incident" aria-label="Incident Report">
+      <span class="incident-dot" aria-hidden="true"></span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <span>Incident</span>
+    </button>
+
+    <button class="tab-btn" data-screen="reset" aria-label="Post-Tour Reset">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+      <span>Reset</span>
+    </button>
+
+  </nav>
+
+</div><!-- /.app -->
+
+<script src="app.js"></script>
+</body>
+</html>
