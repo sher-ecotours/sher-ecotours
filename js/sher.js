@@ -9,7 +9,9 @@
    ============================================================ */
 
 // ===== GOOGLE FORM 1 — GUEST ENQUIRY (live) =====
-const _ENQUIRY_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSfFYcL82aBQRBT_50LPP1JC4XQk1_3Z_pm-Fr-OB4okYdNEAg/viewform';
+const _ENQUIRY_FORM_URL  = 'https://docs.google.com/forms/d/e/1FAIpQLSdc2cdqx37mtyrdc81EHiA6VbL1b6jcBnfifvuq14BAYcVSAA/viewform';
+// ===== GOOGLE FORM 2 — DATE FLEXIBILITY / WAITLIST (live) =====
+const _WAITLIST_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSdHOMyMc4nDExA6nI045wnr5-L9QoSncOO6L2SbtbippnWokg/viewform';
 
 // ===== FYGARO PAYMENT URL CONSTANTS =====
 const _FYGARO = {

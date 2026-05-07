@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>SHER Operations</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --teal:   #1A7A6E;
+      --teal-d: #135c53;
+      --gold:   #B8962E;
+      --red:    #C0392B;
+      --amber:  #E67E22;
+      --white:  #ffffff;
+      --bg:     #f4f6f5;
+      --text:   #1a2420;
+      --muted:  #4a6158;
+      --border: #d0dbd8;
+      --btn-h:  52px;
+      --radius: 6px;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-text-size-adjust: 100%;
+    }
+
+    /* ── HEADER ── */
+    .ops-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--teal);
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      height: 52px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    }
+    .ops-header-title {
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+    .ops-header-date {
+      font-size: 13px;
+      font-weight: 400;
+      opacity: 0.88;
+    }
+
+    /* ── LAYOUT ── */
+    .ops-body {
+      padding: 16px 14px 200px;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    /* ── SECTIONS ── */
+    .ops-section {
+      margin-bottom: 28px;
+    }
+    .ops-section-heading {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 6px 0 10px;
+      border-bottom: 2px solid currentColor;
+      margin-bottom: 12px;
+    }
+    .ops-section-heading.gold  { color: var(--gold); }
+    .ops-section-heading.teal  { color: var(--teal); }
+
+    /* ── BUTTONS ── */
+    .ops-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      min-height: var(--btn-h);
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      font-size: 15px;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.15s, box-shadow 0.15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .ops-btn:active {
+      background: #e8efed;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.08);
+    }
+    .ops-btn-arrow {
+      flex-shrink: 0;
+      margin-left: 12px;
+      opacity: 0.35;
+    }
+
+    /* Incident button — red/amber left accent */
+    .ops-btn.incident {
+      border-left: 5px solid var(--red);
+      padding-left: 13px;
+    }
+    .ops-btn.incident .ops-btn-label {
+      color: var(--red);
+      font-weight: 600;
+    }
+
+    /* Spreadsheet button — teal accent */
+    .ops-btn.spreadsheet {
+      border-left: 5px solid var(--teal);
+      padding-left: 13px;
+    }
+
+    .ops-btn-label { flex: 1; text-align: left; }
+    .ops-btn-sub {
+      display: block;
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* ── EMERGENCY PANEL ── */
+    .ops-emergency {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--teal-d);
+      color: var(--white);
+      padding: 14px 16px 18px;
+      z-index: 200;
+    }
+    .ops-emergency-title {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      opacity: 0.7;
+      margin-bottom: 10px;
+    }
+    .ops-emergency-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px 16px;
+    }
+    .ops-emergency-item {
+      font-size: 13px;
+      line-height: 1.4;
+    }
+    .ops-emergency-item strong {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      opacity: 0.7;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .ops-emergency-item a {
+      color: var(--white);
+      text-decoration: none;
+    }
+
+    /* Arrow SVG */
+    svg.arrow { width: 18px; height: 18px; }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="ops-header">
+  <span class="ops-header-title">SHER Operations</span>
+  <span class="ops-header-date" id="js-date"></span>
+</header>
+
+<main class="ops-body">
+
+  <!-- ── SECTION 1: PRE-TOUR ── -->
+  <div class="ops-section">
+    <div class="ops-section-heading gold">Pre-Tour</div>
+
+    <a href="FORM-6-URL" target="_blank" rel="noopener" class="ops-btn">
+      <span class="ops-btn-label">
+        Daily Pre-Launch &amp; Go/No-Go
+        <span class="ops-btn-sub">Complete before every departure</span>
+      </span>
+      <svg class="arrow ops-btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+    </a>
+
+    <a href="FORM-7-URL" target="_blank" rel="noopener" class="ops-btn">
+      <span class="ops-btn-label">
+        Equipment Inspection
+        <span class="ops-btn-sub">Full fleet check — kayaks, PFDs, radio</span>
+      </span>
+      <svg class="arrow ops-btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+    </a>
+  </div>
+
+  <!-- ── SECTION 2: GUESTS ── -->
+  <div class="ops-section">
+    <div class="ops-section-heading teal">Guests</div>
+
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdc2cdqx37mtyrdc81EHiA6VbL1b6jcBnfifvuq14BAYcVSAA/viewform" target="_blank" rel="noopener" class="ops-btn">
+      <span class="ops-btn-label">
+        Guest Enquiry Form
+        <span class="ops-btn-sub">Website-facing · Form 1</span>
+      </span>
+      <svg class="arrow ops-btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+    </a>
+
+    <a href="FORM-3-URL" target="_blank" rel="noopener" class="ops-btn">
+      <span class="ops-btn-label">
+        Guest Waiver &amp; Health Screening
+        <span class="ops-btn-sub">Send to guest after booking is confirmed</span>
+      </span>
+      <svg class="arrow ops-btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+    </a>
+
+    <a href="FORM-4-URL" target="_blank" rel="noopener" class="ops-btn">
+      <span class="ops-btn-label">
+        Booking Confirmation (internal)
+        <span class="ops-btn-sub">Triggers confirmation email to guest</span>
+      </span>
+      <svg class="arrow ops-btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+    </a>
+  </div>
+
+  <!-- ── SECTION 3: DURING & AFTER TOUR ── -->
+  <div class="ops-section">
+    <div class="ops-section-heading teal">During &amp; After Tour</div>
+
+    <a href="FORM-9-URL" target="_blank" rel="noopener" class="ops-btn">
+      <span class="ops-btn-label">
+        Post-Tour Reset &amp; Daily Log
+        <span class="ops-btn-sub">Complete at end of operating day</span>
+      </span>
+      <svg class="arrow ops-btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+    </a>
+
+    <a href="FORM-8-URL" target="_blank" rel="noopener" class="ops-btn incident">
+      <span class="ops-btn-label">
+        Report an Incident
+        <span class="ops-btn-sub">Level 1 – 3 · submit as soon as safe to do so</span>
+      </span>
+      <svg class="arrow ops-btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+    </a>
+
+    <a href="FORM-6-URL" target="_blank" rel="noopener" class="ops-btn">
+      <span class="ops-btn-label">
+        Morning Log / Post-Experience Notes
+        <span class="ops-btn-sub">Same form as Pre-Launch — covers post-experience section</span>
+      </span>
+      <svg class="arrow ops-btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+    </a>
+  </div>
+
+  <!-- ── SECTION 4: RECORDS & TRAINING ── -->
+  <div class="ops-section">
+    <div class="ops-section-heading teal">Records &amp; Training</div>
+
+    <a href="FORM-10-URL" target="_blank" rel="noopener" class="ops-btn">
+      <span class="ops-btn-label">
+        Guide Training Record
+        <span class="ops-btn-sub">Induction, competency assessments, shadow tours</span>
+      </span>
+      <svg class="arrow ops-btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+    </a>
+
+    <a href="https://docs.google.com/spreadsheets/d/1dXD23ZTwmr5J5XMK3heDI3EDKz3Vcu_nku4GxXp1T2Y/edit" target="_blank" rel="noopener" class="ops-btn spreadsheet">
+      <span class="ops-btn-label">
+        Open Master Spreadsheet
+        <span class="ops-btn-sub">SHER TMS — Master Database 2026</span>
+      </span>
+      <svg class="arrow ops-btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+    </a>
+  </div>
+
+</main>
+
+<!-- EMERGENCY PANEL — pinned to bottom -->
+<div class="ops-emergency">
+  <div class="ops-emergency-title">Emergency Reference</div>
+  <div class="ops-emergency-grid">
+    <div class="ops-emergency-item">
+      <strong>Emergency</strong>
+      <a href="tel:911">911</a>
+    </div>
+    <div class="ops-emergency-item">
+      <strong>Coast Guard</strong>
+      VHF Channel 16
+    </div>
+    <div class="ops-emergency-item">
+      <strong>Ops Lead — Kemble</strong>
+      <a href="tel:+17587165206">(758) 716-5206</a>
+    </div>
+    <div class="ops-emergency-item">
+      <strong>Email</strong>
+      <a href="mailto:bookings@safehavenecotours.com">bookings@</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    const d = new Date();
+    const days   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    document.getElementById('js-date').textContent =
+      days[d.getDay()] + ' ' + d.getDate() + ' ' + months[d.getMonth()];
+  })();
+</script>
+
+</body>
+</html>
