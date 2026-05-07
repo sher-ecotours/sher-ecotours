@@ -1,4 +1,4 @@
-// FYGARO PAYMENT LINKS — replace placeholders when live account is approved
+﻿// FYGARO PAYMENT LINKS — replace placeholders when live account is approved
 // Golden Mirror:        https://fygaro.com/pay/GOLDEN-MIRROR-PLACEHOLDER
 // Scorpio's Secret:     https://fygaro.com/pay/SCORPIOS-SECRET-PLACEHOLDER
 // Scorpio's Sanctuary:  https://fygaro.com/pay/SCORPIOS-SANCTUARY-PLACEHOLDER
@@ -8,13 +8,8 @@
    safehavenecotours.com
    ============================================================ */
 
-// ===== GOOGLE FORM 1 — GUEST ENQUIRY (kept for reference — native modal now used) =====
-// const _ENQUIRY_FORM_URL  = 'https://docs.google.com/forms/d/e/1FAIpQLSdc2cdqx37mtyrdc81EHiA6VbL1b6jcBnfifvuq14BAYcVSAA/viewform';
-// ===== GOOGLE FORM 2 — DATE FLEXIBILITY / WAITLIST (kept for reference — native modal now used) =====
-// const _WAITLIST_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSdHOMyMc4nDExA6nI045wnr5-L9QoSncOO6L2SbtbippnWokg/viewform';
-
-// ===== TMS WEB APP ENDPOINT — paste deployed Google Apps Script URL here =====
-const _TMS_ENDPOINT = 'https://script.google.com/a/macros/safehavenecotours.com/s/AKfycbz0qTpXRM7vUPoXfThEK8AkbU5-f8S73d8hc-I73xTTbtwWrvxdWNYEBGCSDTfW4ts-/exec';
+// ===== TMS WEB APP ENDPOINT =====
+const _TMS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbz0qTpXRM7vUPoXfThEK8AkbU5-f8S73d8hc-I73xTTbtwWrvxdWNYEBGCSDTfW4ts-/exec';
 
 // ===== FYGARO PAYMENT URL CONSTANTS =====
 const _FYGARO = {
@@ -587,25 +582,18 @@ function _v(id) {
 
 // ── POST to TMS endpoint ──
 function _tmsPost(payload, onSuccess, btnEl) {
-  if (_TMS_ENDPOINT.indexOf('PASTE_') !== -1) {
-    // Endpoint not yet configured — show success anyway (wire up after Part 2 deploys)
-    onSuccess();
-    return;
-  }
   if (btnEl) { btnEl.disabled = true; btnEl.textContent = 'Sending…'; }
   fetch(_TMS_ENDPOINT, {
     method  : 'POST',
-    // text/plain avoids CORS preflight; GAS reads via e.postData.contents
-    headers : { 'Content-Type': 'text/plain' },
+    mode    : 'no-cors',
+    headers : { 'Content-Type': 'application/json' },
     body    : JSON.stringify(payload)
-  })
-  .then(onSuccess)
-  .catch(onSuccess); // show success regardless — GAS redirects make response opaque
+  }).then(onSuccess).catch(onSuccess);
 }
 
 // ── Enquiry form submit ──
 function _submitEnquiry() {
-  var required = ['enq-name','enq-email','enq-phone','enq-exp','enq-date1','enq-flex','enq-guests'];
+  var required = ['enq-name','enq-email','enq-phone','enq-exp','enq-date','enq-guests'];
   var missing = required.filter(function(id){ return !_v(id); });
   if (missing.length) {
     missing.forEach(function(id){
@@ -616,19 +604,16 @@ function _submitEnquiry() {
   }
   var btn = document.getElementById('enq-submit-btn');
   _tmsPost({
-    formType   : 'enquiry',
-    name       : _v('enq-name'),
-    email      : _v('enq-email'),
-    phone      : _v('enq-phone'),
-    experience : _v('enq-exp'),
-    date1      : _v('enq-date1'),
-    date2      : _v('enq-date2'),
-    date3      : _v('enq-date3'),
-    flexibility: _v('enq-flex'),
-    guests     : _v('enq-guests'),
-    occasion   : _v('enq-occasion'),
-    source     : _v('enq-source'),
-    notes      : _v('enq-notes')
+    formType                                  : 'enquiry',
+    'Full Name'                               : _v('enq-name'),
+    'Email Address'                           : _v('enq-email'),
+    'WhatsApp / Phone Number'                 : _v('enq-phone'),
+    'Which experience are you interested in?' : _v('enq-exp'),
+    'Preferred Date (first choice)'           : _v('enq-date'),
+    'Number of guests'                        : _v('enq-guests'),
+    'Is this for a special occasion?'         : _v('enq-occasion'),
+    'How did you hear about SHER?'            : _v('enq-source'),
+    "Anything else you'd like us to know?"    : _v('enq-notes')
   }, _showEnquirySuccess, btn);
 }
 
@@ -639,10 +624,8 @@ function _showEnquirySuccess() {
     '<span class="sher-modal-eyebrow">Received</span>' +
     '<h2 class="sher-modal-title" style="margin-bottom:18px">Thank you</h2>' +
     '<p style="font-size:15px;font-weight:300;color:rgba(240,230,200,0.72);line-height:1.85;margin-bottom:28px">' +
-      'We have received your enquiry and will be in touch personally within 24 hours.' +
-      '<br/><br/><em style="color:#d4a843;font-family:\'Cormorant Garamond\',serif;font-size:17px">' +
-      'You will hear from a person, not a system.' +
-      '</em></p>' +
+      'Thank you — we will be in touch within 24 hours.' +
+    '</p>' +
     '<button class="sher-modal-submit" onclick="closeSherModal(\'enquiry\')">Close</button>';
 }
 
@@ -659,17 +642,14 @@ function _submitWaitlist() {
   }
   var btn = document.getElementById('wl-submit-btn');
   _tmsPost({
-    formType   : 'waitlist',
-    name       : _v('wl-name'),
-    email      : _v('wl-email'),
-    phone      : _v('wl-phone'),
-    experience : _v('wl-exp'),
-    availFrom  : _v('wl-from'),
-    availUntil : _v('wl-until'),
-    time       : _v('wl-time'),
-    occasion   : _v('wl-occasion'),
-    contact    : _v('wl-contact'),
-    notes      : _v('wl-notes')
+    formType                                  : 'flexibility',
+    'Full Name'                               : _v('wl-name'),
+    'Email Address'                           : _v('wl-email'),
+    'WhatsApp / Phone Number'                 : _v('wl-phone'),
+    'Available from'                          : _v('wl-from'),
+    'Available until'                         : _v('wl-until'),
+    'Which experience are you interested in?' : _v('wl-exp'),
+    'How would you like us to contact you?'   : _v('wl-contact')
   }, _showWaitlistSuccess, btn);
 }
 
@@ -680,7 +660,7 @@ function _showWaitlistSuccess() {
     '<span class="sher-modal-eyebrow">You are on our list</span>' +
     '<h2 class="sher-modal-title" style="margin-bottom:18px">Thank you</h2>' +
     '<p style="font-size:15px;font-weight:300;color:rgba(240,230,200,0.72);line-height:1.85;margin-bottom:28px">' +
-      'We have added you to our availability list. You will hear from us personally the moment a matching slot opens — before any public announcement.' +
+      'You are on our availability list. We will be in touch when a slot opens.' +
       '</p>' +
     '<button class="sher-modal-submit" onclick="closeSherModal(\'waitlist\')">Close</button>';
 }
@@ -727,61 +707,48 @@ function _buildEnquiryModals() {
       '<div class="sher-modal-row">' +
         '<div class="sher-modal-field"><label class="sher-modal-label">Email Address</label>' +
           '<input class="sher-modal-input" id="enq-email" type="email" placeholder="your@email.com"/></div>' +
-        '<div class="sher-modal-field"><label class="sher-modal-label">WhatsApp / Phone</label>' +
+        '<div class="sher-modal-field"><label class="sher-modal-label">WhatsApp / Phone Number</label>' +
           '<input class="sher-modal-input" id="enq-phone" type="tel" placeholder="+1 758 000 0000"/></div>' +
       '</div>' +
 
-      '<div class="sher-modal-field"><label class="sher-modal-label">Which experience?</label>' +
+      '<div class="sher-modal-field"><label class="sher-modal-label">Which experience are you interested in?</label>' +
         '<select class="sher-modal-select" id="enq-exp"><option value="" disabled selected>Select an experience…</option>'+expOpts+'</select></div>' +
 
-      '<div class="sher-modal-field"><label class="sher-modal-label">Preferred Date (first choice)</label>' +
-        '<input class="sher-modal-input" id="enq-date1" type="date"/></div>' +
-
       '<div class="sher-modal-row">' +
-        '<div class="sher-modal-field"><label class="sher-modal-label">Second choice (optional)</label>' +
-          '<input class="sher-modal-input" id="enq-date2" type="date"/></div>' +
-        '<div class="sher-modal-field"><label class="sher-modal-label">Third choice (optional)</label>' +
-          '<input class="sher-modal-input" id="enq-date3" type="date"/></div>' +
-      '</div>' +
-
-      '<div class="sher-modal-row">' +
-        '<div class="sher-modal-field"><label class="sher-modal-label">How fixed are your dates?</label>' +
-          '<select class="sher-modal-select" id="enq-flex">' +
-            '<option value="" disabled selected>Select…</option>' +
-            '<option value="I need these specific dates">I need these specific dates</option>' +
-            '<option value="I am somewhat flexible">I am somewhat flexible</option>' +
-            '<option value="Any date works">Any date works — open to anything available</option>' +
-          '</select></div>' +
+        '<div class="sher-modal-field"><label class="sher-modal-label">Preferred Date</label>' +
+          '<input class="sher-modal-input" id="enq-date" type="date"/></div>' +
         '<div class="sher-modal-field"><label class="sher-modal-label">Number of guests</label>' +
           '<select class="sher-modal-select" id="enq-guests">' +
             '<option value="" disabled selected>Select…</option>' +
             '<option>1</option><option>2</option><option>3</option>' +
-            '<option>4</option><option>5</option><option>6</option><option>More than 6</option>' +
+            '<option>4</option><option>5</option><option>6</option>' +
           '</select></div>' +
       '</div>' +
 
       '<div class="sher-modal-row">' +
-        '<div class="sher-modal-field"><label class="sher-modal-label">Special occasion? (optional)</label>' +
+        '<div class="sher-modal-field"><label class="sher-modal-label">Is this for a special occasion?</label>' +
           '<select class="sher-modal-select" id="enq-occasion">' +
-            '<option value="">None</option><option>Proposal</option><option>Engagement</option>' +
+            '<option value="None">None</option><option>Proposal</option>' +
             '<option>Anniversary</option><option>Vow Renewal</option><option>Birthday</option><option>Other</option>' +
           '</select></div>' +
-        '<div class="sher-modal-field"><label class="sher-modal-label">How did you hear about us? (optional)</label>' +
+        '<div class="sher-modal-field"><label class="sher-modal-label">How did you hear about SHER?</label>' +
           '<select class="sher-modal-select" id="enq-source">' +
             '<option value="">Prefer not to say</option>' +
-            '<option>Resort or hotel concierge</option><option>Google search</option>' +
-            '<option>Instagram or Facebook</option><option>TripAdvisor</option>' +
-            '<option>Friend or family</option><option>Other</option>' +
+            '<option value="Resort concierge">Resort concierge</option>' +
+            '<option value="Google">Google</option>' +
+            '<option value="Social media">Social media</option>' +
+            '<option value="Friend">Friend</option>' +
+            '<option value="Other">Other</option>' +
           '</select></div>' +
       '</div>' +
 
-      '<div class="sher-modal-field"><label class="sher-modal-label">Anything else you\'d like us to know? (optional)</label>' +
+      '<div class="sher-modal-field"><label class="sher-modal-label">Anything else? (optional)</label>' +
         '<textarea class="sher-modal-textarea" id="enq-notes" placeholder="Access needs, celebration details, questions…"></textarea></div>' +
 
       '<div class="sher-modal-actions">' +
         '<button class="sher-modal-submit" id="enq-submit-btn" onclick="_submitEnquiry()">' +
           '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>' +
-          ' Send Enquiry' +
+          ' Request a Private Tour Window' +
         '</button>' +
       '</div>' +
       '<p class="sher-modal-note">We will never share your details. You will receive a personal reply — not an automated email.</p>' +
@@ -802,12 +769,9 @@ function _buildEnquiryModals() {
       '<div class="sher-modal-row">' +
         '<div class="sher-modal-field"><label class="sher-modal-label">Email Address</label>' +
           '<input class="sher-modal-input" id="wl-email" type="email" placeholder="your@email.com"/></div>' +
-        '<div class="sher-modal-field"><label class="sher-modal-label">WhatsApp / Phone</label>' +
+        '<div class="sher-modal-field"><label class="sher-modal-label">WhatsApp / Phone Number</label>' +
           '<input class="sher-modal-input" id="wl-phone" type="tel" placeholder="+1 758 000 0000"/></div>' +
       '</div>' +
-
-      '<div class="sher-modal-field"><label class="sher-modal-label">Which experience?</label>' +
-        '<select class="sher-modal-select" id="wl-exp"><option value="" disabled selected>Select an experience…</option>'+expOpts+'</select></div>' +
 
       '<div class="sher-modal-row">' +
         '<div class="sher-modal-field"><label class="sher-modal-label">Available from</label>' +
@@ -816,36 +780,20 @@ function _buildEnquiryModals() {
           '<input class="sher-modal-input" id="wl-until" type="date"/></div>' +
       '</div>' +
 
-      '<div class="sher-modal-row">' +
-        '<div class="sher-modal-field"><label class="sher-modal-label">Preferred time</label>' +
-          '<select class="sher-modal-select" id="wl-time">' +
-            '<option value="" disabled selected>Select…</option>' +
-            '<option value="Dawn — 5:15 AM">Dawn — 5:15 AM</option>' +
-            '<option value="Mid-morning — 9:00 AM">Mid-morning — 9:00 AM</option>' +
-            '<option value="Either / Flexible">Either / Flexible</option>' +
-            '<option value="By appointment">By appointment (Islet experiences)</option>' +
-          '</select></div>' +
-        '<div class="sher-modal-field"><label class="sher-modal-label">Special occasion? (optional)</label>' +
-          '<select class="sher-modal-select" id="wl-occasion">' +
-            '<option value="">None</option><option>Proposal</option><option>Engagement</option>' +
-            '<option>Anniversary</option><option>Vow Renewal</option><option>Birthday</option><option>Other</option>' +
-          '</select></div>' +
-      '</div>' +
+      '<div class="sher-modal-field"><label class="sher-modal-label">Which experience?</label>' +
+        '<select class="sher-modal-select" id="wl-exp"><option value="" disabled selected>Select an experience…</option>'+expOpts+'</select></div>' +
 
       '<div class="sher-modal-field"><label class="sher-modal-label">How would you like us to contact you?</label>' +
         '<select class="sher-modal-select" id="wl-contact">' +
           '<option value="" disabled selected>Select…</option>' +
-          '<option value="Contact me when anything opens in my window">Contact me when anything opens in my window</option>' +
-          '<option value="My specific window only">My specific window only — do not suggest other dates</option>' +
+          '<option value="Contact me when anything opens">Contact me when anything opens</option>' +
+          '<option value="My specific window only">My specific window only</option>' +
         '</select></div>' +
-
-      '<div class="sher-modal-field"><label class="sher-modal-label">Anything else? (optional)</label>' +
-        '<textarea class="sher-modal-textarea" id="wl-notes" placeholder="Any other details that would help us match your window…"></textarea></div>' +
 
       '<div class="sher-modal-actions">' +
         '<button class="sher-modal-submit" id="wl-submit-btn" onclick="_submitWaitlist()">' +
           '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>' +
-          ' Add Me to the List' +
+          ' Add Me to the Availability List' +
         '</button>' +
       '</div>' +
       '<p class="sher-modal-note">You will hear from us personally. We never send automated availability alerts.</p>' +
