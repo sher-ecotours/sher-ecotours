@@ -17,8 +17,9 @@
 
 // ── Constants — must match build-tms-phase2.gs ───────────────────────────────
 
-var _WA_SS_ID      = '1ETwJ00x2MSr2iiRFIsCoTocSSP_u3eWdS8OZCjFXAqs';
-var _WA_SHER_EMAIL = 'bookings@safehavenecotours.com';
+var _WA_SS_ID         = '1ETwJ00x2MSr2iiRFIsCoTocSSP_u3eWdS8OZCjFXAqs';
+var _WA_SHER_EMAIL    = 'bookings@safehavenecotours.com';
+var _WA_PWA_LOG_SS_ID = '1A2u8H22XaOjeXhYh7qcr4CHXbjN3Jk97keF7zZLFYc8';
 
 // ── doGet — called by Guide PWA to fetch today's bookings ─────────────────────
 
@@ -198,6 +199,22 @@ function _waHandleMorningLog(d) {
     ]);
   }
 
+  // Log raw submission to PWA log sheet
+  _logToPWASheet('FORM 6 — MORNING LOG', [
+    new Date(),
+    d['Experience(s) Delivered Today']           || '',
+    d['Sky Condition at Departure']              || '',
+    d['Experience Mode']                         || '',
+    d['Number of Guests']                        || '',
+    d['Was a Mystic Morning Bundle issued?']     || '',
+    d['Water Condition']                         || '',
+    d['Wildlife or Bay Observation (optional)']  || '',
+    d['Equipment Condition Check']               || '',
+    d['Equipment Notes (if any)']                || '',
+    d['Guest Mood at End of Experience']         || '',
+    d['Guide Notes (free text)']                 || ''
+  ]);
+
   // Equipment flag notification
   var equipCheck = d['Equipment Condition Check'] || '';
   if (equipCheck && equipCheck !== 'All good — nothing to report') {
@@ -230,6 +247,28 @@ function _waHandleEquipmentInspection(d) {
     });
   }
 
+  // Log raw submission to PWA log sheet
+  _logToPWASheet('FORM 7 — EQUIPMENT INSPECTION', [
+    new Date(),
+    d['Guide Name']                  || '',
+    d['Inspection Date']             || '',
+    d['Kayak-01 cleared']            || '',
+    d['Kayak-02 cleared']            || '',
+    d['Kayak-03 cleared']            || '',
+    d['Guide kayak cleared']         || '',
+    d['Electric canoe cleared']      || '',
+    d['PFDs checked']                || '',
+    d['First aid kit checked']       || '',
+    d['Safety equipment checked']    || '',
+    d['Communication device checked']|| '',
+    d['Paddles checked']             || '',
+    d['Refreshment kit prepared']    || '',
+    d['Bay conditions assessed']     || '',
+    d['Launch area clear']           || '',
+    d['Any item flagged']            || '',
+    d['Inspection Notes']            || ''
+  ]);
+
   // Update Equipment Log with last inspection date
   var ss    = SpreadsheetApp.openById(_WA_SS_ID);
   var equip = ss.getSheetByName('11. EQUIPMENT LOG');
@@ -259,6 +298,22 @@ function _waHandleIncident(d) {
   var urgency = level === '3' ? 'EMERGENCY — ' : level === '2' ? 'URGENT — ' : '';
   var levels  = { '1': 'Minor', '2': 'Moderate', '3': 'Emergency' };
 
+  // Log raw submission to PWA log sheet
+  _logToPWASheet('FORM 8 — INCIDENT REPORTS', [
+    new Date(),
+    d['Incident Level']              || '',
+    d['Incident Type']               || '',
+    d['Date and Time']               || '',
+    d['Guide Name']                  || '',
+    d['Location']                    || '',
+    d['Description']                 || '',
+    d['Guests Involved']             || '',
+    d['Guest Names']                 || '',
+    d['Immediate Action Taken']      || '',
+    d['Medical Attention Required']  || '',
+    d['External Services Contacted'] || ''
+  ]);
+
   MailApp.sendEmail({
     to:      _WA_SHER_EMAIL,
     subject: urgency + 'Incident Report — Level ' + level + ' — ' + type,
@@ -286,6 +341,22 @@ function _waHandleIncident(d) {
 function _waHandlePostTourReset(d) {
   var ss    = SpreadsheetApp.openById(_WA_SS_ID);
   var today = Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'yyyy-MM-dd');
+
+  // Log raw submission to PWA log sheet
+  _logToPWASheet('FORM 9 — POST-TOUR RESET', [
+    new Date(),
+    d['Guide Name']                    || '',
+    d['Experience Delivered']          || '',
+    d['All guests safely returned']    || '',
+    d['Equipment returned and stowed'] || '',
+    d['Kayaks rinsed and secured']     || '',
+    d['PFDs dried and stored']         || '',
+    d['Launch area cleared']           || '',
+    d['Access secured']                || '',
+    d['Lost Property Found']           || '',
+    d['Lost Property Description']     || '',
+    d['Guide Notes']                   || ''
+  ]);
 
   // Lost property notification
   if (d['Lost Property Found'] === 'Yes') {
@@ -315,6 +386,18 @@ function _waHandlePostTourReset(d) {
   }
 
   return { status: 'success' };
+}
+
+// ── PWA log writer ────────────────────────────────────────────────────────────
+
+function _logToPWASheet(sheetName, row) {
+  try {
+    var ss    = SpreadsheetApp.openById(_WA_PWA_LOG_SS_ID);
+    var sheet = ss.getSheetByName(sheetName);
+    if (sheet) sheet.appendRow(row);
+  } catch (err) {
+    Logger.log('PWA log write failed (' + sheetName + '): ' + err.message);
+  }
 }
 
 // ── Utilities ─────────────────────────────────────────────────────────────────
