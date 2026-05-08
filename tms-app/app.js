@@ -132,7 +132,15 @@ function loadBookings() {
     '&order=departure.asc'
   )
   .then(function(rows) {
-    if (!Array.isArray(rows)) return;
+    if (!Array.isArray(rows)) {
+      console.warn('[SHER] today_bookings error:', JSON.stringify(rows));
+      if (!cached) {
+        container.innerHTML = '<p class="no-bookings">Could not load bookings. Check console for details.</p>' +
+          '<button class="retry-btn" onclick="loadBookings()">Try again</button>';
+      }
+      return;
+    }
+    console.log('[SHER] today_bookings returned', rows.length, 'row(s) for', today);
     var bookings = rows.map(function(r) {
       return {
         guestName:  r.guest_name  || '',
