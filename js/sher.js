@@ -9,7 +9,7 @@
    ============================================================ */
 
 // ===== TMS WEB APP ENDPOINT =====
-const _TMS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbz0qTpXRM7vUPoXfThEK8AkbU5-f8S73d8hc-I73xTTbtwWrvxdWNYEBGCSDTfW4ts-/exec';
+const _TMS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbwaiIdNQL9uS__m6A0zfepmbPJsaNAmdkzZZstCe_TU6P5rENkI6PWKQMeodGWK2UPinA/exec';
 
 // ===== FYGARO PAYMENT URL CONSTANTS =====
 const _FYGARO = {
