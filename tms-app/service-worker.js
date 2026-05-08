@@ -1,4 +1,4 @@
-const CACHE = 'sher-guide-v1';
+const CACHE = 'sher-guide-v2';
 const SHELL = [
   './',
   './index.html',
@@ -26,15 +26,9 @@ self.addEventListener('activate', e => {
 self.addEventListener('fetch', e => {
   const url = new URL(e.request.url);
 
-  // TMS API calls — network only, return offline stub on failure
-  if (url.hostname === 'script.google.com') {
-    e.respondWith(
-      fetch(e.request).catch(() =>
-        new Response(JSON.stringify({ status: 'offline', bookings: [] }), {
-          headers: { 'Content-Type': 'application/json' }
-        })
-      )
-    );
+  // Supabase API — network only, failures propagate so offline queue fires
+  if (url.hostname.endsWith('.supabase.co')) {
+    e.respondWith(fetch(e.request));
     return;
   }
 

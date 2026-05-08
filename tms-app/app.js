@@ -1,7 +1,39 @@
-/* ─── SHER Guide App ──────────────────────────────────────────────────────── */
+/* ─── SHER Guide App — Supabase backend ──────────────────────────────────── */
 'use strict';
 
-const ENDPOINT = 'https://script.google.com/macros/s/AKfycbwaiIdNQL9uS__m6A0zfepmbPJsaNAmdkzZZstCe_TU6P5rENkI6PWKQMeodGWK2UPinA/exec';
+const SUPABASE_URL      = 'https://zbklfuhsmnmcwcqcpdxk.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpia2xmdWhzbW5tY3djcWNwZHhrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgyNjMxNzQsImV4cCI6MjA5MzgzOTE3NH0.r6RAWjrMGRu9I31hI9fd7wNRPxAnjR0haHuxmgWuMpc';
+
+// ── Supabase REST helpers ──────────────────────────────────────────────────────
+
+function _sbHeaders() {
+  return {
+    'apikey':        SUPABASE_ANON_KEY,
+    'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+    'Content-Type':  'application/json',
+    'Prefer':        'return=minimal'
+  };
+}
+
+function _sbInsert(table, data) {
+  return fetch(SUPABASE_URL + '/rest/v1/' + table, {
+    method:  'POST',
+    headers: _sbHeaders(),
+    body:    JSON.stringify(data)
+  })
+  .then(function(r) { return r.status === 201; })
+  .catch(function()  { return false; });
+}
+
+function _sbSelect(table, query) {
+  return fetch(SUPABASE_URL + '/rest/v1/' + table + '?' + query, {
+    headers: {
+      'apikey':        SUPABASE_ANON_KEY,
+      'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+    }
+  })
+  .then(function(r) { return r.json(); });
+}
 
 // ── Boot ───────────────────────────────────────────────────────────────────────
 
@@ -25,11 +57,11 @@ function registerSW() {
 // ── Navigation ─────────────────────────────────────────────────────────────────
 
 var screenTitles = {
-  home:       'SHER Guide',
-  prelaunch:  'Pre-Launch Log',
-  equipment:  'Equipment Check',
-  incident:   'Incident Report',
-  reset:      'Post-Tour Reset'
+  home:      'SHER Guide',
+  prelaunch: 'Pre-Launch Log',
+  equipment: 'Equipment Check',
+  incident:  'Incident Report',
+  reset:     'Post-Tour Reset'
 };
 
 function initNav() {
@@ -50,27 +82,22 @@ function showScreen(id) {
   });
 
   var screen = document.getElementById('screen-' + id);
-  if (screen) {
-    screen.classList.add('active');
-    screen.scrollTop = 0;
-  }
+  if (screen) { screen.classList.add('active'); screen.scrollTop = 0; }
 
-  var header = document.getElementById('app-header');
   var titleEl = document.getElementById('header-title');
   titleEl.textContent = screenTitles[id] || 'SHER Guide';
+
+  var header = document.getElementById('app-header');
   header.classList.toggle('header--incident', id === 'incident');
 
-  // Show date only on home
   document.getElementById('header-date').style.display = id === 'home' ? 'block' : 'none';
 }
 
 function setDate() {
-  var el = document.getElementById('header-date');
-  el.textContent = new Date().toLocaleDateString('en-US', {
+  document.getElementById('header-date').textContent = new Date().toLocaleDateString('en-US', {
     weekday: 'long', month: 'long', day: 'numeric'
   });
 
-  // Set incident datetime default to now
   var dtInput = document.getElementById('f8-datetime');
   if (dtInput) {
     var now = new Date();
@@ -86,7 +113,6 @@ function loadBookings() {
   var metaEl    = document.getElementById('bookings-meta');
   var noteEl    = document.getElementById('bookings-cache-note');
 
-  // Show cached immediately if available
   var cached = null;
   try {
     var raw = localStorage.getItem('sher_bookings_cache');
@@ -99,28 +125,39 @@ function loadBookings() {
     if (metaEl) metaEl.style.display = 'flex';
   }
 
-  // Try live fetch
-  fetch(ENDPOINT + '?formType=getTodayBookings', { redirect: 'follow' })
-    .then(function(r) { return r.json(); })
-    .then(function(json) {
-      if (json.status === 'success') {
-        renderBookings(json.bookings);
-        try {
-          localStorage.setItem('sher_bookings_cache', JSON.stringify({
-            data: json.bookings, ts: Date.now()
-          }));
-        } catch(e) {}
-        if (noteEl) noteEl.textContent = 'Updated ' + fmtTime(new Date());
-        if (metaEl) metaEl.style.display = 'flex';
-      }
-    })
-    .catch(function() {
-      if (!cached) {
-        container.innerHTML =
-          '<p class="no-bookings">Unable to load &mdash; no connection.<br/>Bookings will appear when connected.</p>' +
-          '<button class="retry-btn" onclick="loadBookings()">Try again</button>';
-      }
+  var today = todayISO();
+  _sbSelect('today_bookings',
+    'booking_date=eq.' + today +
+    '&select=guest_name,experience,departure,group_size,occasion' +
+    '&order=departure.asc'
+  )
+  .then(function(rows) {
+    if (!Array.isArray(rows)) return;
+    var bookings = rows.map(function(r) {
+      return {
+        guestName:  r.guest_name  || '',
+        experience: r.experience  || '',
+        departure:  r.departure   || '',
+        groupSize:  r.group_size  || '',
+        occasion:   r.occasion    || ''
+      };
     });
+    renderBookings(bookings);
+    try {
+      localStorage.setItem('sher_bookings_cache', JSON.stringify({
+        data: bookings, ts: Date.now()
+      }));
+    } catch(e) {}
+    if (noteEl) noteEl.textContent = 'Updated ' + fmtTime(new Date());
+    if (metaEl) metaEl.style.display = 'flex';
+  })
+  .catch(function() {
+    if (!cached) {
+      container.innerHTML =
+        '<p class="no-bookings">No connection. Bookings will appear when connected.</p>' +
+        '<button class="retry-btn" onclick="loadBookings()">Try again</button>';
+    }
+  });
 }
 
 function renderBookings(bookings) {
@@ -129,18 +166,17 @@ function renderBookings(bookings) {
     container.innerHTML = '<p class="no-bookings">No experiences scheduled today.</p>';
     return;
   }
-
   container.innerHTML = bookings.map(function(b) {
     var tags = '';
     if (b.departure) tags += '<span class="booking-tag">' + esc(b.departure) + '</span>';
-    if (b.groupSize) tags += '<span class="booking-tag">' + esc(b.groupSize) + ' guest' + (b.groupSize != '1' ? 's' : '') + '</span>';
+    if (b.groupSize)  tags += '<span class="booking-tag">' + esc(b.groupSize) + ' guest' + (b.groupSize != '1' ? 's' : '') + '</span>';
     if (b.occasion && b.occasion !== 'None' && b.occasion !== '') {
       tags += '<span class="booking-tag booking-tag--occasion">' + esc(b.occasion) + '</span>';
     }
     return (
       '<div class="booking-card">' +
         '<div class="booking-experience">' + esc(b.experience) + '</div>' +
-        '<div class="booking-guest">' + esc(b.guestName) + '</div>' +
+        '<div class="booking-guest">'      + esc(b.guestName)  + '</div>' +
         (tags ? '<div class="booking-meta">' + tags + '</div>' : '') +
       '</div>'
     );
@@ -155,23 +191,15 @@ function initForms() {
   document.getElementById('form-incident').addEventListener('submit', onIncidentSubmit);
   document.getElementById('form-reset').addEventListener('submit', onResetSubmit);
 
-  // Conditional field visibility
   on('f6-equip-condition', 'change', function(v) {
     toggle('f6-equip-notes-wrap', v !== '' && v !== 'All good — nothing to report');
   });
-  on('f7-flagged', 'change', function(v) {
-    toggle('f7-notes-wrap', v === 'Yes');
-  });
-  on('f8-guests-involved', 'change', function(v) {
-    toggle('f8-guest-names-wrap', v === 'Yes');
-  });
-  on('f9-lost-property', 'change', function(v) {
-    toggle('f9-lost-desc-wrap', v === 'Yes');
-  });
+  on('f7-flagged',          'change', function(v) { toggle('f7-notes-wrap',         v === 'Yes'); });
+  on('f8-guests-involved',  'change', function(v) { toggle('f8-guest-names-wrap',   v === 'Yes'); });
+  on('f9-lost-property',    'change', function(v) { toggle('f9-lost-desc-wrap',     v === 'Yes'); });
 
-  // Clear input-error on change
   document.querySelectorAll('.form-input, .form-select, .form-textarea').forEach(function(el) {
-    el.addEventListener('input', function() { el.classList.remove('input-error'); });
+    el.addEventListener('input',  function() { el.classList.remove('input-error'); });
     el.addEventListener('change', function() { el.classList.remove('input-error'); });
   });
 }
@@ -182,46 +210,57 @@ function onPrelaunchSubmit(e) {
   e.preventDefault();
   if (!validateRequired(e.target)) return;
 
-  var payload = {
-    formType: 'morningLog',
-    'Experience(s) Delivered Today': val('f6-experience'),
-    'Sky Condition at Departure':    val('f6-sky'),
-    'Experience Mode':               val('f6-mode'),
-    'Number of Guests':              val('f6-guests'),
-    'Was a Mystic Morning Bundle issued?': val('f6-mystic'),
-    'Water Condition':               val('f6-water'),
-    'Wildlife or Bay Observation (optional)': val('f6-wildlife'),
-    'Equipment Condition Check':     val('f6-equip-condition'),
-    'Equipment Notes (if any)':      val('f6-equip-notes'),
-    'Guest Mood at End of Experience': val('f6-mood'),
-    'Guide Notes (free text)':       val('f6-guide-notes')
-  };
-
-  submitToTMS(payload, 'form-prelaunch',
-    'Morning log submitted. Have a safe and extraordinary experience.');
+  submitToSupabase('guide_morning_logs', {
+    experience_delivered: val('f6-experience'),
+    sky_condition:        val('f6-sky'),
+    experience_mode:      val('f6-mode'),
+    number_of_guests:     val('f6-guests'),
+    mystic_bundle_issued: val('f6-mystic'),
+    water_condition:      val('f6-water'),
+    wildlife_observation: val('f6-wildlife'),
+    equipment_condition:  val('f6-equip-condition'),
+    equipment_notes:      val('f6-equip-notes'),
+    guest_mood:           val('f6-mood'),
+    guide_notes:          val('f6-guide-notes')
+  }, 'form-prelaunch', 'Morning log submitted. Have a safe and extraordinary experience.');
 }
 
 // ── Form 7: Equipment Inspection ───────────────────────────────────────────────
+
+var _f7FieldMap = {
+  'Kayak-01 cleared':           'kayak_01',
+  'Kayak-02 cleared':           'kayak_02',
+  'Kayak-03 cleared':           'kayak_03',
+  'Guide kayak cleared':        'guide_kayak',
+  'Electric canoe cleared':     'electric_canoe',
+  'PFDs checked':               'pfds_checked',
+  'First aid kit checked':      'first_aid_kit',
+  'Safety equipment checked':   'safety_equipment',
+  'Communication device checked': 'communication_device',
+  'Paddles checked':            'paddles',
+  'Refreshment kit prepared':   'refreshment_kit',
+  'Bay conditions assessed':    'bay_conditions',
+  'Launch area clear':          'launch_area'
+};
 
 function onEquipmentSubmit(e) {
   e.preventDefault();
   if (!validateRequired(e.target)) return;
 
-  var payload = {
-    formType: 'equipmentInspection',
-    'Guide Name':      val('f7-guide'),
-    'Inspection Date': todayISO()
+  var data = {
+    guide_name:       val('f7-guide'),
+    inspection_date:  todayISO(),
+    any_item_flagged: val('f7-flagged'),
+    inspection_notes: val('f7-notes')
   };
 
-  // Collect all checkbox values
   e.target.querySelectorAll('input[type="checkbox"][data-field]').forEach(function(cb) {
-    payload[cb.dataset.field] = cb.checked ? 'Yes' : 'No';
+    var col = _f7FieldMap[cb.dataset.field];
+    if (col) data[col] = cb.checked ? 'Yes' : 'No';
   });
 
-  payload['Any item flagged']   = val('f7-flagged');
-  payload['Inspection Notes']   = val('f7-notes');
-
-  submitToTMS(payload, 'form-equipment', 'Equipment check logged.');
+  submitToSupabase('guide_equipment_inspections', data,
+    'form-equipment', 'Equipment check logged.');
 }
 
 // ── Form 8: Incident Report ────────────────────────────────────────────────────
@@ -229,7 +268,6 @@ function onEquipmentSubmit(e) {
 function onIncidentSubmit(e) {
   e.preventDefault();
 
-  // Validate level selection
   var levelVal = document.querySelector('input[name="f8-level"]:checked');
   if (!levelVal) {
     showFormError(e.target, 'Please select an incident level (1, 2, or 3).');
@@ -237,23 +275,19 @@ function onIncidentSubmit(e) {
   }
   if (!validateRequired(e.target)) return;
 
-  var payload = {
-    formType: 'incident',
-    'Incident Level':              levelVal.value,
-    'Incident Type':               val('f8-type'),
-    'Date and Time':               val('f8-datetime'),
-    'Guide Name':                  val('f8-guide'),
-    'Location':                    val('f8-location'),
-    'Description':                 val('f8-description'),
-    'Guests Involved':             val('f8-guests-involved'),
-    'Guest Names':                 val('f8-guest-names'),
-    'Immediate Action Taken':      val('f8-action'),
-    'Medical Attention Required':  val('f8-medical'),
-    'External Services Contacted': val('f8-external')
-  };
-
-  submitToTMS(payload, 'form-incident',
-    'Incident reported. Operations Lead has been notified.');
+  submitToSupabase('guide_incidents', {
+    incident_level:    levelVal.value,
+    incident_type:     val('f8-type'),
+    incident_datetime: val('f8-datetime'),
+    guide_name:        val('f8-guide'),
+    location:          val('f8-location'),
+    description:       val('f8-description'),
+    guests_involved:   val('f8-guests-involved'),
+    guest_names:       val('f8-guest-names'),
+    immediate_action:  val('f8-action'),
+    medical_attention: val('f8-medical'),
+    external_services: val('f8-external')
+  }, 'form-incident', 'Incident reported. Operations Lead has been notified.');
 }
 
 // ── Form 9: Post-Tour Reset ────────────────────────────────────────────────────
@@ -262,65 +296,44 @@ function onResetSubmit(e) {
   e.preventDefault();
   if (!validateRequired(e.target)) return;
 
-  // Require all confirmation checkboxes
   var checks = e.target.querySelectorAll('.required-check');
   var allChecked = true;
   checks.forEach(function(cb) {
     var item = cb.closest('.check-item');
-    if (!cb.checked) {
-      if (item) item.classList.add('check-error');
-      allChecked = false;
-    } else {
-      if (item) item.classList.remove('check-error');
-    }
+    if (!cb.checked) { if (item) item.classList.add('check-error'); allChecked = false; }
+    else             { if (item) item.classList.remove('check-error'); }
   });
   if (!allChecked) {
     showFormError(e.target, 'Please confirm all items before completing the day.');
     return;
   }
 
-  var payload = {
-    formType: 'postTourReset',
-    'Guide Name':                  val('f9-guide'),
-    'Experience Delivered':        val('f9-experience'),
-    'All guests safely returned':  chk('f9-check-guests'),
-    'Equipment returned and stowed': chk('f9-check-equipment'),
-    'Kayaks rinsed and secured':   chk('f9-check-kayaks'),
-    'PFDs dried and stored':       chk('f9-check-pfds'),
-    'Launch area cleared':         chk('f9-check-launch'),
-    'Access secured':              chk('f9-check-access'),
-    'Lost Property Found':         val('f9-lost-property'),
-    'Lost Property Description':   val('f9-lost-desc'),
-    'Guide Notes':                 val('f9-notes')
-  };
-
-  submitToTMS(payload, 'form-reset', 'Day complete. Well done.');
+  submitToSupabase('guide_post_tour_resets', {
+    guide_name:           val('f9-guide'),
+    experience_delivered: val('f9-experience'),
+    guests_returned:      chk('f9-check-guests'),
+    equipment_stowed:     chk('f9-check-equipment'),
+    kayaks_secured:       chk('f9-check-kayaks'),
+    pfds_stored:          chk('f9-check-pfds'),
+    launch_cleared:       chk('f9-check-launch'),
+    access_secured:       chk('f9-check-access'),
+    lost_property_found:  val('f9-lost-property'),
+    lost_property_desc:   val('f9-lost-desc'),
+    guide_notes:          val('f9-notes')
+  }, 'form-reset', 'Day complete. Well done.');
 }
 
-// ── TMS submission ─────────────────────────────────────────────────────────────
+// ── Supabase submission ────────────────────────────────────────────────────────
 
-function submitToTMS(payload, formId, successMsg) {
+function submitToSupabase(table, data, formId, successMsg) {
   var form = document.getElementById(formId);
   var btn  = form ? form.querySelector('.submit-btn') : null;
   if (btn) { btn.disabled = true; btn.textContent = 'Submitting…'; }
 
-  postToTMS(payload).then(function(ok) {
-    if (!ok) queueSubmission(payload);
+  _sbInsert(table, data).then(function(ok) {
+    if (!ok) queueSubmission(table, data);
     showSuccess(formId, successMsg);
     updateQueueBanner();
-  });
-}
-
-function postToTMS(payload) {
-  return fetch(ENDPOINT, {
-    method:  'POST',
-    mode:    'no-cors',
-    headers: { 'Content-Type': 'application/json' },
-    body:    JSON.stringify(payload)
-  }).then(function() {
-    return true;
-  }).catch(function() {
-    return false;
   });
 }
 
@@ -329,12 +342,17 @@ function showSuccess(formId, message) {
   var screen = form ? form.closest('.screen') : null;
   if (!screen) return;
 
+  var originalLabel = form.querySelector('.submit-btn') ?
+    form.querySelector('.submit-btn').getAttribute('data-label') || '' : '';
+
   var div = document.createElement('div');
   div.className = 'success-overlay';
   div.innerHTML =
     '<div class="success-card">' +
       '<div class="success-icon">' +
-        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="9 12 11 14 15 10"/></svg>' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">' +
+          '<circle cx="12" cy="12" r="10"/><polyline points="9 12 11 14 15 10"/>' +
+        '</svg>' +
       '</div>' +
       '<p class="success-msg">' + esc(message) + '</p>' +
       '<button class="success-btn" id="success-done-btn">Done</button>' +
@@ -346,18 +364,13 @@ function showSuccess(formId, message) {
     div.remove();
     if (form) {
       form.reset();
-      // Reset conditional wrappers
-      form.querySelectorAll('.conditional-wrap').forEach(function(w) {
-        w.classList.remove('visible');
-        w.style.display = 'none';
-      });
-      // Re-enable submit button
+      form.querySelectorAll('.conditional-wrap').forEach(function(w) { w.style.display = 'none'; });
+      form.querySelectorAll('.check-error').forEach(function(el) { el.classList.remove('check-error'); });
       var btn = form.querySelector('.submit-btn');
-      if (btn) { btn.disabled = false; btn.textContent = btn.dataset.label || btn.textContent; }
-      // Reset check-error states
-      form.querySelectorAll('.check-error').forEach(function(el) {
-        el.classList.remove('check-error');
-      });
+      if (btn) {
+        btn.disabled    = false;
+        btn.textContent = originalLabel || btn.textContent;
+      }
     }
     showScreen('home');
     loadBookings();
@@ -373,15 +386,14 @@ function showFormError(form, msg) {
   }
   err.textContent = msg;
   form.scrollTop = 0;
-  err.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
 // ── Offline queue ──────────────────────────────────────────────────────────────
 
-function queueSubmission(payload) {
+function queueSubmission(table, data) {
   try {
     var q = JSON.parse(localStorage.getItem('sher_queue') || '[]');
-    q.push({ payload: payload, ts: Date.now() });
+    q.push({ table: table, data: data, ts: Date.now() });
     localStorage.setItem('sher_queue', JSON.stringify(q));
   } catch(e) {}
 }
@@ -394,7 +406,7 @@ function flushQueue() {
     var chain = Promise.resolve();
     q.forEach(function(item) {
       chain = chain.then(function() {
-        return postToTMS(item.payload).then(function(ok) {
+        return _sbInsert(item.table, item.data).then(function(ok) {
           if (!ok) remaining.push(item);
         });
       });
@@ -408,7 +420,7 @@ function flushQueue() {
 
 function updateQueueBanner() {
   try {
-    var q = JSON.parse(localStorage.getItem('sher_queue') || '[]');
+    var q      = JSON.parse(localStorage.getItem('sher_queue') || '[]');
     var banner = document.getElementById('queue-banner');
     if (banner) banner.classList.toggle('visible', q.length > 0);
   } catch(e) {}
@@ -450,10 +462,10 @@ function validateRequired(form) {
 function esc(str) {
   if (!str && str !== 0) return '';
   return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
+    .replace(/&/g,  '&amp;')
+    .replace(/</g,  '&lt;')
+    .replace(/>/g,  '&gt;')
+    .replace(/"/g,  '&quot;');
 }
 
 function todayISO() {

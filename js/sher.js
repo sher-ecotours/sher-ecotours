@@ -8,8 +8,9 @@
    safehavenecotours.com
    ============================================================ */
 
-// ===== TMS WEB APP ENDPOINT =====
-const _TMS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbwaiIdNQL9uS__m6A0zfepmbPJsaNAmdkzZZstCe_TU6P5rENkI6PWKQMeodGWK2UPinA/exec';
+// ===== SUPABASE — website form submissions =====
+const _SB_URL = 'https://zbklfuhsmnmcwcqcpdxk.supabase.co';
+const _SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpia2xmdWhzbW5tY3djcWNwZHhrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgyNjMxNzQsImV4cCI6MjA5MzgzOTE3NH0.r6RAWjrMGRu9I31hI9fd7wNRPxAnjR0haHuxmgWuMpc';
 
 // ===== FYGARO PAYMENT URL CONSTANTS =====
 const _FYGARO = {
@@ -580,15 +581,21 @@ function _v(id) {
   return el ? el.value.trim() : '';
 }
 
-// ── POST to TMS endpoint ──
-function _tmsPost(payload, onSuccess, btnEl) {
+// ── Supabase insert helper ──
+function _sbInsert(table, data, onSuccess, btnEl) {
   if (btnEl) { btnEl.disabled = true; btnEl.textContent = 'Sending…'; }
-  fetch(_TMS_ENDPOINT, {
+  fetch(_SB_URL + '/rest/v1/' + table, {
     method  : 'POST',
-    mode    : 'no-cors',
-    headers : { 'Content-Type': 'application/json' },
-    body    : JSON.stringify(payload)
-  }).then(onSuccess).catch(onSuccess);
+    headers : {
+      'apikey'       : _SB_KEY,
+      'Authorization': 'Bearer ' + _SB_KEY,
+      'Content-Type' : 'application/json',
+      'Prefer'       : 'return=minimal'
+    },
+    body: JSON.stringify(data)
+  })
+  .then(onSuccess)
+  .catch(onSuccess);
 }
 
 // ── Enquiry form submit ──
@@ -603,17 +610,16 @@ function _submitEnquiry() {
     return;
   }
   var btn = document.getElementById('enq-submit-btn');
-  _tmsPost({
-    formType                                  : 'enquiry',
-    'Full Name'                               : _v('enq-name'),
-    'Email Address'                           : _v('enq-email'),
-    'WhatsApp / Phone Number'                 : _v('enq-phone'),
-    'Which experience are you interested in?' : _v('enq-exp'),
-    'Preferred Date (first choice)'           : _v('enq-date'),
-    'Number of guests'                        : _v('enq-guests'),
-    'Is this for a special occasion?'         : _v('enq-occasion'),
-    'How did you hear about SHER?'            : _v('enq-source'),
-    "Anything else you'd like us to know?"    : _v('enq-notes')
+  _sbInsert('enquiries', {
+    full_name:        _v('enq-name'),
+    email_address:    _v('enq-email'),
+    whatsapp_phone:   _v('enq-phone'),
+    experience:       _v('enq-exp'),
+    preferred_date:   _v('enq-date'),
+    number_of_guests: _v('enq-guests'),
+    special_occasion: _v('enq-occasion'),
+    how_heard:        _v('enq-source'),
+    notes:            _v('enq-notes')
   }, _showEnquirySuccess, btn);
 }
 
@@ -641,15 +647,14 @@ function _submitWaitlist() {
     return;
   }
   var btn = document.getElementById('wl-submit-btn');
-  _tmsPost({
-    formType                                  : 'flexibility',
-    'Full Name'                               : _v('wl-name'),
-    'Email Address'                           : _v('wl-email'),
-    'WhatsApp / Phone Number'                 : _v('wl-phone'),
-    'Available from'                          : _v('wl-from'),
-    'Available until'                         : _v('wl-until'),
-    'Which experience are you interested in?' : _v('wl-exp'),
-    'How would you like us to contact you?'   : _v('wl-contact')
+  _sbInsert('waitlist', {
+    full_name:          _v('wl-name'),
+    email_address:      _v('wl-email'),
+    whatsapp_phone:     _v('wl-phone'),
+    available_from:     _v('wl-from'),
+    available_until:    _v('wl-until'),
+    experience:         _v('wl-exp'),
+    contact_preference: _v('wl-contact')
   }, _showWaitlistSuccess, btn);
 }
 
