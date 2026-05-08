@@ -90,6 +90,7 @@ create table guide_post_tour_resets (
   pfds_stored          text,
   launch_cleared       text,
   access_secured       text,
+  guest_mood           text,
   lost_property_found  text,
   lost_property_desc   text,
   guide_notes          text

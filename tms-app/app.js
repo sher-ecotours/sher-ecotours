@@ -325,6 +325,7 @@ function onResetSubmit(e) {
     pfds_stored:          chk('f9-check-pfds'),
     launch_cleared:       chk('f9-check-launch'),
     access_secured:       chk('f9-check-access'),
+    guest_mood:           val('f9-mood'),
     lost_property_found:  val('f9-lost-property'),
     lost_property_desc:   val('f9-lost-desc'),
     guide_notes:          val('f9-notes')
