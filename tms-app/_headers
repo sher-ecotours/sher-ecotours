@@ -1,0 +1,15 @@
+# Service worker — must never be cached
+/service-worker.js
+  Cache-Control: no-cache, no-store, must-revalidate
+  Service-Worker-Allowed: /
+
+# App shell — short cache so updates land quickly
+/manifest.json
+  Cache-Control: public, max-age=3600
+
+/index.html
+  Cache-Control: public, max-age=3600
+
+# Static assets — cacheable for 24 hours
+/*
+  Cache-Control: public, max-age=86400
