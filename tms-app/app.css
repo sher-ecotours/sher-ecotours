@@ -359,8 +359,10 @@ html, body {
   padding: 14px 16px;
   border: 1.5px solid var(--border);
   border-radius: var(--radius-sm);
-  background: var(--bg);
-  color: var(--text);
+  background: #ffffff;
+  color: #111111;
+  -webkit-text-fill-color: #111111;
+  opacity: 1;
   font-size: 16px;
   font-family: inherit;
   appearance: none;
@@ -374,7 +376,9 @@ html, body {
   outline: none;
   border-color: var(--teal);
   box-shadow: 0 0 0 3px rgba(26,122,110,0.12);
-  background: var(--white);
+  background: #ffffff;
+  color: #111111;
+  -webkit-text-fill-color: #111111;
 }
 
 .form-input.input-error,
@@ -391,20 +395,25 @@ html, body {
   padding-top: 12px;
 }
 
-/* Explicit text colours — prevents white-on-white in OS dark mode or browser overrides */
+/* Near-black text on white — enforced for iOS Safari via -webkit-text-fill-color */
 input,
 select,
 textarea {
-  color: #1A1A2E;
+  color: #111111;
+  background-color: #ffffff;
+  opacity: 1;
+  -webkit-text-fill-color: #111111;
 }
 
 input::placeholder,
 textarea::placeholder {
-  color: #888888;
+  color: #666666;
+  -webkit-text-fill-color: #666666;
+  opacity: 1;
 }
 
 select option {
-  color: #1A1A2E;
+  color: #111111;
   background-color: #ffffff;
 }
 
@@ -690,22 +699,4 @@ select option {
     --red-light:  rgba(192,57,43,0.15);
   }
 
-  /* Unfocused inputs sit on dark bg — restore light text */
-  .form-input:not(:focus),
-  .form-select:not(:focus),
-  .form-textarea:not(:focus) {
-    color: var(--text);
-  }
-
-  /* Focused inputs flip to white bg — keep text dark for readability */
-  .form-input:focus,
-  .form-select:focus,
-  .form-textarea:focus {
-    color: #1A1A2E;
-  }
-
-  .form-input::placeholder,
-  .form-textarea::placeholder {
-    color: var(--text-3);
-  }
 }
