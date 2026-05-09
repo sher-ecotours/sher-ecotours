@@ -391,6 +391,23 @@ html, body {
   padding-top: 12px;
 }
 
+/* Explicit text colours — prevents white-on-white in OS dark mode or browser overrides */
+input,
+select,
+textarea {
+  color: #1A1A2E;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #888888;
+}
+
+select option {
+  color: #1A1A2E;
+  background-color: #ffffff;
+}
+
 /* Custom select arrow */
 .select-wrap { position: relative; }
 .select-wrap::after {
@@ -671,5 +688,24 @@ html, body {
     --teal-light: rgba(26,122,110,0.18);
     --gold-light: rgba(184,150,46,0.12);
     --red-light:  rgba(192,57,43,0.15);
+  }
+
+  /* Unfocused inputs sit on dark bg — restore light text */
+  .form-input:not(:focus),
+  .form-select:not(:focus),
+  .form-textarea:not(:focus) {
+    color: var(--text);
+  }
+
+  /* Focused inputs flip to white bg — keep text dark for readability */
+  .form-input:focus,
+  .form-select:focus,
+  .form-textarea:focus {
+    color: #1A1A2E;
+  }
+
+  .form-input::placeholder,
+  .form-textarea::placeholder {
+    color: var(--text-3);
   }
 }
