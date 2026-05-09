@@ -21,6 +21,13 @@ var _WA_SS_ID         = '1ETwJ00x2MSr2iiRFIsCoTocSSP_u3eWdS8OZCjFXAqs';
 var _WA_SHER_EMAIL    = 'bookings@safehavenecotours.com';
 var _WA_PWA_LOG_SS_ID = '1A2u8H22XaOjeXhYh7qcr4CHXbjN3Jk97keF7zZLFYc8';
 
+// Master TMS spreadsheet (contains 1. MASTER BOOKINGS tab)
+var _MASTER_SS_ID = '1dXD23ZTwmr5J5XMK3heDI3EDKz3Vcu_nku4GxXp1T2Y';
+
+// Supabase — Guide PWA backend
+var _SB_URL = 'https://zbklfuhsmnmcwcqcpdxk.supabase.co';
+var _SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpia2xmdWhzbW5tY3djcWNwZHhrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgyNjMxNzQsImV4cCI6MjA5MzgzOTE3NH0.r6RAWjrMGRu9I31hI9fd7wNRPxAnjR0haHuxmgWuMpc';
+
 // ── doGet — called by Guide PWA to fetch today's bookings ─────────────────────
 
 function doGet(e) {
@@ -398,6 +405,136 @@ function _logToPWASheet(sheetName, row) {
   } catch (err) {
     Logger.log('PWA log write failed (' + sheetName + '): ' + err.message);
   }
+}
+
+// ── Supabase Booking Sync ─────────────────────────────────────────────────────
+
+/**
+ * Reads today's confirmed bookings from 1. MASTER BOOKINGS and writes them to
+ * the Supabase today_bookings table so the Guide PWA can display them.
+ *
+ * Run manually via SHER Tools > Sync to Guide App, or automatically at 5 AM
+ * daily via the trigger installed by installDailyTrigger().
+ */
+function syncTodayBookingsToSupabase() {
+  var tz       = 'America/St_Lucia';
+  var todayStr = Utilities.formatDate(new Date(), tz, 'yyyy-MM-dd');
+
+  // ── 1. Read confirmed bookings for today ────────────────────────────────────
+  var ss    = SpreadsheetApp.openById(_MASTER_SS_ID);
+  var sheet = ss.getSheetByName('1. MASTER BOOKINGS');
+
+  if (!sheet) {
+    Logger.log('syncTodayBookingsToSupabase: sheet "1. MASTER BOOKINGS" not found in ' + _MASTER_SS_ID);
+    return;
+  }
+
+  var data    = sheet.getDataRange().getValues();
+  var headers = data[0];
+
+  var colStatus = headers.indexOf('Booking Status');
+  var colExp    = headers.indexOf('Experience Name');
+  var colDate   = headers.indexOf('Booking Date (Experience)');
+  var colGuest  = headers.indexOf('Guest Name(s)');
+  var colSize   = headers.indexOf('Group Size');
+  var colTime   = headers.indexOf('Preferred Time');
+  var colOcc    = headers.indexOf('Occasion Type');
+
+  var bookings = [];
+  for (var i = 1; i < data.length; i++) {
+    var row = data[i];
+    if (String(row[colStatus]).trim() !== 'Confirmed') continue;
+
+    var bookDate;
+    try {
+      bookDate = Utilities.formatDate(new Date(row[colDate]), tz, 'yyyy-MM-dd');
+    } catch (err) {
+      continue;
+    }
+
+    if (bookDate !== todayStr) continue;
+
+    bookings.push({
+      booking_date: todayStr,
+      guest_name:   String(row[colGuest] || '').trim(),
+      experience:   String(row[colExp]   || '').trim(),
+      departure:    String(row[colTime]  || '').trim(),
+      group_size:   String(row[colSize]  || '').trim(),
+      occasion:     String(row[colOcc]   || '').trim()
+    });
+  }
+
+  Logger.log('syncTodayBookingsToSupabase: found ' + bookings.length + ' confirmed booking(s) for ' + todayStr);
+
+  // ── 2. Delete today's existing rows from Supabase ──────────────────────────
+  var sbHeaders = {
+    'apikey':        _SB_KEY,
+    'Authorization': 'Bearer ' + _SB_KEY,
+    'Content-Type':  'application/json',
+    'Prefer':        'return=minimal'
+  };
+
+  var delResp = UrlFetchApp.fetch(
+    _SB_URL + '/rest/v1/today_bookings?booking_date=eq.' + todayStr,
+    { method: 'delete', headers: sbHeaders, muteHttpExceptions: true }
+  );
+  Logger.log('Delete response: HTTP ' + delResp.getResponseCode());
+
+  if (bookings.length === 0) {
+    Logger.log('syncTodayBookingsToSupabase: no bookings to insert — done.');
+    return;
+  }
+
+  // ── 3. Insert current confirmed bookings ───────────────────────────────────
+  var insResp = UrlFetchApp.fetch(
+    _SB_URL + '/rest/v1/today_bookings',
+    {
+      method:             'post',
+      headers:            sbHeaders,
+      payload:            JSON.stringify(bookings),
+      muteHttpExceptions: true
+    }
+  );
+  var insCode = insResp.getResponseCode();
+  Logger.log('Insert response: HTTP ' + insCode);
+
+  if (insCode === 201) {
+    Logger.log('syncTodayBookingsToSupabase: SUCCESS — ' + bookings.length + ' booking(s) written to Supabase for ' + todayStr);
+  } else {
+    Logger.log('syncTodayBookingsToSupabase: INSERT FAILED — ' + insResp.getContentText());
+  }
+}
+
+// ── Custom Menu ───────────────────────────────────────────────────────────────
+
+function onOpen() {
+  SpreadsheetApp.getUi()
+    .createMenu('SHER Tools')
+    .addItem('Sync to Guide App', 'syncTodayBookingsToSupabase')
+    .addToUi();
+}
+
+// ── Daily Trigger Installer ───────────────────────────────────────────────────
+
+/**
+ * Run this ONCE from the Apps Script editor to install the 5 AM daily trigger.
+ * Safe to re-run — removes any existing trigger for the same function first.
+ */
+function installDailyTrigger() {
+  ScriptApp.getProjectTriggers().forEach(function(t) {
+    if (t.getHandlerFunction() === 'syncTodayBookingsToSupabase') {
+      ScriptApp.deleteTrigger(t);
+    }
+  });
+
+  ScriptApp.newTrigger('syncTodayBookingsToSupabase')
+    .timeBased()
+    .atHour(5)
+    .everyDays(1)
+    .inTimezone('America/St_Lucia')
+    .create();
+
+  Logger.log('Daily trigger installed: syncTodayBookingsToSupabase at 5 AM America/St_Lucia');
 }
 
 // ── Utilities ─────────────────────────────────────────────────────────────────

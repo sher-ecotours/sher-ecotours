@@ -160,6 +160,13 @@ alter table today_bookings enable row level security;
 create policy "anon read today bookings"
   on today_bookings for select to anon using (true);
 
+create policy "anon insert today bookings"
+  on today_bookings for insert to anon with check (true);
+
+create policy "anon delete today bookings"
+  on today_bookings for delete to anon using (true);
+
 -- ── Done ──────────────────────────────────────────────────────────────────────
 -- After running, verify all 7 tables appear in the Table Editor.
--- No further setup needed — the PWA uses the anon key with RLS for access control.
+-- today_bookings allows anon select/insert/delete — written by GAS sync only.
+-- All other tables allow anon insert only (guide app + website forms).
