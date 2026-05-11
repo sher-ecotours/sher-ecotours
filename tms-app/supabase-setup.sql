@@ -32,11 +32,20 @@ create table guide_equipment_inspections (
   created_at           timestamptz default now(),
   guide_name           text,
   inspection_date      text,
-  kayak_01             text,
-  kayak_02             text,
-  kayak_03             text,
-  guide_kayak          text,
-  electric_canoe       text,
+  -- Guest kayaks
+  kayak_gt01           text,
+  kayak_gt02           text,
+  -- Guide kayaks
+  kayak_lg01           text,
+  kayak_sg01           text,
+  -- Rescue dinghy
+  rd_hull              text,
+  rd_fittings          text,
+  rd_motor_mount       text,
+  rd_motor_test        text,
+  rd_battery_charge    text,
+  rd_battery_terminals text,
+  -- Safety & launch
   pfds_checked         text,
   first_aid_kit        text,
   safety_equipment     text,
@@ -53,6 +62,9 @@ alter table guide_equipment_inspections enable row level security;
 
 create policy "anon insert equipment inspections"
   on guide_equipment_inspections for insert to anon with check (true);
+
+create policy "anon read equipment inspections"
+  on guide_equipment_inspections for select to anon using (true);
 
 -- ── 3. Incident Reports (Form 8) ─────────────────────────────────────────────
 

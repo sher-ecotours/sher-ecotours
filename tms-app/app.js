@@ -202,6 +202,10 @@ function initForms() {
   on('f6-equip-condition', 'change', function(v) {
     toggle('f6-equip-notes-wrap', v !== '' && v !== 'All good — nothing to report');
   });
+  on('f7-battery-charge', 'change', function(v) {
+    var warn = document.getElementById('f7-battery-warning');
+    if (warn) warn.classList.toggle('visible', v === 'Below 50%');
+  });
   on('f7-flagged',          'change', function(v) { toggle('f7-notes-wrap',         v === 'Yes'); });
   on('f8-guests-involved',  'change', function(v) { toggle('f8-guest-names-wrap',   v === 'Yes'); });
   on('f9-lost-property',    'change', function(v) { toggle('f9-lost-desc-wrap',     v === 'Yes'); });
@@ -236,11 +240,15 @@ function onPrelaunchSubmit(e) {
 // ── Form 7: Equipment Inspection ───────────────────────────────────────────────
 
 var _f7FieldMap = {
-  'Kayak-01 cleared':           'kayak_01',
-  'Kayak-02 cleared':           'kayak_02',
-  'Kayak-03 cleared':           'kayak_03',
-  'Guide kayak cleared':        'guide_kayak',
-  'Electric canoe cleared':     'electric_canoe',
+  'GT-01 cleared':              'kayak_gt01',
+  'GT-02 cleared':              'kayak_gt02',
+  'LG-01 cleared':              'kayak_lg01',
+  'SG-01 cleared':              'kayak_sg01',
+  'RD-01 hull':                 'rd_hull',
+  'RD-01 fittings':             'rd_fittings',
+  'Motor mount':                'rd_motor_mount',
+  'Motor test run':             'rd_motor_test',
+  'Battery terminals':          'rd_battery_terminals',
   'PFDs checked':               'pfds_checked',
   'First aid kit checked':      'first_aid_kit',
   'Safety equipment checked':   'safety_equipment',
@@ -256,10 +264,11 @@ function onEquipmentSubmit(e) {
   if (!validateRequired(e.target)) return;
 
   var data = {
-    guide_name:       val('f7-guide'),
-    inspection_date:  todayISO(),
-    any_item_flagged: val('f7-flagged'),
-    inspection_notes: val('f7-notes')
+    guide_name:        val('f7-guide'),
+    inspection_date:   todayISO(),
+    rd_battery_charge: val('f7-battery-charge'),
+    any_item_flagged:  val('f7-flagged'),
+    inspection_notes:  val('f7-notes')
   };
 
   e.target.querySelectorAll('input[type="checkbox"][data-field]').forEach(function(cb) {

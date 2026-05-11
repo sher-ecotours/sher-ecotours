@@ -241,7 +241,8 @@ function _waHandleMorningLog(d) {
 // ── Guide App: Equipment Inspection (Form 7) ──────────────────────────────────
 
 function _waHandleEquipmentInspection(d) {
-  var flagged = d['Any item flagged'] === 'Yes';
+  var flagged     = d['Any item flagged'] === 'Yes';
+  var batteryLow  = d['Battery charge'] === 'Below 50%';
 
   if (flagged) {
     MailApp.sendEmail({
@@ -254,16 +255,33 @@ function _waHandleEquipmentInspection(d) {
     });
   }
 
+  if (batteryLow) {
+    MailApp.sendEmail({
+      to:      _WA_SHER_EMAIL,
+      subject: 'SHER — Rescue Dinghy Battery Low: recharge before next operation',
+      body:    'The 12V marine battery on the rescue dinghy was reported as Below 50% during the equipment inspection.\n\n' +
+               'Guide: ' + (d['Guide Name'] || 'Not specified') + '\n' +
+               'Date:  ' + new Date().toDateString() + '\n\n' +
+               'Do not operate the rescue dinghy until the battery is recharged.\n' +
+               'Confirm with the guide that it is safe to proceed before launch.'
+    });
+  }
+
   // Log raw submission to PWA log sheet
   _logToPWASheet('FORM 7 — EQUIPMENT INSPECTION', [
     new Date(),
     d['Guide Name']                  || '',
     d['Inspection Date']             || '',
-    d['Kayak-01 cleared']            || '',
-    d['Kayak-02 cleared']            || '',
-    d['Kayak-03 cleared']            || '',
-    d['Guide kayak cleared']         || '',
-    d['Electric canoe cleared']      || '',
+    d['GT-01 cleared']               || '',
+    d['GT-02 cleared']               || '',
+    d['LG-01 cleared']               || '',
+    d['SG-01 cleared']               || '',
+    d['RD-01 hull']                  || '',
+    d['RD-01 fittings']              || '',
+    d['Motor mount']                 || '',
+    d['Motor test run']              || '',
+    d['Battery charge']              || '',
+    d['Battery terminals']           || '',
     d['PFDs checked']                || '',
     d['First aid kit checked']       || '',
     d['Safety equipment checked']    || '',
@@ -512,6 +530,70 @@ function onOpen() {
     .createMenu('SHER Tools')
     .addItem('Sync to Guide App', 'syncTodayBookingsToSupabase')
     .addToUi();
+}
+
+// ── Rescue Dinghy Battery Alert ───────────────────────────────────────────────
+
+/**
+ * Queries Supabase for any equipment inspection today where rd_battery_charge
+ * is "Below 50%" and sends one alert email per day if found.
+ * Schedule this to run every hour via a GAS time-based trigger, or add it
+ * to installDailyTrigger() to run once at 5 AM alongside the booking sync.
+ */
+function checkBatteryAlerts() {
+  var tz       = 'America/St_Lucia';
+  var todayStr = Utilities.formatDate(new Date(), tz, 'yyyy-MM-dd');
+
+  var resp = UrlFetchApp.fetch(
+    _SB_URL + '/rest/v1/guide_equipment_inspections' +
+    '?rd_battery_charge=eq.Below 50%' +
+    '&created_at=gte.' + todayStr + 'T00%3A00%3A00' +
+    '&select=guide_name,rd_battery_charge,created_at' +
+    '&limit=1',
+    {
+      headers: {
+        'apikey':        _SB_KEY,
+        'Authorization': 'Bearer ' + _SB_KEY
+      },
+      muteHttpExceptions: true
+    }
+  );
+
+  var code = resp.getResponseCode();
+  if (code !== 200) {
+    Logger.log('checkBatteryAlerts: Supabase returned HTTP ' + code);
+    return;
+  }
+
+  var rows = JSON.parse(resp.getContentText());
+  if (!Array.isArray(rows) || rows.length === 0) {
+    Logger.log('checkBatteryAlerts: no low-battery entries today');
+    return;
+  }
+
+  // Guard: send at most one alert email per day
+  var props    = PropertiesService.getScriptProperties();
+  var alertKey = 'battery_alert_sent_' + todayStr;
+  if (props.getProperty(alertKey)) {
+    Logger.log('checkBatteryAlerts: alert already sent today');
+    return;
+  }
+
+  var guide = rows[0].guide_name || 'Not recorded';
+  MailApp.sendEmail({
+    to:      _WA_SHER_EMAIL,
+    subject: 'SHER — Rescue Dinghy Battery Low: recharge before next operation',
+    body:    'The 12V marine battery on the rescue dinghy was reported as Below 50% ' +
+             'during today’s equipment inspection.\n\n' +
+             'Guide:  ' + guide + '\n' +
+             'Date:   ' + todayStr + '\n\n' +
+             'Action required: Do not operate the rescue dinghy until the battery ' +
+             'is recharged. Confirm with the guide before next launch.\n\n' +
+             'Logged via SHER Guide PWA — guide.safehavenecotours.com'
+  });
+
+  props.setProperty(alertKey, '1');
+  Logger.log('checkBatteryAlerts: alert email sent for ' + todayStr + ' (guide: ' + guide + ')');
 }
 
 // ── Daily Trigger Installer ───────────────────────────────────────────────────

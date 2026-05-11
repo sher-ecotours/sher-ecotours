@@ -434,6 +434,31 @@ select option {
 }
 .select-wrap .form-select { padding-right: 40px; }
 
+/* ── Rescue Dinghy section ─────────────────────────────────────────────────── */
+
+.section-label--rescue {
+  color: #8B5E00;
+}
+
+.form-section--rescue {
+  border-color: rgba(184,150,46,0.35);
+}
+
+.battery-warning {
+  display: none;
+  background: #FFF3CD;
+  border: 1.5px solid #B8962E;
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  margin-top: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #7A5A10;
+  line-height: 1.5;
+}
+
+.battery-warning.visible { display: block; }
+
 /* ── Checkbox items ────────────────────────────────────────────────────────── */
 
 .check-item {

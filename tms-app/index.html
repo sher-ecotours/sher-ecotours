@@ -254,28 +254,74 @@
         </div>
       </div>
 
-      <div class="section-label">Watercraft</div>
+      <div class="section-label">Guest Kayaks</div>
       <div class="form-section">
         <label class="check-item">
-          <input type="checkbox" data-field="Kayak-01 cleared"/>
-          <span class="check-text">Kayak-01 &mdash; inspected and cleared</span>
+          <input type="checkbox" data-field="GT-01 cleared"/>
+          <span class="check-text">Guest Tandem Kayak 1 (GT-01) &mdash; hull, seat, footrests, drain plug, handles</span>
         </label>
         <label class="check-item">
-          <input type="checkbox" data-field="Kayak-02 cleared"/>
-          <span class="check-text">Kayak-02 &mdash; inspected and cleared</span>
+          <input type="checkbox" data-field="GT-02 cleared"/>
+          <span class="check-text">Guest Tandem Kayak 2 (GT-02) &mdash; hull, seat, footrests, drain plug, handles</span>
+        </label>
+      </div>
+
+      <div class="section-label">Guide Kayaks</div>
+      <div class="form-section">
+        <label class="check-item">
+          <input type="checkbox" data-field="LG-01 cleared"/>
+          <span class="check-text">Lead Guide Kayak (LG-01) &mdash; hull, seat, footrests, drain plug, handles</span>
         </label>
         <label class="check-item">
-          <input type="checkbox" data-field="Kayak-03 cleared"/>
-          <span class="check-text">Kayak-03 &mdash; inspected and cleared</span>
+          <input type="checkbox" data-field="SG-01 cleared"/>
+          <span class="check-text">Support Guide Kayak (SG-01) &mdash; hull, seat, footrests, drain plug, handles</span>
+        </label>
+      </div>
+
+      <div class="section-label section-label--rescue">Rescue Dinghy</div>
+      <div class="form-section form-section--rescue">
+
+        <div class="form-section-title">Hull &amp; Rigging</div>
+        <label class="check-item">
+          <input type="checkbox" data-field="RD-01 hull"/>
+          <span class="check-text">Rescue Dinghy (RD-01) &mdash; hull integrity and inflation pressure within specification</span>
         </label>
         <label class="check-item">
-          <input type="checkbox" data-field="Guide kayak cleared"/>
-          <span class="check-text">Guide kayak &mdash; inspected and cleared</span>
+          <input type="checkbox" data-field="RD-01 fittings"/>
+          <span class="check-text">Rescue Dinghy &mdash; painter line, grab handles, and fittings secure</span>
+        </label>
+
+        <div class="form-section-title" style="margin-top:14px">Electric Motor</div>
+        <label class="check-item">
+          <input type="checkbox" data-field="Motor mount"/>
+          <span class="check-text">Electric motor &mdash; mounted securely, propeller clear, no damage</span>
         </label>
         <label class="check-item">
-          <input type="checkbox" data-field="Electric canoe cleared"/>
-          <span class="check-text">Electric canoe &mdash; inspected and cleared</span>
+          <input type="checkbox" data-field="Motor test run"/>
+          <span class="check-text">Electric motor &mdash; power on, throttle responsive, test run completed</span>
         </label>
+
+        <div class="form-section-title" style="margin-top:14px">12V Marine Battery</div>
+        <div class="form-group">
+          <label class="form-label" for="f7-battery-charge">Charge Status <span class="req">*</span></label>
+          <div class="select-wrap">
+            <select class="form-select" id="f7-battery-charge" required>
+              <option value="">Select charge level&hellip;</option>
+              <option>Full</option>
+              <option>75%</option>
+              <option>50%</option>
+              <option>Below 50%</option>
+            </select>
+          </div>
+          <div class="battery-warning" id="f7-battery-warning">
+            &#9888; Battery below 50% &mdash; notify ops before launching. Do not operate the rescue dinghy until the battery is recharged or ops confirms it is safe to proceed.
+          </div>
+        </div>
+        <label class="check-item">
+          <input type="checkbox" data-field="Battery terminals"/>
+          <span class="check-text">12V Marine battery &mdash; terminals clean, connections secure, no corrosion</span>
+        </label>
+
       </div>
 
       <div class="section-label">Safety Equipment</div>
