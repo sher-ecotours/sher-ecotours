@@ -546,7 +546,7 @@ function checkBatteryAlerts() {
 
   var resp = UrlFetchApp.fetch(
     _SB_URL + '/rest/v1/guide_equipment_inspections' +
-    '?rd_battery_charge=eq.Below 50%' +
+    '?rd_battery_charge=eq.' + encodeURIComponent('Below 50%') +
     '&created_at=gte.' + todayStr + 'T00%3A00%3A00' +
     '&select=guide_name,rd_battery_charge,created_at' +
     '&limit=1',
