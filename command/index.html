@@ -318,7 +318,12 @@ select.qf-input{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://ww
   <div class="nav-sec">
     <div class="nav-sec-label">Finance & Control</div>
     <button class="nav-btn" onclick="nav('finance',this)"><span class="nav-icon">💰</span>Loans & Finance</button>
+    <button class="nav-btn" onclick="nav('expenditure',this)"><span class="nav-icon">💸</span>Expenditure</button>
     <button class="nav-btn" onclick="nav('risks',this)"><span class="nav-icon">🔴</span>Risks & Alerts</button>
+  </div>
+  <div class="nav-sec">
+    <div class="nav-sec-label">Pre-Launch</div>
+    <button class="nav-btn" onclick="nav('readiness',this)"><span class="nav-icon">✓</span>Launch Readiness</button>
   </div>
   <div class="nav-sec">
     <div class="nav-sec-label">Quick Entry</div>
@@ -841,6 +846,176 @@ select.qf-input{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://ww
   </div>
 </div>
 
+<!-- ────────────────────────────────────────────────────────
+     EXPENDITURE TRACKER
+──────────────────────────────────────────────────────── -->
+<div id="tab-expenditure" class="tab-panel">
+  <div class="sec-head">
+    <div><div class="sec-title">Expenditure Tracker</div><div class="sec-sub">All business expenses · Supabase expenses table</div></div>
+    <button class="refresh-btn" onclick="loadExpenses(true)">↻ Refresh</button>
+  </div>
+  <div class="grid-4" style="margin-bottom:18px">
+    <div class="kpi k-em"><div class="kpi-label">Confirmed Total</div><div class="kpi-val big" id="exp-kpi-confirmed">—</div><div class="kpi-sub">XCD</div></div>
+    <div class="kpi k-amber"><div class="kpi-label">Pending Total</div><div class="kpi-val big" id="exp-kpi-pending">—</div><div class="kpi-sub">XCD</div></div>
+    <div class="kpi k-blue"><div class="kpi-label">Tours Track</div><div class="kpi-val big" id="exp-kpi-tours">—</div><div class="kpi-sub">XCD confirmed</div></div>
+    <div class="kpi k-ocean"><div class="kpi-label">Village Track</div><div class="kpi-val big" id="exp-kpi-village">—</div><div class="kpi-sub">XCD confirmed</div></div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">📊 By Category</div>
+      <div id="exp-by-category"><p style="color:var(--mist);font-style:italic;font-size:13px">Loading…</p></div>
+    </div>
+    <div class="card">
+      <div class="card-title">➕ Record Expense</div>
+      <form onsubmit="submitExpense(event)">
+        <div class="qf-row">
+          <div>
+            <div class="qf-label">Date</div>
+            <input class="qf-input" type="date" id="exp-date" required>
+          </div>
+          <div>
+            <div class="qf-label">Category</div>
+            <select class="qf-input" id="exp-category" onchange="setAccountCode(this.value)" required>
+              <option value="">Select…</option>
+              <option value="Fuel">Fuel</option>
+              <option value="Maintenance">Maintenance</option>
+              <option value="Equipment">Equipment</option>
+              <option value="Supplies">Supplies</option>
+              <option value="Food & Beverage">Food &amp; Beverage</option>
+              <option value="Marketing">Marketing</option>
+              <option value="Staff Costs">Staff Costs</option>
+              <option value="Insurance">Insurance</option>
+              <option value="Transport">Transport</option>
+              <option value="Utilities">Utilities</option>
+              <option value="Office">Office</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="qf-label">Account Code</div>
+        <input class="qf-input" type="text" id="exp-acct-code" placeholder="Auto-filled from category">
+        <div class="qf-label">Description *</div>
+        <input class="qf-input" type="text" id="exp-description" placeholder="Brief description" required>
+        <div class="qf-row">
+          <div>
+            <div class="qf-label">Payee</div>
+            <input class="qf-input" type="text" id="exp-payee" placeholder="Vendor / supplier">
+          </div>
+          <div>
+            <div class="qf-label">Amount (XCD) *</div>
+            <input class="qf-input" type="number" id="exp-amount" step="0.01" min="0" placeholder="0.00" required>
+          </div>
+        </div>
+        <div class="qf-row">
+          <div>
+            <div class="qf-label">Payment Method</div>
+            <select class="qf-input" id="exp-payment-method">
+              <option value="">Select…</option>
+              <option value="Cash">Cash</option>
+              <option value="Bank Transfer">Bank Transfer</option>
+              <option value="Card">Card</option>
+              <option value="Cheque">Cheque</option>
+            </select>
+          </div>
+          <div>
+            <div class="qf-label">Business Track</div>
+            <select class="qf-input" id="exp-track">
+              <option value="SHARED">SHARED</option>
+              <option value="TOURS">TOURS</option>
+              <option value="VILLAGE">VILLAGE</option>
+            </select>
+          </div>
+        </div>
+        <div class="qf-row">
+          <div>
+            <div class="qf-label">Paid By</div>
+            <input class="qf-input" type="text" id="exp-paid-by" placeholder="Name">
+          </div>
+          <div>
+            <div class="qf-label">Status</div>
+            <select class="qf-input" id="exp-status">
+              <option value="Confirmed">Confirmed</option>
+              <option value="Pending">Pending</option>
+            </select>
+          </div>
+        </div>
+        <div class="qf-label">Notes</div>
+        <input class="qf-input" type="text" id="exp-notes" placeholder="Optional">
+        <button type="submit" class="qf-submit">Record Expense</button>
+        <div class="qf-success" id="exp-success">✓ Expense recorded successfully.</div>
+      </form>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">📋 Expense Log <span class="live-tag"><span class="dot"></span> Live</span></div>
+    <div style="overflow-x:auto">
+      <table class="dt">
+        <thead><tr>
+          <th>Date</th><th>Category</th><th>Description</th><th>Payee</th>
+          <th>Amount</th><th>Track</th><th>Method</th><th>Status</th>
+        </tr></thead>
+        <tbody id="exp-log-body"><tr><td colspan="8" style="color:var(--mist);font-style:italic;text-align:center;padding:20px">Loading…</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ────────────────────────────────────────────────────────
+     PRE-LAUNCH READINESS CHECKLIST
+──────────────────────────────────────────────────────── -->
+<div id="tab-readiness" class="tab-panel">
+  <div class="sec-head">
+    <div><div class="sec-title">Pre-Launch Readiness</div><div class="sec-sub">30-item checklist · Site · Regulatory · Insurance · Equipment · Safety · Commercial · Finance</div></div>
+    <button class="refresh-btn" onclick="loadChecklist(true)">↻ Refresh</button>
+  </div>
+  <div class="grid-4" style="margin-bottom:18px">
+    <div class="kpi k-green"><div class="kpi-label">Complete</div><div class="kpi-val big" id="rl-kpi-done">—</div><div class="kpi-sub" id="rl-kpi-done-pct">of 30</div></div>
+    <div class="kpi k-blue"><div class="kpi-label">In Progress</div><div class="kpi-val big" id="rl-kpi-ip">—</div><div class="kpi-sub">items</div></div>
+    <div class="kpi k-amber"><div class="kpi-label">Not Started</div><div class="kpi-val big" id="rl-kpi-ns">—</div><div class="kpi-sub">items</div></div>
+    <div class="kpi k-red"><div class="kpi-label">Blocked</div><div class="kpi-val big" id="rl-kpi-blk">—</div><div class="kpi-sub">items</div></div>
+  </div>
+  <div class="card" style="padding:16px 22px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+      <div style="font-weight:600;font-size:13px;color:var(--teal)">Overall Progress</div>
+      <div id="rl-pct-label" style="font-family:'DM Mono',monospace;font-size:14px;font-weight:500">—%</div>
+    </div>
+    <div class="prog" style="height:10px"><div class="prog-fill pf-em" id="rl-prog-fill" style="width:0%"></div></div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">✏️ Update Checklist Item</div>
+      <form onsubmit="submitChecklistUpdate(event)">
+        <div class="qf-label">Item</div>
+        <select class="qf-input" id="rl-item-select">
+          <option value="">Loading items…</option>
+        </select>
+        <div class="qf-label">New Status</div>
+        <select class="qf-input" id="rl-status">
+          <option value="Not Started">Not Started</option>
+          <option value="In Progress">In Progress</option>
+          <option value="Complete">Complete</option>
+          <option value="Blocked">Blocked</option>
+          <option value="N/A">N/A</option>
+        </select>
+        <div class="qf-label">Blocker (if Blocked)</div>
+        <input class="qf-input" type="text" id="rl-blocker" placeholder="What's blocking this?">
+        <div class="qf-label">Notes</div>
+        <input class="qf-input" type="text" id="rl-notes-rl" placeholder="Optional notes">
+        <button type="submit" class="qf-submit">Update Status</button>
+        <div class="qf-success" id="rl-success">✓ Status updated.</div>
+      </form>
+    </div>
+    <div class="card">
+      <div class="card-title">📊 By Category</div>
+      <div id="rl-by-category"><p style="color:var(--mist);font-style:italic;font-size:13px">Loading…</p></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">📋 Full Checklist <span class="live-tag"><span class="dot"></span> Live</span></div>
+    <div id="rl-checklist-body"><p style="color:var(--mist);font-style:italic;font-size:13px;padding:10px 0">Loading…</p></div>
+  </div>
+</div>
+
   </div><!-- /content -->
 </div><!-- /main -->
 </div><!-- /app -->
@@ -923,6 +1098,7 @@ function setDate() {
   var d = new Date();
   document.getElementById('page-date').textContent = d.toLocaleDateString('en-LC', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
   setLoanPaymentDefaults();
+  initExpenseDefaults();
   var dateInput = document.getElementById('be-date');
   if (dateInput) dateInput.value = d.toISOString().split('T')[0];
 }
@@ -932,7 +1108,8 @@ var _pageTitles = {
   executive: 'Executive Dashboard', today: 'Today\'s Operations',
   bookings: 'Today\'s Bookings', morning: 'Morning Logs',
   equipment: 'Equipment Checks', incidents: 'Incident Reports',
-  finance: 'Loans & Finance', risks: 'Risks & Alerts',
+  finance: 'Loans & Finance', expenditure: 'Expenditure Tracker',
+  risks: 'Risks & Alerts', readiness: 'Pre-Launch Readiness',
   enquiry: 'Log New Enquiry', 'booking-entry': 'Add Today\'s Booking'
 };
 function nav(id, el) {
@@ -963,6 +1140,8 @@ function loadAll() {
   setConn('loading', 'Connecting to Supabase…');
   var today = new Date().toISOString().split('T')[0];
   loadLoans(false);
+  loadExpenses(false);
+  loadChecklist(false);
   Promise.all([
     sbSelect('today_bookings', 'booking_date=eq.' + today + '&order=departure.asc'),
     sbSelect('guide_morning_logs', 'order=created_at.desc&limit=14'),
@@ -1362,6 +1541,208 @@ function wxPill(mode) {
   var m = mode.toLowerCase();
   var cls = m.indexOf('golden')!==-1?'wx-golden':m.indexOf('mystic')!==-1?'wx-mystic':m.indexOf('calm')!==-1?'wx-calm':'wx-rain';
   return '<span class="wx-pill ' + cls + '">' + modeEmoji(mode) + ' ' + esc(mode.split(' —')[0].split('(')[0].trim()) + '</span>';
+}
+
+/* ─── EXPENDITURE ─────────────────────────────────────────── */
+var _expenses = [];
+var _acctCodes = {
+  'Fuel':'5010','Maintenance':'5020','Equipment':'5060',
+  'Supplies':'5030','Food & Beverage':'5050','Marketing':'6010',
+  'Staff Costs':'7010','Insurance':'7020','Transport':'5040',
+  'Utilities':'7030','Office':'6020','Other':'9999'
+};
+
+function initExpenseDefaults() {
+  var el = document.getElementById('exp-date');
+  if (el) el.value = new Date().toISOString().split('T')[0];
+}
+
+function setAccountCode(cat) {
+  var el = document.getElementById('exp-acct-code');
+  if (el) el.value = _acctCodes[cat] || '';
+}
+
+function loadExpenses(manual) {
+  sbSelect('expenses', 'order=expense_date.desc,created_at.desc&limit=200').then(function(r) {
+    _expenses = Array.isArray(r) ? r : [];
+    renderExpenses();
+  }).catch(function(e) { console.error('[loadExpenses]', e); });
+}
+
+function renderExpenses() {
+  var confirmed = 0, pending = 0, tours = 0, village = 0;
+  var byCat = {};
+  _expenses.forEach(function(e) {
+    var amt = parseFloat(e.amount) || 0;
+    if (e.status === 'Confirmed') confirmed += amt; else pending += amt;
+    if (e.status === 'Confirmed') {
+      if (e.business_track === 'TOURS') tours += amt;
+      else if (e.business_track === 'VILLAGE') village += amt;
+    }
+    byCat[e.category] = (byCat[e.category] || 0) + amt;
+  });
+  var fmtXCD = function(n) { return 'XCD ' + n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','); };
+  var el = function(id) { return document.getElementById(id); };
+  if (el('exp-kpi-confirmed')) el('exp-kpi-confirmed').textContent = fmtXCD(confirmed);
+  if (el('exp-kpi-pending'))   el('exp-kpi-pending').textContent   = fmtXCD(pending);
+  if (el('exp-kpi-tours'))     el('exp-kpi-tours').textContent     = fmtXCD(tours);
+  if (el('exp-kpi-village'))   el('exp-kpi-village').textContent   = fmtXCD(village);
+  var catEl = el('exp-by-category');
+  if (catEl) {
+    var cats = Object.keys(byCat).sort(function(a,b){ return byCat[b]-byCat[a]; });
+    if (!cats.length) { catEl.innerHTML = '<p style="color:var(--mist);font-style:italic;font-size:13px">No expenses recorded.</p>'; }
+    else {
+      var h = '<table class="dt"><thead><tr><th>Category</th><th style="text-align:right">Total (XCD)</th></tr></thead><tbody>';
+      cats.forEach(function(c) { h += '<tr><td>' + esc(c) + '</td><td style="text-align:right;font-family:\'DM Mono\',monospace">' + byCat[c].toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',') + '</td></tr>'; });
+      catEl.innerHTML = h + '</tbody></table>';
+    }
+  }
+  var tbody = el('exp-log-body');
+  if (tbody) {
+    if (!_expenses.length) { tbody.innerHTML = '<tr><td colspan="8" style="color:var(--mist);font-style:italic;text-align:center;padding:20px">No expenses recorded yet.</td></tr>'; return; }
+    var h = '';
+    _expenses.forEach(function(e) {
+      var sc = e.status === 'Confirmed' ? 'bg' : 'ba';
+      h += '<tr><td style="font-family:\'DM Mono\',monospace;font-size:11px">' + esc(e.expense_date||'') + '</td>';
+      h += '<td>' + esc(e.category||'') + '</td><td>' + esc(e.description||'') + '</td><td>' + esc(e.payee||'—') + '</td>';
+      h += '<td style="font-family:\'DM Mono\',monospace;text-align:right">' + (parseFloat(e.amount)||0).toFixed(2) + '</td>';
+      h += '<td><span class="badge bb">' + esc(e.business_track||'—') + '</span></td>';
+      h += '<td>' + esc(e.payment_method||'—') + '</td>';
+      h += '<td><span class="badge ' + sc + '">' + esc(e.status||'—') + '</span></td></tr>';
+    });
+    tbody.innerHTML = h;
+  }
+}
+
+function submitExpense(e) {
+  e.preventDefault();
+  var payload = {
+    expense_date:   document.getElementById('exp-date').value,
+    account_code:   document.getElementById('exp-acct-code').value,
+    category:       document.getElementById('exp-category').value,
+    description:    document.getElementById('exp-description').value,
+    payee:          document.getElementById('exp-payee').value,
+    amount:         parseFloat(document.getElementById('exp-amount').value),
+    currency:       'XCD',
+    payment_method: document.getElementById('exp-payment-method').value,
+    paid_by:        document.getElementById('exp-paid-by').value,
+    business_track: document.getElementById('exp-track').value,
+    status:         document.getElementById('exp-status').value,
+    notes:          document.getElementById('exp-notes').value,
+    entered_by:     'SHER Command'
+  };
+  sbInsert('expenses', payload).then(function() {
+    var suc = document.getElementById('exp-success');
+    suc.style.display = 'block';
+    setTimeout(function(){ suc.style.display='none'; }, 4000);
+    ['exp-description','exp-payee','exp-amount','exp-notes'].forEach(function(id){ document.getElementById(id).value=''; });
+    loadExpenses(true);
+  }).catch(function(err){ alert('Error saving expense: ' + err.message); });
+}
+
+/* ─── LAUNCH CHECKLIST ────────────────────────────────────── */
+var _checklist = [];
+
+function loadChecklist(manual) {
+  sbSelect('launch_checklist', 'order=sort_order.asc,category.asc').then(function(r) {
+    _checklist = Array.isArray(r) ? r : [];
+    renderChecklist();
+    populateChecklistSelect();
+  }).catch(function(e){ console.error('[loadChecklist]', e); });
+}
+
+function renderChecklist() {
+  var counts = {'Complete':0,'In Progress':0,'Not Started':0,'Blocked':0};
+  _checklist.forEach(function(item){ if (counts.hasOwnProperty(item.status)) counts[item.status]++; });
+  var total = _checklist.length || 1;
+  var done = counts['Complete'];
+  var pct = Math.round((done/total)*100);
+  var el = function(id){ return document.getElementById(id); };
+  if (el('rl-kpi-done'))    el('rl-kpi-done').textContent    = done;
+  if (el('rl-kpi-done-pct')) el('rl-kpi-done-pct').textContent = 'of ' + _checklist.length;
+  if (el('rl-kpi-ip'))      el('rl-kpi-ip').textContent      = counts['In Progress'];
+  if (el('rl-kpi-ns'))      el('rl-kpi-ns').textContent      = counts['Not Started'];
+  if (el('rl-kpi-blk'))     el('rl-kpi-blk').textContent     = counts['Blocked'];
+  if (el('rl-pct-label'))   el('rl-pct-label').textContent   = pct + '%';
+  if (el('rl-prog-fill'))   el('rl-prog-fill').style.width   = pct + '%';
+  var byCat = {};
+  _checklist.forEach(function(item){
+    if (!byCat[item.category]) byCat[item.category] = {done:0,total:0};
+    byCat[item.category].total++;
+    if (item.status === 'Complete') byCat[item.category].done++;
+  });
+  var catEl = el('rl-by-category');
+  if (catEl) {
+    var h = '<table class="dt"><thead><tr><th>Category</th><th>Progress</th><th style="text-align:right">Done</th></tr></thead><tbody>';
+    Object.keys(byCat).forEach(function(cat){
+      var c = byCat[cat], cp = Math.round((c.done/c.total)*100);
+      h += '<tr><td>' + esc(cat) + '</td>';
+      h += '<td style="min-width:100px"><div class="prog"><div class="prog-fill pf-em" style="width:'+cp+'%"></div></div></td>';
+      h += '<td style="text-align:right;font-family:\'DM Mono\',monospace">'+c.done+'/'+c.total+'</td></tr>';
+    });
+    catEl.innerHTML = h + '</tbody></table>';
+  }
+  var bodyEl = el('rl-checklist-body');
+  if (bodyEl) {
+    if (!_checklist.length) { bodyEl.innerHTML = '<p style="color:var(--mist);font-style:italic;font-size:13px;padding:10px 0">No checklist items loaded.</p>'; return; }
+    var groups = {};
+    _checklist.forEach(function(item){ if (!groups[item.category]) groups[item.category]=[]; groups[item.category].push(item); });
+    var h = '';
+    Object.keys(groups).forEach(function(cat){
+      h += '<div style="margin-bottom:20px">';
+      h += '<div style="font-family:\'Cormorant Garamond\',serif;font-size:15px;font-weight:600;color:var(--teal);padding:8px 0;border-bottom:2px solid var(--fog);margin-bottom:8px">' + esc(cat) + '</div>';
+      h += '<table class="dt"><thead><tr><th>#</th><th>Item</th><th>Owner</th><th>Target</th><th>Status</th><th>Notes</th></tr></thead><tbody>';
+      groups[cat].forEach(function(item){
+        var sc = item.status==='Complete'?'bg':item.status==='In Progress'?'bb':item.status==='Blocked'?'br':'bm';
+        h += '<tr>';
+        h += '<td style="font-family:\'DM Mono\',monospace;font-size:11px;color:var(--mist)">' + (item.sort_order||'') + '</td>';
+        h += '<td><strong>' + esc(item.item_name) + '</strong>' + (item.description ? '<br><span style="font-size:11px;color:var(--mist)">'+esc(item.description)+'</span>':'') + '</td>';
+        h += '<td>' + esc(item.owner||'—') + '</td>';
+        h += '<td style="font-family:\'DM Mono\',monospace;font-size:11px">' + esc(item.target_date||'—') + '</td>';
+        h += '<td><span class="badge '+sc+'">' + esc(item.status) + '</span>' + (item.blocker?'<br><span style="font-size:11px;color:var(--red)">⚠ '+esc(item.blocker)+'</span>':'') + '</td>';
+        h += '<td style="font-size:11px;color:var(--mist)">' + esc(item.notes||'') + '</td></tr>';
+      });
+      h += '</tbody></table></div>';
+    });
+    bodyEl.innerHTML = h;
+  }
+}
+
+function populateChecklistSelect() {
+  var sel = document.getElementById('rl-item-select');
+  if (!sel) return;
+  sel.innerHTML = '<option value="">Select item to update…</option>';
+  _checklist.forEach(function(item){
+    var opt = document.createElement('option');
+    opt.value = item.id;
+    opt.textContent = '[' + item.category + '] ' + item.item_name;
+    sel.appendChild(opt);
+  });
+}
+
+function submitChecklistUpdate(e) {
+  e.preventDefault();
+  var id = document.getElementById('rl-item-select').value;
+  if (!id) { alert('Please select an item to update.'); return; }
+  var payload = {
+    status:     document.getElementById('rl-status').value,
+    blocker:    document.getElementById('rl-blocker').value,
+    notes:      document.getElementById('rl-notes-rl').value,
+    updated_at: new Date().toISOString()
+  };
+  fetch(SB_URL + '/rest/v1/launch_checklist?id=eq.' + id, {
+    method: 'PATCH',
+    headers: {'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},
+    body: JSON.stringify(payload)
+  }).then(function(r){
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    var suc = document.getElementById('rl-success');
+    suc.style.display = 'block';
+    setTimeout(function(){ suc.style.display='none'; }, 3000);
+    document.getElementById('rl-blocker').value = '';
+    document.getElementById('rl-notes-rl').value = '';
+    loadChecklist(true);
+  }).catch(function(err){ alert('Update failed: ' + err.message); });
 }
 </script>
 </body>
