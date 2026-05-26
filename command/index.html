@@ -266,6 +266,14 @@ select.qf-input{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://ww
 
 /* ── CONN PILL ────────────────────────────────────────── */
 .conn-bar{background:#fff;border-bottom:1px solid var(--fog);padding:7px 28px;display:flex;align-items:center;gap:8px;font-size:11px;color:var(--mist)}
+
+/* ── WEATHER GO/NO-GO ──────────────────────────────────── */
+.wx-gonogo{border-radius:10px;padding:14px 22px;margin-bottom:18px;display:flex;align-items:center;gap:18px;border:2px solid}
+.wx-gonogo-status{font-family:'DM Mono',monospace;font-size:22px;font-weight:700;letter-spacing:1px;min-width:88px}
+.wx-gonogo-msg{font-size:14px;font-weight:500;line-height:1.4}
+.go-green{background:var(--green-bg);border-color:var(--green);color:var(--green)}
+.go-amber{background:var(--amber-bg);border-color:var(--amber);color:var(--amber)}
+.go-red{background:var(--red-bg);border-color:var(--red);color:var(--red)}
 </style>
 </head>
 <body>
@@ -310,6 +318,7 @@ select.qf-input{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://ww
   </div>
   <div class="nav-sec">
     <div class="nav-sec-label">Live Data</div>
+    <button class="nav-btn" onclick="nav('weather',this)"><span class="nav-icon">🌤️</span>Weather & Tides</button>
     <button class="nav-btn" onclick="nav('bookings',this)"><span class="nav-icon">📅</span>Today's Bookings</button>
     <button class="nav-btn" onclick="nav('morning',this)"><span class="nav-icon">🌤️</span>Morning Logs</button>
     <button class="nav-btn" onclick="nav('equipment',this)"><span class="nav-icon">🛶</span>Equipment Checks</button>
@@ -327,6 +336,11 @@ select.qf-input{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://ww
     <button class="nav-btn" onclick="nav('revenue',this)"><span class="nav-icon">📈</span>Revenue</button>
     <button class="nav-btn" onclick="nav('expenditure',this)"><span class="nav-icon">💸</span>Expenditure</button>
     <button class="nav-btn" onclick="nav('risks',this)"><span class="nav-icon">🔴</span>Risks & Alerts</button>
+  </div>
+  <div class="nav-sec">
+    <div class="nav-sec-label">Reference</div>
+    <button class="nav-btn" onclick="nav('emergency',this)"><span class="nav-icon">🆘</span>Emergency</button>
+    <button class="nav-btn" onclick="nav('regulatory',this)"><span class="nav-icon">📄</span>Regulatory</button>
   </div>
   <div class="nav-sec">
     <div class="nav-sec-label">Pre-Launch</div>
@@ -1428,6 +1442,265 @@ select.qf-input{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://ww
 </div>
 
 <!-- ────────────────────────────────────────────────────────
+     WEATHER & CONDITIONS
+──────────────────────────────────────────────────────── -->
+<div id="tab-weather" class="tab-panel">
+  <div class="sec-head">
+    <div><div class="sec-title">Weather & Conditions</div><div class="sec-sub">Live · open-meteo.com · Savannes Bay 13.73°N 60.94°W · no API key</div></div>
+    <button class="refresh-btn" onclick="loadWeather()">↻ Refresh</button>
+  </div>
+  <div id="wx-gonogo" class="wx-gonogo go-amber">
+    <div class="wx-gonogo-status">—</div>
+    <div class="wx-gonogo-msg">Loading conditions from open-meteo…</div>
+  </div>
+  <div id="wx-error" style="display:none;margin-bottom:12px"></div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">🌡️ Current Conditions <span style="font-size:11px;color:var(--mist);font-weight:400" id="wx-updated"></span></div>
+      <div style="display:flex;align-items:baseline;gap:16px;margin-bottom:18px">
+        <div id="wx-temp" style="font-family:'DM Mono',monospace;font-size:54px;font-weight:500;color:var(--ink);line-height:1">—</div>
+        <div>
+          <div id="wx-desc" style="font-size:16px;font-weight:500;color:var(--ink)">—</div>
+          <div id="wx-feel" style="font-size:12px;color:var(--mist);margin-top:3px">—</div>
+        </div>
+      </div>
+      <div class="grid-2" style="gap:10px">
+        <div style="background:var(--blue-bg);border-radius:var(--r-sm);padding:12px 14px">
+          <div class="kpi-label">Wind</div>
+          <div id="wx-wind" style="font-family:'DM Mono',monospace;font-size:14px;font-weight:600;color:var(--blue);margin-top:3px">—</div>
+          <div id="wx-gust" style="font-size:11px;color:var(--mist);margin-top:1px">—</div>
+        </div>
+        <div style="background:#0c2333;border-radius:var(--r-sm);padding:12px 14px">
+          <div class="kpi-label" style="color:rgba(255,255,255,0.5)">Wave Height</div>
+          <div id="wx-wave" style="font-family:'DM Mono',monospace;font-size:14px;font-weight:600;color:#7ecfff;margin-top:3px">—</div>
+          <div id="wx-wave-dir" style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:1px">—</div>
+        </div>
+        <div style="background:var(--green-bg);border-radius:var(--r-sm);padding:12px 14px">
+          <div class="kpi-label">Humidity</div>
+          <div id="wx-hum" style="font-family:'DM Mono',monospace;font-size:14px;font-weight:600;color:var(--green);margin-top:3px">—</div>
+        </div>
+        <div style="background:var(--amber-bg);border-radius:var(--r-sm);padding:12px 14px">
+          <div class="kpi-label">Precipitation</div>
+          <div id="wx-precip" style="font-family:'DM Mono',monospace;font-size:14px;font-weight:600;color:var(--amber);margin-top:3px">—</div>
+          <div style="font-size:10px;color:var(--mist);margin-top:1px">current hour</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">⏱️ Next 12 Hours</div>
+      <div id="wx-hourly"><div style="display:flex;align-items:center;gap:8px;color:var(--mist);font-size:13px"><div class="spinner"></div>Loading…</div></div>
+      <div style="margin-top:18px;padding-top:16px;border-top:1px solid var(--fog)">
+        <div style="font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:var(--mist);font-weight:500;margin-bottom:12px">Marine Conditions — Savannes Bay</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center">
+          <div>
+            <div style="font-size:10px;text-transform:uppercase;letter-spacing:.7px;color:var(--mist);margin-bottom:4px">Wave Ht</div>
+            <div id="wx-wave-big" style="font-family:'DM Mono',monospace;font-size:28px;font-weight:600;color:var(--teal)">—</div>
+            <div style="font-size:10px;color:var(--mist)">metres</div>
+          </div>
+          <div>
+            <div style="font-size:10px;text-transform:uppercase;letter-spacing:.7px;color:var(--mist);margin-bottom:4px">Swell From</div>
+            <div id="wx-wave-dir2" style="font-family:'DM Mono',monospace;font-size:28px;font-weight:600;color:var(--teal)">—</div>
+            <div style="font-size:10px;color:var(--mist)">direction</div>
+          </div>
+          <div>
+            <div style="font-size:10px;text-transform:uppercase;letter-spacing:.7px;color:var(--mist);margin-bottom:4px">Period</div>
+            <div id="wx-wave-per2" style="font-family:'DM Mono',monospace;font-size:28px;font-weight:600;color:var(--teal)">—</div>
+            <div style="font-size:10px;color:var(--mist)">seconds</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="alert alert-info">
+    <span>ℹ️</span>
+    <div><strong>Go/No-Go thresholds —</strong>
+      <span style="color:var(--green);font-weight:600"> ■ GO:</span> wind &lt; 22 km/h · wave &lt; 0.5 m ·
+      <span style="color:var(--amber);font-weight:600"> ■ CAUTION:</span> wind 22–35 km/h or wave 0.5–0.9 m ·
+      <span style="color:var(--red);font-weight:600"> ■ NO-GO:</span> wind &gt; 35 km/h or wave ≥ 1.0 m or storm.
+      Source: open-meteo.com — free, no key required.
+    </div>
+  </div>
+</div>
+
+<!-- ────────────────────────────────────────────────────────
+     EMERGENCY CONTACTS & PROCEDURES
+──────────────────────────────────────────────────────── -->
+<div id="tab-emergency" class="tab-panel">
+  <div class="sec-head">
+    <div><div class="sec-title">Emergency Contacts & Procedures</div><div class="sec-sub">Keep this tab open on every tour day — fast access in a real incident</div></div>
+  </div>
+  <div style="background:var(--red-bg);border:2px solid var(--red);border-radius:var(--r);padding:22px 24px;margin-bottom:18px">
+    <div style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:var(--red);margin-bottom:16px">🆘 EMERGENCY NUMBERS — ST LUCIA</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px">
+      <div style="background:#fff;border-radius:8px;padding:14px 16px;border-left:4px solid var(--red)">
+        <div style="font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--mist);margin-bottom:5px">Emergency — All Services</div>
+        <div style="font-family:'DM Mono',monospace;font-size:32px;font-weight:700;color:var(--red)">911</div>
+        <div style="font-size:11px;color:var(--mist);margin-top:2px">Police · Fire · Ambulance</div>
+      </div>
+      <div style="background:#fff;border-radius:8px;padding:14px 16px;border-left:4px solid var(--red)">
+        <div style="font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--mist);margin-bottom:5px">Coast Guard — Marine SAR</div>
+        <div style="font-family:'DM Mono',monospace;font-size:20px;font-weight:700;color:var(--red)">758-452-2894</div>
+        <div style="font-size:11px;color:var(--mist);margin-top:2px">Man overboard · vessel emergency · VHF Ch16</div>
+      </div>
+      <div style="background:#fff;border-radius:8px;padding:14px 16px;border-left:4px solid var(--red)">
+        <div style="font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--mist);margin-bottom:5px">St Jude Hospital — Vieux Fort</div>
+        <div style="font-family:'DM Mono',monospace;font-size:20px;font-weight:700;color:var(--red)">758-454-6041</div>
+        <div style="font-size:11px;color:var(--mist);margin-top:2px">Nearest hospital · ~10 min from Savannes Bay</div>
+      </div>
+      <div style="background:#fff;border-radius:8px;padding:14px 16px;border-left:4px solid var(--amber)">
+        <div style="font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--mist);margin-bottom:5px">Victoria Hospital — Castries</div>
+        <div style="font-family:'DM Mono',monospace;font-size:20px;font-weight:700;color:var(--amber)">758-452-2421</div>
+        <div style="font-size:11px;color:var(--mist);margin-top:2px">Main referral hospital · north coast</div>
+      </div>
+    </div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">👥 SHER Team Direct</div>
+      <div class="equip-row">
+        <div><div style="font-weight:600;font-size:14px">Kemble Emanuel</div><div style="font-size:11px;color:var(--mist)">Owner · Lead Guide</div></div>
+        <div style="font-family:'DM Mono',monospace;font-size:15px;font-weight:600;color:var(--teal)">[Add number]</div>
+      </div>
+      <div class="equip-row">
+        <div><div style="font-weight:600;font-size:14px">Sabina</div><div style="font-size:11px;color:var(--mist)">Co-owner · Operations</div></div>
+        <div style="font-family:'DM Mono',monospace;font-size:15px;font-weight:600;color:var(--teal)">[Add number]</div>
+      </div>
+      <div style="margin-top:18px;padding-top:16px;border-top:1px solid var(--fog)">
+        <div style="font-size:12px;font-weight:600;color:var(--ink);margin-bottom:10px">Quick Reference</div>
+        <div style="display:flex;flex-direction:column;gap:8px;font-size:12px;color:var(--ink)">
+          <div>📻 VHF Channel 16 — Distress &amp; calling frequency</div>
+          <div>🚢 Nearest landing — Vieux Fort Pier</div>
+          <div>🏥 Nearest defibrillator — St Jude Hospital A&amp;E</div>
+          <div>📍 Bay coordinates — 13.73°N, 60.94°W</div>
+          <div>🔥 Fire Service direct — 758-452-1631</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">📋 Emergency Procedures</div>
+      <div style="display:flex;flex-direction:column;gap:12px;font-size:13px">
+        <div style="background:var(--red-bg);border-radius:7px;padding:12px 14px;border-left:3px solid var(--red)">
+          <div style="font-weight:700;color:var(--red);margin-bottom:6px">🌊 Man Overboard</div>
+          <ol style="padding-left:16px;line-height:1.8;color:#3a1a1a">
+            <li>Shout "Man overboard!" · note position · assign spotter</li>
+            <li>Throw life ring immediately</li>
+            <li>Circle back · kill engine before reaching person</li>
+            <li>Call Coast Guard: <strong>758-452-2894</strong></li>
+          </ol>
+        </div>
+        <div style="background:var(--amber-bg);border-radius:7px;padding:12px 14px;border-left:3px solid var(--amber)">
+          <div style="font-weight:700;color:var(--amber);margin-bottom:6px">🏥 Medical Emergency</div>
+          <ol style="padding-left:16px;line-height:1.8;color:#3a2a0a">
+            <li>Assess: airway · breathing · circulation · apply first aid</li>
+            <li>Call 911 · request ambulance to Vieux Fort pier</li>
+            <li>Head to nearest landing immediately</li>
+            <li>St Jude Hospital: <strong>758-454-6041</strong></li>
+          </ol>
+        </div>
+        <div style="background:var(--blue-bg);border-radius:7px;padding:12px 14px;border-left:3px solid var(--blue)">
+          <div style="font-weight:700;color:var(--blue);margin-bottom:6px">🔥 Fire on Vessel</div>
+          <ol style="padding-left:16px;line-height:1.8;color:#0a1a3a">
+            <li>Warn guests · move upwind · cut engine</li>
+            <li>Use extinguisher if safe · don life jackets</li>
+            <li>Call Coast Guard · head for nearest shore</li>
+            <li>Fire Service: <strong>758-452-1631</strong></li>
+          </ol>
+        </div>
+        <div style="background:var(--cloud);border-radius:7px;padding:12px 14px;border-left:3px solid var(--mist)">
+          <div style="font-weight:700;color:var(--ink);margin-bottom:6px">⛈️ Weather Abort</div>
+          <ol style="padding-left:16px;line-height:1.8;color:var(--ink)">
+            <li>Brief guests calmly · secure all loose gear</li>
+            <li>Return to Savannes Bay shore · avoid open sea</li>
+            <li>Radio Coast Guard if conditions deteriorate</li>
+            <li>Issue full refund or reschedule</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ────────────────────────────────────────────────────────
+     REGULATORY CALENDAR
+──────────────────────────────────────────────────────── -->
+<div id="tab-regulatory" class="tab-panel">
+  <div class="sec-head">
+    <div><div class="sec-title">Regulatory Calendar</div><div class="sec-sub">Licences · Insurance · Certifications · colour-coded by days to expiry</div></div>
+    <button class="refresh-btn" onclick="loadRegulatory(true)">↻ Refresh</button>
+  </div>
+  <div class="grid-4" style="margin-bottom:18px">
+    <div class="kpi k-red"><div class="kpi-label">Expired</div><div class="kpi-val big" id="reg-kpi-exp">—</div><div class="kpi-sub">action required now</div></div>
+    <div class="kpi k-amber"><div class="kpi-label">Due &lt; 30 days</div><div class="kpi-val big" id="reg-kpi-30">—</div><div class="kpi-sub">renew urgently</div></div>
+    <div class="kpi k-blue"><div class="kpi-label">Due &lt; 90 days</div><div class="kpi-val big" id="reg-kpi-90">—</div><div class="kpi-sub">plan renewal</div></div>
+    <div class="kpi k-green"><div class="kpi-label">Current</div><div class="kpi-val big" id="reg-kpi-ok">—</div><div class="kpi-sub">no action needed</div></div>
+  </div>
+  <div class="card">
+    <div class="card-title">📋 All Regulatory Items <span class="live-tag"><span class="dot"></span> Live</span></div>
+    <div style="overflow-x:auto">
+      <table class="dt">
+        <thead><tr>
+          <th>Item</th><th>Category</th><th>Issuing Body</th>
+          <th>Expiry Date</th><th>Days Left</th><th>Responsible</th><th>Notes</th>
+        </tr></thead>
+        <tbody id="reg-table-body"><tr><td colspan="7" style="color:var(--mist);font-style:italic;text-align:center;padding:20px">Loading…</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">✏️ Update Dates &amp; Status</div>
+      <form onsubmit="submitRegulatoryUpdate(event)">
+        <div class="qf-label">Item</div>
+        <select class="qf-input" id="reg-item-select"><option value="">Select item…</option></select>
+        <div class="qf-row">
+          <div><div class="qf-label">Expiry Date</div><input class="qf-input" type="date" id="reg-expiry"></div>
+          <div><div class="qf-label">Renewal Lodged</div><input class="qf-input" type="date" id="reg-renewal"></div>
+        </div>
+        <div class="qf-row">
+          <div>
+            <div class="qf-label">Status</div>
+            <select class="qf-input" id="reg-status">
+              <option value="Active">Active</option>
+              <option value="Expired">Expired</option>
+              <option value="Pending Renewal">Pending Renewal</option>
+              <option value="Not Applicable">Not Applicable</option>
+            </select>
+          </div>
+          <div><div class="qf-label">Responsible</div><input class="qf-input" type="text" id="reg-responsible" placeholder="Name"></div>
+        </div>
+        <div class="qf-label">Notes</div>
+        <input class="qf-input" type="text" id="reg-notes" placeholder="Optional">
+        <button type="submit" class="qf-submit">Save Update</button>
+        <div class="qf-success" id="reg-success">✓ Updated successfully.</div>
+      </form>
+    </div>
+    <div class="card">
+      <div class="card-title">➕ Add Regulatory Item</div>
+      <form onsubmit="submitRegulatoryAdd(event)">
+        <div class="qf-label">Item Name *</div>
+        <input class="qf-input" type="text" id="reg-new-name" placeholder="e.g. Dive Master Cert" required>
+        <div class="qf-row">
+          <div>
+            <div class="qf-label">Category</div>
+            <select class="qf-input" id="reg-new-cat">
+              <option>Business</option><option>Safety</option><option>Insurance</option>
+              <option>Vessel</option><option>Certification</option><option>Regulatory</option><option>Tax</option>
+            </select>
+          </div>
+          <div><div class="qf-label">Issuing Body</div><input class="qf-input" type="text" id="reg-new-body" placeholder="e.g. SLTA"></div>
+        </div>
+        <div class="qf-row">
+          <div><div class="qf-label">Expiry Date</div><input class="qf-input" type="date" id="reg-new-expiry"></div>
+          <div><div class="qf-label">Responsible</div><input class="qf-input" type="text" id="reg-new-responsible" placeholder="Name"></div>
+        </div>
+        <button type="submit" class="qf-submit">Add Item</button>
+        <div class="qf-success" id="reg-add-success">✓ Item added.</div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- ────────────────────────────────────────────────────────
      PRE-LAUNCH READINESS CHECKLIST
 ──────────────────────────────────────────────────────── -->
 <div id="tab-readiness" class="tab-panel">
@@ -1577,7 +1850,8 @@ var _pageTitles = {
   executive: 'Executive Dashboard', today: 'Today\'s Operations',
   bookings: 'Today\'s Bookings', morning: 'Morning Logs',
   equipment: 'Equipment Checks', incidents: 'Incident Reports',
-  inventory: 'Inventory & Stock', schedule: 'Guide Schedule', followups: 'Guest Follow-ups',
+  weather: 'Weather & Conditions', inventory: 'Inventory & Stock', schedule: 'Guide Schedule', followups: 'Guest Follow-ups',
+  emergency: 'Emergency Contacts', regulatory: 'Regulatory Calendar',
   finance: 'Loans & Finance', revenue: 'Revenue Dashboard', expenditure: 'Expenditure Tracker',
   risks: 'Risks & Alerts', readiness: 'Pre-Launch Readiness',
   enquiry: 'Log New Enquiry', 'booking-entry': 'Add Today\'s Booking'
@@ -1616,6 +1890,8 @@ function loadAll() {
   loadSchedule(false);
   loadInventory(false);
   loadFollowups(false);
+  loadRegulatory(false);
+  loadWeather();
   Promise.all([
     sbSelect('today_bookings', 'booking_date=eq.' + today + '&order=departure.asc'),
     sbSelect('guide_morning_logs', 'order=created_at.desc&limit=14'),
@@ -2353,6 +2629,245 @@ function submitExpense(e) {
     ['exp-description','exp-payee','exp-amount','exp-notes'].forEach(function(id){ document.getElementById(id).value=''; });
     loadExpenses(true);
   }).catch(function(err){ alert('Error saving expense: ' + err.message); });
+}
+
+/* ─── WEATHER ────────────────────────────────────────────── */
+var _weatherData = null, _marineData = null;
+
+function loadWeather() {
+  var lat = 13.73, lon = -60.94;
+  var wxUrl = 'https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lon
+    +'&current=temperature_2m,relative_humidity_2m,apparent_temperature,wind_speed_10m,wind_direction_10m,wind_gusts_10m,weather_code,precipitation'
+    +'&hourly=temperature_2m,precipitation,wind_speed_10m,weather_code'
+    +'&forecast_days=2&timezone=America%2FBarbados&wind_speed_unit=kmh';
+  var marineUrl = 'https://marine-api.open-meteo.com/v1/marine?latitude='+lat+'&longitude='+lon
+    +'&current=wave_height,wave_direction,wave_period&forecast_days=1&timezone=America%2FBarbados';
+  Promise.all([
+    fetch(wxUrl).then(function(r){ return r.json(); }),
+    fetch(marineUrl).then(function(r){ return r.json(); })
+  ]).then(function(res) {
+    _weatherData = res[0]; _marineData = res[1];
+    renderWeather();
+  }).catch(function(err) {
+    console.error('[loadWeather]', err);
+    var e = document.getElementById('wx-error');
+    if (e) { e.style.display='block'; e.innerHTML='<div class="alert alert-red"><span>⚠️</span><div>Weather data unavailable — check connection.</div></div>'; }
+  });
+}
+
+function renderWeather() {
+  if (!_weatherData || !_weatherData.current) return;
+  var c = _weatherData.current;
+  var wave    = _marineData && _marineData.current ? parseFloat(_marineData.current.wave_height)   : null;
+  var waveDir = _marineData && _marineData.current ? _marineData.current.wave_direction             : null;
+  var wavePer = _marineData && _marineData.current ? _marineData.current.wave_period                : null;
+  var wind  = parseFloat(c.wind_speed_10m);
+  var gust  = parseFloat(c.wind_gusts_10m);
+  var wcode = c.weather_code;
+  var isStorm = wcode >= 95, isRain = wcode >= 61;
+
+  var goStatus, goMsg, goCls;
+  if (isStorm || wind > 35 || (wave !== null && wave >= 1.0)) {
+    goStatus='NO-GO'; goCls='go-red';
+    goMsg = isStorm ? '⛈️  Storm detected — do not launch'
+          : wind > 35 ? '💨  Wind exceeds 35 km/h — unsafe for tours'
+          : '🌊  Wave height ≥ 1.0 m — unsafe sea state';
+  } else if (wind > 22 || (wave !== null && wave >= 0.5) || isRain) {
+    goStatus='CAUTION'; goCls='go-amber';
+    goMsg = wind > 22   ? '💨  Elevated winds — assess before departure'
+          : wave >= 0.5 ? '🌊  Wave height elevated — monitor conditions'
+          : '🌧️  Rainfall detected — assess guest comfort';
+  } else {
+    goStatus='✓  GO'; goCls='go-green';
+    goMsg = 'Conditions look good · proceed with normal pre-departure checks';
+  }
+
+  var banner = document.getElementById('wx-gonogo');
+  if (banner) { banner.className='wx-gonogo '+goCls; banner.innerHTML='<div class="wx-gonogo-status">'+goStatus+'</div><div class="wx-gonogo-msg">'+goMsg+'</div>'; }
+
+  var el = function(id){ return document.getElementById(id); };
+  if (el('wx-temp'))    el('wx-temp').textContent    = Math.round(c.temperature_2m)+'°C';
+  if (el('wx-feel'))    el('wx-feel').textContent    = 'Feels like '+Math.round(c.apparent_temperature)+'°C';
+  if (el('wx-desc'))    el('wx-desc').textContent    = wxCodeIcon(wcode)+'  '+wxCodeDesc(wcode);
+  if (el('wx-wind'))    el('wx-wind').textContent    = Math.round(wind)+' km/h '+degToCompass(c.wind_direction_10m);
+  if (el('wx-gust'))    el('wx-gust').textContent    = 'Gusts '+Math.round(gust)+' km/h';
+  if (el('wx-hum'))     el('wx-hum').textContent     = Math.round(c.relative_humidity_2m)+'%';
+  if (el('wx-precip'))  el('wx-precip').textContent  = parseFloat(c.precipitation).toFixed(1)+' mm';
+  if (el('wx-updated')) el('wx-updated').textContent = '· Updated '+fmtTime(new Date());
+
+  var waveStr = wave!==null ? wave.toFixed(2)+' m' : 'No data';
+  var wDirStr = waveDir!==null ? degToCompass(waveDir) : '—';
+  var wPerStr = wavePer!==null ? parseFloat(wavePer).toFixed(0) : '—';
+  if (el('wx-wave'))      el('wx-wave').textContent      = waveStr;
+  if (el('wx-wave-dir'))  el('wx-wave-dir').textContent  = wDirStr+' swell direction';
+  if (el('wx-wave-big'))  el('wx-wave-big').textContent  = wave!==null ? wave.toFixed(1) : '—';
+  if (el('wx-wave-dir2')) el('wx-wave-dir2').textContent = wDirStr;
+  if (el('wx-wave-per2')) el('wx-wave-per2').textContent = wPerStr;
+
+  renderHourlyForecast();
+}
+
+function renderHourlyForecast() {
+  var el = document.getElementById('wx-hourly');
+  if (!el || !_weatherData || !_weatherData.hourly) return;
+  var times=_weatherData.hourly.time, temps=_weatherData.hourly.temperature_2m;
+  var precips=_weatherData.hourly.precipitation, winds=_weatherData.hourly.wind_speed_10m;
+  var codes=_weatherData.hourly.weather_code;
+  var nowStr=new Date().toISOString().slice(0,13), startIdx=0;
+  for (var i=0;i<times.length;i++) { if (times[i].slice(0,13)>=nowStr){startIdx=i;break;} }
+  var html='<div style="display:flex;gap:7px;overflow-x:auto;padding-bottom:6px">';
+  for (var j=startIdx;j<Math.min(startIdx+12,times.length);j++) {
+    var t=new Date(times[j]+':00'), hr=t.getHours();
+    var lbl=j===startIdx?'Now':(hr%12||12)+(hr>=12?'pm':'am');
+    var isNow=j===startIdx;
+    var bg=isNow?'var(--teal)':'var(--cloud)', clr=isNow?'#fff':'var(--ink)', mst=isNow?'rgba(255,255,255,0.6)':'var(--mist)';
+    html+='<div style="min-width:58px;text-align:center;background:'+bg+';border-radius:8px;padding:10px 5px;border:1px solid var(--fog);flex-shrink:0">';
+    html+='<div style="font-size:10px;font-weight:600;color:'+mst+';margin-bottom:3px">'+lbl+'</div>';
+    html+='<div style="font-size:20px;margin-bottom:3px">'+wxCodeIcon(codes[j])+'</div>';
+    html+='<div style="font-size:12px;font-weight:600;color:'+clr+'">'+Math.round(temps[j])+'°</div>';
+    html+='<div style="font-size:10px;color:'+mst+';margin-top:2px">'+Math.round(winds[j])+'km/h</div>';
+    if (precips[j]>0.1) html+='<div style="font-size:10px;color:'+(isNow?'rgba(255,255,255,0.85)':'var(--blue)')+'">'+precips[j].toFixed(1)+'mm</div>';
+    html+='</div>';
+  }
+  el.innerHTML=html+'</div>';
+}
+
+function wxCodeDesc(c) {
+  if(c===0)return'Clear sky';if(c<=1)return'Mainly clear';if(c<=2)return'Partly cloudy';
+  if(c===3)return'Overcast';if(c<=48)return'Foggy';if(c<=55)return'Drizzle';
+  if(c<=67)return'Rain';if(c<=77)return'Snow';if(c<=82)return'Rain showers';
+  if(c<=86)return'Snow showers';if(c>=95)return'Thunderstorm';return'Unknown';
+}
+function wxCodeIcon(c) {
+  if(c===0)return'☀️';if(c<=2)return'🌤️';if(c===3)return'☁️';
+  if(c<=48)return'🌫️';if(c<=55)return'🌦️';if(c<=67)return'🌧️';
+  if(c<=77)return'❄️';if(c<=82)return'🌦️';if(c<=86)return'🌨️';
+  if(c>=95)return'⛈️';return'🌡️';
+}
+function degToCompass(deg) {
+  return ['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'][Math.round(deg/22.5)%16];
+}
+
+/* ─── REGULATORY ──────────────────────────────────────────── */
+var _regulatory = [];
+
+function loadRegulatory(manual) {
+  sbSelect('regulatory_items','order=category.asc,item_name.asc').then(function(r){
+    _regulatory=Array.isArray(r)?r:[];
+    renderRegulatory();
+  }).catch(function(e){console.error('[loadRegulatory]',e);});
+}
+
+function daysUntil(dateStr) {
+  if (!dateStr) return null;
+  return Math.round((new Date(dateStr).setHours(12)-new Date().setHours(12))/(864e5));
+}
+
+function renderRegulatory() {
+  var expired=0,due30=0,due90=0,ok=0;
+  _regulatory.forEach(function(item){
+    var d=daysUntil(item.expiry_date);
+    if(d===null)return;
+    if(d<0)expired++;else if(d<30)due30++;else if(d<90)due90++;else ok++;
+  });
+  var el=function(id){return document.getElementById(id);};
+  if(el('reg-kpi-exp'))el('reg-kpi-exp').textContent=expired;
+  if(el('reg-kpi-30'))el('reg-kpi-30').textContent=due30;
+  if(el('reg-kpi-90'))el('reg-kpi-90').textContent=due90;
+  if(el('reg-kpi-ok'))el('reg-kpi-ok').textContent=ok;
+
+  var sorted=_regulatory.slice().sort(function(a,b){
+    var da=daysUntil(a.expiry_date),db=daysUntil(b.expiry_date);
+    if(da===null&&db===null)return 0;if(da===null)return 1;if(db===null)return -1;return da-db;
+  });
+
+  var tbody=el('reg-table-body');
+  if(tbody){
+    if(!sorted.length){tbody.innerHTML='<tr><td colspan="7" style="color:var(--mist);font-style:italic;text-align:center;padding:20px">No items loaded.</td></tr>';}
+    else{
+      var h='';
+      sorted.forEach(function(item){
+        var d=daysUntil(item.expiry_date);
+        var badge,bc;
+        if(d===null){badge='No date set';bc='bm';}
+        else if(d<0){badge='EXPIRED '+Math.abs(d)+'d ago';bc='br';}
+        else if(d<30){badge=d+'d left';bc='br';}
+        else if(d<90){badge=d+'d left';bc='ba';}
+        else{badge=d+'d left';bc='bg';}
+        h+='<tr><td><strong>'+esc(item.item_name)+'</strong></td>';
+        h+='<td><span class="badge bo">'+esc(item.category)+'</span></td>';
+        h+='<td style="font-size:12px;color:var(--mist)">'+esc(item.issuing_body||'—')+'</td>';
+        h+='<td style="font-family:\'DM Mono\',monospace;font-size:12px">'+(item.expiry_date||'—')+'</td>';
+        h+='<td><span class="badge '+bc+'">'+badge+'</span></td>';
+        h+='<td style="font-size:12px">'+esc(item.responsible||'—')+'</td>';
+        h+='<td style="font-size:11px;color:var(--mist)">'+esc(item.notes||'')+'</td></tr>';
+      });
+      tbody.innerHTML=h;
+    }
+  }
+
+  var sel=el('reg-item-select');
+  if(sel){
+    sel.innerHTML='<option value="">Select item…</option>';
+    sorted.forEach(function(item){
+      var opt=document.createElement('option');
+      opt.value=item.id;
+      opt.textContent='['+item.category+'] '+item.item_name;
+      opt.dataset.expiry=item.expiry_date||'';opt.dataset.renewal=item.renewal_date||'';
+      opt.dataset.status=item.status||'Active';opt.dataset.responsible=item.responsible||'';
+      opt.dataset.notes=item.notes||'';
+      sel.appendChild(opt);
+    });
+    sel.onchange=function(){
+      var o=sel.options[sel.selectedIndex];
+      if(!o.value)return;
+      el('reg-expiry').value=o.dataset.expiry;el('reg-renewal').value=o.dataset.renewal;
+      el('reg-status').value=o.dataset.status;el('reg-responsible').value=o.dataset.responsible;
+      el('reg-notes').value=o.dataset.notes;
+    };
+  }
+}
+
+function submitRegulatoryUpdate(e) {
+  e.preventDefault();
+  var id=document.getElementById('reg-item-select').value;
+  if(!id){alert('Please select an item.');return;}
+  var payload={
+    expiry_date: document.getElementById('reg-expiry').value||null,
+    renewal_date:document.getElementById('reg-renewal').value||null,
+    status:      document.getElementById('reg-status').value,
+    responsible: document.getElementById('reg-responsible').value,
+    notes:       document.getElementById('reg-notes').value,
+    updated_at:  new Date().toISOString()
+  };
+  fetch(SB_URL+'/rest/v1/regulatory_items?id=eq.'+id,{
+    method:'PATCH',
+    headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},
+    body:JSON.stringify(payload)
+  }).then(function(r){
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    var suc=document.getElementById('reg-success');
+    suc.style.display='block';setTimeout(function(){suc.style.display='none';},3000);
+    loadRegulatory(true);
+  }).catch(function(err){alert('Update failed: '+err.message);});
+}
+
+function submitRegulatoryAdd(e) {
+  e.preventDefault();
+  var payload={
+    item_name:   document.getElementById('reg-new-name').value,
+    category:    document.getElementById('reg-new-cat').value,
+    issuing_body:document.getElementById('reg-new-body').value,
+    expiry_date: document.getElementById('reg-new-expiry').value||null,
+    responsible: document.getElementById('reg-new-responsible').value,
+    status:'Active'
+  };
+  sbInsert('regulatory_items',payload).then(function(){
+    var suc=document.getElementById('reg-add-success');
+    suc.style.display='block';setTimeout(function(){suc.style.display='none';},3000);
+    ['reg-new-name','reg-new-body','reg-new-expiry','reg-new-responsible'].forEach(function(id){document.getElementById(id).value='';});
+    loadRegulatory(true);
+  }).catch(function(err){alert('Error: '+err.message);});
 }
 
 /* ─── GUIDE SCHEDULE ─────────────────────────────────────── */
