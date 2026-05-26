@@ -25,6 +25,12 @@
   [headers.values]
     Cache-Control = "public, max-age=86400"
 
+# ── /command — serve the password-protected dashboard ────────────────────────
+[[redirects]]
+  from = "/command"
+  to   = "/command/index.html"
+  status = 200
+
 # ── Main site: catch-all for SPA-style direct links ──────────────────────────
 [[redirects]]
   from = "/*"

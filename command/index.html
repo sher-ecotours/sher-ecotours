@@ -1,0 +1,1368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SHER Command · Live Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Outfit:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ── TOKENS ───────────────────────────────────────────── */
+:root {
+  --teal:      #0b5e51;
+  --teal-mid:  #117a6a;
+  --em:        #1aab90;
+  --em-soft:   #2ecfb2;
+  --ocean:     #0c2333;
+  --ocean-mid: #163650;
+  --sand:      #f0e6cc;
+  --sand-dk:   #c8a96e;
+  --cloud:     #f6faf8;
+  --fog:       #e4ede9;
+  --ink:       #172820;
+  --mist:      #7a9990;
+  --white:     #ffffff;
+  --red:       #c0392b; --red-bg: #fdf0ee;
+  --amber:     #b7770d; --amber-bg: #fef9ec;
+  --green:     #1a7a47; --green-bg: #eaf5ef;
+  --blue:      #1a4a82; --blue-bg: #e8f0fb;
+  --r: 12px; --r-sm: 7px;
+  --sh: 0 2px 18px rgba(11,94,81,0.09);
+  --sh-lg: 0 8px 40px rgba(11,94,81,0.16);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:#edf2f0;color:var(--ink);min-height:100vh;font-size:14px;line-height:1.55}
+
+/* ── PASSWORD GATE ──────────────────────────────────────── */
+#gate {
+  position: fixed; inset: 0; z-index: 9999;
+  background: linear-gradient(145deg, var(--ocean) 0%, #0f3a50 55%, var(--teal) 100%);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Outfit', sans-serif;
+}
+.gate-box {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 20px;
+  padding: 48px 44px 44px;
+  width: 100%; max-width: 380px;
+  text-align: center;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 24px 80px rgba(0,0,0,0.35);
+}
+.gate-mark {
+  width: 56px; height: 56px;
+  background: linear-gradient(135deg,var(--em),var(--em-soft));
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px; font-weight: 700; color: #fff;
+  margin: 0 auto 18px;
+}
+.gate-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px; font-weight: 500; color: #fff;
+  margin-bottom: 4px;
+}
+.gate-sub {
+  font-size: 12px; color: rgba(255,255,255,0.45);
+  letter-spacing: .5px; margin-bottom: 32px;
+}
+.gate-input {
+  width: 100%; padding: 13px 16px;
+  background: rgba(255,255,255,0.09);
+  border: 1.5px solid rgba(255,255,255,0.18);
+  border-radius: 9px;
+  font-family: 'Outfit', sans-serif; font-size: 15px;
+  color: #fff; letter-spacing: 2px;
+  outline: none; margin-bottom: 12px;
+  transition: border-color .18s;
+  text-align: center;
+}
+.gate-input::placeholder { color: rgba(255,255,255,0.3); letter-spacing: .5px; font-size: 13px; }
+.gate-input:focus { border-color: var(--em-soft); background: rgba(255,255,255,0.13); }
+.gate-btn {
+  width: 100%; padding: 13px;
+  background: linear-gradient(135deg,var(--teal),var(--em));
+  color: #fff; border: none; border-radius: 9px;
+  font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 600;
+  cursor: pointer; transition: all .18s; letter-spacing: .3px;
+}
+.gate-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(26,171,144,.4); }
+.gate-btn:active { transform: translateY(0); }
+.gate-err {
+  display: none; margin-top: 12px;
+  color: #ff8a80; font-size: 12px; font-weight: 500;
+}
+.gate-footer {
+  margin-top: 28px; font-size: 10px; color: rgba(255,255,255,0.2);
+  letter-spacing: .5px; text-transform: uppercase;
+}
+
+/* ── SIDEBAR ────────────────────────────────────────────── */
+#app{display:none}
+.app{display:flex;min-height:100vh}
+.sidebar{width:232px;min-width:232px;background:var(--ocean);color:#fff;display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:200;overflow-y:auto}
+.sb-brand{padding:22px 18px 18px;border-bottom:1px solid rgba(255,255,255,0.07)}
+.brand-mark{width:42px;height:42px;background:linear-gradient(135deg,var(--em),var(--em-soft));border-radius:9px;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:700;color:#fff;margin-bottom:10px}
+.brand-name{font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:500;line-height:1.25}
+.brand-sub{font-size:10px;color:rgba(255,255,255,0.38);margin-top:3px;letter-spacing:.6px;text-transform:uppercase}
+.live-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(26,171,144,0.18);border:1px solid rgba(26,171,144,0.35);border-radius:20px;padding:4px 9px;font-size:10px;color:var(--em-soft);font-weight:500;margin-top:10px}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--em-soft);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+.nav-sec{padding:14px 10px 6px}
+.nav-sec-label{font-size:10px;letter-spacing:1.1px;text-transform:uppercase;color:rgba(255,255,255,.3);padding:0 8px;margin-bottom:5px}
+.nav-btn{display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:7px;cursor:pointer;transition:all .16s;color:rgba(255,255,255,.65);font-size:13px;font-weight:400;margin-bottom:2px;border:none;background:none;width:100%;text-align:left;font-family:'Outfit',sans-serif}
+.nav-btn:hover{background:rgba(255,255,255,.07);color:#fff}
+.nav-btn.active{background:var(--teal);color:#fff;font-weight:500}
+.nav-icon{width:17px;text-align:center;font-size:14px;flex-shrink:0}
+.nav-badge{margin-left:auto;font-size:10px;background:var(--red);color:#fff;border-radius:10px;padding:1px 6px;font-weight:600}
+.sb-footer{margin-top:auto;padding:14px 18px;border-top:1px solid rgba(255,255,255,.07);font-size:10px;color:rgba(255,255,255,.28)}
+.sb-signout{padding:10px 18px 0}
+.sb-signout button{width:100%;padding:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:7px;color:rgba(255,255,255,.45);font-size:11px;font-family:'Outfit',sans-serif;cursor:pointer;transition:all .16s}
+.sb-signout button:hover{background:rgba(255,255,255,.1);color:#fff}
+
+/* ── MAIN ──────────────────────────────────────────────── */
+.main{margin-left:232px;flex:1;display:flex;flex-direction:column;min-width:0}
+.topbar{background:#fff;border-bottom:1px solid var(--fog);padding:13px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;gap:12px}
+.topbar-left h1{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:500}
+.topbar-left .tdate{font-size:11px;color:var(--mist);font-family:'DM Mono',monospace;margin-top:1px}
+.topbar-chips{display:flex;gap:7px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border-radius:6px;font-size:11px;font-weight:500;cursor:pointer;border:none;font-family:'Outfit',sans-serif}
+.chip-red{background:var(--red-bg);color:var(--red)}
+.chip-green{background:var(--green-bg);color:var(--green)}
+.chip-amber{background:var(--amber-bg);color:var(--amber)}
+.chip-blue{background:var(--blue-bg);color:var(--blue)}
+.conn-status{display:flex;align-items:center;gap:6px;font-size:11px;font-family:'DM Mono',monospace}
+.conn-dot{width:7px;height:7px;border-radius:50%;background:#999;flex-shrink:0}
+.conn-dot.ok{background:var(--green)}
+.conn-dot.err{background:var(--red)}
+.conn-dot.loading{background:var(--amber);animation:pulse 1s infinite}
+
+/* ── CONTENT ────────────────────────────────────────────── */
+.content{padding:24px 28px 60px}
+.tab-panel{display:none}.tab-panel.active{display:block}
+
+/* ── CARDS ────────────────────────────────────────────── */
+.card{background:#fff;border-radius:var(--r);box-shadow:var(--sh);padding:18px 22px;margin-bottom:18px}
+.card-title{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:500;color:var(--teal);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+
+/* ── KPI TILES ────────────────────────────────────────── */
+.kpi{background:#fff;border-radius:var(--r);padding:18px;box-shadow:var(--sh);position:relative;overflow:hidden}
+.kpi::before{content:'';position:absolute;left:0;top:0;width:3px;height:100%}
+.kpi.k-em::before{background:var(--em)}
+.kpi.k-red::before{background:var(--red)}
+.kpi.k-amber::before{background:var(--amber)}
+.kpi.k-green::before{background:var(--green)}
+.kpi.k-blue::before{background:var(--blue)}
+.kpi.k-ocean::before{background:var(--ocean)}
+.kpi-label{font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--mist);margin-bottom:5px;font-weight:500}
+.kpi-val{font-family:'DM Mono',monospace;font-size:22px;font-weight:500;color:var(--ink)}
+.kpi-val.big{font-size:26px}
+.kpi-sub{font-size:11px;color:var(--mist);margin-top:3px}
+.loading-val{color:var(--mist);font-style:italic;font-size:14px;font-family:'Outfit',sans-serif}
+
+/* ── LIVE INDICATOR ───────────────────────────────────── */
+.live-tag{display:inline-flex;align-items:center;gap:4px;font-size:10px;color:var(--em);font-weight:500;margin-left:auto}
+.live-tag .dot{width:5px;height:5px;border-radius:50%;background:var(--em);animation:pulse 2s infinite}
+
+/* ── BOOKING CARDS ────────────────────────────────────── */
+.booking-card{background:var(--cloud);border:1px solid var(--fog);border-radius:var(--r-sm);padding:13px 16px;margin-bottom:9px;border-left:3px solid var(--em)}
+.booking-card:last-child{margin-bottom:0}
+.booking-exp{font-weight:600;font-size:13px;color:var(--teal);margin-bottom:3px}
+.booking-guest{font-size:13px;color:var(--ink);margin-bottom:5px}
+.booking-tags{display:flex;gap:6px;flex-wrap:wrap}
+.btag{font-size:11px;background:#fff;border:1px solid var(--fog);border-radius:4px;padding:2px 7px;color:var(--ink)}
+.btag-occasion{background:#fef3ff;border-color:#d8b4fe;color:#6b21a8}
+.no-bookings{font-size:13px;color:var(--mist);font-style:italic;padding:16px 0;text-align:center}
+
+/* ── LOG ROWS ─────────────────────────────────────────── */
+.log-row{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--fog);font-size:13px}
+.log-row:last-child{border-bottom:none}
+.log-time{font-family:'DM Mono',monospace;font-size:11px;color:var(--mist);min-width:76px;padding-top:1px}
+.log-body{flex:1}
+.log-title{font-weight:500;margin-bottom:2px}
+.log-detail{font-size:12px;color:var(--mist)}
+
+/* ── BADGES ───────────────────────────────────────────── */
+.badge{display:inline-flex;align-items:center;gap:3px;padding:3px 8px;border-radius:4px;font-size:11px;font-weight:500}
+.bg{background:var(--green-bg);color:var(--green)}
+.ba{background:var(--amber-bg);color:var(--amber)}
+.br{background:var(--red-bg);color:var(--red)}
+.bb{background:var(--blue-bg);color:var(--blue)}
+.bm{background:var(--fog);color:var(--mist)}
+.bo{background:#e8edf3;color:var(--ocean)}
+
+/* ── INCIDENT CARDS ───────────────────────────────────── */
+.incident-card{border-radius:var(--r-sm);padding:14px 16px;margin-bottom:10px;font-size:13px}
+.inc-1{background:var(--amber-bg);border-left:4px solid var(--amber)}
+.inc-2{background:#fff3e0;border-left:4px solid #e65100}
+.inc-3{background:var(--red-bg);border-left:4px solid var(--red)}
+.inc-head{font-weight:600;margin-bottom:4px;display:flex;align-items:center;justify-content:space-between}
+.inc-body{font-size:12px;color:#3a3a3a;line-height:1.5}
+.inc-meta{font-size:11px;color:var(--mist);margin-top:6px;font-family:'DM Mono',monospace}
+
+/* ── EQUIPMENT ────────────────────────────────────────── */
+.equip-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--fog);font-size:13px}
+.equip-row:last-child{border-bottom:none}
+.equip-item{color:var(--ink)}
+.equip-status{display:flex;align-items:center;gap:6px}
+
+/* ── TABLES ───────────────────────────────────────────── */
+.dt{width:100%;border-collapse:collapse;font-size:13px}
+.dt th{text-align:left;padding:9px 12px;font-size:10px;text-transform:uppercase;letter-spacing:.6px;color:var(--mist);border-bottom:2px solid var(--fog);font-weight:500}
+.dt td{padding:10px 12px;border-bottom:1px solid var(--fog);vertical-align:top}
+.dt tr:last-child td{border-bottom:none}
+.dt tr:hover td{background:var(--cloud)}
+
+/* ── PROGRESS ─────────────────────────────────────────── */
+.prog{height:5px;background:var(--fog);border-radius:3px;overflow:hidden;margin-top:5px}
+.prog-fill{height:100%;border-radius:3px}
+.pf-em{background:var(--em)}.pf-am{background:var(--amber)}.pf-rd{background:var(--red)}
+
+/* ── ALERT BOX ────────────────────────────────────────── */
+.alert{border-radius:8px;padding:11px 14px;margin-bottom:10px;font-size:12.5px;display:flex;gap:9px;align-items:flex-start;line-height:1.5}
+.alert-red{background:var(--red-bg);border-left:3px solid var(--red);color:#6b1b14}
+.alert-amber{background:var(--amber-bg);border-left:3px solid var(--amber);color:#6b4d0a}
+.alert-green{background:var(--green-bg);border-left:3px solid var(--green);color:#124d2d}
+.alert-info{background:var(--blue-bg);border-left:3px solid var(--blue);color:#1a3a6e}
+.alert strong{font-weight:600}
+
+/* ── SPINNER ──────────────────────────────────────────── */
+.spinner{display:inline-block;width:16px;height:16px;border:2px solid var(--fog);border-top-color:var(--em);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── WEATHER PILL ─────────────────────────────────────── */
+.wx-pill{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:20px;font-size:12px;font-weight:500}
+.wx-golden{background:#fef9ec;border:1px solid #f0c040;color:#8a6000}
+.wx-mystic{background:#f0f0ff;border:1px solid #9090d0;color:#2a2a8a}
+.wx-calm{background:#e8f5ee;border:1px solid #60c090;color:#1a6040}
+.wx-rain{background:#e8e8f5;border:1px solid #8090b0;color:#303060}
+
+/* ── SECTION HEADER ───────────────────────────────────── */
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:18px}
+.sec-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500}
+.sec-sub{font-size:11px;color:var(--mist);margin-top:3px}
+.refresh-btn{font-size:11px;color:var(--mist);background:none;border:1px solid var(--fog);border-radius:5px;padding:4px 10px;cursor:pointer;font-family:'Outfit',sans-serif}
+.refresh-btn:hover{border-color:var(--em);color:var(--teal)}
+
+/* ── FORM PANELS ──────────────────────────────────────── */
+.qf-label{font-size:12px;font-weight:600;color:var(--ink);margin-bottom:4px;margin-top:12px}
+.qf-input{width:100%;padding:9px 12px;border:1.5px solid var(--fog);border-radius:var(--r-sm);font-family:'Outfit',sans-serif;font-size:13px;color:var(--ink);background:var(--cloud);outline:none}
+.qf-input:focus{border-color:var(--em);background:#fff}
+.qf-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.qf-submit{margin-top:14px;width:100%;padding:11px;background:linear-gradient(135deg,var(--teal),var(--em));color:#fff;border:none;border-radius:var(--r-sm);font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .18s}
+.qf-submit:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(11,94,81,.25)}
+.qf-success{background:var(--green-bg);color:var(--green);border-radius:var(--r-sm);padding:10px 14px;font-size:13px;font-weight:500;margin-top:10px;display:none}
+select.qf-input{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%237a9990' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:30px;appearance:none;cursor:pointer}
+
+/* ── RESPONSIVE ───────────────────────────────────────── */
+@media(max-width:900px){.sidebar{width:190px;min-width:190px}.main{margin-left:190px}.grid-4{grid-template-columns:1fr 1fr}}
+@media(max-width:640px){.sidebar{display:none}.main{margin-left:0}.grid-2,.grid-3,.grid-4{grid-template-columns:1fr}.content{padding:16px}}
+
+/* ── CONN PILL ────────────────────────────────────────── */
+.conn-bar{background:#fff;border-bottom:1px solid var(--fog);padding:7px 28px;display:flex;align-items:center;gap:8px;font-size:11px;color:var(--mist)}
+</style>
+</head>
+<body>
+
+<!-- ── PASSWORD GATE ─────────────────────────────────────── -->
+<div id="gate">
+  <div class="gate-box">
+    <div class="gate-mark">S</div>
+    <div class="gate-title">SHER Command</div>
+    <div class="gate-sub">SAVANNES BAY · RESTRICTED ACCESS</div>
+    <input
+      class="gate-input"
+      type="password"
+      id="pw-input"
+      placeholder="Enter password…"
+      autocomplete="current-password"
+      onkeydown="if(event.key==='Enter')checkPw()"
+    >
+    <button class="gate-btn" onclick="checkPw()">Access Dashboard</button>
+    <div class="gate-err" id="pw-err">Incorrect password. Try again.</div>
+    <div class="gate-footer">Safeport Security Services Ltd</div>
+  </div>
+</div>
+
+<!-- ── DASHBOARD (hidden until authenticated) ─────────────── -->
+<div id="app">
+<div class="app">
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sb-brand">
+    <div class="brand-mark">S</div>
+    <div class="brand-name">SHER Command</div>
+    <div class="brand-sub">Live · Savannes Bay</div>
+    <div class="live-badge"><div class="live-dot"></div> Connected to Supabase</div>
+  </div>
+
+  <div class="nav-sec">
+    <div class="nav-sec-label">Overview</div>
+    <button class="nav-btn active" onclick="nav('executive',this)"><span class="nav-icon">🏠</span>Executive Dashboard</button>
+    <button class="nav-btn" onclick="nav('today',this)"><span class="nav-icon">📋</span>Today's Operations</button>
+  </div>
+  <div class="nav-sec">
+    <div class="nav-sec-label">Live Data</div>
+    <button class="nav-btn" onclick="nav('bookings',this)"><span class="nav-icon">📅</span>Today's Bookings</button>
+    <button class="nav-btn" onclick="nav('morning',this)"><span class="nav-icon">🌤️</span>Morning Logs</button>
+    <button class="nav-btn" onclick="nav('equipment',this)"><span class="nav-icon">🛶</span>Equipment Checks</button>
+    <button class="nav-btn" onclick="nav('incidents',this)" id="nav-incidents"><span class="nav-icon">⚠️</span>Incidents</button>
+  </div>
+  <div class="nav-sec">
+    <div class="nav-sec-label">Finance & Control</div>
+    <button class="nav-btn" onclick="nav('finance',this)"><span class="nav-icon">💰</span>Loans & Finance</button>
+    <button class="nav-btn" onclick="nav('risks',this)"><span class="nav-icon">🔴</span>Risks & Alerts</button>
+  </div>
+  <div class="nav-sec">
+    <div class="nav-sec-label">Quick Entry</div>
+    <button class="nav-btn" onclick="nav('enquiry',this)"><span class="nav-icon">✉️</span>Log Enquiry</button>
+    <button class="nav-btn" onclick="nav('booking-entry',this)"><span class="nav-icon">➕</span>Add Today Booking</button>
+  </div>
+
+  <div class="sb-signout">
+    <button onclick="signOut()">🔒 Sign out</button>
+  </div>
+
+  <div class="sb-footer">
+    Safeport Security Services Ltd<br>
+    bookings@safehavenecotours.com<br>
+    guide.safehavenecotours.com
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <h1 id="page-title">Executive Dashboard</h1>
+      <div class="tdate" id="page-date"></div>
+    </div>
+    <div class="topbar-chips">
+      <div class="chip chip-red" id="chip-incidents" style="display:none" onclick="nav('incidents',null)">⚠️ <span id="chip-inc-count">0</span> Incidents</div>
+      <div class="chip chip-amber" id="chip-battery" style="display:none">🔋 Battery Low</div>
+      <div class="chip chip-green" id="chip-ok" style="display:none">✓ All Clear</div>
+    </div>
+    <div class="conn-status">
+      <div class="conn-dot loading" id="conn-dot"></div>
+      <span id="conn-label">Connecting…</span>
+    </div>
+  </div>
+
+  <!-- CONN BAR -->
+  <div class="conn-bar" id="conn-bar" style="display:none">
+    <div class="spinner"></div>
+    <span id="conn-bar-msg">Loading live data from Supabase…</span>
+  </div>
+
+  <div class="content">
+
+<!-- ────────────────────────────────────────────────────────
+     EXECUTIVE DASHBOARD
+──────────────────────────────────────────────────────── -->
+<div id="tab-executive" class="tab-panel active">
+  <div class="sec-head">
+    <div>
+      <div class="sec-title">Executive Dashboard</div>
+      <div class="sec-sub">Live · refreshes on load · Supabase + Operational records</div>
+    </div>
+    <button class="refresh-btn" onclick="loadAll()">↻ Refresh</button>
+  </div>
+
+  <div class="grid-4" style="margin-bottom:18px">
+    <div class="kpi k-em">
+      <div class="kpi-label">Today's Bookings</div>
+      <div class="kpi-val big" id="kpi-bookings-count"><span class="loading-val">Loading…</span></div>
+      <div class="kpi-sub" id="kpi-bookings-sub">Pulling from Supabase</div>
+    </div>
+    <div class="kpi k-green">
+      <div class="kpi-label">Today's Guests</div>
+      <div class="kpi-val big" id="kpi-guests-count"><span class="loading-val">Loading…</span></div>
+      <div class="kpi-sub" id="kpi-guests-sub">From confirmed bookings</div>
+    </div>
+    <div class="kpi k-amber">
+      <div class="kpi-label">Experience Mode</div>
+      <div class="kpi-val" id="kpi-mode" style="font-size:14px;margin-top:4px"><span class="loading-val">Loading…</span></div>
+      <div class="kpi-sub" id="kpi-mode-sub">From morning log</div>
+    </div>
+    <div class="kpi k-ocean">
+      <div class="kpi-label">Equipment Status</div>
+      <div class="kpi-val" id="kpi-equip" style="font-size:14px;margin-top:4px"><span class="loading-val">Loading…</span></div>
+      <div class="kpi-sub" id="kpi-equip-sub">From inspection log</div>
+    </div>
+  </div>
+
+  <div class="grid-4" style="margin-bottom:22px">
+    <div class="kpi k-red">
+      <div class="kpi-label">Loan Payment Due</div>
+      <div class="kpi-val">EC $7,056</div>
+      <div class="kpi-sub">May 27 Republic + May 31 Maclean James</div>
+    </div>
+    <div class="kpi k-red">
+      <div class="kpi-label">Incidents (7 days)</div>
+      <div class="kpi-val" id="kpi-incidents"><span class="loading-val">…</span></div>
+      <div class="kpi-sub">From guide app</div>
+    </div>
+    <div class="kpi k-amber">
+      <div class="kpi-label">SLASPA Permit</div>
+      <div class="kpi-val" style="font-size:13px;margin-top:4px">Pending</div>
+      <div class="kpi-sub">Submitted Feb 26</div>
+    </div>
+    <div class="kpi k-blue">
+      <div class="kpi-label">Office Rent Start</div>
+      <div class="kpi-val" style="font-size:13px;margin-top:4px">Jul 1, 2026</div>
+      <div class="kpi-sub">XCD $1,300/month</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">📅 Today's Booked Experiences<span class="live-tag"><span class="dot"></span>LIVE</span></div>
+      <div id="exec-bookings"><div style="display:flex;gap:8px;align-items:center;color:var(--mist);font-size:13px"><div class="spinner"></div>Loading bookings…</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">🌤️ Latest Morning Log<span class="live-tag"><span class="dot"></span>LIVE</span></div>
+      <div id="exec-morning"><div style="display:flex;gap:8px;align-items:center;color:var(--mist);font-size:13px"><div class="spinner"></div>Loading morning log…</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">⚠️ Recent Incidents<span class="live-tag"><span class="dot"></span>LIVE</span></div>
+      <div id="exec-incidents"><div style="display:flex;gap:8px;align-items:center;color:var(--mist);font-size:13px"><div class="spinner"></div>Loading incidents…</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">✓ Post-Tour Reset Status<span class="live-tag"><span class="dot"></span>LIVE</span></div>
+      <div id="exec-reset"><div style="display:flex;gap:8px;align-items:center;color:var(--mist);font-size:13px"><div class="spinner"></div>Loading reset log…</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🚨 Standing Alerts — Action Required</div>
+    <div class="alert alert-red"><span>🔴</span><div><strong>Republic Bank payment due May 27 — 2 days.</strong> EC $4,750.00 to Republic Bank. Then Maclean James EC $2,305.56 due May 31. Total this month: EC $7,055.56.</div></div>
+    <div class="alert alert-red"><span>🔴</span><div><strong>SLASPA permit response overdue</strong> — Application submitted Feb 26, 2026. Tours are operating. Follow up in writing this week.</div></div>
+    <div class="alert alert-amber"><span>⚠️</span><div><strong>Bookkeeping not yet established</strong> — No ledger, no chart of accounts in use. Revenue and expenses must be recorded from launch date (Mar 25).</div></div>
+    <div class="alert alert-amber"><span>⚠️</span><div><strong>Church St office rehabilitation summary</strong> — Must be submitted to Lessor before July 1, 2026 when rent commences.</div></div>
+    <div class="alert alert-info"><span>ℹ️</span><div><strong>Equipment lease not fully executed</strong> — Confirm Lessor fields are signed and Schedule A (condition report) has been completed jointly.</div></div>
+  </div>
+</div>
+
+<!-- ────────────────────────────────────────────────────────
+     TODAY'S OPERATIONS
+──────────────────────────────────────────────────────── -->
+<div id="tab-today" class="tab-panel">
+  <div class="sec-head">
+    <div><div class="sec-title">Today's Operations</div><div class="sec-sub">Live summary from all four PWA data streams</div></div>
+    <button class="refresh-btn" onclick="loadAll()">↻ Refresh</button>
+  </div>
+  <div class="grid-2">
+    <div class="card"><div class="card-title">📅 Bookings Today</div><div id="today-bookings-full"></div></div>
+    <div class="card"><div class="card-title">🌤️ Morning Log — Full Detail</div><div id="today-morning-full"></div></div>
+    <div class="card"><div class="card-title">🔧 Equipment Inspection — Latest</div><div id="today-equip-full"></div></div>
+    <div class="card"><div class="card-title">✓ Post-Tour Reset — Latest</div><div id="today-reset-full"></div></div>
+  </div>
+</div>
+
+<!-- ────────────────────────────────────────────────────────
+     BOOKINGS
+──────────────────────────────────────────────────────── -->
+<div id="tab-bookings" class="tab-panel">
+  <div class="sec-head">
+    <div><div class="sec-title">Today's Bookings</div><div class="sec-sub">Live from Supabase · today_bookings table</div></div>
+    <button class="refresh-btn" onclick="loadBookings(true)">↻ Refresh</button>
+  </div>
+  <div class="card"><div id="bookings-full-list"></div></div>
+</div>
+
+<!-- ────────────────────────────────────────────────────────
+     MORNING LOGS
+──────────────────────────────────────────────────────── -->
+<div id="tab-morning" class="tab-panel">
+  <div class="sec-head">
+    <div><div class="sec-title">Morning Logs</div><div class="sec-sub">Live from guide_morning_logs · last 14 entries</div></div>
+    <button class="refresh-btn" onclick="loadMorningLogs(true)">↻ Refresh</button>
+  </div>
+  <div class="card"><div id="morning-full-list"></div></div>
+</div>
+
+<!-- ────────────────────────────────────────────────────────
+     EQUIPMENT
+──────────────────────────────────────────────────────── -->
+<div id="tab-equipment" class="tab-panel">
+  <div class="sec-head">
+    <div><div class="sec-title">Equipment Checks</div><div class="sec-sub">Live from guide_equipment_inspections · last 10 entries</div></div>
+    <button class="refresh-btn" onclick="loadEquipment(true)">↻ Refresh</button>
+  </div>
+  <div class="card"><div id="equip-full-list"></div></div>
+</div>
+
+<!-- ────────────────────────────────────────────────────────
+     INCIDENTS
+──────────────────────────────────────────────────────── -->
+<div id="tab-incidents" class="tab-panel">
+  <div class="sec-head">
+    <div><div class="sec-title">Incident Reports</div><div class="sec-sub">Live from guide_incidents · all records</div></div>
+    <button class="refresh-btn" onclick="loadIncidents(true)">↻ Refresh</button>
+  </div>
+  <div id="incidents-full-list"></div>
+</div>
+
+<!-- ────────────────────────────────────────────────────────
+     FINANCE
+──────────────────────────────────────────────────────── -->
+<div id="tab-finance" class="tab-panel">
+  <div class="sec-head">
+    <div><div class="sec-title">Loans & Finance</div><div class="sec-sub">Live balances from Supabase · loan_payments table · record every payment the day it is made</div></div>
+    <button class="refresh-btn" onclick="loadLoans(true)">↻ Refresh</button>
+  </div>
+
+  <div class="grid-4" style="margin-bottom:18px">
+    <div class="kpi k-red">
+      <div class="kpi-label">Maclean James — Remaining</div>
+      <div class="kpi-val" id="l1-remaining"><span class="loading-val">Loading…</span></div>
+      <div class="kpi-sub" id="l1-paid-sub">of EC $20,750.00 total</div>
+    </div>
+    <div class="kpi k-red">
+      <div class="kpi-label">Republic Bank — Balance</div>
+      <div class="kpi-val" id="rb-remaining"><span class="loading-val">Loading…</span></div>
+      <div class="kpi-sub" id="rb-paid-sub">Land acquisition loan</div>
+    </div>
+    <div class="kpi k-amber">
+      <div class="kpi-label">Next Due — Republic Bank</div>
+      <div class="kpi-val" style="color:var(--red);font-size:15px;margin-top:3px">EC $4,750.00</div>
+      <div class="kpi-sub" style="color:var(--red);font-weight:600">May 27, 2026 — 2 days</div>
+    </div>
+    <div class="kpi k-ocean">
+      <div class="kpi-label">Combined Monthly Obligation</div>
+      <div class="kpi-val">EC $7,056</div>
+      <div class="kpi-sub">$4,750 Republic + $2,306 Maclean James</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:18px">
+    <div class="card-title">💳 Loan — Maclean James</div>
+    <div class="grid-2">
+      <div>
+        <div class="log-row"><div class="log-time">Principal</div><div class="log-body"><strong>EC $20,750.00</strong></div></div>
+        <div class="log-row"><div class="log-time">Interest</div><div class="log-body">0% — interest free</div></div>
+        <div class="log-row"><div class="log-time">Instalment</div><div class="log-body">EC $2,305.56 × 9 monthly</div></div>
+        <div class="log-row"><div class="log-time">First due</div><div class="log-body" style="color:var(--red);font-weight:600">May 31, 2026</div></div>
+        <div class="log-row"><div class="log-time">Final due</div><div class="log-body">January 31, 2027</div></div>
+        <div class="log-row"><div class="log-time">Signed</div><div class="log-body">22 February 2026</div></div>
+        <div class="log-row"><div class="log-time">Document</div><div class="log-body" style="font-size:11px">loan_agreement_kemble_mclean_james.pdf</div></div>
+        <div style="margin-top:16px">
+          <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px">
+            <span style="color:var(--mist)">Amount repaid</span>
+            <span id="l1-paid-label" style="font-family:'DM Mono',monospace;font-weight:500">Loading…</span>
+          </div>
+          <div class="prog"><div class="prog-fill pf-em" id="l1-prog" style="width:0%"></div></div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--mist);margin-top:4px">
+            <span>EC $0</span><span>EC $20,750.00</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.7px;color:var(--mist);margin-bottom:10px">Payment History</div>
+        <div id="l1-history"><div style="color:var(--mist);font-size:13px;font-style:italic">Loading…</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:18px;border-left:4px solid var(--blue)">
+    <div class="card-title" style="color:var(--blue)">🏦 Republic Bank — Land Acquisition Loan
+      <span class="live-tag" style="color:var(--red);margin-left:auto"><span class="dot" style="background:var(--red)"></span>May 27 in 2 days</span>
+    </div>
+    <div class="alert alert-red" style="margin-bottom:16px">
+      <span>🔴</span>
+      <div><strong>Payment due May 27, 2026 — 2 days.</strong> EC $4,750.00 must be paid to Republic Bank by the 27th of each month. Do not miss this date.</div>
+    </div>
+    <div class="grid-2">
+      <div>
+        <div class="log-row"><div class="log-time">Lender</div><div class="log-body"><strong>Republic Bank</strong></div></div>
+        <div class="log-row"><div class="log-time">Purpose</div><div class="log-body">Land acquisition</div></div>
+        <div class="log-row"><div class="log-time">Current balance</div><div class="log-body"><strong style="color:var(--red)">EC $407,163.93</strong> <span style="font-size:11px;color:var(--mist)">as confirmed</span></div></div>
+        <div class="log-row"><div class="log-time">Monthly payment</div><div class="log-body"><strong>EC $4,750.00</strong></div></div>
+        <div class="log-row"><div class="log-time">Due date</div><div class="log-body">27th of each month</div></div>
+        <div class="log-row"><div class="log-time">First payment</div><div class="log-body">March 2026</div></div>
+        <div class="log-row"><div class="log-time">Interest rate</div><div class="log-body"><span style="background:var(--amber-bg);color:var(--amber);padding:2px 7px;border-radius:4px;font-size:11px">Information Required — confirm with bank</span></div></div>
+        <div class="log-row"><div class="log-time">Loan term</div><div class="log-body"><span style="background:var(--amber-bg);color:var(--amber);padding:2px 7px;border-radius:4px;font-size:11px">Information Required — confirm with bank</span></div></div>
+        <div style="margin-top:14px">
+          <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px">
+            <span style="color:var(--mist)">Payments recorded here</span>
+            <span id="rb-paid-label" style="font-family:'DM Mono',monospace;font-weight:500">Loading…</span>
+          </div>
+          <div class="prog"><div class="prog-fill" id="rb-prog" style="width:0%;background:var(--blue)"></div></div>
+          <div style="font-size:11px;color:var(--mist);margin-top:4px">Progress bar reflects payments logged in this system — not amortization schedule. Confirm outstanding balance with Republic Bank monthly.</div>
+        </div>
+        <div class="alert alert-info" style="margin-top:12px">
+          <span>ℹ️</span>
+          <div style="font-size:12px">Balance of EC $407,163.93 is confirmed as stated. For exact amortization, interest split, and payoff date — <strong>requires confirmation from Republic Bank.</strong></div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.7px;color:var(--mist);margin-bottom:10px">Payment History — Republic Bank</div>
+        <div id="rb-history"><div style="color:var(--mist);font-size:13px;font-style:italic">Loading…</div></div>
+        <div style="margin-top:16px;border-top:1px solid var(--fog);padding-top:14px">
+          <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.7px;color:var(--mist);margin-bottom:8px">Upcoming Due Dates</div>
+          <div class="log-row"><div class="log-time" style="color:var(--red);font-weight:600">May 27, 2026</div><div class="log-body" style="color:var(--red);font-weight:600">EC $4,750.00 — DUE IN 2 DAYS</div></div>
+          <div class="log-row"><div class="log-time">Jun 27, 2026</div><div class="log-body">EC $4,750.00</div></div>
+          <div class="log-row"><div class="log-time">Jul 27, 2026</div><div class="log-body">EC $4,750.00</div></div>
+          <div class="log-row"><div class="log-time">Aug 27, 2026</div><div class="log-body">EC $4,750.00</div></div>
+          <div class="log-row"><div class="log-time">Sep 27, 2026</div><div class="log-body">EC $4,750.00</div></div>
+          <div class="log-row"><div class="log-time">Oct 27, 2026</div><div class="log-body">EC $4,750.00</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="border:2px solid var(--em)">
+    <div class="card-title">✏️ Record a Loan Payment<span class="live-tag"><span class="dot"></span>Writes to Supabase</span></div>
+    <div class="alert alert-info" style="margin-bottom:16px">
+      <span>ℹ️</span>
+      <div>Record every payment <strong>the day it is made</strong>. This updates the live balance, progress bar, and payment history immediately. One entry per payment. Do not estimate — only confirm payments already made.</div>
+    </div>
+    <form id="loan-payment-form" onsubmit="submitLoanPayment(event)">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+        <div>
+          <div class="qf-label">Loan *</div>
+          <select class="qf-input" name="loan_id" id="lp-loan-id" required onchange="prefillAmount()">
+            <option value="" disabled selected>Select loan…</option>
+            <option value="REPUBLIC">Republic Bank — Land Acquisition (EC $4,750/month)</option>
+            <option value="LOAN1">Maclean James — Personal (EC $2,305.56/month)</option>
+          </select>
+        </div>
+        <div>
+          <div class="qf-label">Payment Date *</div>
+          <input class="qf-input" type="date" name="payment_date" id="lp-date" required>
+        </div>
+        <div>
+          <div class="qf-label">Amount Paid *</div>
+          <input class="qf-input" type="number" name="amount_paid" id="lp-amount" step="0.01" min="0.01" required placeholder="Select loan first">
+        </div>
+        <div>
+          <div class="qf-label">Currency</div>
+          <select class="qf-input" name="currency" id="lp-currency">
+            <option value="XCD" selected>XCD — Eastern Caribbean $</option>
+            <option value="USD">USD — US Dollar</option>
+          </select>
+        </div>
+        <div>
+          <div class="qf-label">Payment Method *</div>
+          <select class="qf-input" name="payment_method" required>
+            <option value="" disabled selected>Select…</option>
+            <option>Bank Transfer</option>
+            <option>Cash</option>
+            <option>Mobile Payment</option>
+            <option>Cheque</option>
+            <option>Standing Order</option>
+          </select>
+        </div>
+        <div>
+          <div class="qf-label">Confirmed By *</div>
+          <select class="qf-input" name="confirmed_by" required>
+            <option value="" disabled selected>Select…</option>
+            <option>Kemble Emanuel</option>
+            <option>Sabina</option>
+          </select>
+        </div>
+      </div>
+      <div style="margin-top:12px">
+        <div class="qf-label">Notes / Reference Number</div>
+        <input class="qf-input" type="text" name="notes" placeholder="e.g. Republic Bank ref #RB-20260527 · May instalment · Receipt held">
+      </div>
+      <div style="display:flex;gap:10px;margin-top:14px;align-items:center">
+        <button type="submit" class="qf-submit" style="flex:1">✓ Record Payment to Supabase</button>
+        <button type="button" onclick="document.getElementById('loan-payment-form').reset();setLoanPaymentDefaults()" class="refresh-btn" style="white-space:nowrap">Clear</button>
+      </div>
+    </form>
+    <div class="qf-success" id="loan-payment-success">✓ Payment recorded. Balance and history updated.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📊 Revenue Benchmarks vs Loan Obligations</div>
+    <table class="dt">
+      <thead><tr><th>Scenario</th><th>Monthly Revenue (EC)</th><th>Republic Bank (EC)</th><th>Maclean James (EC)</th><th>Total Obligations</th><th>Net Position</th></tr></thead>
+      <tbody>
+        <tr><td>Conservative (7 tours/wk)</td><td>EC $32,368</td><td style="color:var(--red)">$4,750</td><td style="color:var(--red)">$2,306</td><td style="color:var(--red);font-weight:600">EC $7,056</td><td style="color:var(--green);font-weight:600">EC $25,312</td></tr>
+        <tr><td><strong>🎯 Target (8 tours/wk)</strong></td><td><strong>EC $36,992</strong></td><td style="color:var(--red)"><strong>$4,750</strong></td><td style="color:var(--red)"><strong>$2,306</strong></td><td style="color:var(--red);font-weight:600"><strong>EC $7,056</strong></td><td style="color:var(--green);font-weight:600"><strong>EC $29,936</strong></td></tr>
+        <tr><td>Strong (10 tours/wk)</td><td>EC $46,240</td><td style="color:var(--red)">$4,750</td><td style="color:var(--red)">$2,306</td><td style="color:var(--red);font-weight:600">EC $7,056</td><td style="color:var(--green);font-weight:600">EC $39,184</td></tr>
+      </tbody>
+    </table>
+    <div class="alert alert-amber" style="margin-top:14px"><span>⚠️</span><div>Republic Bank loan (EC $4,750/month) is a long-term land acquisition commitment with no confirmed end date in this system. Maclean James loan ends January 2027. After that, monthly obligation drops to EC $4,750 only. <strong>Requires licensed accountant confirmation for full amortization schedule.</strong></div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🗓️ Full Repayment Schedule</div>
+    <table class="dt" id="schedule-table">
+      <thead><tr><th>#</th><th>Due Date</th><th>Amount (EC)</th><th>Status</th><th>Remaining After</th></tr></thead>
+      <tbody>
+        <tr><td class="log-time">1</td><td>May 31, 2026</td><td>$2,305.56</td><td id="sch-1"><span class="badge ba">Due</span></td><td class="log-time">$18,444.44</td></tr>
+        <tr><td class="log-time">2</td><td>Jun 30, 2026</td><td>$2,305.56</td><td id="sch-2"><span class="badge bm">Upcoming</span></td><td class="log-time">$16,138.88</td></tr>
+        <tr><td class="log-time">3</td><td>Jul 31, 2026</td><td>$2,305.56</td><td id="sch-3"><span class="badge bm">Upcoming</span></td><td class="log-time">$13,833.32</td></tr>
+        <tr><td class="log-time">4</td><td>Aug 31, 2026</td><td>$2,305.56</td><td id="sch-4"><span class="badge bm">Upcoming</span></td><td class="log-time">$11,527.76</td></tr>
+        <tr><td class="log-time">5</td><td>Sep 30, 2026</td><td>$2,305.56</td><td id="sch-5"><span class="badge bm">Upcoming</span></td><td class="log-time">$9,222.20</td></tr>
+        <tr><td class="log-time">6</td><td>Oct 31, 2026</td><td>$2,305.56</td><td id="sch-6"><span class="badge bm">Upcoming</span></td><td class="log-time">$6,916.64</td></tr>
+        <tr><td class="log-time">7</td><td>Nov 30, 2026</td><td>$2,305.56</td><td id="sch-7"><span class="badge bm">Upcoming</span></td><td class="log-time">$4,611.08</td></tr>
+        <tr><td class="log-time">8</td><td>Dec 31, 2026</td><td>$2,305.56</td><td id="sch-8"><span class="badge bm">Upcoming</span></td><td class="log-time">$2,305.52</td></tr>
+        <tr style="background:var(--green-bg)"><td class="log-time">9</td><td><strong>Jan 31, 2027 (Final)</strong></td><td><strong>$2,305.52</strong></td><td id="sch-9"><span class="badge bm">Upcoming</span></td><td class="log-time" style="color:var(--green);font-weight:600">$0.00 — Debt free</td></tr>
+      </tbody>
+    </table>
+    <div style="font-size:11px;color:var(--mist);margin-top:10px">Payment status updates automatically as you record payments above. Row turns green when recorded.</div>
+  </div>
+</div>
+
+<!-- ────────────────────────────────────────────────────────
+     RISKS
+──────────────────────────────────────────────────────── -->
+<div id="tab-risks" class="tab-panel">
+  <div class="sec-head"><div><div class="sec-title">Risks & Alerts</div><div class="sec-sub">Standing risk register + live incidents from PWA</div></div></div>
+  <div class="card">
+    <div class="card-title">🔴 Standing Risk Register</div>
+    <table class="dt">
+      <thead><tr><th>Risk</th><th>Severity</th><th>Mitigation</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td><strong>SLASPA permit unconfirmed</strong><br><span style="font-size:11px;color:var(--mist)">Operating without written approval</span></td><td><span class="badge br">HIGH</span></td><td>Send formal status enquiry this week</td><td><span class="badge ba">Open</span></td></tr>
+        <tr><td><strong>Republic Bank — May 27 payment due</strong><br><span style="font-size:11px;color:var(--mist)">EC $4,750 due in 2 days · Balance EC $407,163.93</span></td><td><span class="badge br">HIGH</span></td><td>Make Republic Bank payment by May 27. Then Maclean James EC $2,305.56 by May 31.</td><td><span class="badge br">Urgent</span></td></tr>
+        <tr><td><strong>No bookkeeping records</strong><br><span style="font-size:11px;color:var(--mist)">Revenue & expenses unrecorded since launch</span></td><td><span class="badge br">HIGH</span></td><td>Engage accountant + set up ledger immediately</td><td><span class="badge ba">Open</span></td></tr>
+        <tr><td><strong>Equipment lease not fully executed</strong></td><td><span class="badge ba">MED</span></td><td>Complete all fields + Schedule A</td><td><span class="badge ba">Open</span></td></tr>
+        <tr><td><strong>Guest liability / waiver compliance</strong></td><td><span class="badge br">HIGH</span></td><td>100% waiver rate — verify via Guide App logs</td><td><span class="badge bg">Monitoring</span></td></tr>
+        <tr><td><strong>Hurricane season (Jun–Nov)</strong></td><td><span class="badge ba">MED</span></td><td>Build revenue buffer in Apr–May. Weather policy active via Guide App.</td><td><span class="badge bg">Managed</span></td></tr>
+        <tr><td><strong>Capital gap — Village development</strong><br><span style="font-size:11px;color:var(--mist)">USD $890K needed — no confirmed source</span></td><td><span class="badge br">HIGH</span></td><td>Build tours revenue record. Pursue investor/bank.</td><td><span class="badge bm">Deferred</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card">
+    <div class="card-title">⚠️ Live Incidents from Guide App <span class="live-tag" style="margin-left:8px"><span class="dot"></span>LIVE</span></div>
+    <div id="risks-incidents-live"></div>
+  </div>
+</div>
+
+<!-- ────────────────────────────────────────────────────────
+     QUICK ENTRY — ENQUIRY
+──────────────────────────────────────────────────────── -->
+<div id="tab-enquiry" class="tab-panel">
+  <div class="sec-head"><div><div class="sec-title">Log New Enquiry</div><div class="sec-sub">Writes directly to Supabase enquiries table — TMS Enquiry Log</div></div></div>
+  <div class="card" style="max-width:560px">
+    <div class="card-title">✉️ Guest Enquiry — Quick Entry</div>
+    <div class="alert alert-info" style="margin-bottom:16px"><span>ℹ️</span><div>This writes to the <strong>enquiries</strong> table in Supabase. Your Google Apps Script will auto-email the guest and notify bookings@safehavenecotours.com.</div></div>
+    <form id="enquiry-form" onsubmit="submitEnquiry(event)">
+      <div class="qf-row">
+        <div><div class="qf-label">Full Name *</div><input class="qf-input" name="full_name" required placeholder="Guest full name"></div>
+        <div><div class="qf-label">WhatsApp / Phone *</div><input class="qf-input" name="whatsapp_phone" required placeholder="+1 758 …"></div>
+      </div>
+      <div class="qf-label">Email Address</div>
+      <input class="qf-input" name="email_address" type="email" placeholder="guest@email.com">
+      <div class="qf-label">Experience Interested In *</div>
+      <select class="qf-input" name="experience" required>
+        <option value="" disabled selected>Select…</option>
+        <option>Bay Serenity — Savannes Bay Eco Kayak</option>
+        <option>Golden Mirror — Dawn Kayak Experience</option>
+        <option>Mystic Morning — Kayak in the Rain</option>
+        <option>Scorpion Islet Arc</option>
+        <option>Sunset Romance Tour</option>
+        <option>General Enquiry</option>
+      </select>
+      <div class="qf-row">
+        <div><div class="qf-label">Preferred Date</div><input class="qf-input" name="preferred_date" type="date"></div>
+        <div><div class="qf-label">Number of Guests</div>
+          <select class="qf-input" name="number_of_guests">
+            <option value="1">1</option><option value="2" selected>2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6+">6+</option>
+          </select>
+        </div>
+      </div>
+      <div class="qf-label">Special Occasion?</div>
+      <select class="qf-input" name="special_occasion">
+        <option>None</option><option>Proposal</option><option>Anniversary</option><option>Vow Renewal</option><option>Birthday</option><option>Other celebration</option>
+      </select>
+      <div class="qf-label">How They Heard About Us</div>
+      <select class="qf-input" name="how_heard">
+        <option>Resort concierge</option><option>Airbnb host</option><option>Google Search</option><option>Social media</option><option>Friend/family referral</option><option>Tour driver</option><option>Other</option>
+      </select>
+      <div class="qf-label">Notes</div>
+      <textarea class="qf-input" name="notes" rows="2" placeholder="Any additional context…"></textarea>
+      <button type="submit" class="qf-submit">✉️ Submit Enquiry to Supabase</button>
+    </form>
+    <div class="qf-success" id="enquiry-success">✓ Enquiry submitted to Supabase. Auto-email will fire from Google Apps Script within moments.</div>
+  </div>
+</div>
+
+<!-- ────────────────────────────────────────────────────────
+     QUICK ENTRY — ADD BOOKING
+──────────────────────────────────────────────────────── -->
+<div id="tab-booking-entry" class="tab-panel">
+  <div class="sec-head"><div><div class="sec-title">Add Today's Booking</div><div class="sec-sub">Writes to Supabase today_bookings — visible on Guide App home screen immediately</div></div></div>
+  <div class="card" style="max-width:560px">
+    <div class="card-title">➕ Add Booking to Guide App</div>
+    <div class="alert alert-green" style="margin-bottom:16px"><span>✓</span><div>This writes directly to the <strong>today_bookings</strong> table. The entry appears on the Guide App home screen <strong>immediately</strong> — no sync delay.</div></div>
+    <form id="booking-entry-form" onsubmit="submitTodayBooking(event)">
+      <div class="qf-label">Guest Name *</div>
+      <input class="qf-input" name="guest_name" required placeholder="Lead guest full name">
+      <div class="qf-label">Experience *</div>
+      <select class="qf-input" name="experience" required>
+        <option value="" disabled selected>Select…</option>
+        <option>Bay Serenity Circuit</option>
+        <option>Golden Mirror — Dawn Experience</option>
+        <option>Mystic Morning</option>
+        <option>Scorpion Islet Arc</option>
+        <option>Sunset Romance Tour</option>
+      </select>
+      <div class="qf-row">
+        <div><div class="qf-label">Booking Date *</div><input class="qf-input" name="booking_date" type="date" id="be-date" required></div>
+        <div><div class="qf-label">Departure Time *</div>
+          <select class="qf-input" name="departure" required>
+            <option value="5:15 AM">5:15 AM — Dawn</option>
+            <option value="9:00 AM" selected>9:00 AM — Morning</option>
+            <option value="By appointment">By appointment</option>
+          </select>
+        </div>
+      </div>
+      <div class="qf-row">
+        <div><div class="qf-label">Group Size *</div>
+          <select class="qf-input" name="group_size" required>
+            <option value="1">1</option><option value="2" selected>2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option>
+          </select>
+        </div>
+        <div><div class="qf-label">Occasion</div>
+          <select class="qf-input" name="occasion">
+            <option value="None" selected>None</option><option>Proposal</option><option>Anniversary</option><option>Vow Renewal</option><option>Birthday</option>
+          </select>
+        </div>
+      </div>
+      <div class="qf-label">Notes</div>
+      <textarea class="qf-input" name="notes" rows="2" placeholder="Special requirements, accessibility notes…"></textarea>
+      <button type="submit" class="qf-submit">✓ Add to Guide App Now</button>
+    </form>
+    <div class="qf-success" id="booking-entry-success">✓ Booking added to Supabase. It will appear on the Guide App home screen immediately.</div>
+  </div>
+</div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+</div><!-- /app -->
+</div><!-- /#app -->
+
+<script>
+/* ─── PASSWORD GATE ──────────────────────────────────────── */
+// SHA-256 of "SherLive2026!" — change password by updating this hash only
+var PW_HASH = '5f181d08b05ceb14e1d1b0ff78871dbf8e6d00f604514e2de900f19669bb1fa1';
+var SESSION_KEY = 'sher_cmd_auth';
+
+async function checkPw() {
+  var input = document.getElementById('pw-input').value;
+  if (!input) return;
+  var encoded = new TextEncoder().encode(input);
+  var buf = await crypto.subtle.digest('SHA-256', encoded);
+  var hex = Array.from(new Uint8Array(buf)).map(function(b){ return b.toString(16).padStart(2,'0'); }).join('');
+  if (hex === PW_HASH) {
+    sessionStorage.setItem(SESSION_KEY, '1');
+    document.getElementById('gate').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    loadAll();
+  } else {
+    var err = document.getElementById('pw-err');
+    err.style.display = 'block';
+    document.getElementById('pw-input').value = '';
+    document.getElementById('pw-input').focus();
+    setTimeout(function(){ err.style.display = 'none'; }, 3000);
+  }
+}
+
+function signOut() {
+  sessionStorage.removeItem(SESSION_KEY);
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('gate').style.display = 'flex';
+  document.getElementById('pw-input').value = '';
+  document.getElementById('pw-input').focus();
+}
+
+// Auto-authenticate if already in session
+(function() {
+  if (sessionStorage.getItem(SESSION_KEY) === '1') {
+    document.getElementById('gate').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+  }
+})();
+
+/* ─── SUPABASE CONFIG ─────────────────────────────────────── */
+var SB_URL = 'https://zbklfuhsmnmcwcqcpdxk.supabase.co';
+var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpia2xmdWhzbW5tY3djcWNwZHhrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgyNjMxNzQsImV4cCI6MjA5MzgzOTE3NH0.r6RAWjrMGRu9I31hI9fd7wNRPxAnjR0haHuxmgWuMpc';
+
+function sbHeaders() {
+  return { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' };
+}
+function sbSelect(table, query) {
+  return fetch(SB_URL + '/rest/v1/' + table + (query ? '?' + query : ''), {
+    headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
+  }).then(function(r) { return r.json(); });
+}
+function sbInsert(table, data) {
+  return fetch(SB_URL + '/rest/v1/' + table, {
+    method: 'POST',
+    headers: sbHeaders(),
+    body: JSON.stringify(data)
+  }).then(function(r) { return r.status === 201; });
+}
+
+/* ─── STATE ───────────────────────────────────────────────── */
+var _bookings = [], _morning = [], _equipment = [], _incidents = [], _resets = [];
+var _connected = false;
+
+/* ─── INIT ────────────────────────────────────────────────── */
+document.addEventListener('DOMContentLoaded', function() {
+  setDate();
+  if (sessionStorage.getItem(SESSION_KEY) === '1') loadAll();
+  else document.getElementById('pw-input').focus();
+});
+
+function setDate() {
+  var d = new Date();
+  document.getElementById('page-date').textContent = d.toLocaleDateString('en-LC', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+  setLoanPaymentDefaults();
+  var dateInput = document.getElementById('be-date');
+  if (dateInput) dateInput.value = d.toISOString().split('T')[0];
+}
+
+/* ─── NAVIGATION ──────────────────────────────────────────── */
+var _pageTitles = {
+  executive: 'Executive Dashboard', today: 'Today\'s Operations',
+  bookings: 'Today\'s Bookings', morning: 'Morning Logs',
+  equipment: 'Equipment Checks', incidents: 'Incident Reports',
+  finance: 'Loans & Finance', risks: 'Risks & Alerts',
+  enquiry: 'Log New Enquiry', 'booking-entry': 'Add Today\'s Booking'
+};
+function nav(id, el) {
+  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.nav-btn').forEach(function(b) { b.classList.remove('active'); });
+  var panel = document.getElementById('tab-' + id);
+  if (panel) panel.classList.add('active');
+  if (el) el.classList.add('active');
+  document.getElementById('page-title').textContent = _pageTitles[id] || id;
+  window.scrollTo(0, 0);
+}
+
+/* ─── CONN STATUS ─────────────────────────────────────────── */
+function setConn(state, msg) {
+  var dot = document.getElementById('conn-dot');
+  var label = document.getElementById('conn-label');
+  var bar = document.getElementById('conn-bar');
+  var barMsg = document.getElementById('conn-bar-msg');
+  dot.className = 'conn-dot ' + state;
+  label.textContent = msg;
+  if (state === 'loading') { bar.style.display = 'flex'; barMsg.textContent = msg; }
+  else bar.style.display = 'none';
+  _connected = (state === 'ok');
+}
+
+/* ─── LOAD ALL ────────────────────────────────────────────── */
+function loadAll() {
+  setConn('loading', 'Connecting to Supabase…');
+  var today = new Date().toISOString().split('T')[0];
+  loadLoans(false);
+  Promise.all([
+    sbSelect('today_bookings', 'booking_date=eq.' + today + '&order=departure.asc'),
+    sbSelect('guide_morning_logs', 'order=created_at.desc&limit=14'),
+    sbSelect('guide_equipment_inspections', 'order=created_at.desc&limit=10'),
+    sbSelect('guide_incidents', 'order=created_at.desc'),
+    sbSelect('guide_post_tour_resets', 'order=created_at.desc&limit=10')
+  ]).then(function(results) {
+    _bookings  = Array.isArray(results[0]) ? results[0] : [];
+    _morning   = Array.isArray(results[1]) ? results[1] : [];
+    _equipment = Array.isArray(results[2]) ? results[2] : [];
+    _incidents = Array.isArray(results[3]) ? results[3] : [];
+    _resets    = Array.isArray(results[4]) ? results[4] : [];
+    setConn('ok', 'Connected · ' + fmtTime(new Date()));
+    renderAll();
+  }).catch(function(err) {
+    setConn('err', 'Connection failed');
+    renderOffline();
+    console.error('[SHER Dashboard]', err);
+  });
+}
+
+function loadBookings(manual) { if (manual) { sbSelect('today_bookings', 'booking_date=eq.' + new Date().toISOString().split('T')[0] + '&order=departure.asc').then(function(r) { _bookings = Array.isArray(r) ? r : []; renderBookingsPanel(); }); } }
+function loadMorningLogs(manual) { if (manual) { sbSelect('guide_morning_logs', 'order=created_at.desc&limit=14').then(function(r) { _morning = Array.isArray(r) ? r : []; renderMorningPanel(); }); } }
+function loadEquipment(manual) { if (manual) { sbSelect('guide_equipment_inspections', 'order=created_at.desc&limit=10').then(function(r) { _equipment = Array.isArray(r) ? r : []; renderEquipmentPanel(); }); } }
+function loadIncidents(manual) { if (manual) { sbSelect('guide_incidents', 'order=created_at.desc').then(function(r) { _incidents = Array.isArray(r) ? r : []; renderIncidentsPanel(); }); } }
+
+/* ─── RENDER ALL ──────────────────────────────────────────── */
+function renderAll() {
+  renderKPIs();
+  renderExecBookings();
+  renderExecMorning();
+  renderExecIncidents();
+  renderExecReset();
+  renderBookingsPanel();
+  renderMorningPanel();
+  renderEquipmentPanel();
+  renderIncidentsPanel();
+  renderResetFull();
+  renderRisksLive();
+  updateChips();
+}
+
+/* ─── KPIs ────────────────────────────────────────────────── */
+function renderKPIs() {
+  var bcount = _bookings.length;
+  set('kpi-bookings-count', bcount === 0 ? '0' : String(bcount));
+  set('kpi-bookings-sub', bcount + ' experience' + (bcount !== 1 ? 's' : '') + ' today');
+  var gcount = _bookings.reduce(function(t,b) { return t + (parseInt(b.group_size) || 1); }, 0);
+  set('kpi-guests-count', gcount || '0');
+  set('kpi-guests-sub', 'across ' + bcount + ' booking' + (bcount !== 1 ? 's' : ''));
+  var m = _morning[0];
+  if (m) {
+    var mode = m.experience_mode || m.experience_delivered || 'Not logged';
+    set('kpi-mode', modeEmoji(mode) + ' ' + mode.split(' —')[0].split('(')[0].trim());
+    set('kpi-mode-sub', 'Logged ' + fmtTime(new Date(m.created_at)));
+  } else {
+    set('kpi-mode', '— No log today');
+    set('kpi-mode-sub', 'Guide has not submitted morning log');
+  }
+  var eq = _equipment[0];
+  if (eq) {
+    var flagged = eq.any_item_flagged === 'Yes';
+    var battery = eq.rd_battery_charge === 'Below 50%';
+    set('kpi-equip', battery ? '🔋 Battery Low' : flagged ? '⚠️ Item Flagged' : '✓ All Clear');
+    set('kpi-equip-sub', 'Inspected ' + fmtTime(new Date(eq.created_at)));
+  } else {
+    set('kpi-equip', '— Not inspected yet');
+    set('kpi-equip-sub', 'No inspection log today');
+  }
+  var inc7 = _incidents.filter(function(i) { return new Date(i.created_at) > new Date(Date.now()-7*86400000); }).length;
+  set('kpi-incidents', inc7);
+}
+
+/* ─── EXEC PANELS ─────────────────────────────────────────── */
+function renderExecBookings() {
+  var el = document.getElementById('exec-bookings');
+  if (!_bookings.length) { el.innerHTML = '<p class="no-bookings">No bookings in Supabase for today.</p><p style="font-size:12px;color:var(--mist);margin-top:6px">Add via the TMS sync or use "Add Today Booking" in the sidebar.</p>'; return; }
+  el.innerHTML = _bookings.map(function(b) {
+    var tags = '';
+    if (b.departure) tags += '<span class="btag">' + esc(b.departure) + '</span>';
+    if (b.group_size) tags += '<span class="btag">' + esc(b.group_size) + ' guest' + (b.group_size!='1'?'s':'') + '</span>';
+    if (b.occasion && b.occasion !== 'None' && b.occasion !== '') tags += '<span class="btag btag-occasion">' + esc(b.occasion) + '</span>';
+    return '<div class="booking-card"><div class="booking-exp">' + esc(b.experience) + '</div><div class="booking-guest">' + esc(b.guest_name) + '</div>' + (tags ? '<div class="booking-tags">' + tags + '</div>' : '') + '</div>';
+  }).join('');
+}
+
+function renderExecMorning() {
+  var el = document.getElementById('exec-morning');
+  var m = _morning[0];
+  if (!m) { el.innerHTML = '<p class="no-bookings">No morning log submitted today.</p><p style="font-size:12px;color:var(--mist);margin-top:6px">Guide completes this via the Pre-Launch screen on the Guide App.</p>'; return; }
+  var mode = m.experience_mode || m.experience_delivered || '—';
+  var isMystic = mode.toLowerCase().indexOf('mystic') !== -1;
+  el.innerHTML =
+    '<div style="margin-bottom:12px">' + wxPill(mode) + '</div>' +
+    row('Sky', m.sky_condition) + row('Water', m.water_condition) +
+    row('Guests', m.number_of_guests) + row('Equipment', m.equipment_condition) +
+    (m.wildlife_observation ? row('Wildlife', m.wildlife_observation) : '') +
+    (m.guide_notes ? row('Guide notes', '"' + m.guide_notes + '"') : '') +
+    (isMystic ? '<div class="alert alert-info" style="margin-top:12px"><span>🌿</span><div>Mystic Morning — conservation contribution triggered (EC $25 × guests)</div></div>' : '') +
+    '<div style="font-size:11px;color:var(--mist);margin-top:10px;font-family:DM Mono,monospace">Submitted ' + fmtDateTime(new Date(m.created_at)) + '</div>';
+}
+
+function renderExecIncidents() {
+  var el = document.getElementById('exec-incidents');
+  var recent = _incidents.slice(0, 3);
+  if (!recent.length) { el.innerHTML = '<div class="alert alert-green"><span>✓</span><div>No incidents on record. Guide App is reporting cleanly.</div></div>'; return; }
+  el.innerHTML = recent.map(function(i) { return incCard(i); }).join('');
+}
+
+function renderExecReset() {
+  var el = document.getElementById('exec-reset');
+  var r = _resets[0];
+  if (!r) { el.innerHTML = '<p class="no-bookings">No post-tour reset logged today.</p><p style="font-size:12px;color:var(--mist);margin-top:6px">Guide completes this via the Post-Tour Reset screen.</p>'; return; }
+  var checks = [
+    ['Guests returned', r.guests_returned], ['Equipment stowed', r.equipment_stowed],
+    ['Kayaks secured', r.kayaks_secured], ['PFDs stored', r.pfds_stored],
+    ['Launch cleared', r.launch_cleared], ['Access secured', r.access_secured]
+  ];
+  el.innerHTML = checks.map(function(c) {
+    var ok = c[1] === 'Yes';
+    return '<div class="equip-row"><span class="equip-item">' + c[0] + '</span><span class="badge ' + (ok ? 'bg' : 'br') + '">' + (ok ? '✓ Yes' : '✗ No') + '</span></div>';
+  }).join('') +
+  (r.lost_property_found === 'Yes' ? '<div class="alert alert-amber" style="margin-top:10px"><span>📦</span><div><strong>Lost property found:</strong> ' + esc(r.lost_property_desc || 'See notes') + '</div></div>' : '') +
+  '<div style="font-size:11px;color:var(--mist);margin-top:10px;font-family:DM Mono,monospace">Submitted ' + fmtDateTime(new Date(r.created_at)) + ' by ' + esc(r.guide_name) + '</div>';
+}
+
+/* ─── FULL PANELS ─────────────────────────────────────────── */
+function renderBookingsPanel() {
+  var el = document.getElementById('bookings-full-list');
+  var el2 = document.getElementById('today-bookings-full');
+  var html = !_bookings.length ? '<p class="no-bookings">No bookings for today in Supabase today_bookings table.</p>' :
+    '<table class="dt"><thead><tr><th>Guest</th><th>Experience</th><th>Departure</th><th>Guests</th><th>Occasion</th></tr></thead><tbody>' +
+    _bookings.map(function(b) {
+      return '<tr><td>' + esc(b.guest_name) + '</td><td><strong>' + esc(b.experience) + '</strong></td><td>' + esc(b.departure) + '</td><td>' + esc(b.group_size) + '</td><td>' + (b.occasion && b.occasion!=='None' ? '<span class="badge bb">' + esc(b.occasion) + '</span>' : '<span class="badge bm">None</span>') + '</td></tr>';
+    }).join('') + '</tbody></table>';
+  if (el) el.innerHTML = html;
+  if (el2) el2.innerHTML = html;
+}
+
+function renderMorningPanel() {
+  var el = document.getElementById('morning-full-list');
+  if (!el) return;
+  if (!_morning.length) { el.innerHTML = '<div class="no-bookings">No morning logs yet.</div>'; return; }
+  el.innerHTML = '<table class="dt"><thead><tr><th>Date/Time</th><th>Mode</th><th>Sky</th><th>Water</th><th>Guests</th><th>Equipment</th><th>Wildlife</th></tr></thead><tbody>' +
+    _morning.map(function(m) {
+      var mode = m.experience_mode || m.experience_delivered || '—';
+      return '<tr><td class="log-time">' + fmtDateTime(new Date(m.created_at)) + '</td><td>' + wxPill(mode) + '</td><td>' + esc(m.sky_condition) + '</td><td>' + esc(m.water_condition) + '</td><td>' + esc(m.number_of_guests) + '</td><td><span class="badge ' + (m.equipment_condition && m.equipment_condition!=='All good — nothing to report' ? 'ba' : 'bg') + '">' + (m.equipment_condition || '—').replace('All good — nothing to report','✓ Good').slice(0,18) + '</span></td><td style="max-width:180px;font-size:12px">' + esc(m.wildlife_observation ? m.wildlife_observation.slice(0,60) : '—') + '</td></tr>';
+    }).join('') + '</tbody></table>';
+}
+
+function renderEquipmentPanel() {
+  var el = document.getElementById('equip-full-list');
+  var el2 = document.getElementById('today-equip-full');
+  if (!_equipment.length) {
+    var msg = '<p class="no-bookings">No equipment inspections on record.</p>';
+    if (el) el.innerHTML = msg; if (el2) el2.innerHTML = msg; return;
+  }
+  var eq = _equipment[0];
+  var html =
+    '<div class="alert ' + (eq.rd_battery_charge === 'Below 50%' ? 'alert-red' : 'alert-green') + '" style="margin-bottom:14px"><span>' + (eq.rd_battery_charge === 'Below 50%' ? '🔋' : '✓') + '</span><div><strong>Rescue Dinghy Battery: ' + esc(eq.rd_battery_charge || '—') + '</strong> — inspected ' + fmtDateTime(new Date(eq.created_at)) + ' by ' + esc(eq.guide_name) + '</div></div>' +
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">' +
+    eqRow('GT-01 Kayak', eq.kayak_gt01) + eqRow('GT-02 Kayak', eq.kayak_gt02) +
+    eqRow('LG-01 Guide Kayak', eq.kayak_lg01) + eqRow('SG-01 Guide Kayak', eq.kayak_sg01) +
+    eqRow('RD Hull', eq.rd_hull) + eqRow('RD Motor', eq.rd_motor_test) +
+    eqRow('PFDs', eq.pfds_checked) + eqRow('First Aid Kit', eq.first_aid_kit) +
+    eqRow('Communication Device', eq.communication_device) + eqRow('Launch Area', eq.launch_area) +
+    '</div>' +
+    (eq.inspection_notes ? '<div class="alert alert-amber" style="margin-top:12px"><span>📋</span><div>' + esc(eq.inspection_notes) + '</div></div>' : '');
+  if (el) el.innerHTML = html; if (el2) el2.innerHTML = html;
+}
+
+function eqRow(label, val) {
+  var ok = val === 'Yes'; var na = !val;
+  return '<div class="equip-row" style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--fog);font-size:12px"><span>' + label + '</span><span class="badge ' + (na ? 'bm' : ok ? 'bg' : 'br') + '">' + (na ? '—' : ok ? '✓' : '✗') + '</span></div>';
+}
+
+function renderIncidentsPanel() {
+  var el = document.getElementById('incidents-full-list');
+  if (!el) return;
+  if (!_incidents.length) { el.innerHTML = '<div class="card"><p class="no-bookings" style="text-align:center;padding:24px">✓ No incidents on record. Guide App is reporting cleanly.</p></div>'; return; }
+  el.innerHTML = _incidents.map(function(i) { return '<div style="margin-bottom:14px">' + incCard(i) + '</div>'; }).join('');
+}
+
+function renderResetFull() {
+  var el = document.getElementById('today-reset-full');
+  if (!el || !_resets[0]) return;
+  renderExecReset();
+  el.innerHTML = document.getElementById('exec-reset').innerHTML;
+}
+
+function renderRisksLive() {
+  var el = document.getElementById('risks-incidents-live');
+  if (!el) return;
+  if (!_incidents.length) { el.innerHTML = '<div class="alert alert-green"><span>✓</span><div>No incidents on record from the Guide App.</div></div>'; return; }
+  el.innerHTML = _incidents.slice(0,5).map(function(i) { return incCard(i); }).join('');
+}
+
+/* ─── CHIPS ───────────────────────────────────────────────── */
+function updateChips() {
+  var inc7 = _incidents.filter(function(i) { return new Date(i.created_at) > new Date(Date.now()-7*86400000); }).length;
+  var battLow = _equipment.length && _equipment[0].rd_battery_charge === 'Below 50%';
+  var chipI = document.getElementById('chip-incidents');
+  var chipB = document.getElementById('chip-battery');
+  var chipOk = document.getElementById('chip-ok');
+  if (inc7 > 0) { chipI.style.display = 'flex'; document.getElementById('chip-inc-count').textContent = inc7; } else chipI.style.display = 'none';
+  if (battLow) chipB.style.display = 'flex'; else chipB.style.display = 'none';
+  if (!inc7 && !battLow) chipOk.style.display = 'flex'; else chipOk.style.display = 'none';
+}
+
+/* ─── INCIDENT CARD ───────────────────────────────────────── */
+function incCard(i) {
+  var lvl = i.incident_level || '1';
+  var cls = 'inc-' + Math.min(3, parseInt(lvl) || 1);
+  var lvlLabel = lvl === '3' ? '🔴 Level 3 — Emergency' : lvl === '2' ? '🟠 Level 2 — Operational' : '🟡 Level 1 — Minor';
+  return '<div class="incident-card ' + cls + '">' +
+    '<div class="inc-head"><span>' + lvlLabel + ' — ' + esc(i.incident_type || 'Unclassified') + '</span><span class="badge ' + (lvl==='3'?'br':lvl==='2'?'ba':'bo') + '">Level ' + lvl + '</span></div>' +
+    '<div class="inc-body">' + esc(i.description || 'No description recorded.') + '</div>' +
+    '<div class="inc-meta">' + fmtDateTime(new Date(i.created_at)) + ' · ' + esc(i.guide_name || '—') + ' · ' + esc(i.location || '—') + '</div>' +
+    (i.immediate_action ? '<div style="font-size:12px;margin-top:6px;color:#2a2a2a"><strong>Action taken:</strong> ' + esc(i.immediate_action) + '</div>' : '') +
+    '</div>';
+}
+
+/* ─── FORM SUBMISSIONS ────────────────────────────────────── */
+function submitEnquiry(e) {
+  e.preventDefault();
+  var fd = new FormData(e.target);
+  var data = {};
+  fd.forEach(function(v,k){ data[k] = v; });
+  sbInsert('enquiries', data).then(function(ok) {
+    if (ok) { e.target.reset(); showSuccess('enquiry-success'); }
+    else alert('Supabase insert failed. Check connection and try again.');
+  }).catch(function() { alert('Network error. Check internet connection.'); });
+}
+
+function submitTodayBooking(e) {
+  e.preventDefault();
+  var fd = new FormData(e.target);
+  var data = {};
+  fd.forEach(function(v,k){ data[k] = v; });
+  sbInsert('today_bookings', data).then(function(ok) {
+    if (ok) {
+      e.target.reset();
+      document.getElementById('be-date').value = new Date().toISOString().split('T')[0];
+      showSuccess('booking-entry-success');
+      setTimeout(function() {
+        sbSelect('today_bookings', 'booking_date=eq.' + new Date().toISOString().split('T')[0] + '&order=departure.asc').then(function(r) {
+          _bookings = Array.isArray(r) ? r : [];
+          renderExecBookings(); renderBookingsPanel(); renderKPIs();
+        });
+      }, 800);
+    } else alert('Supabase insert failed. Check connection.');
+  }).catch(function() { alert('Network error.'); });
+}
+
+/* ─── OFFLINE ─────────────────────────────────────────────── */
+function renderOffline() {
+  ['exec-bookings','exec-morning','exec-incidents','exec-reset'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.innerHTML = '<div class="alert alert-amber"><span>🟡</span><div>Could not reach Supabase. Check your internet connection and try again.</div></div>';
+  });
+  ['kpi-bookings-count','kpi-guests-count'].forEach(function(id){ set(id,'—'); });
+  set('kpi-mode','Offline'); set('kpi-equip','Offline'); set('kpi-incidents','—');
+}
+
+/* ─── HELPERS ─────────────────────────────────────────────── */
+function set(id, html) { var el = document.getElementById(id); if (el) el.innerHTML = html; }
+function esc(s) { if (!s && s!==0) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function fmtTime(d) { return d.toLocaleTimeString('en-LC',{hour:'numeric',minute:'2-digit'}); }
+function fmtDateTime(d) { return d.toLocaleDateString('en-LC',{month:'short',day:'numeric'}) + ' ' + fmtTime(d); }
+function row(label, val) { if (!val) return ''; return '<div class="log-row"><div class="log-time">' + label + '</div><div class="log-body">' + esc(val) + '</div></div>'; }
+function showSuccess(id) { var el = document.getElementById(id); if (!el) return; el.style.display='block'; setTimeout(function(){ el.style.display='none'; },5000); }
+
+/* ─── LOAN DATA ───────────────────────────────────────────── */
+var _loanPayments = [];
+var L1_TOTAL = 20750.00;
+var RB_CONFIRMED_BALANCE = 407163.93;
+
+var L1_SCHEDULE = [
+  { due: 'May 31, 2026',  amount: 2305.56 },
+  { due: 'Jun 30, 2026',  amount: 2305.56 },
+  { due: 'Jul 31, 2026',  amount: 2305.56 },
+  { due: 'Aug 31, 2026',  amount: 2305.56 },
+  { due: 'Sep 30, 2026',  amount: 2305.56 },
+  { due: 'Oct 31, 2026',  amount: 2305.56 },
+  { due: 'Nov 30, 2026',  amount: 2305.56 },
+  { due: 'Dec 31, 2026',  amount: 2305.56 },
+  { due: 'Jan 31, 2027',  amount: 2305.52 }
+];
+
+function loadLoans(manual) {
+  sbSelect('loan_payments', 'order=payment_date.asc').then(function(r) {
+    _loanPayments = Array.isArray(r) ? r : [];
+    renderLoans();
+  }).catch(function() {
+    set('l1-remaining', 'EC $' + fmt2(L1_TOTAL));
+    set('rb-remaining', 'EC $' + fmt2(RB_CONFIRMED_BALANCE));
+    set('l1-history', '<div style="color:var(--mist);font-size:13px">No payments recorded yet.</div>');
+    set('rb-history', '<div style="color:var(--mist);font-size:13px">No payments recorded yet.</div>');
+  });
+}
+
+function renderLoans() {
+  var l1Payments = _loanPayments.filter(function(p){ return p.loan_id==='LOAN1'; });
+  var rbPayments = _loanPayments.filter(function(p){ return p.loan_id==='REPUBLIC'; });
+
+  var l1Paid = l1Payments.reduce(function(t,p){ return t+parseFloat(p.amount_paid||0); },0);
+  var l1Remaining = Math.max(0, L1_TOTAL - l1Paid);
+  var l1Pct = Math.min(100, (l1Paid/L1_TOTAL)*100);
+  var paidCount = l1Payments.length;
+
+  set('l1-remaining','EC $'+fmt2(l1Remaining));
+  set('l1-paid-sub','Paid: EC $'+fmt2(l1Paid)+' of $'+fmt2(L1_TOTAL));
+  var bar1=document.getElementById('l1-prog');
+  if(bar1){bar1.style.width=l1Pct+'%';bar1.style.background=l1Pct===100?'var(--green)':'var(--em)';}
+  set('l1-paid-label','EC $'+fmt2(l1Paid)+' ('+Math.round(l1Pct)+'%)');
+  set('l1-history',renderPaymentHistory(l1Payments));
+
+  for(var i=0;i<9;i++){
+    var cell=document.getElementById('sch-'+(i+1));
+    if(!cell)continue;
+    var r=cell.closest('tr');
+    if(i<paidCount){cell.innerHTML='<span class="badge bg">Paid</span>';if(r)r.style.background='var(--green-bg)';}
+    else if(i===paidCount){cell.innerHTML='<span class="badge ba">Due</span>';if(r)r.style.background='var(--amber-bg)';}
+    else{cell.innerHTML='<span class="badge bm">Upcoming</span>';if(r)r.style.background='';}
+  }
+
+  var rbPaid=rbPayments.reduce(function(t,p){return t+parseFloat(p.amount_paid||0);},0);
+  set('rb-remaining','EC $'+fmt2(RB_CONFIRMED_BALANCE));
+  set('rb-paid-sub',rbPayments.length+' payment(s) logged here | Confirm balance with bank');
+  set('rb-paid-label',rbPayments.length+' payment(s) | EC $'+fmt2(rbPaid)+' recorded');
+  set('rb-history',renderPaymentHistory(rbPayments));
+}
+
+function fmt2(n){return parseFloat(n).toFixed(2);}
+
+function renderPaymentHistory(payments){
+  if(!payments.length)return '<div style="color:var(--mist);font-size:13px;font-style:italic;padding:8px 0">No payments recorded in this system yet.</div>';
+  return payments.map(function(p,i){
+    return '<div class="log-row">'+
+      '<div class="log-time">'+esc(p.payment_date)+'</div>'+
+      '<div class="log-body">'+
+        '<span style="font-family:DM Mono,monospace;font-weight:600">EC $'+fmt2(p.amount_paid)+'</span>'+
+        ' · '+esc(p.payment_method||'—')+
+        (p.confirmed_by?' · '+esc(p.confirmed_by):'')+
+        (p.notes?'<div style="font-size:11px;color:var(--mist);margin-top:2px">'+esc(p.notes)+'</div>':'')+
+      '</div>'+
+      '<span class="badge bg" style="flex-shrink:0">#'+(i+1)+'</span>'+
+    '</div>';
+  }).join('');
+}
+
+function setLoanPaymentDefaults(){
+  var d=document.getElementById('lp-date');
+  if(d)d.value=new Date().toISOString().split('T')[0];
+}
+
+function prefillAmount(){
+  var loan=document.getElementById('lp-loan-id').value;
+  var amt=document.getElementById('lp-amount');
+  if(loan==='REPUBLIC'){if(amt)amt.placeholder='4750.00';}
+  if(loan==='LOAN1'){if(amt)amt.placeholder='2305.56';}
+}
+
+function submitLoanPayment(e){
+  e.preventDefault();
+  var fd=new FormData(e.target);
+  var data={};
+  fd.forEach(function(v,k){data[k]=v;});
+  data.amount_paid=parseFloat(data.amount_paid);
+  if(!data.loan_id){alert('Please select a loan.');return;}
+  if(isNaN(data.amount_paid)||data.amount_paid<=0){alert('Please enter a valid amount greater than zero.');return;}
+  var btn=e.target.querySelector('[type="submit"]');
+  if(btn){btn.disabled=true;btn.textContent='Recording...';}
+  sbInsert('loan_payments',data).then(function(ok){
+    if(btn){btn.disabled=false;btn.textContent='✓ Record Payment to Supabase';}
+    if(ok){e.target.reset();setLoanPaymentDefaults();showSuccess('loan-payment-success');loadLoans(true);}
+    else{alert('Could not record payment — check Supabase connection.');}
+  }).catch(function(){
+    if(btn){btn.disabled=false;btn.textContent='✓ Record Payment to Supabase';}
+    alert('Network error.');
+  });
+}
+
+function modeEmoji(mode) {
+  if (!mode) return '—';
+  var m = mode.toLowerCase();
+  if (m.indexOf('golden') !== -1) return '🌅';
+  if (m.indexOf('mystic') !== -1) return '🌫️';
+  if (m.indexOf('calm') !== -1)   return '🤍';
+  if (m.indexOf('cancel') !== -1) return '🚫';
+  if (m.indexOf('modif') !== -1)  return '⚠️';
+  return '🛶';
+}
+
+function wxPill(mode) {
+  if (!mode) return '<span class="wx-pill wx-calm">— Not logged</span>';
+  var m = mode.toLowerCase();
+  var cls = m.indexOf('golden')!==-1?'wx-golden':m.indexOf('mystic')!==-1?'wx-mystic':m.indexOf('calm')!==-1?'wx-calm':'wx-rain';
+  return '<span class="wx-pill ' + cls + '">' + modeEmoji(mode) + ' ' + esc(mode.split(' —')[0].split('(')[0].trim()) + '</span>';
+}
+</script>
+</body>
+</html>
