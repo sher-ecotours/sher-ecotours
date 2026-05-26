@@ -314,6 +314,12 @@ select.qf-input{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://ww
     <button class="nav-btn" onclick="nav('morning',this)"><span class="nav-icon">🌤️</span>Morning Logs</button>
     <button class="nav-btn" onclick="nav('equipment',this)"><span class="nav-icon">🛶</span>Equipment Checks</button>
     <button class="nav-btn" onclick="nav('incidents',this)" id="nav-incidents"><span class="nav-icon">⚠️</span>Incidents</button>
+    <button class="nav-btn" onclick="nav('inventory',this)" id="nav-inventory"><span class="nav-icon">📦</span>Inventory</button>
+  </div>
+  <div class="nav-sec">
+    <div class="nav-sec-label">Team</div>
+    <button class="nav-btn" onclick="nav('schedule',this)"><span class="nav-icon">🗓️</span>Guide Schedule</button>
+    <button class="nav-btn" onclick="nav('followups',this)"><span class="nav-icon">⭐</span>Guest Follow-ups</button>
   </div>
   <div class="nav-sec">
     <div class="nav-sec-label">Finance & Control</div>
@@ -1133,6 +1139,295 @@ select.qf-input{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://ww
 </div>
 
 <!-- ────────────────────────────────────────────────────────
+     GUIDE SCHEDULE
+──────────────────────────────────────────────────────── -->
+<div id="tab-schedule" class="tab-panel">
+  <div class="sec-head">
+    <div><div class="sec-title">Guide Schedule</div><div class="sec-sub">Weekly roster · who's on which tour each day</div></div>
+    <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+      <button class="refresh-btn" onclick="_schedWeekOff--;renderSchedule()">← Prev</button>
+      <button class="refresh-btn" onclick="_schedWeekOff=0;renderSchedule()">This Week</button>
+      <button class="refresh-btn" onclick="_schedWeekOff++;renderSchedule()">Next →</button>
+      <button class="refresh-btn" onclick="loadSchedule(true)">↻ Refresh</button>
+    </div>
+  </div>
+  <div class="card">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <div id="sched-week-label" style="font-family:'DM Mono',monospace;font-size:12px;color:var(--mist)">Loading…</div>
+    </div>
+    <div id="sched-calendar" style="overflow-x:auto"></div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">➕ Add Schedule Entry</div>
+      <form onsubmit="submitSchedule(event)">
+        <div class="qf-row">
+          <div>
+            <div class="qf-label">Date *</div>
+            <input class="qf-input" type="date" id="sched-date" required>
+          </div>
+          <div>
+            <div class="qf-label">Guide Name *</div>
+            <input class="qf-input" type="text" id="sched-guide" placeholder="e.g. Kemble" required>
+          </div>
+        </div>
+        <div class="qf-row">
+          <div>
+            <div class="qf-label">Role</div>
+            <select class="qf-input" id="sched-role">
+              <option>Lead Guide</option>
+              <option>Support Guide</option>
+              <option>Skipper</option>
+              <option>Standby</option>
+              <option>Off Duty</option>
+            </select>
+          </div>
+          <div>
+            <div class="qf-label">Tour</div>
+            <select class="qf-input" id="sched-tour">
+              <option value="">Select…</option>
+              <option>Bay Serenity Circuit</option>
+              <option>Golden Mirror — Dawn Experience</option>
+              <option>Mystic Morning</option>
+              <option>Scorpion Islet Arc</option>
+              <option>Sunset Romance Tour</option>
+              <option>All Tours</option>
+              <option>N/A</option>
+            </select>
+          </div>
+        </div>
+        <div class="qf-row">
+          <div>
+            <div class="qf-label">Departure</div>
+            <select class="qf-input" id="sched-dep">
+              <option value="">N/A</option>
+              <option>5:15 AM</option>
+              <option>9:00 AM</option>
+              <option>By appointment</option>
+            </select>
+          </div>
+          <div>
+            <div class="qf-label">Notes</div>
+            <input class="qf-input" type="text" id="sched-notes" placeholder="Optional">
+          </div>
+        </div>
+        <button type="submit" class="qf-submit">Add to Schedule</button>
+        <div class="qf-success" id="sched-success">✓ Schedule entry added.</div>
+      </form>
+    </div>
+    <div class="card">
+      <div class="card-title">👥 This Week's Team</div>
+      <div id="sched-team-summary"><p style="color:var(--mist);font-style:italic;font-size:13px">Loading…</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ────────────────────────────────────────────────────────
+     INVENTORY & STOCK
+──────────────────────────────────────────────────────── -->
+<div id="tab-inventory" class="tab-panel">
+  <div class="sec-head">
+    <div><div class="sec-title">Inventory & Stock</div><div class="sec-sub">Live counts vs minimum thresholds · red badge when below minimum</div></div>
+    <button class="refresh-btn" onclick="loadInventory(true)">↻ Refresh</button>
+  </div>
+  <div id="inv-alerts" style="margin-bottom:4px"></div>
+  <div class="grid-4" style="margin-bottom:18px">
+    <div class="kpi k-red"><div class="kpi-label">Below Minimum</div><div class="kpi-val big" id="inv-kpi-low">—</div><div class="kpi-sub">need restocking</div></div>
+    <div class="kpi k-green"><div class="kpi-label">Well Stocked</div><div class="kpi-val big" id="inv-kpi-ok">—</div><div class="kpi-sub">above threshold</div></div>
+    <div class="kpi k-em"><div class="kpi-label">Total Items</div><div class="kpi-val big" id="inv-kpi-total">—</div><div class="kpi-sub">tracked</div></div>
+    <div class="kpi k-amber"><div class="kpi-label">Last Updated</div><div class="kpi-val" id="inv-kpi-updated" style="font-size:12px;margin-top:6px">—</div><div class="kpi-sub">most recent check</div></div>
+  </div>
+  <div class="card">
+    <div class="card-title">📦 Stock Levels</div>
+    <div id="inv-list" style="overflow-x:auto">
+      <p style="color:var(--mist);font-style:italic;font-size:13px">Loading…</p>
+    </div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">✏️ Update Stock Count</div>
+      <form onsubmit="submitInventoryUpdate(event)">
+        <div class="qf-label">Item</div>
+        <select class="qf-input" id="inv-item-select"><option value="">Loading…</option></select>
+        <div class="qf-row">
+          <div>
+            <div class="qf-label">New Count *</div>
+            <input class="qf-input" type="number" id="inv-count" min="0" step="1" placeholder="0" required>
+          </div>
+          <div>
+            <div class="qf-label">Checked By</div>
+            <input class="qf-input" type="text" id="inv-checked-by" placeholder="Your name">
+          </div>
+        </div>
+        <div class="qf-label">Notes</div>
+        <input class="qf-input" type="text" id="inv-notes-upd" placeholder="Optional">
+        <button type="submit" class="qf-submit">Update Count</button>
+        <div class="qf-success" id="inv-upd-success">✓ Stock count updated.</div>
+      </form>
+    </div>
+    <div class="card">
+      <div class="card-title">➕ Add New Item</div>
+      <form onsubmit="submitInventoryAdd(event)">
+        <div class="qf-label">Item Name *</div>
+        <input class="qf-input" type="text" id="inv-new-name" placeholder="e.g. Waterproof bag" required>
+        <div class="qf-row">
+          <div>
+            <div class="qf-label">Category</div>
+            <select class="qf-input" id="inv-new-cat">
+              <option>Safety</option><option>Medical</option><option>Water Sports</option>
+              <option>Equipment</option><option>Supplies</option><option>General</option>
+            </select>
+          </div>
+          <div>
+            <div class="qf-label">Location</div>
+            <select class="qf-input" id="inv-new-loc">
+              <option>Main Boat</option><option>Store</option><option>Rescue Dinghy</option><option>Office</option>
+            </select>
+          </div>
+        </div>
+        <div class="qf-row">
+          <div>
+            <div class="qf-label">Current Count *</div>
+            <input class="qf-input" type="number" id="inv-new-count" min="0" step="1" placeholder="0" required>
+          </div>
+          <div>
+            <div class="qf-label">Minimum *</div>
+            <input class="qf-input" type="number" id="inv-new-min" min="0" step="1" placeholder="1" required>
+          </div>
+        </div>
+        <div class="qf-row">
+          <div>
+            <div class="qf-label">Unit</div>
+            <input class="qf-input" type="text" id="inv-new-unit" placeholder="units / sets / kits">
+          </div>
+          <div></div>
+        </div>
+        <button type="submit" class="qf-submit">Add Item</button>
+        <div class="qf-success" id="inv-add-success">✓ Item added to inventory.</div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- ────────────────────────────────────────────────────────
+     GUEST FOLLOW-UPS
+──────────────────────────────────────────────────────── -->
+<div id="tab-followups" class="tab-panel">
+  <div class="sec-head">
+    <div><div class="sec-title">Guest Follow-ups</div><div class="sec-sub">Post-tour thank-yous · review requests · ratings</div></div>
+    <button class="refresh-btn" onclick="loadFollowups(true)">↻ Refresh</button>
+  </div>
+  <div class="grid-4" style="margin-bottom:18px">
+    <div class="kpi k-amber"><div class="kpi-label">Thank-you Pending</div><div class="kpi-val big" id="fu-kpi-ty">—</div><div class="kpi-sub">not yet sent</div></div>
+    <div class="kpi k-blue"><div class="kpi-label">Review Requests Out</div><div class="kpi-val big" id="fu-kpi-rr">—</div><div class="kpi-sub">awaiting response</div></div>
+    <div class="kpi k-green"><div class="kpi-label">Reviews Received</div><div class="kpi-val big" id="fu-kpi-recv">—</div><div class="kpi-sub">total</div></div>
+    <div class="kpi k-em"><div class="kpi-label">Avg Rating</div><div class="kpi-val big" id="fu-kpi-avg">—</div><div class="kpi-sub">out of 5 ★</div></div>
+  </div>
+  <!-- Action list -->
+  <div class="card" style="margin-bottom:18px">
+    <div class="card-title">🔔 Action Needed</div>
+    <div id="fu-actions"><p style="color:var(--mist);font-style:italic;font-size:13px">Loading…</p></div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">➕ Add Guest Follow-up</div>
+      <form onsubmit="submitFollowup(event)">
+        <div class="qf-row">
+          <div>
+            <div class="qf-label">Tour Date *</div>
+            <input class="qf-input" type="date" id="fu-date" required>
+          </div>
+          <div>
+            <div class="qf-label">Guest Name *</div>
+            <input class="qf-input" type="text" id="fu-guest" placeholder="Lead guest" required>
+          </div>
+        </div>
+        <div class="qf-label">Experience</div>
+        <select class="qf-input" id="fu-exp">
+          <option value="">Select…</option>
+          <option>Bay Serenity Circuit</option>
+          <option>Golden Mirror — Dawn Experience</option>
+          <option>Mystic Morning</option>
+          <option>Scorpion Islet Arc</option>
+          <option>Sunset Romance Tour</option>
+        </select>
+        <div class="qf-label">Contact Info (email / WhatsApp)</div>
+        <input class="qf-input" type="text" id="fu-contact" placeholder="guest@email.com or +1 758…">
+        <div class="qf-row">
+          <div>
+            <div class="qf-label">Review Platform</div>
+            <select class="qf-input" id="fu-platform">
+              <option>Google</option><option>TripAdvisor</option><option>Both</option><option>N/A</option>
+            </select>
+          </div>
+          <div>
+            <div class="qf-label">Assigned To</div>
+            <input class="qf-input" type="text" id="fu-assigned" placeholder="e.g. Sabina">
+          </div>
+        </div>
+        <div class="qf-label">Notes</div>
+        <input class="qf-input" type="text" id="fu-notes-add" placeholder="Optional">
+        <button type="submit" class="qf-submit">Add Guest</button>
+        <div class="qf-success" id="fu-add-success">✓ Guest follow-up added.</div>
+      </form>
+    </div>
+    <div class="card">
+      <div class="card-title">✏️ Update Follow-up Status</div>
+      <form onsubmit="submitFollowupUpdate(event)">
+        <div class="qf-label">Guest</div>
+        <select class="qf-input" id="fu-select"><option value="">Loading…</option></select>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-top:14px">
+          <label style="display:flex;align-items:center;gap:10px;font-size:13px;cursor:pointer">
+            <input type="checkbox" id="fu-ty-sent" style="width:16px;height:16px;accent-color:var(--em)">
+            <span>Thank-you message sent</span>
+          </label>
+          <label style="display:flex;align-items:center;gap:10px;font-size:13px;cursor:pointer">
+            <input type="checkbox" id="fu-rr-sent" style="width:16px;height:16px;accent-color:var(--em)">
+            <span>Review requested</span>
+          </label>
+          <label style="display:flex;align-items:center;gap:10px;font-size:13px;cursor:pointer">
+            <input type="checkbox" id="fu-rv-recv" style="width:16px;height:16px;accent-color:var(--em)">
+            <span>Review received</span>
+          </label>
+        </div>
+        <div class="qf-row" style="margin-top:12px">
+          <div>
+            <div class="qf-label">Rating (1–5)</div>
+            <select class="qf-input" id="fu-rating">
+              <option value="">—</option>
+              <option value="5">★★★★★ 5</option>
+              <option value="4">★★★★ 4</option>
+              <option value="3">★★★ 3</option>
+              <option value="2">★★ 2</option>
+              <option value="1">★ 1</option>
+            </select>
+          </div>
+          <div>
+            <div class="qf-label">Notes</div>
+            <input class="qf-input" type="text" id="fu-notes-upd" placeholder="Optional">
+          </div>
+        </div>
+        <button type="submit" class="qf-submit">Save Update</button>
+        <div class="qf-success" id="fu-upd-success">✓ Follow-up updated.</div>
+      </form>
+    </div>
+  </div>
+  <!-- Full log -->
+  <div class="card">
+    <div class="card-title">📋 All Guests <span class="live-tag"><span class="dot"></span> Live</span></div>
+    <div style="overflow-x:auto">
+      <table class="dt">
+        <thead><tr>
+          <th>Tour Date</th><th>Guest</th><th>Experience</th>
+          <th>Thank-you</th><th>Review Req.</th><th>Review Recv.</th><th>Rating</th><th>Platform</th>
+        </tr></thead>
+        <tbody id="fu-log-body"><tr><td colspan="8" style="color:var(--mist);font-style:italic;text-align:center;padding:20px">Loading…</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ────────────────────────────────────────────────────────
      PRE-LAUNCH READINESS CHECKLIST
 ──────────────────────────────────────────────────────── -->
 <div id="tab-readiness" class="tab-panel">
@@ -1272,6 +1567,7 @@ function setDate() {
   setLoanPaymentDefaults();
   initRevenueDefaults();
   initExpenseDefaults();
+  initScheduleDefaults();
   var dateInput = document.getElementById('be-date');
   if (dateInput) dateInput.value = d.toISOString().split('T')[0];
 }
@@ -1281,6 +1577,7 @@ var _pageTitles = {
   executive: 'Executive Dashboard', today: 'Today\'s Operations',
   bookings: 'Today\'s Bookings', morning: 'Morning Logs',
   equipment: 'Equipment Checks', incidents: 'Incident Reports',
+  inventory: 'Inventory & Stock', schedule: 'Guide Schedule', followups: 'Guest Follow-ups',
   finance: 'Loans & Finance', revenue: 'Revenue Dashboard', expenditure: 'Expenditure Tracker',
   risks: 'Risks & Alerts', readiness: 'Pre-Launch Readiness',
   enquiry: 'Log New Enquiry', 'booking-entry': 'Add Today\'s Booking'
@@ -1316,6 +1613,9 @@ function loadAll() {
   loadRevenue(false);
   loadExpenses(false);
   loadChecklist(false);
+  loadSchedule(false);
+  loadInventory(false);
+  loadFollowups(false);
   Promise.all([
     sbSelect('today_bookings', 'booking_date=eq.' + today + '&order=departure.asc'),
     sbSelect('guide_morning_logs', 'order=created_at.desc&limit=14'),
@@ -2053,6 +2353,380 @@ function submitExpense(e) {
     ['exp-description','exp-payee','exp-amount','exp-notes'].forEach(function(id){ document.getElementById(id).value=''; });
     loadExpenses(true);
   }).catch(function(err){ alert('Error saving expense: ' + err.message); });
+}
+
+/* ─── GUIDE SCHEDULE ─────────────────────────────────────── */
+var _schedule = [];
+var _schedWeekOff = 0;
+
+function initScheduleDefaults() {
+  var el = document.getElementById('sched-date');
+  if (el) el.value = new Date().toISOString().split('T')[0];
+}
+
+function loadSchedule(manual) {
+  var now = new Date();
+  var from = new Date(now); from.setDate(now.getDate() - 42);
+  var to   = new Date(now); to.setDate(now.getDate() + 42);
+  var q = 'schedule_date=gte.' + from.toISOString().split('T')[0] + '&schedule_date=lte.' + to.toISOString().split('T')[0] + '&order=schedule_date.asc,guide_name.asc';
+  sbSelect('guide_schedule', q).then(function(r) {
+    _schedule = Array.isArray(r) ? r : [];
+    renderSchedule();
+  }).catch(function(e) { console.error('[loadSchedule]', e); });
+}
+
+function renderSchedule() {
+  var base = new Date();
+  base.setDate(base.getDate() + _schedWeekOff * 7);
+  var dow = base.getDay();
+  var mon = new Date(base);
+  mon.setDate(base.getDate() - (dow === 0 ? 6 : dow - 1));
+
+  var days = [];
+  for (var i = 0; i < 7; i++) {
+    var d = new Date(mon); d.setDate(mon.getDate() + i);
+    days.push(d);
+  }
+
+  var lbl = document.getElementById('sched-week-label');
+  if (lbl) lbl.textContent = 'Week of ' + days[0].toLocaleDateString('en',{month:'short',day:'numeric'}) + ' – ' + days[6].toLocaleDateString('en',{month:'short',day:'numeric',year:'numeric'});
+
+  var todayStr = new Date().toISOString().split('T')[0];
+  var dayNames = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  var html = '<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:7px;min-width:560px">';
+
+  days.forEach(function(d, i) {
+    var ds = d.toISOString().split('T')[0];
+    var isToday = ds === todayStr;
+    var entries = _schedule.filter(function(s){ return s.schedule_date === ds; });
+    var bg = isToday ? 'var(--green-bg)' : 'var(--cloud)';
+    var border = isToday ? '1.5px solid var(--green)' : '1px solid var(--fog)';
+    var dayLblColor = isToday ? 'var(--green)' : 'var(--mist)';
+
+    html += '<div style="background:'+bg+';border-radius:8px;padding:9px;border:'+border+'">';
+    html += '<div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:'+dayLblColor+'">'+dayNames[i]+'</div>';
+    html += '<div style="font-family:\'DM Mono\',monospace;font-size:13px;font-weight:600;color:var(--ink);margin-bottom:7px">'+d.getDate()+'</div>';
+
+    if (!entries.length) {
+      html += '<div style="font-size:11px;color:var(--mist);font-style:italic">No entry</div>';
+    } else {
+      entries.forEach(function(s) {
+        var rc = s.role==='Off Duty'?'bm':s.role==='Lead Guide'?'bg':s.role==='Skipper'?'bb':'bo';
+        html += '<div style="background:#fff;border-radius:5px;padding:6px 7px;margin-bottom:5px;border:1px solid var(--fog)">';
+        html += '<div style="font-size:12px;font-weight:600;color:var(--teal)">'+esc(s.guide_name)+'</div>';
+        html += '<div style="margin:3px 0"><span class="badge '+rc+'" style="font-size:10px">'+esc(s.role||'Guide')+'</span></div>';
+        if (s.tour && s.tour!=='N/A') html += '<div style="font-size:10px;color:var(--mist);margin-top:1px;line-height:1.35">'+esc(s.tour)+'</div>';
+        if (s.departure) html += '<div style="font-size:10px;font-family:\'DM Mono\',monospace;color:var(--mist)">'+esc(s.departure)+'</div>';
+        html += '</div>';
+      });
+    }
+    html += '</div>';
+  });
+  html += '</div>';
+  var cal = document.getElementById('sched-calendar');
+  if (cal) cal.innerHTML = html;
+
+  // Team summary for the displayed week
+  var ws = days[0].toISOString().split('T')[0];
+  var we = days[6].toISOString().split('T')[0];
+  var weekEntries = _schedule.filter(function(s){ return s.schedule_date >= ws && s.schedule_date <= we; });
+  var guides = {};
+  weekEntries.forEach(function(s) {
+    if (!guides[s.guide_name]) guides[s.guide_name] = { days:0, tours:[] };
+    if (s.role !== 'Off Duty') guides[s.guide_name].days++;
+    if (s.tour && s.tour !== 'N/A' && s.tour !== '') guides[s.guide_name].tours.push(s.tour);
+  });
+  var sumEl = document.getElementById('sched-team-summary');
+  if (sumEl) {
+    var names = Object.keys(guides).sort();
+    if (!names.length) { sumEl.innerHTML = '<p style="color:var(--mist);font-style:italic;font-size:13px">No schedule entries for this week.</p>'; }
+    else {
+      var h = '<table class="dt"><thead><tr><th>Guide</th><th>Days On</th><th>Tours</th></tr></thead><tbody>';
+      names.forEach(function(g) {
+        var ut = guides[g].tours.filter(function(t,i,a){return a.indexOf(t)===i;});
+        h += '<tr><td><strong>'+esc(g)+'</strong></td><td style="font-family:\'DM Mono\',monospace">'+guides[g].days+'</td><td style="font-size:11px;color:var(--mist)">'+(ut.join(', ')||'—')+'</td></tr>';
+      });
+      sumEl.innerHTML = h + '</tbody></table>';
+    }
+  }
+}
+
+function submitSchedule(e) {
+  e.preventDefault();
+  var payload = {
+    schedule_date: document.getElementById('sched-date').value,
+    guide_name:    document.getElementById('sched-guide').value,
+    role:          document.getElementById('sched-role').value,
+    tour:          document.getElementById('sched-tour').value,
+    departure:     document.getElementById('sched-dep').value,
+    notes:         document.getElementById('sched-notes').value
+  };
+  sbInsert('guide_schedule', payload).then(function() {
+    var suc = document.getElementById('sched-success');
+    suc.style.display = 'block';
+    setTimeout(function(){ suc.style.display='none'; }, 3000);
+    document.getElementById('sched-guide').value = '';
+    document.getElementById('sched-notes').value = '';
+    loadSchedule(true);
+  }).catch(function(err){ alert('Error: ' + err.message); });
+}
+
+/* ─── INVENTORY ───────────────────────────────────────────── */
+var _inventory = [];
+
+function loadInventory(manual) {
+  sbSelect('inventory', 'order=category.asc,item_name.asc').then(function(r) {
+    _inventory = Array.isArray(r) ? r : [];
+    renderInventory();
+  }).catch(function(e) { console.error('[loadInventory]', e); });
+}
+
+function renderInventory() {
+  var low = 0, ok = 0;
+  var lastUpdated = null;
+  _inventory.forEach(function(item) {
+    if (item.current_count < item.minimum_threshold) low++; else ok++;
+    var u = item.updated_at || item.created_at;
+    if (!lastUpdated || u > lastUpdated) lastUpdated = u;
+  });
+  var el = function(id){ return document.getElementById(id); };
+  if (el('inv-kpi-low'))     el('inv-kpi-low').textContent     = low;
+  if (el('inv-kpi-ok'))      el('inv-kpi-ok').textContent      = ok;
+  if (el('inv-kpi-total'))   el('inv-kpi-total').textContent   = _inventory.length;
+  if (el('inv-kpi-updated')) el('inv-kpi-updated').textContent = lastUpdated ? fmtTime(new Date(lastUpdated)) : '—';
+
+  // Alert strip
+  var alertEl = el('inv-alerts');
+  if (alertEl) {
+    var lowItems = _inventory.filter(function(i){ return i.current_count < i.minimum_threshold; });
+    if (!lowItems.length) { alertEl.innerHTML = ''; }
+    else {
+      var names = lowItems.map(function(i){ return esc(i.item_name) + ' ('+i.current_count+'/'+i.minimum_threshold+')'; }).join(' · ');
+      alertEl.innerHTML = '<div class="alert alert-red" style="margin-bottom:14px"><span>⚠️</span><div><strong>'+lowItems.length+' item'+(lowItems.length>1?'s':'')+' below minimum:</strong> '+names+'</div></div>';
+    }
+  }
+
+  // Inventory list grouped by category
+  var listEl = el('inv-list');
+  if (listEl) {
+    if (!_inventory.length) { listEl.innerHTML = '<p style="color:var(--mist);font-style:italic;font-size:13px">No inventory items.</p>'; }
+    else {
+      var cats = {};
+      _inventory.forEach(function(item){ if(!cats[item.category]) cats[item.category]=[]; cats[item.category].push(item); });
+      var h = '';
+      Object.keys(cats).sort().forEach(function(cat) {
+        h += '<div style="font-family:\'Cormorant Garamond\',serif;font-size:14px;font-weight:600;color:var(--teal);padding:10px 0 6px;border-bottom:2px solid var(--fog);margin-bottom:6px">'+esc(cat)+'</div>';
+        h += '<table class="dt" style="margin-bottom:16px"><thead><tr><th>Item</th><th>Location</th><th style="text-align:center">Count</th><th style="text-align:center">Min</th><th>Status</th><th>Stock</th></tr></thead><tbody>';
+        cats[cat].forEach(function(item) {
+          var isLow = item.current_count < item.minimum_threshold;
+          var pct = item.minimum_threshold > 0 ? Math.min(100, Math.round((item.current_count/item.minimum_threshold)*100)) : 100;
+          var fillCls = isLow ? 'pf-rd' : 'pf-em';
+          h += '<tr>';
+          h += '<td><strong>'+esc(item.item_name)+'</strong>'+(item.notes?'<br><span style="font-size:11px;color:var(--mist)">'+esc(item.notes)+'</span>':'')+'</td>';
+          h += '<td style="font-size:12px;color:var(--mist)">'+esc(item.location||'—')+'</td>';
+          h += '<td style="text-align:center;font-family:\'DM Mono\',monospace;font-weight:600;color:'+(isLow?'var(--red)':'var(--green)')+'">'+item.current_count+' '+esc(item.unit||'')+'</td>';
+          h += '<td style="text-align:center;font-family:\'DM Mono\',monospace;color:var(--mist)">'+item.minimum_threshold+'</td>';
+          h += '<td><span class="badge '+(isLow?'br':'bg')+'">'+(isLow?'LOW':'OK')+'</span></td>';
+          h += '<td style="min-width:80px"><div class="prog"><div class="prog-fill '+fillCls+'" style="width:'+pct+'%"></div></div></td>';
+          h += '</tr>';
+        });
+        h += '</tbody></table>';
+      });
+      listEl.innerHTML = h;
+    }
+  }
+
+  // Populate item select
+  var sel = el('inv-item-select');
+  if (sel) {
+    sel.innerHTML = '<option value="">Select item…</option>';
+    _inventory.forEach(function(item){
+      var opt = document.createElement('option');
+      opt.value = item.id;
+      opt.textContent = '['+item.category+'] '+item.item_name+' ('+item.current_count+' '+item.unit+')';
+      sel.appendChild(opt);
+    });
+  }
+}
+
+function submitInventoryUpdate(e) {
+  e.preventDefault();
+  var id = document.getElementById('inv-item-select').value;
+  if (!id) { alert('Please select an item.'); return; }
+  var payload = {
+    current_count:    parseInt(document.getElementById('inv-count').value),
+    last_checked_by:  document.getElementById('inv-checked-by').value,
+    notes:            document.getElementById('inv-notes-upd').value,
+    updated_at:       new Date().toISOString()
+  };
+  fetch(SB_URL+'/rest/v1/inventory?id=eq.'+id, {
+    method:'PATCH',
+    headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},
+    body:JSON.stringify(payload)
+  }).then(function(r){
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    var suc = document.getElementById('inv-upd-success');
+    suc.style.display='block'; setTimeout(function(){ suc.style.display='none'; },3000);
+    document.getElementById('inv-count').value='';
+    document.getElementById('inv-notes-upd').value='';
+    loadInventory(true);
+  }).catch(function(err){ alert('Update failed: '+err.message); });
+}
+
+function submitInventoryAdd(e) {
+  e.preventDefault();
+  var payload = {
+    item_name:         document.getElementById('inv-new-name').value,
+    category:          document.getElementById('inv-new-cat').value,
+    location:          document.getElementById('inv-new-loc').value,
+    current_count:     parseInt(document.getElementById('inv-new-count').value)||0,
+    minimum_threshold: parseInt(document.getElementById('inv-new-min').value)||1,
+    unit:              document.getElementById('inv-new-unit').value||'units'
+  };
+  sbInsert('inventory', payload).then(function(){
+    var suc = document.getElementById('inv-add-success');
+    suc.style.display='block'; setTimeout(function(){ suc.style.display='none'; },3000);
+    ['inv-new-name','inv-new-count','inv-new-min','inv-new-unit'].forEach(function(id){ document.getElementById(id).value=''; });
+    loadInventory(true);
+  }).catch(function(err){ alert('Error: '+err.message); });
+}
+
+/* ─── GUEST FOLLOW-UPS ────────────────────────────────────── */
+var _followups = [];
+
+function loadFollowups(manual) {
+  sbSelect('guest_followups', 'order=tour_date.desc,created_at.desc').then(function(r) {
+    _followups = Array.isArray(r) ? r : [];
+    renderFollowups();
+  }).catch(function(e){ console.error('[loadFollowups]', e); });
+}
+
+function renderFollowups() {
+  var tyPending=0, rrOut=0, rvRecv=0, ratings=[];
+  _followups.forEach(function(f) {
+    if (!f.thank_you_sent) tyPending++;
+    if (f.thank_you_sent && !f.review_received) rrOut++;
+    if (f.review_received) { rvRecv++; if (f.review_rating) ratings.push(f.review_rating); }
+  });
+  var avg = ratings.length ? (ratings.reduce(function(a,b){return a+b;},0)/ratings.length).toFixed(1) : '—';
+
+  var el = function(id){ return document.getElementById(id); };
+  if (el('fu-kpi-ty'))   el('fu-kpi-ty').textContent   = tyPending;
+  if (el('fu-kpi-rr'))   el('fu-kpi-rr').textContent   = rrOut;
+  if (el('fu-kpi-recv')) el('fu-kpi-recv').textContent  = rvRecv;
+  if (el('fu-kpi-avg'))  el('fu-kpi-avg').textContent   = avg === '—' ? '—' : avg + ' ★';
+
+  // Action list
+  var actEl = el('fu-actions');
+  if (actEl) {
+    var needsAction = _followups.filter(function(f){ return !f.thank_you_sent || (f.thank_you_sent && !f.review_received && !f.review_requested); });
+    if (!needsAction.length) {
+      actEl.innerHTML = '<div class="alert alert-green"><span>✓</span><div>All follow-ups are up to date.</div></div>';
+    } else {
+      var h = '<table class="dt"><thead><tr><th>Guest</th><th>Tour Date</th><th>Experience</th><th>Action Needed</th><th>Contact</th></tr></thead><tbody>';
+      needsAction.forEach(function(f) {
+        var actions = [];
+        if (!f.thank_you_sent) actions.push('<span class="badge ba">Send Thank-you</span>');
+        if (f.thank_you_sent && !f.review_requested) actions.push('<span class="badge bb">Request Review</span>');
+        h += '<tr>';
+        h += '<td><strong>'+esc(f.guest_name)+'</strong>'+(f.assigned_to?'<br><span style="font-size:11px;color:var(--mist)">→ '+esc(f.assigned_to)+'</span>':'')+'</td>';
+        h += '<td style="font-family:\'DM Mono\',monospace;font-size:11px">'+esc(f.tour_date||'')+'</td>';
+        h += '<td style="font-size:12px">'+esc(f.experience||'—')+'</td>';
+        h += '<td>'+actions.join(' ')+'</td>';
+        h += '<td style="font-size:11px;color:var(--mist)">'+esc(f.contact_info||'—')+'</td>';
+        h += '</tr>';
+      });
+      actEl.innerHTML = h + '</tbody></table>';
+    }
+  }
+
+  // Populate select for update form
+  var sel = el('fu-select');
+  if (sel) {
+    sel.innerHTML = '<option value="">Select guest…</option>';
+    _followups.forEach(function(f){
+      var opt = document.createElement('option');
+      opt.value = f.id;
+      opt.textContent = f.guest_name + ' · ' + (f.tour_date||'') + (f.experience?' · '+f.experience.split(' ')[0]:'');
+      opt.dataset.ty = f.thank_you_sent ? '1' : '';
+      opt.dataset.rr = f.review_requested ? '1' : '';
+      opt.dataset.rv = f.review_received ? '1' : '';
+      opt.dataset.rating = f.review_rating || '';
+      sel.appendChild(opt);
+    });
+    sel.onchange = function() {
+      var opt = sel.options[sel.selectedIndex];
+      document.getElementById('fu-ty-sent').checked = !!opt.dataset.ty;
+      document.getElementById('fu-rr-sent').checked = !!opt.dataset.rr;
+      document.getElementById('fu-rv-recv').checked = !!opt.dataset.rv;
+      document.getElementById('fu-rating').value = opt.dataset.rating || '';
+    };
+  }
+
+  // Full log
+  var tbody = el('fu-log-body');
+  if (tbody) {
+    if (!_followups.length) { tbody.innerHTML = '<tr><td colspan="8" style="color:var(--mist);font-style:italic;text-align:center;padding:20px">No guest follow-ups yet.</td></tr>'; return; }
+    var h = '';
+    _followups.forEach(function(f) {
+      var stars = f.review_rating ? '★'.repeat(f.review_rating)+'☆'.repeat(5-f.review_rating) : '—';
+      h += '<tr>';
+      h += '<td style="font-family:\'DM Mono\',monospace;font-size:11px">'+esc(f.tour_date||'')+'</td>';
+      h += '<td><strong>'+esc(f.guest_name)+'</strong>'+(f.contact_info?'<br><span style="font-size:10px;color:var(--mist)">'+esc(f.contact_info)+'</span>':'')+'</td>';
+      h += '<td style="font-size:12px">'+esc(f.experience||'—')+'</td>';
+      h += '<td style="text-align:center"><span class="badge '+(f.thank_you_sent?'bg':'ba')+'">'+(f.thank_you_sent?'✓ Sent':'Pending')+'</span></td>';
+      h += '<td style="text-align:center"><span class="badge '+(f.review_requested?'bg':'bm')+'">'+(f.review_requested?'✓ Sent':'Not yet')+'</span></td>';
+      h += '<td style="text-align:center"><span class="badge '+(f.review_received?'bg':'bm')+'">'+(f.review_received?'✓ Recv':'Waiting')+'</span></td>';
+      h += '<td style="color:var(--amber);font-size:12px">'+stars+'</td>';
+      h += '<td style="font-size:11px">'+esc(f.review_platform||'—')+'</td>';
+      h += '</tr>';
+    });
+    tbody.innerHTML = h;
+  }
+}
+
+function submitFollowup(e) {
+  e.preventDefault();
+  var payload = {
+    tour_date:    document.getElementById('fu-date').value,
+    guest_name:   document.getElementById('fu-guest').value,
+    experience:   document.getElementById('fu-exp').value,
+    contact_info: document.getElementById('fu-contact').value,
+    review_platform: document.getElementById('fu-platform').value,
+    assigned_to:  document.getElementById('fu-assigned').value,
+    notes:        document.getElementById('fu-notes-add').value
+  };
+  sbInsert('guest_followups', payload).then(function(){
+    var suc = document.getElementById('fu-add-success');
+    suc.style.display='block'; setTimeout(function(){ suc.style.display='none'; },3000);
+    ['fu-guest','fu-contact','fu-assigned','fu-notes-add'].forEach(function(id){ document.getElementById(id).value=''; });
+    loadFollowups(true);
+  }).catch(function(err){ alert('Error: '+err.message); });
+}
+
+function submitFollowupUpdate(e) {
+  e.preventDefault();
+  var id = document.getElementById('fu-select').value;
+  if (!id) { alert('Please select a guest.'); return; }
+  var rating = document.getElementById('fu-rating').value;
+  var payload = {
+    thank_you_sent:   document.getElementById('fu-ty-sent').checked,
+    review_requested: document.getElementById('fu-rr-sent').checked,
+    review_received:  document.getElementById('fu-rv-recv').checked,
+    review_rating:    rating ? parseInt(rating) : null,
+    notes:            document.getElementById('fu-notes-upd').value
+  };
+  fetch(SB_URL+'/rest/v1/guest_followups?id=eq.'+id, {
+    method:'PATCH',
+    headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},
+    body:JSON.stringify(payload)
+  }).then(function(r){
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    var suc = document.getElementById('fu-upd-success');
+    suc.style.display='block'; setTimeout(function(){ suc.style.display='none'; },3000);
+    document.getElementById('fu-notes-upd').value='';
+    loadFollowups(true);
+  }).catch(function(err){ alert('Update failed: '+err.message); });
 }
 
 /* ─── LAUNCH CHECKLIST ────────────────────────────────────── */
