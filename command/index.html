@@ -318,6 +318,7 @@ select.qf-input{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://ww
   <div class="nav-sec">
     <div class="nav-sec-label">Finance & Control</div>
     <button class="nav-btn" onclick="nav('finance',this)"><span class="nav-icon">💰</span>Loans & Finance</button>
+    <button class="nav-btn" onclick="nav('revenue',this)"><span class="nav-icon">📈</span>Revenue</button>
     <button class="nav-btn" onclick="nav('expenditure',this)"><span class="nav-icon">💸</span>Expenditure</button>
     <button class="nav-btn" onclick="nav('risks',this)"><span class="nav-icon">🔴</span>Risks & Alerts</button>
   </div>
@@ -847,6 +848,177 @@ select.qf-input{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://ww
 </div>
 
 <!-- ────────────────────────────────────────────────────────
+     REVENUE DASHBOARD
+──────────────────────────────────────────────────────── -->
+<div id="tab-revenue" class="tab-panel">
+  <div class="sec-head">
+    <div><div class="sec-title">Revenue Dashboard</div><div class="sec-sub">All income · Supabase revenue_entries table · P&amp;L vs expenditure</div></div>
+    <button class="refresh-btn" onclick="loadRevenue(true)">↻ Refresh</button>
+  </div>
+
+  <!-- KPI strip -->
+  <div class="grid-4" style="margin-bottom:18px">
+    <div class="kpi k-green"><div class="kpi-label">Total Revenue</div><div class="kpi-val big" id="rev-kpi-total">—</div><div class="kpi-sub">All time · confirmed</div></div>
+    <div class="kpi k-em"><div class="kpi-label">This Month</div><div class="kpi-val big" id="rev-kpi-month">—</div><div class="kpi-sub" id="rev-kpi-month-lbl">XCD received</div></div>
+    <div class="kpi k-blue"><div class="kpi-label">This Week</div><div class="kpi-val big" id="rev-kpi-week">—</div><div class="kpi-sub">XCD received</div></div>
+    <div class="kpi k-amber"><div class="kpi-label">Avg Booking Value</div><div class="kpi-val big" id="rev-kpi-avg">—</div><div class="kpi-sub">XCD per full payment</div></div>
+  </div>
+
+  <!-- Chart + by experience -->
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">📊 Revenue vs Expenses — Last 6 Months</div>
+      <div id="rev-chart" style="margin-top:4px"></div>
+      <div style="margin-top:16px" id="rev-pl-wrap">
+        <table class="dt" id="rev-pl-table-el">
+          <thead><tr><th>Month</th><th style="text-align:right">Revenue</th><th style="text-align:right">Expenses</th><th style="text-align:right">Net</th></tr></thead>
+          <tbody id="rev-pl-body"><tr><td colspan="4" style="color:var(--mist);font-style:italic;text-align:center;padding:12px">Loading…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">🛶 Revenue by Experience</div>
+      <div id="rev-by-exp"><p style="color:var(--mist);font-style:italic;font-size:13px">Loading…</p></div>
+      <div style="margin-top:20px">
+        <div class="card-title" style="margin-bottom:10px">🏷️ By Business Track</div>
+        <div id="rev-by-track"><p style="color:var(--mist);font-style:italic;font-size:13px">Loading…</p></div>
+      </div>
+      <div style="margin-top:20px">
+        <div class="card-title" style="margin-bottom:10px">💳 By Payment Method</div>
+        <div id="rev-by-method"><p style="color:var(--mist);font-style:italic;font-size:13px">Loading…</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Log revenue form -->
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">➕ Log Revenue</div>
+      <form onsubmit="submitRevenue(event)">
+        <div class="qf-row">
+          <div>
+            <div class="qf-label">Date</div>
+            <input class="qf-input" type="date" id="rev-date" required>
+          </div>
+          <div>
+            <div class="qf-label">Experience</div>
+            <select class="qf-input" id="rev-exp">
+              <option value="">Select…</option>
+              <option>Bay Serenity Circuit</option>
+              <option>Golden Mirror — Dawn Experience</option>
+              <option>Mystic Morning</option>
+              <option>Scorpion Islet Arc</option>
+              <option>Sunset Romance Tour</option>
+              <option>Other / Village</option>
+            </select>
+          </div>
+        </div>
+        <div class="qf-row">
+          <div>
+            <div class="qf-label">Guest Name</div>
+            <input class="qf-input" type="text" id="rev-guest" placeholder="Lead guest">
+          </div>
+          <div>
+            <div class="qf-label">Group Size</div>
+            <select class="qf-input" id="rev-group">
+              <option value="1">1</option><option value="2" selected>2</option>
+              <option value="3">3</option><option value="4">4</option>
+              <option value="5">5</option><option value="6">6</option>
+            </select>
+          </div>
+        </div>
+        <div class="qf-row">
+          <div>
+            <div class="qf-label">Amount (XCD) *</div>
+            <input class="qf-input" type="number" id="rev-amount" step="0.01" min="0" placeholder="0.00" required>
+          </div>
+          <div>
+            <div class="qf-label">Payment Type</div>
+            <select class="qf-input" id="rev-ptype">
+              <option value="Full Payment">Full Payment</option>
+              <option value="Deposit">Deposit</option>
+              <option value="Final Payment">Final Payment</option>
+              <option value="Refund">Refund</option>
+            </select>
+          </div>
+        </div>
+        <div class="qf-row">
+          <div>
+            <div class="qf-label">Payment Method</div>
+            <select class="qf-input" id="rev-pmethod">
+              <option value="Cash">Cash</option>
+              <option value="Bank Transfer">Bank Transfer</option>
+              <option value="Card">Card</option>
+              <option value="Online">Online</option>
+            </select>
+          </div>
+          <div>
+            <div class="qf-label">Business Track</div>
+            <select class="qf-input" id="rev-track">
+              <option value="TOURS">TOURS</option>
+              <option value="VILLAGE">VILLAGE</option>
+              <option value="SHARED">SHARED</option>
+            </select>
+          </div>
+        </div>
+        <div class="qf-row">
+          <div>
+            <div class="qf-label">Status</div>
+            <select class="qf-input" id="rev-status">
+              <option value="Received">Received</option>
+              <option value="Pending">Pending</option>
+            </select>
+          </div>
+          <div>
+            <div class="qf-label">Notes</div>
+            <input class="qf-input" type="text" id="rev-notes-rev" placeholder="Optional">
+          </div>
+        </div>
+        <button type="submit" class="qf-submit">Record Revenue</button>
+        <div class="qf-success" id="rev-success">✓ Revenue entry saved.</div>
+      </form>
+    </div>
+    <div class="card">
+      <div class="card-title">📋 P&amp;L Summary — Current Month</div>
+      <div id="rev-pl-month-detail" style="padding:4px 0">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--fog)">
+          <span style="font-size:13px;color:var(--ink)">Total Revenue</span>
+          <span id="rev-pl-rev" style="font-family:'DM Mono',monospace;font-size:15px;font-weight:600;color:var(--green)">—</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--fog)">
+          <span style="font-size:13px;color:var(--ink)">Total Expenses</span>
+          <span id="rev-pl-exp" style="font-family:'DM Mono',monospace;font-size:15px;font-weight:600;color:var(--red)">—</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 0">
+          <span style="font-size:14px;font-weight:600;color:var(--ink)">Net This Month</span>
+          <span id="rev-pl-net" style="font-family:'DM Mono',monospace;font-size:18px;font-weight:600">—</span>
+        </div>
+        <div class="prog" style="height:8px;margin-top:4px"><div class="prog-fill pf-em" id="rev-pl-prog" style="width:0%"></div></div>
+        <div style="font-size:11px;color:var(--mist);margin-top:6px" id="rev-pl-margin-lbl"></div>
+      </div>
+      <div style="margin-top:24px">
+        <div class="card-title" style="margin-bottom:10px">📅 Pending Revenue</div>
+        <div id="rev-pending-list"><p style="color:var(--mist);font-style:italic;font-size:13px">Loading…</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Full log -->
+  <div class="card">
+    <div class="card-title">📋 Revenue Log <span class="live-tag"><span class="dot"></span> Live</span></div>
+    <div style="overflow-x:auto">
+      <table class="dt">
+        <thead><tr>
+          <th>Date</th><th>Guest</th><th>Experience</th><th>Type</th>
+          <th>Amount</th><th>Method</th><th>Track</th><th>Status</th>
+        </tr></thead>
+        <tbody id="rev-log-body"><tr><td colspan="8" style="color:var(--mist);font-style:italic;text-align:center;padding:20px">Loading…</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ────────────────────────────────────────────────────────
      EXPENDITURE TRACKER
 ──────────────────────────────────────────────────────── -->
 <div id="tab-expenditure" class="tab-panel">
@@ -1098,6 +1270,7 @@ function setDate() {
   var d = new Date();
   document.getElementById('page-date').textContent = d.toLocaleDateString('en-LC', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
   setLoanPaymentDefaults();
+  initRevenueDefaults();
   initExpenseDefaults();
   var dateInput = document.getElementById('be-date');
   if (dateInput) dateInput.value = d.toISOString().split('T')[0];
@@ -1108,7 +1281,7 @@ var _pageTitles = {
   executive: 'Executive Dashboard', today: 'Today\'s Operations',
   bookings: 'Today\'s Bookings', morning: 'Morning Logs',
   equipment: 'Equipment Checks', incidents: 'Incident Reports',
-  finance: 'Loans & Finance', expenditure: 'Expenditure Tracker',
+  finance: 'Loans & Finance', revenue: 'Revenue Dashboard', expenditure: 'Expenditure Tracker',
   risks: 'Risks & Alerts', readiness: 'Pre-Launch Readiness',
   enquiry: 'Log New Enquiry', 'booking-entry': 'Add Today\'s Booking'
 };
@@ -1140,6 +1313,7 @@ function loadAll() {
   setConn('loading', 'Connecting to Supabase…');
   var today = new Date().toISOString().split('T')[0];
   loadLoans(false);
+  loadRevenue(false);
   loadExpenses(false);
   loadChecklist(false);
   Promise.all([
@@ -1541,6 +1715,247 @@ function wxPill(mode) {
   var m = mode.toLowerCase();
   var cls = m.indexOf('golden')!==-1?'wx-golden':m.indexOf('mystic')!==-1?'wx-mystic':m.indexOf('calm')!==-1?'wx-calm':'wx-rain';
   return '<span class="wx-pill ' + cls + '">' + modeEmoji(mode) + ' ' + esc(mode.split(' —')[0].split('(')[0].trim()) + '</span>';
+}
+
+/* ─── REVENUE ────────────────────────────────────────────── */
+var _revenue = [];
+
+function initRevenueDefaults() {
+  var el = document.getElementById('rev-date');
+  if (el) el.value = new Date().toISOString().split('T')[0];
+}
+
+function loadRevenue(manual) {
+  sbSelect('revenue_entries', 'order=entry_date.desc,created_at.desc&limit=500').then(function(r) {
+    _revenue = Array.isArray(r) ? r : [];
+    renderRevenue();
+  }).catch(function(e) { console.error('[loadRevenue]', e); });
+}
+
+function renderRevenue() {
+  var now = new Date();
+  var thisMonth = now.toISOString().slice(0, 7);
+  var weekStart = new Date(now); weekStart.setDate(now.getDate() - now.getDay());
+  var weekStr = weekStart.toISOString().split('T')[0];
+
+  var total = 0, monthRev = 0, weekRev = 0, fullPayCount = 0, monthExpenses = 0;
+  var byExp = {}, byMethod = {}, byTrack = {};
+  var pendingEntries = [];
+
+  _revenue.forEach(function(r) {
+    var amt = parseFloat(r.gross_amount) || 0;
+    if (r.status === 'Pending') { pendingEntries.push(r); return; }
+    if (r.status === 'Refunded') amt = -amt;
+    total += amt;
+    if (r.entry_date && r.entry_date.slice(0,7) === thisMonth) monthRev += amt;
+    if (r.entry_date && r.entry_date >= weekStr) weekRev += amt;
+    if (r.payment_type === 'Full Payment' || r.payment_type === 'Final Payment') fullPayCount++;
+    if (r.experience) byExp[r.experience] = (byExp[r.experience]||0) + amt;
+    if (r.payment_method) byMethod[r.payment_method] = (byMethod[r.payment_method]||0) + amt;
+    if (r.business_track) byTrack[r.business_track] = (byTrack[r.business_track]||0) + amt;
+  });
+  _expenses.forEach(function(e) {
+    if (e.status === 'Confirmed' && e.expense_date && e.expense_date.slice(0,7) === thisMonth) {
+      monthExpenses += parseFloat(e.amount) || 0;
+    }
+  });
+
+  var avg = fullPayCount > 0 ? total / fullPayCount : 0;
+  var fmtX = function(n) { return 'XCD ' + Math.abs(n).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,','); };
+  var el = function(id) { return document.getElementById(id); };
+
+  if (el('rev-kpi-total')) el('rev-kpi-total').textContent = fmtX(total);
+  if (el('rev-kpi-month')) el('rev-kpi-month').textContent = fmtX(monthRev);
+  if (el('rev-kpi-week'))  el('rev-kpi-week').textContent  = fmtX(weekRev);
+  if (el('rev-kpi-avg'))   el('rev-kpi-avg').textContent   = fmtX(avg);
+
+  // P&L current month panel
+  var net = monthRev - monthExpenses;
+  var margin = monthRev > 0 ? Math.round((net/monthRev)*100) : 0;
+  if (el('rev-pl-rev')) el('rev-pl-rev').textContent = fmtX(monthRev);
+  if (el('rev-pl-exp')) el('rev-pl-exp').textContent = fmtX(monthExpenses);
+  if (el('rev-pl-net')) {
+    el('rev-pl-net').textContent = (net >= 0 ? '+' : '-') + fmtX(net);
+    el('rev-pl-net').style.color = net >= 0 ? 'var(--green)' : 'var(--red)';
+  }
+  if (el('rev-pl-prog')) el('rev-pl-prog').style.width = Math.max(0, Math.min(100, margin)) + '%';
+  if (el('rev-pl-margin-lbl')) el('rev-pl-margin-lbl').textContent = margin + '% net margin this month';
+
+  // Pending list
+  var pendEl = el('rev-pending-list');
+  if (pendEl) {
+    if (!pendingEntries.length) { pendEl.innerHTML = '<p style="color:var(--mist);font-style:italic;font-size:13px">No pending revenue.</p>'; }
+    else {
+      var h = '';
+      pendingEntries.forEach(function(r) {
+        h += '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--fog);font-size:13px">';
+        h += '<div><div style="font-weight:500">' + esc(r.guest_name||'Guest') + '</div>';
+        h += '<div style="font-size:11px;color:var(--mist)">' + esc(r.experience||'—') + ' · ' + esc(r.entry_date||'') + '</div></div>';
+        h += '<div style="font-family:\'DM Mono\',monospace;font-weight:600;color:var(--amber)">XCD ' + (parseFloat(r.gross_amount)||0).toFixed(2) + '</div></div>';
+      });
+      pendEl.innerHTML = h;
+    }
+  }
+
+  // Revenue by experience (progress bars)
+  var expEl = el('rev-by-exp');
+  if (expEl) {
+    var exps = Object.keys(byExp).sort(function(a,b){return byExp[b]-byExp[a];});
+    if (!exps.length) { expEl.innerHTML = '<p style="color:var(--mist);font-style:italic;font-size:13px">No revenue recorded yet.</p>'; }
+    else {
+      var topVal = byExp[exps[0]];
+      var h = '';
+      exps.forEach(function(exp) {
+        var pct = topVal > 0 ? Math.round((byExp[exp]/topVal)*100) : 0;
+        h += '<div style="margin-bottom:11px">';
+        h += '<div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px">';
+        h += '<span style="color:var(--ink)">' + esc(exp) + '</span>';
+        h += '<span style="font-family:\'DM Mono\',monospace;color:var(--teal)">XCD ' + byExp[exp].toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',') + '</span></div>';
+        h += '<div class="prog"><div class="prog-fill pf-em" style="width:'+pct+'%"></div></div></div>';
+      });
+      expEl.innerHTML = h;
+    }
+  }
+
+  // By track
+  var trackEl = el('rev-by-track');
+  if (trackEl) {
+    var h = '<table class="dt"><thead><tr><th>Track</th><th style="text-align:right">XCD</th></tr></thead><tbody>';
+    ['TOURS','VILLAGE','SHARED'].forEach(function(t) {
+      h += '<tr><td><span class="badge bb">'+t+'</span></td><td style="text-align:right;font-family:\'DM Mono\',monospace">'+(byTrack[t]||0).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',')+'</td></tr>';
+    });
+    trackEl.innerHTML = h + '</tbody></table>';
+  }
+
+  // By method
+  var methEl = el('rev-by-method');
+  if (methEl) {
+    var methods = Object.keys(byMethod).sort(function(a,b){return byMethod[b]-byMethod[a];});
+    if (!methods.length) { methEl.innerHTML = '<p style="color:var(--mist);font-style:italic;font-size:13px">No data.</p>'; }
+    else {
+      var h = '<table class="dt"><thead><tr><th>Method</th><th style="text-align:right">XCD</th></tr></thead><tbody>';
+      methods.forEach(function(m) {
+        h += '<tr><td>'+esc(m)+'</td><td style="text-align:right;font-family:\'DM Mono\',monospace">'+byMethod[m].toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',')+'</td></tr>';
+      });
+      methEl.innerHTML = h + '</tbody></table>';
+    }
+  }
+
+  // Monthly chart (last 6 months)
+  var months = [];
+  for (var i = 5; i >= 0; i--) {
+    var d = new Date(now.getFullYear(), now.getMonth()-i, 1);
+    months.push({ key: d.toISOString().slice(0,7), label: d.toLocaleDateString('en',{month:'short',year:'2-digit'}), revenue:0, expenses:0 });
+  }
+  _revenue.forEach(function(r) {
+    if (r.status === 'Pending') return;
+    var m = months.find(function(m){return m.key===r.entry_date.slice(0,7);});
+    if (m) m.revenue += r.status==='Refunded' ? -(parseFloat(r.gross_amount)||0) : (parseFloat(r.gross_amount)||0);
+  });
+  _expenses.forEach(function(e) {
+    if (e.status !== 'Confirmed') return;
+    var m = months.find(function(m){return m.key===(e.expense_date||'').slice(0,7);});
+    if (m) m.expenses += parseFloat(e.amount)||0;
+  });
+  drawRevenueChart(months);
+
+  // P&L table
+  var plBody = el('rev-pl-body');
+  if (plBody) {
+    var h = '';
+    months.forEach(function(m) {
+      var net = m.revenue - m.expenses;
+      var nc = net >= 0 ? 'var(--green)' : 'var(--red)';
+      h += '<tr>';
+      h += '<td style="font-family:\'DM Mono\',monospace;font-size:11px">'+m.label+'</td>';
+      h += '<td style="text-align:right;font-family:\'DM Mono\',monospace">'+m.revenue.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',')+'</td>';
+      h += '<td style="text-align:right;font-family:\'DM Mono\',monospace">'+m.expenses.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',')+'</td>';
+      h += '<td style="text-align:right;font-family:\'DM Mono\',monospace;font-weight:600;color:'+nc+'">'+(net>=0?'+':'')+net.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',')+'</td>';
+      h += '</tr>';
+    });
+    plBody.innerHTML = h || '<tr><td colspan="4" style="color:var(--mist);text-align:center;padding:12px;font-style:italic">No data for last 6 months.</td></tr>';
+  }
+
+  // Full log
+  var tbody = el('rev-log-body');
+  if (tbody) {
+    if (!_revenue.length) { tbody.innerHTML = '<tr><td colspan="8" style="color:var(--mist);font-style:italic;text-align:center;padding:20px">No revenue entries yet.</td></tr>'; return; }
+    var h = '';
+    _revenue.forEach(function(r) {
+      var sc = r.status==='Received'?'bg':r.status==='Refunded'?'br':'ba';
+      h += '<tr>';
+      h += '<td style="font-family:\'DM Mono\',monospace;font-size:11px">'+esc(r.entry_date||'')+'</td>';
+      h += '<td>'+esc(r.guest_name||'—')+'</td>';
+      h += '<td>'+esc(r.experience||'—')+'</td>';
+      h += '<td>'+esc(r.payment_type||'—')+'</td>';
+      h += '<td style="font-family:\'DM Mono\',monospace;text-align:right">'+(parseFloat(r.gross_amount)||0).toFixed(2)+'</td>';
+      h += '<td>'+esc(r.payment_method||'—')+'</td>';
+      h += '<td><span class="badge bb">'+esc(r.business_track||'—')+'</span></td>';
+      h += '<td><span class="badge '+sc+'">'+esc(r.status||'—')+'</span></td>';
+      h += '</tr>';
+    });
+    tbody.innerHTML = h;
+  }
+}
+
+function drawRevenueChart(months) {
+  var el = document.getElementById('rev-chart');
+  if (!el) return;
+  var W=520, H=190, PT=22, PR=16, PB=40, PL=56;
+  var cW=W-PL-PR, cH=H-PT-PB;
+  var maxVal = Math.max.apply(null, months.map(function(m){return Math.max(m.revenue,m.expenses);}));
+  if (maxVal <= 0) { el.innerHTML = '<p style="color:var(--mist);font-style:italic;font-size:13px;padding:16px 0;text-align:center">No data to chart yet.</p>'; return; }
+  var scY = function(v){ return PT + cH - (v/maxVal)*cH; };
+  var n = months.length, groupW = cW/n, bW = Math.min(18, groupW*0.32);
+  var svg = '<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;height:auto;font-family:Outfit,sans-serif">';
+  [0,0.25,0.5,0.75,1].forEach(function(t){
+    var y = scY(maxVal*t);
+    svg += '<line x1="'+PL+'" y1="'+y+'" x2="'+(W-PR)+'" y2="'+y+'" stroke="#e4ede9" stroke-width="1"/>';
+    svg += '<text x="'+(PL-5)+'" y="'+(y+4)+'" text-anchor="end" font-size="9" fill="#7a9990">'+fmtK(maxVal*t)+'</text>';
+  });
+  months.forEach(function(m, i){
+    var cx = PL+(i+0.5)*groupW;
+    var rH = (m.revenue/maxVal)*cH, eH = (m.expenses/maxVal)*cH;
+    svg += '<rect x="'+(cx-bW-1)+'" y="'+scY(m.revenue)+'" width="'+bW+'" height="'+rH+'" fill="#1a7a47" rx="2" opacity="0.85"/>';
+    svg += '<rect x="'+(cx+1)+'" y="'+scY(m.expenses)+'" width="'+bW+'" height="'+eH+'" fill="#c0392b" rx="2" opacity="0.6"/>';
+    svg += '<text x="'+cx+'" y="'+(H-PB+16)+'" text-anchor="middle" font-size="9" fill="#7a9990">'+m.label+'</text>';
+  });
+  svg += '<rect x="'+PL+'" y="7" width="8" height="8" fill="#1a7a47" rx="1" opacity="0.85"/>';
+  svg += '<text x="'+(PL+11)+'" y="14" font-size="9" fill="#172820">Revenue</text>';
+  svg += '<rect x="'+(PL+68)+'" y="7" width="8" height="8" fill="#c0392b" rx="1" opacity="0.6"/>';
+  svg += '<text x="'+(PL+80)+'" y="14" font-size="9" fill="#172820">Expenses</text>';
+  svg += '</svg>';
+  el.innerHTML = svg;
+}
+
+function fmtK(n) {
+  if (n >= 1000) return (n/1000).toFixed(1).replace(/\.0$/,'')+'k';
+  return Math.round(n)+'';
+}
+
+function submitRevenue(e) {
+  e.preventDefault();
+  var payload = {
+    entry_date:     document.getElementById('rev-date').value,
+    experience:     document.getElementById('rev-exp').value,
+    guest_name:     document.getElementById('rev-guest').value,
+    group_size:     parseInt(document.getElementById('rev-group').value)||1,
+    gross_amount:   parseFloat(document.getElementById('rev-amount').value),
+    currency:       'XCD',
+    payment_type:   document.getElementById('rev-ptype').value,
+    payment_method: document.getElementById('rev-pmethod').value,
+    business_track: document.getElementById('rev-track').value,
+    status:         document.getElementById('rev-status').value,
+    notes:          document.getElementById('rev-notes-rev').value,
+    entered_by:     'SHER Command'
+  };
+  sbInsert('revenue_entries', payload).then(function() {
+    var suc = document.getElementById('rev-success');
+    suc.style.display = 'block';
+    setTimeout(function(){ suc.style.display='none'; }, 4000);
+    ['rev-guest','rev-amount','rev-notes-rev'].forEach(function(id){ document.getElementById(id).value=''; });
+    loadRevenue(true);
+  }).catch(function(err){ alert('Error saving revenue: ' + err.message); });
 }
 
 /* ─── EXPENDITURE ─────────────────────────────────────────── */
