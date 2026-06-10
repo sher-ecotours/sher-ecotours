@@ -21,11 +21,12 @@
     /* Centered hero logo mark */
     .hero-logo-mark {
       display: block; margin: 0 auto 24px;
-      height: 160px; width: auto;
+      max-width: 200px; width: 100%; height: auto;
       opacity: 0.95; position: relative;
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.45));
     }
     @media (max-width: 768px) {
-      .hero-logo-mark { height: 110px; margin-bottom: 16px; }
+      .hero-logo-mark { max-width: 140px; margin-bottom: 16px; }
     }
 
     /* HERO */
@@ -475,7 +476,7 @@
   <div class="hero-bg"></div>
   <div class="hero-overlay"></div>
   <div class="hero-content">
-    <img src="images/SHER-CREAM-300px.png" alt="SHER · Sanctuary Experiences" class="hero-logo-mark"/>
+    <img src="images/SHER-DARK-600px.png" alt="SHER · Sanctuary Experiences" class="hero-logo-mark" loading="eager" fetchpriority="high"/>
     <span class="hero-eyebrow">Savannes Bay · Micoud · Saint Lucia</span>
     <span class="hero-primary">Come SHER the Experience</span>
     <h1 class="hero-title">Where Nature Whispers and <em>Souls Listen</em></h1>
