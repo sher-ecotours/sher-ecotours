@@ -46,7 +46,6 @@ function _buildNav() {
       <a href="${_R}${_P}golden-mirror.html" onclick="toggleMobileMenu()">Golden Mirror</a>
       <a href="${_R}${_P}calm-reflections.html" onclick="toggleMobileMenu()">Calm Reflections</a>
       <a href="${_R}${_P}scorpios-secret.html" onclick="toggleMobileMenu()">Scorpio's Secret</a>
-      <a href="${_R}${_P}table-deau.html" onclick="toggleMobileMenu()">Table d'Eau</a>
       <a href="${book}" class="btn-primary" onclick="toggleMobileMenu()">Book Now</a>
     `;
   }
@@ -55,14 +54,14 @@ function _buildNav() {
   if (siteNav) {
     siteNav.innerHTML = `
       <a href="${_R}index.html" class="nav-logo">
-        <img src="${_R}images/SHER-CREAM-300px.png" alt="SHER · Sanctuary Experiences" class="nav-logo-img"/>
+        <img src="${_R}images/SHER-DARK-600px.png" alt="SHER · Sanctuary Experiences" class="nav-logo-img"/>
+        <span class="nav-location">Savannes Bay · Micoud · Saint Lucia</span>
       </a>
       <ul class="nav-links">
         <li><a href="${_R}index.html">Home</a></li>
         <li><a href="${_R}${_P}golden-mirror.html">Golden Mirror</a></li>
         <li><a href="${_R}${_P}calm-reflections.html">Calm Reflections</a></li>
         <li><a href="${_R}${_P}scorpios-secret.html">Scorpio's Secret</a></li>
-        <li><a href="${_R}${_P}table-deau.html">Table d'Eau</a></li>
         <li><a href="${book}" class="nav-cta">Book Now</a></li>
       </ul>
       <button class="nav-burger" onclick="toggleMobileMenu()" aria-label="Open menu">

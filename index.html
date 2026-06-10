@@ -16,15 +16,46 @@
   <style>
     /* ===== PAGE-SPECIFIC: HOMEPAGE ===== */
 
-    /* Hide navbar logo on homepage — large centered hero mark used instead */
-    .nav-logo { display: none; }
-
     /* Centered hero logo mark */
+    .hero-logo-mark-container {
+      position: relative; display: inline-block;
+    }
     .hero-logo-mark {
       display: block; margin: 0 auto 24px;
       max-width: 200px; width: 100%; height: auto;
       opacity: 0.95; position: relative;
       filter: drop-shadow(0 2px 8px rgba(0,0,0,0.45));
+      animation: sher-sunrise-glow 5s ease-in-out infinite;
+    }
+    @keyframes sher-sunrise-glow {
+      0%, 100% {
+        filter: drop-shadow(0 2px 8px rgba(0,0,0,0.45)) drop-shadow(0 0 10px rgba(212,168,67,0.15));
+      }
+      50% {
+        filter: drop-shadow(0 2px 8px rgba(0,0,0,0.45)) drop-shadow(0 0 26px rgba(232,200,112,0.55));
+      }
+    }
+    .hero-logo-mark-container::before,
+    .hero-logo-mark-container::after {
+      content: '\2726';
+      position: absolute;
+      color: var(--gold-lt);
+      pointer-events: none;
+      opacity: 0;
+      animation: sher-sparkle 3.5s ease-in-out infinite;
+    }
+    .hero-logo-mark-container::before {
+      top: 4%; right: 6%;
+      font-size: 16px;
+    }
+    .hero-logo-mark-container::after {
+      bottom: 14%; left: 2%;
+      font-size: 11px;
+      animation-delay: 1.75s;
+    }
+    @keyframes sher-sparkle {
+      0%, 100% { opacity: 0; transform: scale(0.4) rotate(0deg); }
+      50%      { opacity: 1; transform: scale(1.15) rotate(180deg); }
     }
     @media (max-width: 768px) {
       .hero-logo-mark { max-width: 140px; margin-bottom: 16px; }
@@ -54,47 +85,54 @@
         rgba(8,16,12,0.85) 100%
       );
     }
+    #hero::after {
+      content: '';
+      position: absolute; inset: 0; z-index: 1;
+      background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.35) 100%);
+      pointer-events: none;
+    }
     .hero-content {
       position: relative; z-index: 2;
-      text-align: center; padding: 76px 24px 0; max-width: 860px;
+      text-align: center; padding: 120px 24px 0; max-width: 860px;
       animation: fadeUp 1.2s ease both;
+    }
+    @media (max-width: 768px) {
+      .hero-content { padding-top: 104px; }
     }
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(40px); }
       to   { opacity: 1; transform: translateY(0); }
     }
-    .hero-eyebrow {
-      font-family: 'Jost', sans-serif;
-      font-size: 10px; font-weight: 300;
-      color: var(--gold); letter-spacing: 0.30em;
-      text-transform: uppercase; margin-bottom: 22px;
-      display: block;
-      opacity: 0; animation: fadeUp 1s 0.25s ease both;
-    }
     .hero-primary {
       display: block;
       font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(52px, 8.5vw, 104px);
+      font-size: clamp(37px, 6.12vw, 75px);
       font-weight: 600; color: var(--gold-lt);
       letter-spacing: 0.06em; line-height: 1.1;
-      margin-bottom: 28px;
+      margin-bottom: 24px;
       opacity: 0; animation: fadeUp 1s 0.35s ease both;
     }
     @media (max-width: 560px) {
-      .hero-primary { font-size: clamp(36px, 10vw, 56px) !important; line-height: 1.05 !important; }
+      .hero-primary { font-size: clamp(26px, 7.2vw, 40px) !important; line-height: 1.05 !important; }
     }
     .hero-title {
       font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(52px, 8.5vw, 104px);
+      font-size: clamp(24px, 3.98vw, 49px);
       font-weight: 300; color: var(--white);
       line-height: 1.0; letter-spacing: -0.01em;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
       opacity: 0; animation: fadeUp 1s 0.45s ease both;
     }
     .hero-title em { font-style: italic; color: var(--gold-lt); }
     .hero-tagline {
       display: block; margin-bottom: 28px;
       opacity: 0; animation: fadeUp 1s 0.60s ease both;
+    }
+    .hero-tagline.tagline {
+      font-size: 11px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
     }
     .hero-sub {
       font-family: 'Jost', sans-serif;
@@ -157,7 +195,13 @@
     }
     .section-header-left { max-width: 520px; }
     .cards-grid {
-      display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px;
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+    }
+    @media (max-width: 1023px) {
+      .cards-grid { gap: 16px; }
+    }
+    @media (max-width: 767px) {
+      .cards-grid { grid-template-columns: 1fr; }
     }
     .exp-card {
       border-radius: var(--radius); overflow: hidden;
@@ -175,7 +219,6 @@
     .exp-card:hover .card-img-bg { transform: scale(1.06); }
     .ci-golden-mirror { background: url('images/golden-hour-hero.JPG') center 55% / cover no-repeat; }
     .ci-scorpios      { background: url('images/scorpios-secret-island-scene-1.png') center 40% / cover no-repeat; }
-    .ci-tabledeau     { background: url('images/table-deau-two-couples.png') center 38% / cover no-repeat; }
     .ci-calm          { background: url('images/bay-turqoise-clear-water.jpg') center 45% / cover no-repeat; }
     .card-badge {
       position: absolute; top: 16px; left: 16px;
@@ -437,7 +480,6 @@
     /* RESPONSIVE */
     @media (max-width: 960px) {
       .intro-strip-inner { grid-template-columns: repeat(3,1fr); padding: 0 24px; }
-      .cards-grid { grid-template-columns: 1fr; }
       /* reviews-grid removed */
       .code-grid { grid-template-columns: 1fr; }
       .bay-grid, .about-grid { grid-template-columns: 1fr; gap: 48px; }
@@ -477,8 +519,9 @@
   <div class="hero-bg"></div>
   <div class="hero-overlay"></div>
   <div class="hero-content">
-    <img src="images/SHER-DARK-600px.png" alt="SHER · Sanctuary Experiences" class="hero-logo-mark" loading="eager" fetchpriority="high"/>
-    <span class="hero-eyebrow">Savannes Bay · Micoud · Saint Lucia</span>
+    <div class="hero-logo-mark-container">
+      <img src="images/SHER-DARK-600px.png" alt="SHER · Sanctuary Experiences" class="hero-logo-mark" loading="eager" fetchpriority="high"/>
+    </div>
     <span class="hero-primary">Come SHER the Experience</span>
     <h1 class="hero-title">Where Nature Whispers and <em>Souls Listen</em></h1>
     <span class="hero-tagline tagline">Nature Whispers · Souls Listen</span>
@@ -606,36 +649,7 @@
         </div>
       </a>
 
-      <!-- Card 3: Table d'Eau -->
-      <a href="pages/table-deau.html" class="exp-card reveal" style="transition-delay:0.20s">
-        <div class="card-img">
-          <div class="card-img-bg ci-tabledeau"></div>
-          <span class="card-badge">Coming Soon</span>
-        </div>
-        <div class="card-body">
-          <div class="card-meta">
-            <div class="card-rating">
-              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              2026
-            </div>
-            <span class="card-reviews">Register interest</span>
-          </div>
-          <h3 class="card-title">Table d'Eau</h3>
-          <p class="card-desc">Luxury floating dining on Savannes Bay. White linen, champagne, and Saint Lucian cuisine at golden hour.</p>
-          <div class="card-footer">
-            <div class="card-price" style="color:var(--text-dim);font-size:13px">Launching 2026</div>
-            <div class="card-duration">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-              Golden Hour
-            </div>
-          </div>
-          <div role="button" tabindex="0" class="card-book-btn" style="background:transparent;border:1px solid rgba(212,168,67,0.45);color:var(--gold)" onclick="event.stopPropagation();openSherModal('table-deau')">
-            Register Interest
-          </div>
-        </div>
-      </a>
-
-      <!-- Card 4: Bay Serenity · Calm Reflections -->
+      <!-- Card 3: Bay Serenity · Calm Reflections -->
       <a href="pages/calm-reflections.html" class="exp-card reveal" style="transition-delay:0.30s">
         <div class="card-img">
           <div class="card-img-bg ci-calm"></div>
