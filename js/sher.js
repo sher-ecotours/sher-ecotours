@@ -41,7 +41,7 @@ function _buildNav() {
   if (mobileMenu) {
     mobileMenu.innerHTML = `
       <button id="mobile-close" onclick="toggleMobileMenu()" aria-label="Close menu">&#x2715;</button>
-      <img src="${_R}images/SHER-CREAM-300px.png" alt="SHER · Sanctuary Experiences" style="height:80px;width:auto;margin-bottom:8px"/>
+      <img src="${_R}images/SHER-logo.png" alt="SHER · Sanctuary Experiences" style="height:80px;width:auto;margin-bottom:8px"/>
       <a href="${_R}index.html" onclick="toggleMobileMenu()">Home</a>
       <a href="${_R}${_P}golden-mirror.html" onclick="toggleMobileMenu()">Golden Mirror</a>
       <a href="${_R}${_P}calm-reflections.html" onclick="toggleMobileMenu()">Calm Reflections</a>
@@ -54,7 +54,9 @@ function _buildNav() {
   if (siteNav) {
     siteNav.innerHTML = `
       <a href="${_R}index.html" class="nav-logo">
-        <img src="${_R}images/SHER-DARK-600px.png" alt="SHER · Sanctuary Experiences" class="nav-logo-img"/>
+        <div class="nav-logo-mark">
+          <img src="${_R}images/SHER-logo.png" alt="SHER · Sanctuary Experiences" class="nav-logo-img"/>
+        </div>
         <span class="nav-location">Savannes Bay · Micoud · Saint Lucia</span>
       </a>
       <ul class="nav-links">
@@ -91,7 +93,7 @@ function _buildFooter() {
   footer.innerHTML = `
     <div class="footer-inner">
       <div>
-        <img src="${_R}images/SHER-CREAM-300px.png" alt="SHER · Sanctuary Experiences" class="footer-logo-img"/>
+        <img src="${_R}images/SHER-logo.png" alt="SHER · Sanctuary Experiences" class="footer-logo-img"/>
         <p class="footer-location">Savannes Bay · Micoud · Saint Lucia</p>
         <a href="mailto:bookings@shersanctuary.com" class="footer-email">bookings@shersanctuary.com</a>
         <div class="footer-social">
@@ -337,16 +339,14 @@ function _initBanner() {
   b.innerHTML = 'Bookings now open for 2026 &middot; Secure your experience today &middot; Payment processed by FYGARO &middot; Confirmed within 4 hours' +
     '<button id="sher-banner-close" aria-label="Dismiss">&#x2715;</button>';
   document.body.insertBefore(b, document.body.firstChild);
-  const nav = document.getElementById('site-nav');
-  if (nav) nav.style.top = b.offsetHeight + 'px';
+  document.documentElement.style.setProperty('--banner-h', b.offsetHeight + 'px');
   document.getElementById('sher-banner-close').addEventListener('click', _dismissBanner);
 }
 function _dismissBanner() {
   sessionStorage.setItem('sher_banner_dismissed', '1');
   const b = document.getElementById('sher-banner');
   if (b) b.remove();
-  const nav = document.getElementById('site-nav');
-  if (nav) nav.style.top = '0';
+  document.documentElement.style.setProperty('--banner-h', '0px');
 }
 
 // ===== BOOKING MODALS =====
