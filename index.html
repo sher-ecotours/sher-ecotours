@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>SHER · Eco Sanctuary — Savannes Bay, Saint Lucia</title>
-  <meta name="description" content="Guided eco-kayak tours through Savannes Bay, Saint Lucia. A RAMSAR-protected wetland, mangrove corridor, and Scorpion Islet. Respectful. Quiet. Intentional."/>
+  <title>SHER Sanctuary Experiences · Come SHER the Experience · Savannes Bay, Saint Lucia</title>
+  <meta name="description" content="Come SHER the Experience. Private kayak experiences, sunrise dining, and bespoke occasion arrangements on Savannes Bay — a RAMSAR-protected wetland in Micoud, Saint Lucia. Nature Whispers · Souls Listen."/>
   <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16.png"/>
   <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png"/>
   <link rel="icon" type="image/png" sizes="48x48" href="images/favicon-48.png"/>
@@ -68,6 +68,18 @@
       text-transform: uppercase; margin-bottom: 22px;
       display: block;
       opacity: 0; animation: fadeUp 1s 0.25s ease both;
+    }
+    .hero-primary {
+      display: block;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(52px, 8.5vw, 104px);
+      font-weight: 600; color: var(--gold-lt);
+      letter-spacing: 0.06em; line-height: 1.1;
+      margin-bottom: 28px;
+      opacity: 0; animation: fadeUp 1s 0.35s ease both;
+    }
+    @media (max-width: 560px) {
+      .hero-primary { font-size: clamp(36px, 10vw, 56px) !important; line-height: 1.05 !important; }
     }
     .hero-title {
       font-family: 'Cormorant Garamond', serif;
@@ -463,15 +475,16 @@
   <div class="hero-bg"></div>
   <div class="hero-overlay"></div>
   <div class="hero-content">
-    <img src="images/SHER-CREAM-300px.png" alt="SHER · Eco Sanctuary" class="hero-logo-mark"/>
+    <img src="images/SHER-CREAM-300px.png" alt="SHER · Sanctuary Experiences" class="hero-logo-mark"/>
     <span class="hero-eyebrow">Savannes Bay · Micoud · Saint Lucia</span>
+    <span class="hero-primary">Come SHER the Experience</span>
     <h1 class="hero-title">Where Nature Whispers and <em>Souls Listen</em></h1>
     <span class="hero-tagline tagline">Nature Whispers · Souls Listen</span>
     <p class="hero-sub">Guided eco-kayak tours through one of the Caribbean's most pristine protected bays — a sanctuary for nature, community, and conscious living.</p>
     <div class="hero-actions">
       <a href="#experiences" class="btn-primary">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
-        Explore Tours
+        Come SHER the Experience
       </a>
       <a href="#the-bay" class="btn-outline">Discover the Bay</a>
     </div>
@@ -523,8 +536,11 @@
     <div class="section-header reveal">
       <div class="section-header-left">
         <span class="eyebrow">The SHER Collection</span>
-        <h2 class="section-title">Four <em>experiences</em><br/>on the same bay</h2>
+        <h2 class="section-title">Every <em>experience</em>.<br/>Every occasion.</h2>
       </div>
+    </div>
+    <div class="reveal" style="text-align:center;margin-bottom:24px">
+      <span class="eyebrow" style="margin-bottom:0">Come SHER in Nature's Tranquillity</span>
     </div>
     <div class="cards-grid">
 
@@ -545,7 +561,7 @@
           <h3 class="card-title">Bay Serenity · Golden Mirror</h3>
           <p class="card-desc">A sunrise kayak experience on Savannes Bay. Before the world wakes, the bay becomes a mirror of gold.</p>
           <div class="card-footer">
-            <div class="card-price">USD $180 <span>/ person</span></div>
+            <div class="card-price">USD $175 <span>/ person</span></div>
             <div class="card-duration">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
               2 hours
@@ -647,6 +663,22 @@
         </div>
       </a>
 
+    </div>
+
+    <div class="occasions-block reveal" style="margin-top:90px;max-width:640px">
+      <span class="eyebrow">Come SHER Your Special Occasion</span>
+      <h2 class="section-title">We don't just arrange experiences.<br/>We arrange <em>moments</em>.</h2>
+      <p class="section-body" style="margin-top:20px;max-width:640px">
+        A marriage proposal on the water at first light.<br/>
+        An anniversary table in the mangroves.<br/>
+        A birthday morning that begins before the world wakes.<br/>
+        A honeymoon experience on a bay that most people never find.<br/>
+        A celebration of new life, new love, or simply another year together.
+      </p>
+      <p class="section-body" style="margin-top:20px;max-width:640px">
+        Every occasion is arranged privately. Every detail is handled before you arrive. Write to us with your occasion — we will tell you what is possible.
+      </p>
+      <a href="mailto:bookings@shersanctuary.com?subject=Special%20Occasion%20Enquiry%20%E2%80%94%20SHER%20Sanctuary%20Experiences" class="occasion-link">Tell us your occasion →</a>
     </div>
   </div>
 </section>
@@ -858,7 +890,7 @@
   <div class="bay-speaks-accent reveal"></div>
   <div class="reveal" style="transition-delay:0.1s">
     <p class="bay-speaks-quote">The bay speaks for itself.<br/>Come and listen.</p>
-    <p class="bay-speaks-sub">SHER &middot; Eco Sanctuary opens for guided tours in 2026. Reserve your experience now and be among the first to arrive.</p>
+    <p class="bay-speaks-sub">SHER &middot; Sanctuary Experiences opens for guided tours in 2026. Reserve your experience now and be among the first to arrive.</p>
     <a href="#" onclick="openEnquiryForm(event)" class="btn-primary" style="display:inline-flex">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
       Request a Private Tour Window
@@ -930,9 +962,9 @@
   <div class="cta-actions">
     <a href="#booking-bar" class="btn-primary">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-      Book a Tour
+      Come SHER the Experience
     </a>
-    <a href="mailto:bookings@safehavenecotours.com?subject=Experience%20Enquiry%20%E2%80%94%20SHER%20Eco%20Sanctuary" class="btn-outline">
+    <a href="mailto:bookings@shersanctuary.com?subject=Experience%20Enquiry%20%E2%80%94%20SHER%20Sanctuary%20Experiences" class="btn-outline">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
       Ask About Available Quiet Hours
     </a>
@@ -941,6 +973,7 @@
       WhatsApp Us
     </a>
   </div>
+  <p class="footer-note" style="text-align:center;margin-top:24px;font-style:italic;font-size:12px;color:var(--text-dim);opacity:0.7">We SHER experiences. The bay awaits.</p>
 </section>
 
 <!-- FOOTER -->

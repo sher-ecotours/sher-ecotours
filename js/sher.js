@@ -4,8 +4,9 @@
 // Scorpio's Sanctuary:  https://fygaro.com/pay/SCORPIOS-SANCTUARY-PLACEHOLDER
 
 /* ============================================================
-   SHER · Eco Sanctuary — Shared Site Script
-   safehavenecotours.com
+   SHER · Sanctuary Experiences — Shared Site Script
+   shersanctuary.com
+   TODO: confirm shersanctuary.com is the live Netlify domain
    ============================================================ */
 
 // ===== SUPABASE — website form submissions =====
@@ -40,7 +41,7 @@ function _buildNav() {
   if (mobileMenu) {
     mobileMenu.innerHTML = `
       <button id="mobile-close" onclick="toggleMobileMenu()" aria-label="Close menu">&#x2715;</button>
-      <img src="${_R}images/SHER-CREAM-300px.png" alt="SHER · Eco Sanctuary" style="height:80px;width:auto;margin-bottom:8px"/>
+      <img src="${_R}images/SHER-CREAM-300px.png" alt="SHER · Sanctuary Experiences" style="height:80px;width:auto;margin-bottom:8px"/>
       <a href="${_R}index.html" onclick="toggleMobileMenu()">Home</a>
       <a href="${_R}${_P}golden-mirror.html" onclick="toggleMobileMenu()">Golden Mirror</a>
       <a href="${_R}${_P}calm-reflections.html" onclick="toggleMobileMenu()">Calm Reflections</a>
@@ -54,7 +55,7 @@ function _buildNav() {
   if (siteNav) {
     siteNav.innerHTML = `
       <a href="${_R}index.html" class="nav-logo">
-        <img src="${_R}images/SHER-CREAM-300px.png" alt="SHER · Eco Sanctuary" class="nav-logo-img"/>
+        <img src="${_R}images/SHER-CREAM-300px.png" alt="SHER · Sanctuary Experiences" class="nav-logo-img"/>
       </a>
       <ul class="nav-links">
         <li><a href="${_R}index.html">Home</a></li>
@@ -91,9 +92,9 @@ function _buildFooter() {
   footer.innerHTML = `
     <div class="footer-inner">
       <div>
-        <img src="${_R}images/SHER-CREAM-300px.png" alt="SHER · Eco Sanctuary" class="footer-logo-img"/>
+        <img src="${_R}images/SHER-CREAM-300px.png" alt="SHER · Sanctuary Experiences" class="footer-logo-img"/>
         <p class="footer-location">Savannes Bay · Micoud · Saint Lucia</p>
-        <a href="mailto:bookings@safehavenecotours.com" class="footer-email">bookings@safehavenecotours.com</a>
+        <a href="mailto:bookings@shersanctuary.com" class="footer-email">bookings@shersanctuary.com</a>
         <div class="footer-social">
           <a href="#" class="social-link" aria-label="Instagram">${ig}</a>
           <a href="#" class="social-link" aria-label="Facebook">${fb}</a>
@@ -121,7 +122,7 @@ function _buildFooter() {
       <div>
         <span class="footer-col-title">Contact</span>
         <ul class="footer-col-links">
-          <li><a href="mailto:bookings@safehavenecotours.com">Email Us</a></li>
+          <li><a href="mailto:bookings@shersanctuary.com">Email Us</a></li>
           <li><a href="${_R}${_P}safety-standards.html">Safety Standards</a></li>
           <li><a href="${_R}${_P}environmental-policy.html">Environmental Policy</a></li>
           <li><a href="${_R}${_P}press.html">Press Enquiries</a></li>
@@ -137,6 +138,7 @@ function _buildFooter() {
         <a href="${_R}${_P}booking-terms.html">Booking T&Cs</a>
       </div>
     </div>
+    <p class="footer-parent">SHER is a trading name of Safeport Security Services Limited, registered in Saint Lucia, West Indies.</p>
   `;
 }
 
@@ -368,7 +370,7 @@ function _buildModals() {
       ${close('golden-mirror')}
       <span class="sher-modal-eyebrow">Book Your Experience</span>
       <h2 class="sher-modal-title">Bay Serenity &middot; Golden Mirror</h2>
-      <p class="sher-modal-price">USD $180 per person &middot; Sunrise Kayak &middot; Maximum 6 guests</p>
+      <p class="sher-modal-price">USD $175 per person &middot; Sunrise Kayak &middot; Maximum 6 guests</p>
       ${field('Preferred Date', `<input class="sher-modal-input" id="gm-date" type="date"/>`)}
       ${field('Number of Guests', sel('gm-guests','<option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option>'))}
       ${field('Full Name', input('gm-name','text','Your full name'))}
@@ -478,7 +480,7 @@ function _buildModals() {
       ${field('Full Name', input('td-name','text','Your full name'))}
       ${field('Email Address', input('td-email','email','your@email.com'))}
       ${field('You Are', sel('td-prop','<option>Staying at a resort</option><option>Villa guest</option><option>Local resident</option><option>Other</option>'))}
-      ${field('Preferred Experience', sel('td-exp','<option>Table d\'Eau Intime — one couple</option><option>Table d\'Eau Célébration — two couples</option>'))}
+      ${field('Preferred Experience', sel('td-exp','<option>L\'Aube — one couple</option><option>L\'Estuaire — two couples</option>'))}
       ${field('Anything you would like us to know (optional)', `<textarea class="sher-modal-textarea" id="td-notes" placeholder="Occasion, special requirements, questions…"></textarea>`)}
       <div class="sher-modal-actions">
         <button class="sher-modal-submit" onclick="_submitTableDeau()">
@@ -547,7 +549,7 @@ function _submitTableDeau() {
     'Notes:',
     notes || '(none)',
   ].join('\n');
-  window.location.href = 'mailto:bookings@safehavenecotours.com'
+  window.location.href = 'mailto:bookings@shersanctuary.com'
     + '?subject=' + encodeURIComponent("Table d'Eau Interest — " + name)
     + '&body=' + encodeURIComponent(body);
 }
@@ -560,7 +562,7 @@ function openEnquiryForm(e) {
   var expSel = document.getElementById('enq-exp');
   if (expSel && !expSel.value) {
     var p = window.location.pathname;
-    var guess = p.includes('golden-mirror')    ? 'Bay Serenity · Golden Mirror ($180/person)'
+    var guess = p.includes('golden-mirror')    ? 'Bay Serenity · Golden Mirror ($175/person)'
                : p.includes('calm-reflections') ? 'Bay Serenity · Calm Reflections ($150/person)'
                : p.includes('scorpios-secret')  ? "Scorpio’s Secret ($420/couple)"
                : p.includes('table-deau')        ? "Table d’Eau (Register Interest, 2027+)"
@@ -682,7 +684,7 @@ document.addEventListener('keydown', function(e) {
 // ===== ENQUIRY & WAITLIST MODALS =====
 function _buildEnquiryModals() {
   var expOpts = [
-    'Bay Serenity · Golden Mirror ($180/person)',
+    'Bay Serenity · Golden Mirror ($175/person)',
     'Bay Serenity · Calm Reflections ($150/person)',
     "Scorpio's Secret ($420/couple)",
     "Scorpio's Sanctuary ($600/two couples)",
