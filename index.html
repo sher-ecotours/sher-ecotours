@@ -12,9 +12,49 @@
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link rel="preload" as="image" href="/images/approaching-scorpion-islet-by-canoe-1.PNG" fetchpriority="high"/>
+  <link rel="preload" as="image" href="/images/SHER-new-logo.png" fetchpriority="high"/>
   <link rel="stylesheet" href="css/sher.css"/>
   <style>
     /* ===== PAGE-SPECIFIC: HOMEPAGE ===== */
+
+    /* Centered hero logo mark */
+    .hero-logo-mark-container {
+      position: relative; display: inline-block;
+    }
+    .hero-logo-mark {
+      display: block; margin: 0 auto 24px;
+      max-width: 280px; width: 100%; height: auto;
+      opacity: 0.95; position: relative;
+      filter: drop-shadow(0 1px 4px rgba(0,0,0,0.25));
+      animation: sher-sunrise-glow 5s ease-in-out infinite;
+    }
+    /* Bird-eye twinkle */
+    .hero-logo-mark-container::before {
+      content: '';
+      position: absolute;
+      left: 18%; top: 38%;
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,220,100,1) 0%, rgba(212,175,55,0.6) 50%, transparent 100%);
+      transform: translate(-50%, -50%);
+      animation: sher-eye-twinkle 4s ease-in-out infinite;
+      pointer-events: none;
+    }
+    /* Sun-centre glow */
+    .hero-logo-mark-container::after {
+      content: '';
+      position: absolute;
+      left: 12%; top: 52%;
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,200,60,0.8) 0%, rgba(212,175,55,0.3) 60%, transparent 100%);
+      transform: translate(-50%, -50%);
+      animation: sher-sun-pulse 6s ease-in-out infinite;
+      pointer-events: none;
+    }
+    @media (max-width: 768px) {
+      .hero-logo-mark { max-width: 200px; margin-bottom: 16px; }
+    }
 
     /* HERO */
     #hero {
@@ -472,6 +512,9 @@
   <div class="hero-bg"></div>
   <div class="hero-overlay"></div>
   <div class="hero-content">
+    <div class="hero-logo-mark-container">
+      <img src="images/SHER-new-logo.png" alt="SHER · Saint Lucia · Sanctuary Experiences" class="hero-logo-mark" loading="eager" fetchpriority="high"/>
+    </div>
     <span class="hero-primary">Come SHER the Experience</span>
     <h1 class="hero-title">Where Nature Whispers and <em>Souls Listen</em></h1>
     <span class="hero-tagline tagline">Nature Whispers · Souls Listen</span>
