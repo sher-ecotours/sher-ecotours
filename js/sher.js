@@ -54,9 +54,6 @@ function _buildNav() {
   if (siteNav) {
     siteNav.innerHTML = `
       <a href="${_R}index.html" class="nav-logo">
-        <div class="nav-logo-mark">
-          <img src="${_R}images/SHER-new-logo.png" alt="SHER · Saint Lucia · Sanctuary Experiences" class="nav-logo-img"/>
-        </div>
         <span class="nav-location">Saint Lucia</span>
       </a>
       <ul class="nav-links">
