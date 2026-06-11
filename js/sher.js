@@ -57,7 +57,7 @@ function _buildNav() {
         <div class="nav-logo-mark">
           <img src="${_R}images/SHER-logo.png" alt="SHER · Sanctuary Experiences" class="nav-logo-img"/>
         </div>
-        <span class="nav-location">Savannes Bay · Micoud · Saint Lucia</span>
+        <span class="nav-location">Saint Lucia</span>
       </a>
       <ul class="nav-links">
         <li><a href="${_R}index.html">Home</a></li>
@@ -94,7 +94,7 @@ function _buildFooter() {
     <div class="footer-inner">
       <div>
         <img src="${_R}images/SHER-logo.png" alt="SHER · Sanctuary Experiences" class="footer-logo-img"/>
-        <p class="footer-location">Savannes Bay · Micoud · Saint Lucia</p>
+        <p class="footer-location">Saint Lucia</p>
         <a href="mailto:bookings@shersanctuary.com" class="footer-email">bookings@shersanctuary.com</a>
         <div class="footer-social">
           <a href="#" class="social-link" aria-label="Instagram">${ig}</a>
