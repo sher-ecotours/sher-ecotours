@@ -154,7 +154,7 @@ section { position: relative; }
   position: relative; display: inline-block;
 }
 .nav-logo-img {
-  max-width: 140px; max-height: calc(var(--header-h) - 16px);
+  max-width: 420px; max-height: calc((var(--header-h) - 16px) * 3);
   width: 100%; height: auto; display: block;
   opacity: 1; filter: none;
   background: none; border: none; border-radius: 0;
@@ -212,7 +212,7 @@ section { position: relative; }
 }
 @media (max-width: 768px) {
   :root { --header-h: 64px; }
-  .nav-logo-img { max-width: 100px; max-height: calc(var(--header-h) - 12px); }
+  .nav-logo-img { max-width: 300px; max-height: calc((var(--header-h) - 12px) * 3); }
   .nav-location { display: none; }
 }
 
