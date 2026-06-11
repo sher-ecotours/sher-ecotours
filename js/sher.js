@@ -41,7 +41,7 @@ function _buildNav() {
   if (mobileMenu) {
     mobileMenu.innerHTML = `
       <button id="mobile-close" onclick="toggleMobileMenu()" aria-label="Close menu">&#x2715;</button>
-      <img src="${_R}images/SHER-new-logo.png" alt="SHER · Saint Lucia · Sanctuary Experiences" style="max-width:160px;width:100%;height:auto;display:block;margin-bottom:8px"/>
+      <img src="${_R}images/SHER-final-logo.png" alt="SHER · Saint Lucia · Sanctuary Experiences" style="max-width:160px;width:100%;height:auto;display:block;margin-bottom:8px"/>
       <a href="${_R}index.html" onclick="toggleMobileMenu()">Home</a>
       <a href="${_R}${_P}golden-mirror.html" onclick="toggleMobileMenu()">Golden Mirror</a>
       <a href="${_R}${_P}calm-reflections.html" onclick="toggleMobileMenu()">Calm Reflections</a>
@@ -90,7 +90,7 @@ function _buildFooter() {
   footer.innerHTML = `
     <div class="footer-inner">
       <div>
-        <img src="${_R}images/SHER-new-logo.png" alt="SHER · Saint Lucia · Sanctuary Experiences" class="footer-logo-img"/>
+        <img src="${_R}images/SHER-final-logo.png" alt="SHER · Saint Lucia · Sanctuary Experiences" class="footer-logo-img"/>
         <p class="footer-location">Saint Lucia</p>
         <a href="mailto:bookings@shersanctuary.com" class="footer-email">bookings@shersanctuary.com</a>
         <div class="footer-social">
