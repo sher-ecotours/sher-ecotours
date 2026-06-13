@@ -168,16 +168,16 @@ section { position: relative; }
   0%, 100% { opacity: 0.2; transform: translate(-50%, -50%) scale(0.8); }
   50%      { opacity: 0.9; transform: translate(-50%, -50%) scale(1.6); }
 }
-.nav-location {
-  display: block; margin-top: 6px;
-  font-family: 'Jost', sans-serif;
-  font-size: 9px; font-weight: 300;
-  letter-spacing: 0.2em; text-transform: uppercase;
-  color: rgba(255,255,255,0.6); white-space: nowrap;
+.nav-logo-img {
+  max-width: 160px;
+  width: 100%;
+  height: auto;
+  display: block;
+  mix-blend-mode: screen;
 }
 @media (max-width: 768px) {
   :root { --header-h: 64px; }
-  .nav-location { display: none; }
+  .nav-logo-img { max-width: 120px; }
   .footer-logo-img { max-width: 140px; }
 }
 
