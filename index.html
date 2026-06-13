@@ -22,10 +22,15 @@
       position: relative; display: inline-block;
     }
     .hero-logo-mark {
-      display: block; margin: 0 auto 24px;
-      max-width: 220px; width: 100%; height: auto;
-      opacity: 0.95; position: relative;
-      filter: drop-shadow(0 0px 0px transparent);
+      max-width: 210px;
+      width: 36%;
+      height: auto;
+      display: block;
+      margin: 0 auto 24px;
+      mix-blend-mode: screen;
+      filter:
+        drop-shadow(0 0 18px rgba(212,175,55,0.6))
+        drop-shadow(0 0 40px rgba(212,175,55,0.28));
       animation: sher-sunrise-glow 5s ease-in-out infinite;
     }
     /* Bird-eye twinkle */
@@ -53,7 +58,7 @@
       pointer-events: none;
     }
     @media (max-width: 768px) {
-      .hero-logo-mark { max-width: 150px; margin-bottom: 16px; }
+      .hero-logo-mark { max-width: 155px; width: 48%; margin-bottom: 18px; }
     }
 
     /* HERO */
@@ -513,7 +518,7 @@
   <div class="hero-overlay"></div>
   <div class="hero-content">
     <div class="hero-logo-mark-container">
-      <img src="images/SHER-final-logo.png" alt="SHER · Saint Lucia · Sanctuary Experiences" class="hero-logo-mark" loading="eager" fetchpriority="high"/>
+      <img src="/images/SHER-bird-mark.png" alt="SHER Sanctuary Experiences — Saint Lucia" class="hero-logo-mark" loading="eager" fetchpriority="high"/>
     </div>
     <span class="hero-primary">Come SHER the Experience</span>
     <h1 class="hero-title">Where Nature Whispers and <em>Souls Listen</em></h1>
