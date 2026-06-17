@@ -31,7 +31,21 @@ drop function  if exists get_my_role();
 drop function  if exists get_my_partner_id();
 
 -- ─────────────────────────────────────────────────────────────────────────────
+-- TABLE 1 — user_roles
+-- Created first so helper functions can reference it.
+-- Roles: admin (operator), guide (field staff), partner (hotels/guesthouses)
+-- ─────────────────────────────────────────────────────────────────────────────
+
+create table user_roles (
+  user_id    uuid primary key references auth.users(id) on delete cascade,
+  role       text not null check (role in ('admin', 'guide', 'partner')),
+  partner_id uuid,                          -- populated for partner users only
+  created_at timestamptz default now()
+);
+
+-- ─────────────────────────────────────────────────────────────────────────────
 -- HELPER FUNCTIONS
+-- Defined after user_roles so Postgres can validate the function bodies.
 -- ─────────────────────────────────────────────────────────────────────────────
 
 create sequence booking_seq start 1;
@@ -54,19 +68,6 @@ create or replace function get_my_partner_id()
 returns uuid language sql security definer stable as $$
   select partner_id from user_roles where user_id = auth.uid()
 $$;
-
--- ─────────────────────────────────────────────────────────────────────────────
--- TABLE 1 — user_roles
--- Maps Supabase Auth users to application roles.
--- Roles: admin (operator), guide (field staff), partner (hotels/guesthouses)
--- ─────────────────────────────────────────────────────────────────────────────
-
-create table user_roles (
-  user_id    uuid primary key references auth.users(id) on delete cascade,
-  role       text not null check (role in ('admin', 'guide', 'partner')),
-  partner_id uuid,                          -- populated for partner users only
-  created_at timestamptz default now()
-);
 
 -- ─────────────────────────────────────────────────────────────────────────────
 -- TABLE 2 — experiences
