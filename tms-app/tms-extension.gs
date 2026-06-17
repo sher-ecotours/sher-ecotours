@@ -25,8 +25,8 @@ var _WA_PWA_LOG_SS_ID = '1A2u8H22XaOjeXhYh7qcr4CHXbjN3Jk97keF7zZLFYc8';
 var _MASTER_SS_ID = '1dXD23ZTwmr5J5XMK3heDI3EDKz3Vcu_nku4GxXp1T2Y';
 
 // Supabase — Guide PWA backend
-var _SB_URL = 'https://zbklfuhsmnmcwcqcpdxk.supabase.co';
-var _SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpia2xmdWhzbW5tY3djcWNwZHhrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgyNjMxNzQsImV4cCI6MjA5MzgzOTE3NH0.r6RAWjrMGRu9I31hI9fd7wNRPxAnjR0haHuxmgWuMpc';
+var _SB_URL = 'https://hvxqettaonfxmmntrsmd.supabase.co';
+var _SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh2eHFldHRhb25meG1tbnRyc21kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE3MDk4NDEsImV4cCI6MjA5NzI4NTg0MX0.ZwJwVIiXNwtJW5prOpnwsYjIrfpA5MSvJFYBCv_q5J0';
 
 // ── doGet — called by Guide PWA to fetch today's bookings ─────────────────────
 

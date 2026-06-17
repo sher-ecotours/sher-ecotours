@@ -1,6 +1,6 @@
 -- ── SHER Guide PWA — Supabase Database Setup ─────────────────────────────────
 -- Run this entire script once in the Supabase SQL editor (SQL → New query)
--- Project: SHER TMA PWA · https://zbklfuhsmnmcwcqcpdxk.supabase.co
+-- Project: SHER TMA PWA · https://hvxqettaonfxmmntrsmd.supabase.co
 
 -- ── 1. Guide Morning Logs (Form 6) ───────────────────────────────────────────
 
