@@ -479,6 +479,58 @@ html, body { overflow-x: hidden; max-width: 100%; }
   .nav-burger { display: flex; padding-right: 20px; }
 }
 
+/* ============================================================
+   iOS SAFARI — GPU / MEMORY CRASH FIX
+   backdrop-filter creates a separate GPU compositing layer per
+   element. With 10+ blurred layers (badges, bay stats, map card,
+   audio toggle) iOS exhausts its GPU memory budget and kills the
+   page ("A Problem repeatedly occurred"). Fix: strip all blur on
+   mobile and replace with opaque backgrounds; also stop infinite
+   filter animations which force per-frame recomposition.
+   ============================================================ */
+@media (max-width: 768px) {
+  /* Audio toggle — remove blur, use solid background */
+  #audio-toggle {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: rgba(8,16,12,0.96) !important;
+  }
+  /* Stop infinite ring animation on audio button */
+  #audio-toggle.playing { animation: none !important; }
+
+  /* Stop hero scroll bounce animation */
+  .hero-scroll { animation: none !important; opacity: 0.4; }
+
+  /* Hero logo — static single shadow instead of animating 3 drop-shadows */
+  .hero-logo-mark {
+    animation: none !important;
+    filter: drop-shadow(0 0 18px rgba(212,175,55,0.65)) !important;
+  }
+
+  /* Hide the pseudo-element twinkle/glow overlays */
+  .hero-logo-mark-container::before,
+  .hero-logo-mark-container::after { display: none !important; }
+
+  /* Nav logo mark twinkle already off in earlier 768px rule — belt and braces */
+  .nav-logo-mark::after { animation: none !important; }
+
+  /* Strip backdrop-filter from all card badges, bay stats, and tour route card */
+  .card-badge {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: rgba(8,16,12,0.88) !important;
+  }
+  .bay-stat {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+  .bay-map-card {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: rgba(8,16,12,0.92) !important;
+  }
+}
+
 @media (max-width: 560px) {
   /* Hero headlines — prevent overflow on small screens */
   .hero-title { font-size: clamp(17px, 4.68vw, 26px) !important; line-height: 1.05 !important; }
