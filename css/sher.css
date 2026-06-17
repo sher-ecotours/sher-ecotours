@@ -172,10 +172,16 @@ section { position: relative; }
 }
 @keyframes sher-sunrise-glow {
   0%, 100% {
-    filter: drop-shadow(0 0 6px rgba(212,175,55,0.3)) drop-shadow(0 1px 4px rgba(0,0,0,0.25));
+    filter:
+      drop-shadow(0 0 16px rgba(212,175,55,0.55))
+      drop-shadow(0 0 40px rgba(212,175,55,0.28))
+      drop-shadow(0 0 70px rgba(212,175,55,0.12));
   }
   50% {
-    filter: drop-shadow(0 0 18px rgba(212,175,55,0.7)) drop-shadow(0 0 32px rgba(255,200,80,0.35)) drop-shadow(0 1px 4px rgba(0,0,0,0.25));
+    filter:
+      drop-shadow(0 0 30px rgba(212,175,55,0.90))
+      drop-shadow(0 0 64px rgba(212,175,55,0.55))
+      drop-shadow(0 0 100px rgba(212,175,55,0.28));
   }
 }
 @keyframes sher-eye-twinkle {
@@ -208,20 +214,28 @@ section { position: relative; }
 /* ===== HERO LOGO MARK ===== */
 .hero-logo-mark {
   mix-blend-mode: screen;
-  max-width: 200px;
-  width: 36%;
+  max-width: 280px;
+  width: 48%;
   height: auto;
   display: block;
-  margin: 0 auto 20px;
+  margin: 0 auto 28px;
   filter:
-    drop-shadow(0 0 16px rgba(212,175,55,0.55))
-    drop-shadow(0 0 36px rgba(212,175,55,0.25));
+    drop-shadow(0 0 24px rgba(212,175,55,0.75))
+    drop-shadow(0 0 56px rgba(212,175,55,0.45))
+    drop-shadow(0 0 90px rgba(212,175,55,0.20));
   animation: sher-sunrise-glow 5s ease-in-out infinite;
 }
 @media (max-width: 768px) {
   .hero-logo-mark {
-    max-width: 155px;
-    width: 50%;
+    max-width: 190px;
+    width: 58%;
+    margin-bottom: 20px;
+  }
+}
+@media (max-width: 480px) {
+  .hero-logo-mark {
+    max-width: 160px;
+    width: 62%;
   }
 }
 
