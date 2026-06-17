@@ -1,4 +1,4 @@
-const CACHE = 'sher-guide-v3';
+const CACHE = 'sher-guide-v4';
 const SHELL = [
   './',
   './index.html',
