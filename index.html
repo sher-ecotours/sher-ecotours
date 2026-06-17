@@ -23,42 +23,22 @@
     }
     .hero-logo-mark {
       mix-blend-mode: screen;
-      max-width: 200px;
-      width: 36%;
+      max-width: 320px;
+      width: 52%;
       height: auto;
       display: block;
-      margin: 0 auto 20px;
+      margin: 0 auto 28px;
       filter:
-        drop-shadow(0 0 16px rgba(212,175,55,0.55))
-        drop-shadow(0 0 36px rgba(212,175,55,0.25));
+        drop-shadow(0 0 24px rgba(212,175,55,0.75))
+        drop-shadow(0 0 56px rgba(212,175,55,0.45))
+        drop-shadow(0 0 90px rgba(212,175,55,0.20));
       animation: sher-sunrise-glow 5s ease-in-out infinite;
     }
-    /* Bird-eye twinkle */
-    .hero-logo-mark-container::before {
-      content: '';
-      position: absolute;
-      left: 18%; top: 38%;
-      width: 5px; height: 5px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(255,220,100,1) 0%, rgba(212,175,55,0.6) 50%, transparent 100%);
-      transform: translate(-50%, -50%);
-      animation: sher-eye-twinkle 4s ease-in-out infinite;
-      pointer-events: none;
-    }
-    /* Sun-centre glow */
-    .hero-logo-mark-container::after {
-      content: '';
-      position: absolute;
-      left: 12%; top: 52%;
-      width: 12px; height: 12px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(255,200,60,0.8) 0%, rgba(212,175,55,0.3) 60%, transparent 100%);
-      transform: translate(-50%, -50%);
-      animation: sher-sun-pulse 6s ease-in-out infinite;
-      pointer-events: none;
-    }
     @media (max-width: 768px) {
-      .hero-logo-mark { max-width: 155px; width: 50%; }
+      .hero-logo-mark { max-width: 200px; width: 58%; margin-bottom: 20px; }
+    }
+    @media (max-width: 480px) {
+      .hero-logo-mark { max-width: 170px; width: 62%; }
     }
 
     /* HERO */
@@ -743,7 +723,7 @@
         <a href="mailto:bookings@shersanctuary.com?subject=Royal%20Sanctuary%20Enquiry%20%E2%80%94%20SHER%20Sanctuary%20Experiences" class="occasion-link" style="margin-top:28px;display:inline-block">Enquire →</a>
       </div>
       <div class="teaser-img">
-        <img src="images/royal-sanctuary-hero.jpg" alt="Royal Sanctuary — SHER Saint Lucia" class="teaser-photo"/>
+        <img src="images/royal-sanctuary-hero.jpg" alt="Royal Sanctuary — SHER Saint Lucia" class="teaser-photo" loading="lazy"/>
       </div>
     </div>
 
