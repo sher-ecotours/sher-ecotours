@@ -46,7 +46,7 @@ function _buildNav() {
       <a href="${_R}${_P}golden-mirror.html" onclick="toggleMobileMenu()">Golden Mirror</a>
       <a href="${_R}${_P}calm-reflections.html" onclick="toggleMobileMenu()">Calm Reflections</a>
       <a href="${_R}${_P}scorpios-secret.html" onclick="toggleMobileMenu()">Scorpio's Secret</a>
-      <a href="${book}" class="btn-primary" onclick="toggleMobileMenu()">Book Now</a>
+      <a href="${_R}${_P}book.html" class="btn-primary" onclick="toggleMobileMenu()">Book Now</a>
     `;
   }
 
@@ -61,7 +61,7 @@ function _buildNav() {
         <li><a href="${_R}${_P}golden-mirror.html">Golden Mirror</a></li>
         <li><a href="${_R}${_P}calm-reflections.html">Calm Reflections</a></li>
         <li><a href="${_R}${_P}scorpios-secret.html">Scorpio's Secret</a></li>
-        <li><a href="${book}" class="nav-cta">Book Now</a></li>
+        <li><a href="${_R}${_P}book.html" class="nav-cta">Book Now</a></li>
       </ul>
       <button class="nav-burger" onclick="toggleMobileMenu()" aria-label="Open menu">
         <span></span><span></span><span></span>
@@ -91,8 +91,9 @@ function _buildFooter() {
     <div class="footer-inner">
       <div>
         <img src="${_R}images/SHER-nav-logo.png" alt="SHER Saint Lucia" class="footer-logo-img"/>
-        <p class="footer-location">Saint Lucia</p>
+        <p class="footer-location">Savannes Bay, Micoud<br/>Saint Lucia, West Indies</p>
         <a href="mailto:bookings@shersanctuary.com" class="footer-email">bookings@shersanctuary.com</a>
+        <a href="https://wa.me/17587165206" class="footer-email" target="_blank" rel="noopener" style="margin-top:6px;display:block">+1 758 716 5206 (WhatsApp)</a>
         <div class="footer-social">
           <a href="#" class="social-link" aria-label="Instagram">${ig}</a>
           <a href="#" class="social-link" aria-label="Facebook">${fb}</a>
@@ -106,6 +107,7 @@ function _buildFooter() {
           <li><a href="${_R}${_P}scorpios-secret.html">Scorpio's Secret</a></li>
           <li><a href="${_R}${_P}scorpios-secret.html#sanctuary">Scorpio's Sanctuary</a></li>
           <li><a href="${_R}${_P}table-deau.html">Table d'Eau</a></li>
+          <li><a href="${_R}${_P}book.html" style="color:var(--gold-lt)">Book an Experience →</a></li>
         </ul>
       </div>
       <div>
@@ -118,9 +120,12 @@ function _buildFooter() {
         </ul>
       </div>
       <div>
-        <span class="footer-col-title">Contact</span>
+        <span class="footer-col-title">Contact &amp; Legal</span>
         <ul class="footer-col-links">
           <li><a href="mailto:bookings@shersanctuary.com">Email Us</a></li>
+          <li><a href="https://wa.me/17587165206" target="_blank" rel="noopener">WhatsApp</a></li>
+          <li><a href="${_R}${_P}privacy-policy.html">Privacy Policy</a></li>
+          <li><a href="${_R}${_P}booking-terms.html">Booking Terms</a></li>
           <li><a href="${_R}${_P}safety-standards.html">Safety Standards</a></li>
           <li><a href="${_R}${_P}environmental-policy.html">Environmental Policy</a></li>
           <li><a href="${_R}${_P}press.html">Press Enquiries</a></li>
@@ -129,14 +134,13 @@ function _buildFooter() {
       </div>
     </div>
     <div class="footer-bottom">
-      <span>© 2026 Safe Haven Eco Resort. Savannes Bay, Micoud, Saint Lucia. Operated by Safeport Security Services Limited.</span>
+      <span>© 2026 SHER Sanctuary Experiences. Savannes Bay, Micoud, Saint Lucia. Operated by Safeport Security Services Limited.</span>
       <div class="footer-bottom-links">
-        <a href="#">Privacy Policy</a>
-        <a href="#">Terms of Use</a>
-        <a href="${_R}${_P}booking-terms.html">Booking T&Cs</a>
+        <a href="${_R}${_P}privacy-policy.html">Privacy Policy</a>
+        <a href="${_R}${_P}booking-terms.html">Booking T&amp;Cs</a>
       </div>
     </div>
-    <p class="footer-parent">SHER is a trading name of Safeport Security Services Limited, registered in Saint Lucia, West Indies.</p>
+    <p class="footer-parent">SHER is a trading name of Safeport Security Services Limited, registered in Saint Lucia, West Indies. Payments processed securely by FYGARO.</p>
   `;
 }
 
