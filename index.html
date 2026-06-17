@@ -193,10 +193,10 @@
     }
     .section-header-left { max-width: 520px; }
     .cards-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px;
     }
     @media (max-width: 1023px) {
-      .cards-grid { gap: 16px; }
+      .cards-grid { gap: 16px; grid-template-columns: repeat(2, 1fr); }
     }
     @media (max-width: 767px) {
       .cards-grid { grid-template-columns: 1fr; }
@@ -217,7 +217,8 @@
     .exp-card:hover .card-img-bg { transform: scale(1.06); }
     .ci-golden-mirror { background: url('images/golden-hour-hero.JPG') center 55% / cover no-repeat; }
     .ci-scorpios      { background: url('images/scorpios-secret-island-scene-1.png') center 40% / cover no-repeat; }
-    .ci-calm          { background: url('images/bay-turqoise-clear-water.jpg') center 45% / cover no-repeat; }
+    .ci-calm          { background: url('images/calm-reflections-bay.jpg') center 45% / cover no-repeat; }
+    .ci-royal         { background: url('images/royal-sanctuary-hero.jpg') center 50% / cover no-repeat; }
     .card-badge {
       position: absolute; top: 16px; left: 16px;
       background: rgba(8,16,12,0.7); backdrop-filter: blur(8px);
@@ -252,6 +253,29 @@
     .card-price span { font-size: 12px; color: var(--text-dim); }
     .card-duration { font-size: 12px; color: var(--text-dim); display: flex; align-items: center; gap: 5px; font-weight: 300; }
     .card-duration svg { width: 13px; height: 13px; }
+
+    /* ROYAL SANCTUARY TEASER */
+    .royal-sanctuary-teaser {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+      padding-top: 70px;
+      border-top: 1px solid var(--border-w);
+    }
+    .teaser-photo {
+      width: 100%;
+      height: 420px;
+      object-fit: cover;
+      border-radius: var(--radius);
+    }
+    @media (max-width: 767px) {
+      .royal-sanctuary-teaser {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+      .teaser-photo { height: 280px; }
+    }
 
     /* THE BAY */
     #the-bay {
@@ -677,6 +701,50 @@
         </div>
       </a>
 
+      <!-- Card 4: Royal Sanctuary -->
+      <a href="mailto:bookings@shersanctuary.com?subject=Royal%20Sanctuary%20Enquiry%20%E2%80%94%20SHER%20Sanctuary%20Experiences" class="exp-card reveal" style="transition-delay:0.45s">
+        <div class="card-img">
+          <div class="card-img-bg ci-royal"></div>
+          <span class="card-badge signature">Coming Soon · By Invitation</span>
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <div class="card-rating">
+              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              Private
+            </div>
+            <span class="card-reviews">By invitation</span>
+          </div>
+          <h3 class="card-title">Royal Sanctuary</h3>
+          <p class="card-desc">A ceremonial beach experience unlike anything else on Savannes Bay. Two thrones. A gold canopy. Sunset over the mangroves.</p>
+          <div class="card-footer">
+            <div class="card-price" style="color:var(--gold-lt)">By Enquiry</div>
+            <div class="card-duration">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Bespoke
+            </div>
+          </div>
+          <div style="padding-top:16px;border-top:1px solid var(--border-w);margin-top:16px">
+            <span class="occasion-link" style="font-size:13px;letter-spacing:0.08em">Enquire →</span>
+          </div>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- Royal Sanctuary Teaser -->
+    <div class="royal-sanctuary-teaser reveal" style="margin-top:60px">
+      <div class="teaser-inner">
+        <span class="eyebrow" style="color:var(--gold-lt)">Coming Soon · By Invitation Only</span>
+        <h2 class="section-title" style="margin-top:12px">Royal Sanctuary</h2>
+        <p class="section-body" style="margin-top:16px;max-width:560px">
+          A ceremonial beach experience unlike anything else on Savannes Bay. Two thrones. A gold canopy. Sunset over the mangroves. For those who wish to mark a moment with something the world has never seen.
+        </p>
+        <a href="mailto:bookings@shersanctuary.com?subject=Royal%20Sanctuary%20Enquiry%20%E2%80%94%20SHER%20Sanctuary%20Experiences" class="occasion-link" style="margin-top:28px;display:inline-block">Enquire →</a>
+      </div>
+      <div class="teaser-img">
+        <img src="images/royal-sanctuary-hero.jpg" alt="Royal Sanctuary — SHER Saint Lucia" class="teaser-photo"/>
+      </div>
     </div>
 
     <div class="occasions-block reveal" style="margin-top:90px;max-width:640px">
