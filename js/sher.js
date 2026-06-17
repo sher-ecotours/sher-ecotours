@@ -41,7 +41,7 @@ function _buildNav() {
   if (mobileMenu) {
     mobileMenu.innerHTML = `
       <button id="mobile-close" onclick="toggleMobileMenu()" aria-label="Close menu">&#x2715;</button>
-      <img src="${_R}images/SHER-final-logo.png" alt="SHER · Saint Lucia · Sanctuary Experiences" style="max-width:160px;width:100%;height:auto;display:block;margin-bottom:8px"/>
+      <img src="${_R}images/SHER-nav-logo.png" alt="SHER Saint Lucia" style="max-width:160px;width:100%;height:auto;display:block;margin-bottom:8px;mix-blend-mode:screen"/>
       <a href="${_R}index.html" onclick="toggleMobileMenu()">Home</a>
       <a href="${_R}${_P}golden-mirror.html" onclick="toggleMobileMenu()">Golden Mirror</a>
       <a href="${_R}${_P}calm-reflections.html" onclick="toggleMobileMenu()">Calm Reflections</a>
@@ -54,7 +54,7 @@ function _buildNav() {
   if (siteNav) {
     siteNav.innerHTML = `
       <a href="${_R}index.html" class="nav-logo">
-        <img src="${_R}images/SHER-final-logo.png" alt="SHER Saint Lucia" class="nav-logo-img" style="mix-blend-mode:screen;height:auto;display:block;"/>
+        <img src="${_R}images/SHER-nav-logo.png" alt="SHER Saint Lucia" class="nav-logo-img" style="mix-blend-mode:screen;height:auto;display:block;"/>
       </a>
       <ul class="nav-links">
         <li><a href="${_R}index.html">Home</a></li>
@@ -90,7 +90,7 @@ function _buildFooter() {
   footer.innerHTML = `
     <div class="footer-inner">
       <div>
-        <img src="${_R}images/SHER-final-logo.png" alt="SHER · Saint Lucia · Sanctuary Experiences" class="footer-logo-img"/>
+        <img src="${_R}images/SHER-nav-logo.png" alt="SHER Saint Lucia" class="footer-logo-img"/>
         <p class="footer-location">Saint Lucia</p>
         <a href="mailto:bookings@shersanctuary.com" class="footer-email">bookings@shersanctuary.com</a>
         <div class="footer-social">
@@ -328,23 +328,6 @@ function _initAudioTriggers() {
   });
 }
 
-// ===== ANNOUNCEMENT BANNER =====
-function _initBanner() {
-  if (sessionStorage.getItem('sher_banner_dismissed') === '1') return;
-  const b = document.createElement('div');
-  b.id = 'sher-banner';
-  b.innerHTML = 'Bookings now open for 2026 &middot; Secure your experience today &middot; Payment processed by FYGARO &middot; Confirmed within 4 hours' +
-    '<button id="sher-banner-close" aria-label="Dismiss">&#x2715;</button>';
-  document.body.insertBefore(b, document.body.firstChild);
-  document.documentElement.style.setProperty('--banner-h', b.offsetHeight + 'px');
-  document.getElementById('sher-banner-close').addEventListener('click', _dismissBanner);
-}
-function _dismissBanner() {
-  sessionStorage.setItem('sher_banner_dismissed', '1');
-  const b = document.getElementById('sher-banner');
-  if (b) b.remove();
-  document.documentElement.style.setProperty('--banner-h', '0px');
-}
 
 // ===== BOOKING MODALS =====
 function _buildModals() {
@@ -816,5 +799,4 @@ document.addEventListener('DOMContentLoaded', () => {
   _initAudioTriggers();
   _buildModals();
   _buildEnquiryModals();
-  _initBanner();
 });

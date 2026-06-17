@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link rel="preload" as="image" href="/images/approaching-scorpion-islet-by-canoe-1.PNG" fetchpriority="high"/>
-  <link rel="preload" as="image" href="/images/SHER-final-logo.png" fetchpriority="high"/>
+  <link rel="preload" as="image" href="/images/SHER-hero-mark.png" fetchpriority="high"/>
   <link rel="stylesheet" href="css/sher.css"/>
   <style>
     /* ===== PAGE-SPECIFIC: HOMEPAGE ===== */
@@ -22,15 +22,15 @@
       position: relative; display: inline-block;
     }
     .hero-logo-mark {
-      max-width: 210px;
+      mix-blend-mode: screen;
+      max-width: 200px;
       width: 36%;
       height: auto;
       display: block;
-      margin: 0 auto 24px;
-      mix-blend-mode: screen;
+      margin: 0 auto 20px;
       filter:
-        drop-shadow(0 0 18px rgba(212,175,55,0.6))
-        drop-shadow(0 0 40px rgba(212,175,55,0.28));
+        drop-shadow(0 0 16px rgba(212,175,55,0.55))
+        drop-shadow(0 0 36px rgba(212,175,55,0.25));
       animation: sher-sunrise-glow 5s ease-in-out infinite;
     }
     /* Bird-eye twinkle */
@@ -58,7 +58,7 @@
       pointer-events: none;
     }
     @media (max-width: 768px) {
-      .hero-logo-mark { max-width: 155px; width: 48%; margin-bottom: 18px; }
+      .hero-logo-mark { max-width: 155px; width: 50%; }
     }
 
     /* HERO */
@@ -518,7 +518,7 @@
   <div class="hero-overlay"></div>
   <div class="hero-content">
     <div class="hero-logo-mark-container">
-      <img src="/images/SHER-bird-mark.png" alt="SHER Sanctuary Experiences — Saint Lucia" class="hero-logo-mark" loading="eager" fetchpriority="high"/>
+      <img src="/images/SHER-hero-mark.png" alt="SHER Sanctuary Experiences — Saint Lucia" class="hero-logo-mark" loading="eager" fetchpriority="high"/>
     </div>
     <span class="hero-primary">Come SHER the Experience</span>
     <h1 class="hero-title">Where Nature Whispers and <em>Souls Listen</em></h1>
