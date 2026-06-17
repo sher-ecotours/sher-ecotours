@@ -583,28 +583,90 @@ function _sbInsert(table, data, onSuccess, btnEl) {
   .catch(onSuccess);
 }
 
+// ── Load live experiences from Supabase into form selects ──
+function _loadExperienceOptions(selectIds) {
+  fetch(
+    _SB_URL + '/rest/v1/experiences' +
+    '?active=eq.true&status=in.(live,coming_soon)&is_parent=eq.false' +
+    '&select=id,name,category,status,public_price_usd,pricing_model' +
+    '&order=sort_order.asc',
+    { headers: { 'apikey': _SB_KEY, 'Authorization': 'Bearer ' + _SB_KEY } }
+  )
+  .then(function(r) { return r.json(); })
+  .then(function(exps) {
+    if (!Array.isArray(exps)) return;
+    var html = '<option value="" disabled selected>Select an experience…</option>';
+    var lastCat = '';
+    exps.forEach(function(e) {
+      if (e.category !== lastCat) {
+        if (lastCat) html += '</optgroup>';
+        html += '<optgroup label="' + e.category + '">';
+        lastCat = e.category;
+      }
+      var price = '';
+      if (e.public_price_usd) {
+        price = e.pricing_model === 'per_couple'
+          ? ' · USD $' + e.public_price_usd + '/couple'
+          : ' · USD $' + e.public_price_usd + '/person';
+      }
+      var tag = e.status === 'coming_soon' ? ' · Coming Soon' : '';
+      html += '<option value="' + e.id + '" data-bespoke="' + (e.status === 'coming_soon' ? '1' : '0') + '">'
+            + e.name + price + tag + '</option>';
+    });
+    if (lastCat) html += '</optgroup>';
+    selectIds.forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.innerHTML = html;
+    });
+  })
+  .catch(function() { /* leave placeholder in place on network error */ });
+}
+
+// ── Toggle bespoke note when experience selection changes ──
+function _onEnqExpChange() {
+  var sel = document.getElementById('enq-exp');
+  var opt = sel && sel.options[sel.selectedIndex];
+  var bespoke = opt && opt.dataset.bespoke === '1';
+  var dateSection = document.getElementById('enq-date-section');
+  var bespokeNote = document.getElementById('enq-bespoke-note');
+  if (dateSection) dateSection.style.display = bespoke ? 'none' : '';
+  if (bespokeNote) bespokeNote.style.display = bespoke ? 'block' : 'none';
+}
+
 // ── Enquiry form submit ──
 function _submitEnquiry() {
-  var required = ['enq-name','enq-email','enq-phone','enq-exp','enq-date','enq-guests'];
-  var missing = required.filter(function(id){ return !_v(id); });
+  var sel = document.getElementById('enq-exp');
+  var opt = sel && sel.options[sel.selectedIndex];
+  var isBespoke = opt && opt.dataset.bespoke === '1';
+
+  var required = ['enq-name', 'enq-email', 'enq-phone', 'enq-exp', 'enq-guests'];
+  if (!isBespoke) required.push('enq-date-1');
+
+  var missing = required.filter(function(id) { return !_v(id); });
   if (missing.length) {
-    missing.forEach(function(id){
+    missing.forEach(function(id) {
       var el = document.getElementById(id);
       if (el) { el.style.borderColor = 'rgba(192,57,43,0.8)'; el.focus(); }
     });
     return;
   }
+
+  var dates = [_v('enq-date-1'), _v('enq-date-2'), _v('enq-date-3')].filter(Boolean);
+
   var btn = document.getElementById('enq-submit-btn');
-  _sbInsert('enquiries', {
-    full_name:        _v('enq-name'),
-    email_address:    _v('enq-email'),
-    whatsapp_phone:   _v('enq-phone'),
-    experience:       _v('enq-exp'),
-    preferred_date:   _v('enq-date'),
-    number_of_guests: _v('enq-guests'),
-    special_occasion: _v('enq-occasion'),
-    how_heard:        _v('enq-source'),
-    notes:            _v('enq-notes')
+  _sbInsert('bookings', {
+    lead_name:        _v('enq-name'),
+    lead_email:       _v('enq-email'),
+    lead_phone:       _v('enq-phone'),
+    experience_id:    _v('enq-exp') || null,
+    preferred_dates:  dates.length ? dates : null,
+    date_flexibility: _v('enq-flexibility') || null,
+    group_size:       _v('enq-guests') ? parseInt(_v('enq-guests'), 10) : null,
+    occasion_type:    _v('enq-occasion') || null,
+    how_heard:        _v('enq-source') || null,
+    notes:            _v('enq-notes') || null,
+    status:           'enquiry',
+    source:           'website'
   }, _showEnquirySuccess, btn);
 }
 
@@ -615,17 +677,17 @@ function _showEnquirySuccess() {
     '<span class="sher-modal-eyebrow">Received</span>' +
     '<h2 class="sher-modal-title" style="margin-bottom:18px">Thank you</h2>' +
     '<p style="font-size:15px;font-weight:300;color:rgba(240,230,200,0.72);line-height:1.85;margin-bottom:28px">' +
-      'Thank you — we will be in touch within 24 hours.' +
+      'We have received your request and will be in touch personally within 24 hours.' +
     '</p>' +
     '<button class="sher-modal-submit" onclick="closeSherModal(\'enquiry\')">Close</button>';
 }
 
 // ── Waitlist form submit ──
 function _submitWaitlist() {
-  var required = ['wl-name','wl-email','wl-phone','wl-exp','wl-from','wl-until','wl-contact'];
-  var missing = required.filter(function(id){ return !_v(id); });
+  var required = ['wl-name', 'wl-email', 'wl-phone', 'wl-from', 'wl-until'];
+  var missing = required.filter(function(id) { return !_v(id); });
   if (missing.length) {
-    missing.forEach(function(id){
+    missing.forEach(function(id) {
       var el = document.getElementById(id);
       if (el) { el.style.borderColor = 'rgba(192,57,43,0.8)'; el.focus(); }
     });
@@ -633,13 +695,16 @@ function _submitWaitlist() {
   }
   var btn = document.getElementById('wl-submit-btn');
   _sbInsert('waitlist', {
-    full_name:          _v('wl-name'),
-    email_address:      _v('wl-email'),
-    whatsapp_phone:     _v('wl-phone'),
-    available_from:     _v('wl-from'),
-    available_until:    _v('wl-until'),
-    experience:         _v('wl-exp'),
-    contact_preference: _v('wl-contact')
+    full_name:         _v('wl-name'),
+    email_address:     _v('wl-email'),
+    whatsapp_phone:    _v('wl-phone'),
+    available_from:    _v('wl-from'),
+    available_until:   _v('wl-until'),
+    experience_id:     _v('wl-exp') || null,
+    flexibility_level: _v('wl-contact') || null,
+    occasion:          _v('wl-occasion') || null,
+    notes:             _v('wl-notes') || null,
+    status:            'active'
   }, _showWaitlistSuccess, btn);
 }
 
@@ -650,8 +715,8 @@ function _showWaitlistSuccess() {
     '<span class="sher-modal-eyebrow">You are on our list</span>' +
     '<h2 class="sher-modal-title" style="margin-bottom:18px">Thank you</h2>' +
     '<p style="font-size:15px;font-weight:300;color:rgba(240,230,200,0.72);line-height:1.85;margin-bottom:28px">' +
-      'You are on our availability list. We will be in touch when a slot opens.' +
-      '</p>' +
+      'You are on our availability list. We will contact you personally when a matching slot opens.' +
+    '</p>' +
     '<button class="sher-modal-submit" onclick="closeSherModal(\'waitlist\')">Close</button>';
 }
 
@@ -666,20 +731,6 @@ document.addEventListener('keydown', function(e) {
 
 // ===== ENQUIRY & WAITLIST MODALS =====
 function _buildEnquiryModals() {
-  var expOpts = [
-    'Bay Serenity · Golden Mirror ($175/person)',
-    'Bay Serenity · Calm Reflections ($150/person)',
-    "Scorpio's Secret ($420/couple)",
-    "Scorpio's Sanctuary ($600/two couples)",
-    'The Proposal ($550/couple)',
-    'The Anniversary ($620/couple)',
-    'The Vow Renewal ($720/couple)',
-    'The Birthday Sanctuary (from $480)',
-    'The Sanctuary Table ($820 flat)',
-    "Table d'Eau (Register Interest, 2027+)",
-    'Not sure yet — tell me more'
-  ].map(function(v){ return '<option value="'+v+'">'+v+'</option>'; }).join('');
-
   var div = document.createElement('div');
   div.innerHTML =
 
@@ -692,47 +743,79 @@ function _buildEnquiryModals() {
       '<p class="sher-modal-price">We respond personally within 24 hours — never by automated reply.</p>' +
 
       '<div class="sher-modal-field"><label class="sher-modal-label">Full Name</label>' +
-        '<input class="sher-modal-input" id="enq-name" type="text" placeholder="Your full name"/></div>' +
+        '<input class="sher-modal-input" id="enq-name" type="text" placeholder="Your full name" autocomplete="name"/></div>' +
 
       '<div class="sher-modal-row">' +
         '<div class="sher-modal-field"><label class="sher-modal-label">Email Address</label>' +
-          '<input class="sher-modal-input" id="enq-email" type="email" placeholder="your@email.com"/></div>' +
-        '<div class="sher-modal-field"><label class="sher-modal-label">WhatsApp / Phone Number</label>' +
-          '<input class="sher-modal-input" id="enq-phone" type="tel" placeholder="+1 758 000 0000"/></div>' +
+          '<input class="sher-modal-input" id="enq-email" type="email" placeholder="your@email.com" autocomplete="email"/></div>' +
+        '<div class="sher-modal-field"><label class="sher-modal-label">WhatsApp / Phone</label>' +
+          '<input class="sher-modal-input" id="enq-phone" type="tel" placeholder="+1 758 000 0000" autocomplete="tel"/></div>' +
       '</div>' +
 
       '<div class="sher-modal-field"><label class="sher-modal-label">Which experience are you interested in?</label>' +
-        '<select class="sher-modal-select" id="enq-exp"><option value="" disabled selected>Select an experience…</option>'+expOpts+'</select></div>' +
+        '<select class="sher-modal-select" id="enq-exp" onchange="_onEnqExpChange()">' +
+          '<option value="" disabled selected>Loading experiences…</option>' +
+        '</select></div>' +
+
+      '<div id="enq-bespoke-note" style="display:none;margin-bottom:16px;padding:14px 16px;' +
+        'background:rgba(212,168,67,0.08);border:1px solid rgba(212,168,67,0.25);border-radius:6px;' +
+        'font-size:13px;font-weight:300;color:rgba(240,230,200,0.75);line-height:1.7">' +
+        'This is an exclusive arranged experience. Once we receive your message we will contact you ' +
+        'to discuss your occasion and find your perfect date.' +
+      '</div>' +
+
+      '<div id="enq-date-section">' +
+        '<div class="sher-modal-row">' +
+          '<div class="sher-modal-field"><label class="sher-modal-label">Preferred Date</label>' +
+            '<input class="sher-modal-input" id="enq-date-1" type="date"/></div>' +
+          '<div class="sher-modal-field"><label class="sher-modal-label">Alternative Date (optional)</label>' +
+            '<input class="sher-modal-input" id="enq-date-2" type="date"/></div>' +
+        '</div>' +
+        '<div class="sher-modal-row">' +
+          '<div class="sher-modal-field"><label class="sher-modal-label">Third Choice (optional)</label>' +
+            '<input class="sher-modal-input" id="enq-date-3" type="date"/></div>' +
+          '<div class="sher-modal-field"><label class="sher-modal-label">Date Flexibility</label>' +
+            '<select class="sher-modal-select" id="enq-flexibility">' +
+              '<option value="">I need these specific dates</option>' +
+              '<option value="somewhat_flexible">I am somewhat flexible</option>' +
+              '<option value="any_date">Any date works — just book me in</option>' +
+            '</select></div>' +
+        '</div>' +
+      '</div>' +
 
       '<div class="sher-modal-row">' +
-        '<div class="sher-modal-field"><label class="sher-modal-label">Preferred Date</label>' +
-          '<input class="sher-modal-input" id="enq-date" type="date"/></div>' +
         '<div class="sher-modal-field"><label class="sher-modal-label">Number of guests</label>' +
           '<select class="sher-modal-select" id="enq-guests">' +
             '<option value="" disabled selected>Select…</option>' +
-            '<option>1</option><option>2</option><option>3</option>' +
-            '<option>4</option><option>5</option><option>6</option>' +
+            '<option value="1">1</option><option value="2">2</option>' +
+            '<option value="3">3</option><option value="4">4</option>' +
+            '<option value="5">5</option><option value="6">6</option>' +
+            '<option value="7">7+</option>' +
           '</select></div>' +
-      '</div>' +
-
-      '<div class="sher-modal-row">' +
-        '<div class="sher-modal-field"><label class="sher-modal-label">Is this for a special occasion?</label>' +
+        '<div class="sher-modal-field"><label class="sher-modal-label">Special occasion?</label>' +
           '<select class="sher-modal-select" id="enq-occasion">' +
-            '<option value="None">None</option><option>Proposal</option>' +
-            '<option>Anniversary</option><option>Vow Renewal</option><option>Birthday</option><option>Other</option>' +
-          '</select></div>' +
-        '<div class="sher-modal-field"><label class="sher-modal-label">How did you hear about SHER?</label>' +
-          '<select class="sher-modal-select" id="enq-source">' +
-            '<option value="">Prefer not to say</option>' +
-            '<option value="Resort concierge">Resort concierge</option>' +
-            '<option value="Google">Google</option>' +
-            '<option value="Social media">Social media</option>' +
-            '<option value="Friend">Friend</option>' +
-            '<option value="Other">Other</option>' +
+            '<option value="">None</option>' +
+            '<option value="proposal">Proposal</option>' +
+            '<option value="anniversary">Anniversary</option>' +
+            '<option value="rekindle">Vow Renewal</option>' +
+            '<option value="birthday">Birthday</option>' +
+            '<option value="honeymoon">Honeymoon</option>' +
+            '<option value="new_life">New Chapter</option>' +
+            '<option value="other">Other celebration</option>' +
           '</select></div>' +
       '</div>' +
 
-      '<div class="sher-modal-field"><label class="sher-modal-label">Anything else? (optional)</label>' +
+      '<div class="sher-modal-field"><label class="sher-modal-label">How did you hear about SHER?</label>' +
+        '<select class="sher-modal-select" id="enq-source">' +
+          '<option value="">Prefer not to say</option>' +
+          '<option value="resort_concierge">Resort concierge</option>' +
+          '<option value="google">Google</option>' +
+          '<option value="social_media">Social media</option>' +
+          '<option value="friend">Friend or family</option>' +
+          '<option value="other">Other</option>' +
+        '</select></div>' +
+
+      '<div class="sher-modal-field"><label class="sher-modal-label">Anything to tell us? (optional)</label>' +
         '<textarea class="sher-modal-textarea" id="enq-notes" placeholder="Access needs, celebration details, questions…"></textarea></div>' +
 
       '<div class="sher-modal-actions">' +
@@ -741,7 +824,7 @@ function _buildEnquiryModals() {
           ' Request a Private Tour Window' +
         '</button>' +
       '</div>' +
-      '<p class="sher-modal-note">We will never share your details. You will receive a personal reply — not an automated email.</p>' +
+      '<p class="sher-modal-note">We will never share your details. You will receive a personal reply — not an automated message.</p>' +
     '</div>' +
   '</div>' +
 
@@ -754,14 +837,19 @@ function _buildEnquiryModals() {
       '<p class="sher-modal-price">We will contact you the moment a matching slot opens — before any public announcement.</p>' +
 
       '<div class="sher-modal-field"><label class="sher-modal-label">Full Name</label>' +
-        '<input class="sher-modal-input" id="wl-name" type="text" placeholder="Your full name"/></div>' +
+        '<input class="sher-modal-input" id="wl-name" type="text" placeholder="Your full name" autocomplete="name"/></div>' +
 
       '<div class="sher-modal-row">' +
         '<div class="sher-modal-field"><label class="sher-modal-label">Email Address</label>' +
-          '<input class="sher-modal-input" id="wl-email" type="email" placeholder="your@email.com"/></div>' +
-        '<div class="sher-modal-field"><label class="sher-modal-label">WhatsApp / Phone Number</label>' +
-          '<input class="sher-modal-input" id="wl-phone" type="tel" placeholder="+1 758 000 0000"/></div>' +
+          '<input class="sher-modal-input" id="wl-email" type="email" placeholder="your@email.com" autocomplete="email"/></div>' +
+        '<div class="sher-modal-field"><label class="sher-modal-label">WhatsApp / Phone</label>' +
+          '<input class="sher-modal-input" id="wl-phone" type="tel" placeholder="+1 758 000 0000" autocomplete="tel"/></div>' +
       '</div>' +
+
+      '<div class="sher-modal-field"><label class="sher-modal-label">Which experience?</label>' +
+        '<select class="sher-modal-select" id="wl-exp">' +
+          '<option value="" disabled selected>Loading experiences…</option>' +
+        '</select></div>' +
 
       '<div class="sher-modal-row">' +
         '<div class="sher-modal-field"><label class="sher-modal-label">Available from</label>' +
@@ -770,15 +858,24 @@ function _buildEnquiryModals() {
           '<input class="sher-modal-input" id="wl-until" type="date"/></div>' +
       '</div>' +
 
-      '<div class="sher-modal-field"><label class="sher-modal-label">Which experience?</label>' +
-        '<select class="sher-modal-select" id="wl-exp"><option value="" disabled selected>Select an experience…</option>'+expOpts+'</select></div>' +
+      '<div class="sher-modal-row">' +
+        '<div class="sher-modal-field"><label class="sher-modal-label">Special occasion?</label>' +
+          '<select class="sher-modal-select" id="wl-occasion">' +
+            '<option value="">None</option>' +
+            '<option value="proposal">Proposal</option>' +
+            '<option value="anniversary">Anniversary</option>' +
+            '<option value="birthday">Birthday</option>' +
+            '<option value="other">Other</option>' +
+          '</select></div>' +
+        '<div class="sher-modal-field"><label class="sher-modal-label">Flexibility</label>' +
+          '<select class="sher-modal-select" id="wl-contact">' +
+            '<option value="any_opening">Contact me when anything opens</option>' +
+            '<option value="window_only">My specific window only</option>' +
+          '</select></div>' +
+      '</div>' +
 
-      '<div class="sher-modal-field"><label class="sher-modal-label">How would you like us to contact you?</label>' +
-        '<select class="sher-modal-select" id="wl-contact">' +
-          '<option value="" disabled selected>Select…</option>' +
-          '<option value="Contact me when anything opens">Contact me when anything opens</option>' +
-          '<option value="My specific window only">My specific window only</option>' +
-        '</select></div>' +
+      '<div class="sher-modal-field"><label class="sher-modal-label">Anything to tell us? (optional)</label>' +
+        '<textarea class="sher-modal-textarea" id="wl-notes" placeholder="Any preferences, occasion details…"></textarea></div>' +
 
       '<div class="sher-modal-actions">' +
         '<button class="sher-modal-submit" id="wl-submit-btn" onclick="_submitWaitlist()">' +
@@ -791,6 +888,7 @@ function _buildEnquiryModals() {
   '</div>';
 
   document.body.appendChild(div);
+  _loadExperienceOptions(['enq-exp', 'wl-exp']);
 }
 
 // ===== BOOT =====
