@@ -3,23 +3,74 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>SHER TMS — Building</title>
-  <style>
-    *{margin:0;padding:0;box-sizing:border-box}
-    body{background:#0a140e;color:#f0e6c8;font-family:'Georgia',serif;
-         display:flex;align-items:center;justify-content:center;min-height:100vh}
-    .wrap{text-align:center;padding:48px 24px}
-    .eye{font-size:11px;letter-spacing:.2em;text-transform:uppercase;
-         color:rgba(212,168,67,0.7);margin-bottom:24px}
-    h1{font-size:28px;font-weight:400;margin-bottom:16px;color:#f0e6c8}
-    p{font-size:15px;font-weight:300;color:rgba(240,230,200,0.6);line-height:1.8}
-  </style>
+  <title>SHER TMS — Tour Management System</title>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-  <div class="wrap">
-    <p class="eye">SHER Eco Sanctuary</p>
-    <h1>Tour Management System</h1>
-    <p>Coming soon. This system is being configured.</p>
+
+  <!-- ── Login Screen ── -->
+  <div id="login-screen">
+    <div class="login-box">
+      <div class="login-logo">
+        <div class="login-eye">SHER ECO SANCTUARY</div>
+        <h1>Tour Management System</h1>
+        <p>Operator access only</p>
+      </div>
+      <form id="login-form">
+        <div class="field">
+          <label>Email address</label>
+          <input type="email" id="login-email" autocomplete="email" required/>
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <input type="password" id="login-password" autocomplete="current-password" required/>
+        </div>
+        <div id="login-error" class="error-msg" hidden></div>
+        <button type="submit" id="login-btn">Sign in</button>
+      </form>
+    </div>
   </div>
+
+  <!-- ── App Shell ── -->
+  <div id="app" hidden>
+
+    <aside id="sidebar">
+      <div class="sidebar-brand">
+        <span class="brand-name">SHER</span>
+        <span class="brand-tag">Tour Management System</span>
+      </div>
+      <nav id="sidenav">
+        <a class="nav-item" data-section="dashboard">Dashboard</a>
+        <a class="nav-item" data-section="bookings">Bookings</a>
+        <a class="nav-item" data-section="today">Today</a>
+        <div class="nav-divider"></div>
+        <a class="nav-item" data-section="experiences">Experiences</a>
+        <a class="nav-item" data-section="partners">Partners</a>
+        <a class="nav-item" data-section="equipment">Equipment</a>
+        <div class="nav-divider"></div>
+        <a class="nav-item" data-section="conservation">Conservation</a>
+        <a class="nav-item" data-section="waitlist">Waitlist</a>
+      </nav>
+      <div class="sidebar-footer">
+        <div id="user-email"></div>
+        <button id="logout-btn">Sign out</button>
+      </div>
+    </aside>
+
+    <div id="main">
+      <header id="topbar">
+        <button id="menu-toggle" aria-label="Menu">&#9776;</button>
+        <h2 id="section-title">Dashboard</h2>
+        <div id="topbar-right">
+          <span id="today-label"></span>
+        </div>
+      </header>
+      <div id="content"></div>
+    </div>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
