@@ -20,10 +20,15 @@ async function init() {
 }
 
 async function afterLogin(user) {
-  const { data: role } = await sb.rpc('get_my_role');
+  const { data: role, error: roleErr } = await sb.rpc('get_my_role');
+  if (roleErr) {
+    await sb.auth.signOut();
+    loginError('Role check failed: ' + roleErr.message);
+    return;
+  }
   if (role !== 'admin') {
     await sb.auth.signOut();
-    loginError('This account does not have admin access.');
+    loginError('Access denied. Role returned: ' + (role || 'none'));
     return;
   }
   document.getElementById('login-screen').hidden = true;
