@@ -21,14 +21,15 @@ async function init() {
 
 async function afterLogin(user) {
   const { data: role, error: roleErr } = await sb.rpc('get_my_role');
+  console.log('afterLogin — role:', role, 'error:', roleErr);
   if (roleErr) {
     await sb.auth.signOut();
-    loginError('Role check failed: ' + roleErr.message);
+    loginError('Role check failed: ' + JSON.stringify(roleErr));
     return;
   }
   if (role !== 'admin') {
     await sb.auth.signOut();
-    loginError('Access denied. Role returned: ' + (role || 'none'));
+    loginError('Access denied. Role returned: "' + (role ?? 'null') + '"');
     return;
   }
   document.getElementById('login-screen').hidden = true;
