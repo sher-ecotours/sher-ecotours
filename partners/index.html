@@ -3,23 +3,83 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>SHER Partners — Building</title>
-  <style>
-    *{margin:0;padding:0;box-sizing:border-box}
-    body{background:#0a140e;color:#f0e6c8;font-family:'Georgia',serif;
-         display:flex;align-items:center;justify-content:center;min-height:100vh}
-    .wrap{text-align:center;padding:48px 24px}
-    .eye{font-size:11px;letter-spacing:.2em;text-transform:uppercase;
-         color:rgba(212,168,67,0.7);margin-bottom:24px}
-    h1{font-size:28px;font-weight:400;margin-bottom:16px;color:#f0e6c8}
-    p{font-size:15px;font-weight:300;color:rgba(240,230,200,0.6);line-height:1.8}
-  </style>
+  <title>SHER Partner Portal</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="manifest" href="/manifest.json"/>
+  <meta name="theme-color" content="#d4a843"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="SHER Partners"/>
+  <link rel="apple-touch-icon" href="/icon-192.png"/>
 </head>
 <body>
-  <div class="wrap">
-    <p class="eye">SHER Eco Sanctuary</p>
-    <h1>Partner Portal</h1>
-    <p>Coming soon. This system is being configured.</p>
+
+  <!-- Login -->
+  <div id="login-screen">
+    <div class="login-box">
+      <div class="login-eye">SHER ECO SANCTUARY</div>
+      <h1 class="login-title">Partner Portal</h1>
+      <p class="login-sub">Hotel &amp; tour desk access</p>
+      <form id="login-form">
+        <div class="field">
+          <label>Email</label>
+          <input type="email" id="l-email" autocomplete="email" required/>
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <input type="password" id="l-pass" autocomplete="current-password" required/>
+        </div>
+        <div id="login-error" class="error-msg" hidden></div>
+        <button type="submit" id="login-btn">Sign in</button>
+      </form>
+    </div>
   </div>
+
+  <!-- App -->
+  <div id="app" hidden>
+
+    <header class="app-header">
+      <div>
+        <div class="header-eye">SHER ECO SANCTUARY</div>
+        <div class="header-title" id="header-title">Partner Portal</div>
+      </div>
+      <button id="logout-btn">Sign out</button>
+    </header>
+
+    <!-- Role badge -->
+    <div id="role-badge-bar" class="role-badge-bar"></div>
+
+    <!-- Tab bar (rendered by JS based on role) -->
+    <nav class="tab-bar" id="tab-bar"></nav>
+
+    <!-- Tab panels -->
+    <div id="panel-experiences" class="tab-panel" hidden>
+      <div class="panel-inner" id="content-experiences"></div>
+    </div>
+
+    <div id="panel-book" class="tab-panel" hidden>
+      <div class="panel-inner" id="content-book"></div>
+    </div>
+
+    <!-- Partner: Bookings | Concierge: My Sales -->
+    <div id="panel-bookings" class="tab-panel" hidden>
+      <div class="panel-inner" id="content-bookings"></div>
+    </div>
+
+    <!-- Partner: Commission | Concierge: My Ripples -->
+    <div id="panel-earn" class="tab-panel" hidden>
+      <div class="panel-inner" id="content-earn"></div>
+    </div>
+
+    <!-- Partner: Payouts | Concierge: Redeem -->
+    <div id="panel-action" class="tab-panel" hidden>
+      <div class="panel-inner" id="content-action"></div>
+    </div>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
