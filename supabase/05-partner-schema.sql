@@ -371,32 +371,38 @@ create policy "admin all availability"
 
 
 -- ── commissions — extend existing RLS ────────────────────────────────────────
--- (RLS already enabled in 01-rls.sql; add partner-read policy)
+-- Existing "partner read own commissions" from 01-rls.sql already covers partner.
+-- Drop and recreate to ensure it's consistent (no-op if already correct).
+-- Concierge intentionally has no access to commissions.
 
+drop policy if exists "partner read own commissions" on commissions;
 create policy "partner read own commissions"
   on commissions for select to authenticated
   using (get_my_role() = 'partner' and partner_id = get_my_partner_id());
 
--- Concierge cannot see commissions (no policy granted)
-
 
 -- ── bookings — extend existing RLS for partner + concierge ───────────────────
+
+-- Drop existing partner policies from 01-rls.sql and recreate with concierge support
+drop policy if exists "partner read own bookings"  on bookings;
+drop policy if exists "partner insert own booking" on bookings;
 
 -- Partner can read all bookings from their property
 create policy "partner read own bookings"
   on bookings for select to authenticated
   using (get_my_role() = 'partner' and partner_id = get_my_partner_id());
 
--- Partner can insert new bookings (booking requests)
-create policy "partner insert booking"
+-- Partner and concierge can insert new booking requests
+create policy "partner insert own booking"
   on bookings for insert to authenticated
   with check (
     get_my_role() in ('partner','concierge')
     and partner_id = get_my_partner_id()
-    and source = 'partner_pwa'
+    and source in ('partner','partner_pwa')
   );
 
 -- Concierge can read bookings they personally submitted
+drop policy if exists "concierge read own submitted bookings" on bookings;
 create policy "concierge read own submitted bookings"
   on bookings for select to authenticated
   using (get_my_role() = 'concierge' and concierge_id = get_my_concierge_id());
@@ -404,12 +410,17 @@ create policy "concierge read own submitted bookings"
 
 -- ── partners — read access for partner + concierge ───────────────────────────
 
+-- Drop existing partner policy from 01-rls.sql and consolidate
+drop policy if exists "partner read own record"    on partners;
+drop policy if exists "partner read own property"  on partners;
+
 -- Partner can read their own property record
 create policy "partner read own property"
   on partners for select to authenticated
   using (get_my_role() = 'partner' and id = get_my_partner_id());
 
--- Concierge can read their own property record (name only — no financial columns queried in app)
+-- Concierge can read their own property record (for name display only)
+drop policy if exists "concierge read own property" on partners;
 create policy "concierge read own property"
   on partners for select to authenticated
   using (get_my_role() = 'concierge' and id = get_my_partner_id());
@@ -417,12 +428,15 @@ create policy "concierge read own property"
 
 -- ── experiences — read access for partner + concierge ────────────────────────
 
--- Partner and concierge can read all Live and Coming Soon experiences
+-- Drop existing partner policy from 01-rls.sql and extend to include concierge
+drop policy if exists "partner read live experiences" on experiences;
 create policy "partner read live experiences"
   on experiences for select to authenticated
   using (
     get_my_role() in ('partner','concierge')
+    and active = true
     and status in ('live','coming_soon')
+    and is_parent = false
   );
 
 
