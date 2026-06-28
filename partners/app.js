@@ -106,11 +106,11 @@ async function bootApp() {
       _partnerId = pid;
       const { data: pdata } = await sb
         .from('partners')
-        .select('id,property_name,contact_name,commission_tier,commission_rate,confirmation_mode,trusted_since')
+        .select('id,name,contact_name,commission_tier,commission_rate,confirmation_mode,trusted_since')
         .eq('id', _partnerId)
         .single();
       _partnerData = pdata;
-      $('header-title').textContent = _partnerData?.property_name || 'Partner Portal';
+      $('header-title').textContent = _partnerData?.name || 'Partner Portal';
     }
 
     if (_role === 'concierge') {
