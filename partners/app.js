@@ -2,7 +2,7 @@
 'use strict';
 
 const SUPA_URL = 'https://hvxqettaonfxmmntrsmd.supabase.co';
-const SUPA_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh2eHFldHRhb25meG1tbnRyc21kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg4MDk4MDQsImV4cCI6MjA2NDM4NTgwNH0.qvWCVjPfCmLRuH6g1PqSCODBlGpBx_UaJGVi7zOBPnM';
+const SUPA_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh2eHFldHRhb25meG1tbnRyc21kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE3MDk4NDEsImV4cCI6MjA5NzI4NTg0MX0.ZwJwVIiXNwtJW5prOpnwsYjIrfpA5MSvJFYBCv_q5J0';
 
 const sb = window.supabase.createClient(SUPA_URL, SUPA_ANON);
 
