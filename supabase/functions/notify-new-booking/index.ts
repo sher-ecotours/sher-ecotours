@@ -8,7 +8,7 @@ const RESEND_KEY  = Deno.env.get('RESEND_API_KEY')!
 const SB_URL      = Deno.env.get('SUPABASE_URL')!
 const SB_KEY      = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
 const OPS_EMAIL   = 'bookings@shersanctuary.com'
-const FROM        = 'SHER Sanctuary <bookings@shersanctuary.com>'
+const FROM        = 'SHER Sanctuary <notifications@safeportsecurityservices.com>'
 const TMS_BASE    = 'https://tms.shersanctuary.com'
 const WHATSAPP_NO = '+1 (758) 716-5206'
 

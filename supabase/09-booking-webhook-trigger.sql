@@ -32,10 +32,10 @@ begin
     );
   end if;
 
-  perform extensions.http_post(
+  perform net.http_post(
     url     := 'https://hvxqettaonfxmmntrsmd.supabase.co/functions/v1/notify-new-booking',
-    headers := '{"Content-Type": "application/json"}'::jsonb,
-    body    := payload
+    body    := payload,
+    headers := '{"Content-Type": "application/json"}'::jsonb
   );
 
   return NEW;
