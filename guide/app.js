@@ -72,7 +72,7 @@ document.getElementById('back-btn').addEventListener('click', showHome);
 
 async function loadTodayBookings() {
   const { data } = await sb.from('bookings')
-    .select('id,booking_ref,lead_name,group_size,occasion_type,special_requirements,notes,lead_phone,experiences(name,departure_time)')
+    .select('id,booking_ref,lead_name,group_size,occasion_type,special_requirements,notes,prep_instructions,prep_instructions_updated_at,lead_phone,experiences(name,departure_time)')
     .eq('booking_date', today())
     .eq('status', 'confirmed')
     .order('created_at');
@@ -80,6 +80,20 @@ async function loadTodayBookings() {
 }
 
 function today() { return new Date().toISOString().split('T')[0]; }
+
+function _fmtRelTime(iso) {
+  const d    = new Date(iso);
+  const now  = new Date();
+  const diff = Math.floor((now - d) / 60000); // minutes ago
+  if (diff < 1)   return 'just now';
+  if (diff < 60)  return diff + ' min ago';
+  if (diff < 120) return '1 hour ago';
+  if (diff < 480) return Math.floor(diff / 60) + ' hours ago';
+  // Same day — show time
+  const isToday = d.toDateString() === now.toDateString();
+  const t = d.toLocaleTimeString('en-US', { hour:'numeric', minute:'2-digit', hour12:true });
+  return isToday ? t + ' today' : d.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric' }) + ' at ' + t;
+}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Navigation
@@ -210,13 +224,24 @@ function openBriefing() {
             </ul>
           </div>` : ''}
 
+          ${b.prep_instructions ? `
+          <div class="bi-ops">
+            <div class="bi-ops-title">
+              <span>Operations Instructions</span>
+              ${b.prep_instructions_updated_at
+                ? `<span class="bi-ops-updated">Updated ${_fmtRelTime(b.prep_instructions_updated_at)}</span>`
+                : ''}
+            </div>
+            <div class="bi-ops-text">${b.prep_instructions}</div>
+          </div>` : ''}
+
           ${reqs ? `
           <div class="bi-special">
             <div class="bi-special-title">${occ ? "Partner's Specific Instructions" : 'Special Requirements'}</div>
             <div class="bi-special-text">${reqs}</div>
           </div>` : ''}
 
-          ${!occ && !reqs ? `
+          ${!occ && !b.prep_instructions && !reqs ? `
           <div class="bi-no-occasion">Standard tour — no special setup required.</div>` : ''}
 
         </div>`;

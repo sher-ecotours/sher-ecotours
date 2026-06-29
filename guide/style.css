@@ -226,6 +226,21 @@ select.field-input { cursor:pointer; }
 /* Standard tour note */
 .bi-no-occasion { font-size:14px; color:var(--muted); font-style:italic; }
 
+/* Operations Instructions — from SHER ops, live-updated, highest authority */
+.bi-ops {
+  background:rgba(76,175,125,0.09);
+  border:2px solid rgba(76,175,125,0.38);
+  border-radius:12px; padding:15px; margin-bottom:16px;
+}
+.bi-ops-title {
+  display:flex; justify-content:space-between; align-items:center;
+  gap:8px; flex-wrap:wrap; margin-bottom:10px;
+  font-size:11px; text-transform:uppercase; letter-spacing:.1em;
+  color:var(--green); font-weight:700;
+}
+.bi-ops-updated { font-size:11px; color:rgba(76,175,125,0.65); font-weight:400; }
+.bi-ops-text    { font-size:16px; line-height:1.65; color:var(--text); white-space:pre-line; }
+
 /* Submit button */
 .submit-btn {
   width:100%; padding:18px; background:var(--gold); color:#08120a;

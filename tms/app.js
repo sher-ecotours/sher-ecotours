@@ -514,7 +514,47 @@ async function _openBooking(id) {
           <div style="white-space:pre-line">${b.special_requirements}</div>
         </div>` : ''}
       ${b.notes ? `<div class="detail-notes"><div class="df-label" style="margin-bottom:6px">Internal Notes</div>${b.notes}</div>` : ''}
+
+      <div class="detail-notes prep-inst-section" style="border-top-color:rgba(76,175,125,0.3);background:rgba(76,175,125,0.04)">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px">
+          <div class="df-label" style="color:var(--green)">Tour Preparation Instructions</div>
+          ${b.prep_instructions_updated_at
+            ? `<span style="font-size:11px;color:rgba(76,175,125,0.6)">Last updated ${fmtDT(b.prep_instructions_updated_at)}</span>`
+            : `<span style="font-size:11px;color:var(--muted)">Not yet set — guide will see only the generic occasion checklist</span>`}
+        </div>
+        <textarea id="prep-inst-${id}"
+          rows="4"
+          placeholder="e.g. No champagne in stock today — use sparkling juice instead. Photographer confirmed for 09:30. Red petals in storage room B."
+          style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:5px;
+                 color:var(--text);font-size:13px;padding:10px 13px;resize:vertical;
+                 font-family:inherit;line-height:1.6;transition:border-color .15s"
+          onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='var(--border)'"
+        >${b.prep_instructions || ''}</textarea>
+        <div style="display:flex;align-items:center;gap:10px;margin-top:10px">
+          <button class="btn btn-success" onclick="_savePrep('${id}')">Save Instructions</button>
+          <span id="prep-msg-${id}" style="font-size:12px"></span>
+        </div>
+      </div>
     </div>`;
+}
+
+async function _savePrep(id) {
+  const ta  = document.getElementById('prep-inst-' + id);
+  const msg = document.getElementById('prep-msg-' + id);
+  if (!ta) return;
+  const val = ta.value.trim();
+  const { error } = await sb.from('bookings').update({
+    prep_instructions:            val || null,
+    prep_instructions_updated_at: new Date().toISOString()
+  }).eq('id', id);
+  if (error) {
+    msg.textContent = 'Error: ' + error.message;
+    msg.style.color = 'var(--red)';
+  } else {
+    msg.textContent = 'Saved.';
+    msg.style.color = 'var(--green)';
+    setTimeout(() => { msg.textContent = ''; }, 3000);
+  }
 }
 
 async function _setStatus(id, status) {
