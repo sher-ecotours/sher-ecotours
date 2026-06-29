@@ -60,6 +60,99 @@ function tierClass(t) {
   return 'tier-standard';
 }
 
+/* ── Screen helpers ── */
+function showScreen(id) {
+  ['login-screen','forgot-screen','newpass-screen'].forEach(s => {
+    $(s).hidden = (s !== id);
+  });
+}
+
+/* ── Password recovery: detect reset link on page load ── */
+sb.auth.onAuthStateChange(async (event, session) => {
+  if (event === 'PASSWORD_RECOVERY') {
+    showScreen('newpass-screen');
+  }
+});
+
+/* ── Forgot password link ── */
+$('forgot-link').addEventListener('click', e => {
+  e.preventDefault();
+  $('f-email').value = $('l-email').value || '';
+  showScreen('forgot-screen');
+});
+
+$('back-to-login').addEventListener('click', e => {
+  e.preventDefault();
+  showScreen('login-screen');
+});
+
+/* ── Forgot password form ── */
+$('forgot-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const btn  = $('forgot-btn');
+  const msg  = $('forgot-msg');
+  msg.hidden = true;
+  btn.disabled = true;
+  btn.textContent = 'Sending…';
+
+  const { error } = await sb.auth.resetPasswordForEmail(
+    $('f-email').value.trim(),
+    { redirectTo: 'https://partners.shersanctuary.com' }
+  );
+
+  if (error) {
+    msg.textContent = error.message;
+    msg.hidden = false;
+    btn.disabled = false;
+    btn.textContent = 'Send reset link';
+    return;
+  }
+
+  msg.style.color = 'var(--green)';
+  msg.textContent = 'Reset link sent — check your email.';
+  msg.hidden = false;
+  btn.disabled = false;
+  btn.textContent = 'Send reset link';
+});
+
+/* ── New password form ── */
+$('newpass-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const btn  = $('newpass-btn');
+  const msg  = $('newpass-msg');
+  msg.hidden = true;
+
+  const pass    = $('np-pass').value;
+  const confirm = $('np-confirm').value;
+
+  if (pass !== confirm) {
+    msg.textContent = 'Passwords do not match.';
+    msg.hidden = false;
+    return;
+  }
+  if (pass.length < 8) {
+    msg.textContent = 'Password must be at least 8 characters.';
+    msg.hidden = false;
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Saving…';
+
+  const { error } = await sb.auth.updateUser({ password: pass });
+
+  if (error) {
+    msg.textContent = error.message;
+    msg.hidden = false;
+    btn.disabled = false;
+    btn.textContent = 'Set new password';
+    return;
+  }
+
+  // Password updated — boot the app
+  await bootApp();
+});
+
 /* ── Auth ── */
 $('login-form').addEventListener('submit', async e => {
   e.preventDefault();
@@ -893,5 +986,7 @@ window.submitRedemption = async function(optId) {
   const { data: { session } } = await sb.auth.getSession();
   if (session) {
     await bootApp();
+  } else {
+    showScreen('login-screen');
   }
 })();
