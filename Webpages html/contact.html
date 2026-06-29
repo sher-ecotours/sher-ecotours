@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact & Reschedule | SHER · Eco Sanctuary</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold:       #e8b84b;
+    --gold-deep:  #c49a2a;
+    --gold-pale:  #f7edcc;
+    --teal-deep:  #0b3d32;
+    --teal-mid:   #145c48;
+    --teal-light: #2a9478;
+    --sand:       #f5efe3;
+    --sand-warm:  #ede3cc;
+    --mangrove:   #0f2218;
+    --ink:        #1a1714;
+    --ink-soft:   #3d3830;
+    --serif:      'Cormorant Garamond', Georgia, serif;
+    --sans:       'Jost', system-ui, sans-serif;
+  }
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { font-family:var(--sans); background:var(--mangrove); color:#fff; font-weight:300; overflow-x:hidden; }
+
+  /* NAV */
+  .topnav { position:fixed; top:0; left:0; right:0; z-index:100; padding:20px 8vw; display:flex; justify-content:space-between; align-items:center; transition:background .4s, padding .4s; }
+  .topnav.scrolled { background:rgba(15,34,24,.97); padding:14px 8vw; border-bottom:1px solid rgba(232,184,75,.15); }
+  .nav-logo { font-family:var(--serif); font-size:22px; font-weight:300; color:#fff; text-decoration:none; }
+  .nav-logo em { font-style:italic; color:var(--gold); }
+  .nav-links { display:flex; gap:28px; align-items:center; }
+  .nav-links a { font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:rgba(255,255,255,.6); text-decoration:none; transition:color .2s; }
+  .nav-links a:hover { color:var(--gold); }
+  .nav-book { background:var(--gold) !important; color:var(--mangrove) !important; padding:10px 22px; font-weight:500 !important; }
+
+  /* PAGE HEADER */
+  .page-header {
+    padding:140px 8vw 80px;
+    background:linear-gradient(to bottom, rgba(15,34,24,1) 0%, rgba(11,61,50,.85) 100%);
+    border-bottom:1px solid rgba(232,184,75,.12);
+    text-align:center;
+  }
+  .ph-eyebrow { font-size:10px; letter-spacing:.4em; text-transform:uppercase; color:var(--gold); margin-bottom:16px; font-weight:400; }
+  .ph-title { font-family:var(--serif); font-size:clamp(40px,5vw,68px); font-weight:300; line-height:1.1; margin-bottom:18px; }
+  .ph-title em { font-style:italic; color:var(--gold); }
+  .ph-sub { font-size:15px; color:rgba(255,255,255,.55); max-width:480px; margin:0 auto; line-height:1.7; }
+
+  /* MAIN LAYOUT */
+  .contact-section { background:var(--sand); padding:80px 8vw 100px; }
+  .contact-grid { display:grid; grid-template-columns:1fr 1fr; gap:80px; max-width:1100px; margin:0 auto; align-items:start; }
+
+  /* FORM SIDE */
+  .form-col {}
+  .fc-label { font-size:10px; letter-spacing:.4em; text-transform:uppercase; color:var(--teal-light); margin-bottom:14px; font-weight:500; display:block; }
+  .fc-title { font-family:var(--serif); font-size:clamp(28px,3vw,40px); font-weight:300; color:var(--teal-deep); margin-bottom:32px; line-height:1.2; }
+  .fc-title em { font-style:italic; }
+
+  .form-field { margin-bottom:22px; }
+  .form-field label { display:block; font-size:11px; letter-spacing:.15em; text-transform:uppercase; color:var(--teal-mid); margin-bottom:8px; font-weight:500; }
+  .form-field input,
+  .form-field select,
+  .form-field textarea {
+    width:100%; padding:14px 16px;
+    background:#fff; border:1px solid rgba(11,61,50,.18);
+    font-family:var(--sans); font-size:15px; font-weight:300;
+    color:var(--ink); border-radius:2px;
+    transition:border-color .2s, box-shadow .2s;
+    outline:none;
+  }
+  .form-field input:focus,
+  .form-field select:focus,
+  .form-field textarea:focus {
+    border-color:var(--teal-light);
+    box-shadow:0 0 0 3px rgba(42,148,120,.12);
+  }
+  .form-field textarea { resize:vertical; min-height:130px; line-height:1.6; }
+  .form-field select { cursor:pointer; appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' viewBox='0 0 12 7'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23145c48' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 16px center; padding-right:40px; }
+  .form-field .field-note { font-size:12px; color:rgba(11,61,50,.5); margin-top:6px; }
+
+  .form-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+
+  .submit-btn {
+    width:100%; padding:18px 32px;
+    background:var(--teal-deep); color:#fff;
+    font-family:var(--sans); font-size:11px; font-weight:500;
+    letter-spacing:.2em; text-transform:uppercase;
+    border:none; cursor:pointer; transition:background .2s;
+    margin-top:8px;
+  }
+  .submit-btn:hover { background:var(--teal-mid); }
+  .submit-btn:disabled { opacity:.5; cursor:not-allowed; }
+
+  .form-success {
+    display:none; padding:20px 24px;
+    background:rgba(42,148,120,.1); border-left:3px solid var(--teal-light);
+    margin-top:16px;
+  }
+  .form-success p { font-size:15px; color:var(--teal-deep); line-height:1.6; }
+  .form-success strong { color:var(--teal-mid); }
+
+  /* INFO SIDE */
+  .info-col {}
+  .info-block { margin-bottom:40px; }
+  .ib-label { font-size:10px; letter-spacing:.35em; text-transform:uppercase; color:var(--gold-deep); margin-bottom:10px; font-weight:500; display:block; }
+  .ib-title { font-family:var(--serif); font-size:22px; font-weight:300; color:var(--teal-deep); margin-bottom:12px; }
+  .ib-body { font-size:14px; line-height:1.8; color:var(--ink-soft); }
+
+  .contact-card {
+    background:var(--teal-deep); color:#fff;
+    padding:36px 32px; margin-bottom:24px;
+  }
+  .cc-label { font-size:10px; letter-spacing:.35em; text-transform:uppercase; color:var(--gold); margin-bottom:20px; font-weight:500; display:block; }
+  .cc-row { display:flex; align-items:flex-start; gap:14px; margin-bottom:18px; }
+  .cc-row:last-child { margin-bottom:0; }
+  .cc-icon { font-size:20px; line-height:1; flex-shrink:0; margin-top:2px; }
+  .cc-info {}
+  .cc-name { font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:rgba(255,255,255,.4); margin-bottom:4px; }
+  .cc-val { font-size:15px; color:#fff; }
+  .cc-val a { color:var(--gold); text-decoration:none; }
+  .cc-val a:hover { text-decoration:underline; }
+
+  .whatsapp-btn {
+    display:block; padding:16px 24px;
+    background:rgba(232,184,75,.12); border:1px solid rgba(232,184,75,.3);
+    color:var(--gold); font-size:12px; letter-spacing:.15em; text-transform:uppercase;
+    font-weight:500; text-decoration:none; text-align:center;
+    transition:background .2s, border-color .2s; margin-top:20px;
+  }
+  .whatsapp-btn:hover { background:rgba(232,184,75,.2); border-color:var(--gold); }
+
+  .response-note {
+    background:var(--sand-warm); border-left:3px solid var(--gold-deep);
+    padding:14px 18px; font-family:var(--serif); font-size:16px;
+    font-style:italic; color:var(--teal-deep); line-height:1.5;
+  }
+
+  /* FOOTER */
+  footer { background:#070f0a; padding:56px 8vw 36px; border-top:1px solid rgba(232,184,75,.12); }
+  .ft-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:36px; flex-wrap:wrap; gap:28px; }
+  .ft-brand { font-family:var(--serif); font-size:30px; font-weight:300; line-height:1; }
+  .ft-brand em { font-style:italic; color:var(--gold); }
+  .ft-tagline { font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:rgba(255,255,255,.28); margin-top:5px; }
+  .ft-info p { font-size:13px; color:rgba(255,255,255,.4); margin-bottom:3px; text-align:right; }
+  .ft-info strong { color:var(--gold); font-weight:400; }
+  .ft-bottom { border-top:1px solid rgba(255,255,255,.06); padding-top:22px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; }
+  .ft-bottom p { font-size:11px; color:rgba(255,255,255,.22); letter-spacing:.08em; }
+
+  /* MOBILE */
+  @media (max-width:768px) {
+    .nav-links { display:none; }
+    .contact-grid { grid-template-columns:1fr; gap:48px; }
+    .form-row { grid-template-columns:1fr; }
+    .ft-info p { text-align:left; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav" id="nav">
+  <a href="/" class="nav-logo">SHER · <em>Eco Sanctuary</em></a>
+  <div class="nav-links">
+    <a href="/#experiences">Experiences</a>
+    <a href="/#about">About</a>
+    <a href="/#gallery">Gallery</a>
+    <a href="contact.html" style="color:#fff">Contact</a>
+    <a href="/#book" class="nav-book">Book Now</a>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="ph-eyebrow">SHER · Sanctuary Experiences</div>
+  <h1 class="ph-title">Get in <em>touch</em></h1>
+  <p class="ph-sub">Reschedule your tour, ask a question, or simply reach out — we'll respond within a few hours.</p>
+</div>
+
+<section class="contact-section">
+  <div class="contact-grid">
+
+    <!-- FORM -->
+    <div class="form-col">
+      <span class="fc-label">Send us a message</span>
+      <h2 class="fc-title">We're here to <em>help</em></h2>
+
+      <form id="contact-form" name="contact" method="POST" data-netlify="true" data-netlify-honeypot="bot-field">
+        <input type="hidden" name="form-name" value="contact">
+        <input type="hidden" name="bot-field" style="position:absolute;left:-9999px;opacity:0;tab-index:-1" tabindex="-1" autocomplete="off">
+
+        <div class="form-row">
+          <div class="form-field">
+            <label for="first-name">First Name</label>
+            <input type="text" id="first-name" name="first_name" required autocomplete="given-name">
+          </div>
+          <div class="form-field">
+            <label for="last-name">Last Name</label>
+            <input type="text" id="last-name" name="last_name" required autocomplete="family-name">
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" required autocomplete="email">
+        </div>
+
+        <div class="form-field">
+          <label for="booking-ref">Booking Reference <span style="font-size:11px;color:rgba(11,61,50,.45);text-transform:none;letter-spacing:0">(if applicable)</span></label>
+          <input type="text" id="booking-ref" name="booking_ref" placeholder="e.g. SHR-20260629-XXXX">
+          <div class="field-note">Found in your confirmation email.</div>
+        </div>
+
+        <div class="form-field">
+          <label for="reason">How can we help?</label>
+          <select id="reason" name="reason" required>
+            <option value="" disabled selected>Select a reason…</option>
+            <option value="Reschedule">Reschedule my booking</option>
+            <option value="General enquiry">General enquiry</option>
+            <option value="Group booking">Group / private booking</option>
+            <option value="Cancellation">Cancellation request</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <div class="form-field">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" required placeholder="Tell us your preferred new dates, any questions, or anything else we can help with…"></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn" id="submit-btn">Send Message</button>
+
+        <div class="form-success" id="form-success">
+          <p>Thank you — your message has been received.<br><strong>We'll be in touch within a few hours.</strong><br>If your tour is soon and you need a faster response, please reach us on WhatsApp below.</p>
+        </div>
+      </form>
+    </div>
+
+    <!-- INFO -->
+    <div class="info-col">
+      <div class="contact-card">
+        <span class="cc-label">Direct Contact</span>
+        <div class="cc-row">
+          <div class="cc-icon">✉</div>
+          <div class="cc-info">
+            <div class="cc-name">Email</div>
+            <div class="cc-val"><a href="mailto:bookings@shersanctuary.com">bookings@shersanctuary.com</a></div>
+          </div>
+        </div>
+        <div class="cc-row">
+          <div class="cc-icon">📍</div>
+          <div class="cc-info">
+            <div class="cc-name">Meeting Point</div>
+            <div class="cc-val">SHER Launch Point<br>Savannes Bay, Micoud<br>Saint Lucia</div>
+          </div>
+        </div>
+        <a href="https://wa.me/17587165206?text=Hello%20SHER%2C%20I%20have%20a%20query%20about%20my%20booking" class="whatsapp-btn" target="_blank" rel="noopener">
+          WhatsApp us directly →
+        </a>
+      </div>
+
+      <div class="info-block">
+        <span class="ib-label">Rescheduling</span>
+        <h3 class="ib-title">Flexible by nature</h3>
+        <p class="ib-body">We understand that plans change. Please reach out as early as possible and we'll do our best to find a new date that works. Rescheduling requests made more than 48 hours before the tour date are accommodated whenever capacity allows.</p>
+      </div>
+
+      <div class="response-note">
+        We aim to respond to all messages within 2 hours during operating hours (7 am – 6 pm Saint Lucia time).
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="ft-top">
+    <div>
+      <div class="ft-brand">SHER · <em>Eco Sanctuary</em></div>
+      <div class="ft-tagline">Savannes Bay · Micoud · Saint Lucia</div>
+    </div>
+    <div class="ft-info">
+      <p><strong>bookings@shersanctuary.com</strong></p>
+      <p>WhatsApp: +1 (758) 716-5206</p>
+    </div>
+  </div>
+  <div class="ft-bottom">
+    <p>© 2026 SHER Sanctuary Experiences. All rights reserved.</p>
+    <p>Nature Whispers · Souls Listen</p>
+  </div>
+</footer>
+
+<script>
+  // Sticky nav
+  window.addEventListener('scroll', () => {
+    document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 40)
+  })
+
+  // Pre-fill booking ref from URL param (?ref=SHR-...)
+  const params = new URLSearchParams(window.location.search)
+  const ref = params.get('ref')
+  if (ref) {
+    document.getElementById('booking-ref').value = ref
+    // Auto-select "Reschedule" if coming from email link
+    const reason = document.getElementById('reason')
+    if (reason.value === '') reason.value = 'Reschedule'
+  }
+
+  // Form submission — Netlify handles POST, we show inline success
+  const form = document.getElementById('contact-form')
+  const btn  = document.getElementById('submit-btn')
+  const success = document.getElementById('form-success')
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault()
+    btn.disabled = true
+    btn.textContent = 'Sending…'
+    try {
+      const data = new FormData(form)
+      await fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams(data).toString() })
+      success.style.display = 'block'
+      form.querySelectorAll('input, select, textarea').forEach(el => el.disabled = true)
+      btn.style.display = 'none'
+    } catch {
+      btn.disabled = false
+      btn.textContent = 'Send Message'
+      alert('Something went wrong — please email us directly at bookings@shersanctuary.com')
+    }
+  })
+</script>
+</body>
+</html>

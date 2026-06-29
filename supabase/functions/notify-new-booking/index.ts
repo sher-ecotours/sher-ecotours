@@ -178,9 +178,7 @@ function guestConfirmationHtml(d: GuestData): string {
   <tr><td style="font-size:15px;color:#2a3a2a;line-height:1.8;padding-bottom:16px">Please arrive 15 minutes before departure at the SHER launch point, Savannes Bay, Micoud. Wear comfortable clothing you don't mind getting splashed, and bring sun protection — the bay offers little shade on the water.</td></tr>
   <tr><td style="font-size:15px;color:#2a3a2a;line-height:1.8;padding-bottom:28px">All tours are guide-led, zero-emission, and operate under the Conservation Code that protects this RAMSAR-designated wetland. Your guide will brief you fully on arrival.</td></tr>
   <tr><td style="padding-bottom:32px;border-bottom:1px solid #e0d8cc">
-    <a href="mailto:${OPS_EMAIL}?subject=Booking ${d.ref}" style="color:#d4a843;font-size:15px;text-decoration:none">View your booking</a>
-    <span style="color:#b0a890;padding:0 10px">·</span>
-    <a href="mailto:${OPS_EMAIL}?subject=Reschedule ${d.ref}" style="color:#d4a843;font-size:15px;text-decoration:none">Reschedule or contact us</a>
+    <a href="https://shersanctuary.com/contact.html?ref=${d.ref}" style="color:#d4a843;font-size:15px;text-decoration:none">Reschedule or contact us →</a>
   </td></tr>
   <tr><td style="padding-top:24px;font-size:14px;color:#5a6a5a;line-height:1.7">Questions before your tour? Reply to this email or reach us on WhatsApp: <strong style="color:#0a160b">${WHATSAPP_NO}</strong></td></tr>
 </table></td></tr></table>
