@@ -507,6 +507,7 @@ async function _openBooking(id) {
         <div><div class="df-label">Payment Status</div><div class="df-value">${b.payment_status}</div></div>
         <div><div class="df-label">Waiver</div><div class="df-value">${b.waiver_status}</div></div>
         <div><div class="df-label">Received</div><div class="df-value" style="color:var(--muted)">${fmtDT(b.created_at)}</div></div>
+        <div><div class="df-label">Confirmation Email</div><div class="df-value" style="color:${b.confirmation_sent_at ? 'var(--green)' : 'var(--muted)'}">${b.confirmation_sent_at ? 'Sent ' + fmtDT(b.confirmation_sent_at) : 'Not yet sent'}</div></div>
       </div>
       ${b.special_requirements ? `
         <div class="detail-notes" style="border-top-color:rgba(224,160,64,0.25);background:rgba(224,160,64,0.05)">
