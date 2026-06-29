@@ -363,7 +363,7 @@ async function renderDashboard() {
 let _bookingFilter = 'all';
 
 async function renderBookings() {
-  const tabs = ['all','enquiry','qualified','confirmed','completed','cancelled','deferred'];
+  const tabs = ['all','enquiry','qualified','confirmed','completed','cancelled','deferred','pending'];
   setContent(`
     <div class="tabs">
       ${tabs.map(s => `<button class="tab ${_bookingFilter===s?'active':''}" onclick="_filterBookings('${s}')">${s==='all'?'All':cap(s)}</button>`).join('')}
@@ -447,10 +447,12 @@ async function _openBooking(id) {
             <button class="btn btn-primary" onclick="_approvePartnerBooking('${id}');renderBookings()">Approve</button>
             <button class="btn btn-danger"  onclick="_declinePartnerBooking('${id}')">Decline</button>
           ` : `
-            ${b.status==='enquiry'  ? `<button class="btn btn-primary" onclick="_setStatus('${id}','qualified')">Mark Qualified</button>` : ''}
-            ${b.status==='qualified'? `<button class="btn btn-primary" onclick="_setStatus('${id}','confirmed')">Confirm Booking</button>` : ''}
-            ${b.status==='confirmed'? `<button class="btn btn-success" onclick="_setStatus('${id}','completed')">Mark Completed</button>` : ''}
-            ${!['cancelled','completed'].includes(b.status) ? `<button class="btn btn-danger" onclick="_setStatus('${id}','cancelled')">Cancel</button>` : ''}
+            ${b.status==='enquiry'   ? `<button class="btn btn-primary" onclick="_setStatus('${id}','qualified')">Mark Qualified</button>` : ''}
+            ${b.status==='qualified' ? `<button class="btn btn-primary" onclick="_setStatus('${id}','confirmed')">Confirm Booking</button>` : ''}
+            ${b.status==='confirmed' ? `<button class="btn btn-success" onclick="_setStatus('${id}','completed')">Mark Completed</button>` : ''}
+            ${!['cancelled','completed','deferred'].includes(b.status) ? `<button class="btn btn-danger"  onclick="_setStatus('${id}','cancelled')">Cancel</button>` : ''}
+            ${!['cancelled','completed','deferred'].includes(b.status) ? `<button class="btn btn-ghost"   onclick="_setStatus('${id}','deferred')">Defer</button>` : ''}
+            ${b.status==='deferred' ? `<button class="btn btn-primary" onclick="_setStatus('${id}','enquiry')">Re-open</button>` : ''}
           `}
           <button class="btn btn-ghost" onclick="_loadBookings()">&#8592; Back</button>
         </div>

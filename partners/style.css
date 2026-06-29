@@ -324,6 +324,34 @@ select.field-input  { cursor:pointer; }
   color:var(--muted); margin-bottom:14px;
 }
 
+/* ── Small phones (< 380px) ── */
+@media (max-width:380px) {
+  body { font-size:15px; }
+
+  .login-box { padding:32px 22px; }
+  .login-title { font-size:22px; }
+
+  /* Tab labels tighter on very small screens */
+  .tab { padding:12px 12px; font-size:12px; }
+
+  /* Commission summary stacks */
+  .comm-summary { grid-template-columns:1fr; }
+  .comm-card.full { grid-column:1; }
+  .cc-value { font-size:22px; }
+
+  /* Tier card stacks */
+  .comm-tier-card { flex-direction:column; align-items:flex-start; gap:6px; }
+  .ctc-rate { font-size:24px; }
+
+  /* Experience & booking card text */
+  .exp-name { font-size:15px; }
+  .bk-name  { font-size:15px; }
+
+  /* Ripples hero */
+  .rh-balance { font-size:52px; }
+  .rh-sub { gap:14px; }
+}
+
 /* ── Tablet+ ── */
 @media (min-width:600px) {
   .login-box    { padding:48px 40px; }
