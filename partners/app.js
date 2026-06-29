@@ -322,13 +322,13 @@ async function loadExperiencesTab() {
 
   const { data, error } = await sb
     .from('experiences')
-    .select('id,name,category,description,price_usd,max_guests,departure_time,duration_minutes,status,ripples_awarded,is_parent')
+    .select('id,name,category,public_price_usd,max_capacity,departure_time,duration_minutes,status,ripples_awarded,is_parent')
     .in('status', ['live','coming_soon'])
     .order('status', { ascending:true })
     .order('name', { ascending:true });
 
   if (error || !data?.length) {
-    cont.innerHTML = '<p class="empty">No experiences available right now.</p>';
+    cont.innerHTML = `<p class="empty">${error ? 'Could not load experiences: ' + esc(error.message) : 'No experiences available right now.'}</p>`;
     return;
   }
 
@@ -349,12 +349,11 @@ async function loadExperiencesTab() {
           ${exp.category ? `<span class="exp-meta-item">${esc(exp.category)}</span>` : ''}
           ${exp.departure_time ? `<span class="exp-meta-item">Departs ${esc(exp.departure_time)}</span>` : ''}
           ${exp.duration_minutes ? `<span class="exp-meta-item">${exp.duration_minutes} min</span>` : ''}
-          ${exp.max_guests ? `<span class="exp-meta-item">Max ${exp.max_guests} guests</span>` : ''}
+          ${exp.max_capacity ? `<span class="exp-meta-item">Max ${exp.max_capacity} guests</span>` : ''}
           ${exp.ripples_awarded ? `<span class="exp-meta-item">${exp.ripples_awarded} Ripples</span>` : ''}
         </div>
-        ${exp.description ? `<p style="font-size:14px;color:var(--muted);margin-bottom:12px">${esc(exp.description)}</p>` : ''}
         <div class="exp-price">
-          USD ${Number(exp.price_usd || 0).toFixed(0)}<small class="exp-price-note"> per person</small>
+          USD ${Number(exp.public_price_usd || 0).toFixed(0)}<small class="exp-price-note"> per person</small>
         </div>
         ${exp.status === 'live' ? `
           <button class="book-btn" onclick="preSelectExperience('${exp.id}')">
@@ -394,7 +393,7 @@ function loadBookTab() {
         <select id="bf-exp" class="field-input" required>
           <option value="">— Select experience —</option>
           ${liveExps.map(e =>
-            `<option value="${e.id}">${esc(e.name)} — USD ${Number(e.price_usd||0).toFixed(0)} pp</option>`
+            `<option value="${e.id}">${esc(e.name)} — USD ${Number(e.public_price_usd||0).toFixed(0)} pp</option>`
           ).join('')}
         </select>
       </div>
@@ -498,15 +497,14 @@ async function submitBooking(e) {
   const payload = {
     experience_id:    expId,
     partner_id:       _partnerId,
-    source:           'partner_pwa',
-    status:           'pending',
-    tour_date:        dateVal,
-    guest_count:      guests,
-    lead_guest_name:  leadName,
-    lead_guest_email: email,
-    lead_guest_phone: phone || null,
-    country:          country || null,
-    occasion:         occasion || null,
+    source:           'partner',
+    booking_date:     dateVal,
+    group_size:       guests,
+    lead_name:        leadName,
+    lead_email:       email,
+    lead_phone:       phone || null,
+    nationality:      country || null,
+    occasion_type:    occasion || null,
     special_requirements: notes || null,
   };
 
@@ -546,12 +544,12 @@ async function loadBookingsTab() {
   let query = sb
     .from('bookings')
     .select(`
-      id, booking_ref, status, tour_date, guest_count,
-      lead_guest_name, lead_guest_email,
-      created_at, occasion, source,
+      id, booking_ref, status, booking_date, group_size,
+      lead_name, lead_email,
+      created_at, occasion_type, source,
       experiences(name)
     `)
-    .order('tour_date', { ascending: false })
+    .order('booking_date', { ascending: false })
     .limit(50);
 
   if (_role === 'concierge') {
@@ -581,11 +579,11 @@ async function loadBookingsTab() {
           <span class="bk-ref">${esc(bk.booking_ref || '')}</span>
           <span class="status-badge ${statusClass(bk.status)}">${esc(bk.status).replace('_',' ')}</span>
         </div>
-        <div class="bk-name">${esc(bk.lead_guest_name)}</div>
+        <div class="bk-name">${esc(bk.lead_name)}</div>
         <div class="bk-exp">${esc(bk.experiences?.name || '—')}</div>
         <div class="bk-date">
-          ${bk.tour_date ? fmtDate(bk.tour_date) : 'Date TBC'} · ${bk.guest_count} guest${bk.guest_count > 1 ? 's' : ''}
-          ${bk.occasion ? ` · ${esc(bk.occasion)}` : ''}
+          ${bk.booking_date ? fmtDate(bk.booking_date) : 'Date TBC'} · ${bk.group_size} guest${bk.group_size > 1 ? 's' : ''}
+          ${bk.occasion_type ? ` · ${esc(bk.occasion_type)}` : ''}
         </div>
       </div>
     `).join('') +
@@ -601,7 +599,7 @@ async function loadCommissionTab() {
 
   const { data, error } = await sb
     .from('commissions')
-    .select('id, booking_id, amount_usd, status, period_month, created_at, bookings(booking_ref, lead_guest_name, tour_date)')
+    .select('id, booking_id, amount_usd, status, created_at, bookings(booking_ref, lead_name, booking_date)')
     .eq('partner_id', _partnerId)
     .order('created_at', { ascending:false })
     .limit(60);
@@ -661,7 +659,7 @@ async function loadCommissionTab() {
           <div class="comm-row">
             <div class="cr-left">
               <div class="cr-ref">${esc(r.bookings?.booking_ref || '')}</div>
-              <div class="cr-name">${esc(r.bookings?.lead_guest_name || '—')}</div>
+              <div class="cr-name">${esc(r.bookings?.lead_name || '—')}</div>
               <div class="cr-date">${fmtDate(r.created_at)}</div>
             </div>
             <div class="cr-right">
@@ -690,7 +688,7 @@ async function loadPayoutsTab() {
 
   const { data, error } = await sb
     .from('payouts')
-    .select('id, amount_usd, currency, payment_method, reference, paid_at, period_start, period_end, notes')
+    .select('id, payout_amount_usd, payout_method, reference, paid_at, notes')
     .eq('partner_id', _partnerId)
     .order('paid_at', { ascending:false });
 
@@ -712,15 +710,11 @@ async function loadPayoutsTab() {
     data.map(p => `
       <div class="payout-row">
         <div>
-          <div class="pr-amount">${fmtMoney(p.amount_usd)}</div>
+          <div class="pr-amount">${fmtMoney(p.payout_amount_usd)}</div>
           <div class="pr-date">${fmtDate(p.paid_at)}</div>
-          <div class="pr-method">${esc(p.payment_method || '—')}</div>
+          <div class="pr-method">${esc(p.payout_method || '—')}</div>
           ${p.reference ? `<div class="pr-ref">Ref: ${esc(p.reference)}</div>` : ''}
         </div>
-        ${(p.period_start || p.period_end) ? `
-          <div style="text-align:right;font-size:12px;color:var(--muted)">
-            ${fmtDate(p.period_start)}<br/>to ${fmtDate(p.period_end)}
-          </div>` : ''}
       </div>
     `).join('') +
     '</div>';
@@ -735,7 +729,7 @@ async function loadRipplesTab() {
 
   const { data: ledger, error } = await sb
     .from('ripples_ledger')
-    .select('id, delta, balance_after, note, source, created_at, bookings(booking_ref, experiences(name))')
+    .select('id, ripples_delta, balance_after, notes, created_at, bookings(booking_ref, experiences(name))')
     .eq('concierge_id', _conciergeId)
     .order('created_at', { ascending:false })
     .limit(40);
@@ -788,8 +782,8 @@ async function loadRipplesTab() {
     <p class="panel-subtitle" style="margin-top:0">Transaction History</p>
     <div class="ledger-list">
       ${(ledger||[]).length ? ledger.map(row => {
-        const earned = row.delta > 0;
-        const note   = row.note || row.bookings?.experiences?.name || (earned ? 'Earned' : 'Redeemed');
+        const earned = row.ripples_delta > 0;
+        const note   = row.notes || row.bookings?.experiences?.name || (earned ? 'Earned' : 'Redeemed');
         return `
           <div class="ledger-row">
             <div class="lr-left">
@@ -797,7 +791,7 @@ async function loadRipplesTab() {
               <div class="lr-date">${fmtDate(row.created_at)}</div>
             </div>
             <div class="lr-delta ${earned ? 'lr-earned' : 'lr-spent'}">
-              ${earned ? '+' : ''}${row.delta}
+              ${earned ? '+' : ''}${row.ripples_delta}
             </div>
           </div>`;
       }).join('') : '<p class="empty">No transactions yet.</p>'}
