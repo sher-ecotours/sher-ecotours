@@ -72,7 +72,7 @@ document.getElementById('back-btn').addEventListener('click', showHome);
 
 async function loadTodayBookings() {
   const { data } = await sb.from('bookings')
-    .select('id,booking_ref,lead_name,group_size,occasion_type,experiences(name,departure_time)')
+    .select('id,booking_ref,lead_name,group_size,occasion_type,special_requirements,notes,lead_phone,experiences(name,departure_time)')
     .eq('booking_date', today())
     .eq('status', 'confirmed')
     .order('created_at');
@@ -157,24 +157,70 @@ function renderHome() {
 // Briefing
 // ─────────────────────────────────────────────────────────────────────────────
 
+// Occasion → default preparation checklist
+const OCCASION_PREP = {
+  'Proposal':          { color:'#d4a843', icon:'💍', items:['Red rose petals on kayak deck / shore', 'Champagne + 2 chilled flutes', 'Ring presentation viewpoint identified', 'Photographer briefed and on standby'] },
+  'Anniversary':       { color:'#4caf7d', icon:'🥂', items:['Champagne + 2 chilled flutes', 'Fresh flowers or rose petals', 'Romantic scenic pause planned on route'] },
+  'Honeymoon':         { color:'#d4a843', icon:'🌹', items:['Champagne + 2 chilled flutes', 'Fresh tropical flowers', 'Personalised welcome note from SHER'] },
+  'Birthday':          { color:'#8899ee', icon:'🎂', items:['Birthday cake or dessert arranged', 'Balloons + confetti or ribbons ready', 'Birthday song prepared', 'Surprise timing agreed with partner'] },
+  'Rekindle':          { color:'#d4a843', icon:'🔥', items:['Champagne + 2 chilled flutes', 'Rose petals', 'Private scenic viewpoint pause'] },
+  'Remarriage':        { color:'#4caf7d', icon:'💐', items:['Champagne + 2 chilled flutes', 'Fresh flowers', 'Celebratory ribbons or confetti'] },
+  'New Life Chapter':  { color:'#4caf7d', icon:'🌟', items:['Champagne + 2 chilled flutes', 'Celebratory positive atmosphere'] },
+  'Holiday / Leisure': { color:'#6baed6', icon:'🌴', items:['Fresh refreshments and snacks ready', 'Relaxed flexible pace — no rush', 'Local treats if requested by partner'] },
+};
+
 function openBriefing() {
   if (!_todayBookings.length) {
     showScreen("Today's Briefing", '<div class="empty">No confirmed tours today.</div>');
     return;
   }
+
   showScreen("Today's Briefing", `
     <div class="briefing-list">
-      ${_todayBookings.map(b => `
-        <div class="briefing-item">
-          <div class="bi-ref">${b.booking_ref}</div>
-          <div class="bi-name">${b.lead_name}</div>
-          <div class="bi-exp">${b.experiences?.name || '—'}</div>
-          <div class="bi-meta">
-            ${b.group_size ? `<span>${b.group_size} guest${b.group_size !== 1 ? 's' : ''}</span>` : ''}
-            ${b.experiences?.departure_time ? `<span>${b.experiences.departure_time}</span>` : ''}
-            ${b.occasion_type ? `<span class="bi-occasion">${b.occasion_type}</span>` : ''}
+      ${_todayBookings.map(b => {
+        const occ  = b.occasion_type ? (OCCASION_PREP[b.occasion_type] || null) : null;
+        const clr  = occ?.color || '#d4a843';
+        const reqs = b.special_requirements || b.notes || '';
+
+        return `
+        <div class="briefing-item${occ ? ' has-occasion' : ''}">
+
+          <div class="bi-top">
+            <div class="bi-top-left">
+              <div class="bi-ref">${b.booking_ref}</div>
+              <div class="bi-name">${b.lead_name}</div>
+              <div class="bi-exp">${b.experiences?.name || '—'}</div>
+            </div>
+            <div class="bi-top-right">
+              ${b.experiences?.departure_time ? `<div class="bi-time">${b.experiences.departure_time}</div>` : ''}
+              ${b.group_size ? `<div class="bi-guests">${b.group_size} guest${b.group_size !== 1 ? 's' : ''}</div>` : ''}
+              ${b.lead_phone ? `<div class="bi-phone"><a href="tel:${b.lead_phone}" style="color:var(--gold)">${b.lead_phone}</a></div>` : ''}
+            </div>
           </div>
-        </div>`).join('')}
+
+          ${occ ? `
+          <div class="bi-occasion-banner" style="background:${clr}18;border-color:${clr}38;color:${clr}">
+            <span class="bi-occ-icon">${occ.icon}</span>
+            <span class="bi-occ-label">${b.occasion_type.toUpperCase()}</span>
+          </div>
+          <div class="bi-prep">
+            <div class="bi-prep-title">Default Preparation Checklist</div>
+            <ul class="bi-prep-list">
+              ${occ.items.map(item => `<li>${item}</li>`).join('')}
+            </ul>
+          </div>` : ''}
+
+          ${reqs ? `
+          <div class="bi-special">
+            <div class="bi-special-title">${occ ? "Partner's Specific Instructions" : 'Special Requirements'}</div>
+            <div class="bi-special-text">${reqs}</div>
+          </div>` : ''}
+
+          ${!occ && !reqs ? `
+          <div class="bi-no-occasion">Standard tour — no special setup required.</div>` : ''}
+
+        </div>`;
+      }).join('')}
     </div>`);
 }
 

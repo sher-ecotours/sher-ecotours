@@ -283,7 +283,8 @@ async function renderDashboard() {
     { count: todayTours },
     { count: weekTours },
     { count: activePartners },
-    { data: recent }
+    { data: recent },
+    { data: todayOccasions }
   ] = await Promise.all([
     sb.from('bookings').select('*', { count:'exact', head:true }).eq('status','enquiry').neq('source','partner'),
     sb.from('bookings').select('*', { count:'exact', head:true }).eq('source','partner').eq('status','enquiry'),
@@ -292,7 +293,13 @@ async function renderDashboard() {
     sb.from('partners').select('*', { count:'exact', head:true }).eq('status','active'),
     sb.from('bookings')
       .select('id,booking_ref,lead_name,status,source,created_at,experiences(name)')
-      .order('created_at', { ascending:false }).limit(10)
+      .order('created_at', { ascending:false }).limit(10),
+    sb.from('bookings')
+      .select('id,booking_ref,lead_name,occasion_type,special_requirements,notes,experiences(name,departure_time)')
+      .eq('booking_date', td)
+      .eq('status', 'confirmed')
+      .not('occasion_type', 'is', null)
+      .order('created_at')
   ]);
 
   // Update partner requests badge in sidebar
@@ -330,6 +337,28 @@ async function renderDashboard() {
         <div class="stat-sub">Hotels &amp; guesthouses</div>
       </div>
     </div>
+
+    ${todayOccasions?.length ? `
+    <div class="sh"><h3>Today's Special Occasions</h3></div>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:28px">
+      ${todayOccasions.map(b => {
+        const reqs = b.special_requirements || b.notes || '';
+        return `
+        <div style="background:var(--surface);border:1px solid rgba(212,168,67,0.3);border-radius:8px;padding:14px 18px">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap">
+            <div>
+              <div style="font-size:11px;color:var(--gold);font-weight:600;letter-spacing:.06em;margin-bottom:4px">${b.booking_ref}</div>
+              <div style="font-size:15px;font-weight:500">${b.lead_name}</div>
+              <div style="font-size:12px;color:var(--muted)">${b.experiences?.name||'—'}${b.experiences?.departure_time?' · '+b.experiences.departure_time:''}</div>
+            </div>
+            <div style="background:rgba(212,168,67,0.12);color:var(--gold);font-size:12px;font-weight:600;padding:5px 12px;border-radius:20px;white-space:nowrap">
+              ${b.occasion_type}
+            </div>
+          </div>
+          ${reqs ? `<div style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.06);font-size:12px;color:var(--amber)">${reqs}</div>` : ''}
+        </div>`;
+      }).join('')}
+    </div>` : ''}
 
     <div class="sh">
       <h3>Recent Bookings</h3>
@@ -479,7 +508,12 @@ async function _openBooking(id) {
         <div><div class="df-label">Waiver</div><div class="df-value">${b.waiver_status}</div></div>
         <div><div class="df-label">Received</div><div class="df-value" style="color:var(--muted)">${fmtDT(b.created_at)}</div></div>
       </div>
-      ${b.notes ? `<div class="detail-notes"><div class="df-label" style="margin-bottom:6px">Notes</div>${b.notes}</div>` : ''}
+      ${b.special_requirements ? `
+        <div class="detail-notes" style="border-top-color:rgba(224,160,64,0.25);background:rgba(224,160,64,0.05)">
+          <div class="df-label" style="margin-bottom:6px;color:var(--amber)">Partner Special Requirements</div>
+          <div style="white-space:pre-line">${b.special_requirements}</div>
+        </div>` : ''}
+      ${b.notes ? `<div class="detail-notes"><div class="df-label" style="margin-bottom:6px">Internal Notes</div>${b.notes}</div>` : ''}
     </div>`;
 }
 
@@ -645,7 +679,7 @@ async function renderToday() {
             ${b.occasion_type?`
             <div style="grid-column:1/-1">
               <div class="tm-label">Occasion</div>
-              <div class="tm-value">${b.occasion_type}</div>
+              <div class="tm-value" style="color:var(--gold)">${b.occasion_type}</div>
             </div>`:''}
             ${b.lead_phone?`
             <div style="grid-column:1/-1">
@@ -653,6 +687,11 @@ async function renderToday() {
               <div class="tm-value"><a href="tel:${b.lead_phone}" style="color:var(--gold)">${b.lead_phone}</a></div>
             </div>`:''}
           </div>
+          ${b.special_requirements?`
+            <div class="today-notes" style="border-left:3px solid var(--amber);background:rgba(224,160,64,0.06);padding:12px 14px;border-radius:0 6px 6px 0">
+              <div style="font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--amber);margin-bottom:5px">Partner Special Requirements</div>
+              ${b.special_requirements}
+            </div>` : ''}
           ${b.notes?`<div class="today-notes">${b.notes}</div>`:''}
         </div>`).join('')}
     </div>`);
