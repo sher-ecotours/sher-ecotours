@@ -35,6 +35,54 @@
         <div id="login-error" class="error-msg" hidden></div>
         <button type="submit" id="login-btn">Sign in</button>
       </form>
+      <p style="text-align:center;margin-top:20px">
+        <a href="#" id="forgot-link" style="font-size:13px;color:var(--muted,#888);text-decoration:none">Forgot password?</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- Forgot password -->
+  <div id="forgot-screen" hidden>
+    <div class="login-box">
+      <div class="login-logo">
+        <div class="login-eye">SHER ECO SANCTUARY</div>
+        <h1>Reset Password</h1>
+        <p>We'll email you a reset link</p>
+      </div>
+      <form id="forgot-form">
+        <div class="field">
+          <label>Email address</label>
+          <input type="email" id="f-email" autocomplete="email" required/>
+        </div>
+        <div id="forgot-msg" class="error-msg" hidden></div>
+        <button type="submit" id="forgot-btn">Send reset link</button>
+      </form>
+      <p style="text-align:center;margin-top:16px">
+        <a href="#" id="back-login" style="font-size:13px;color:var(--muted,#888);text-decoration:none">Back to sign in</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- Set new password (recovery token) -->
+  <div id="newpass-screen" hidden>
+    <div class="login-box">
+      <div class="login-logo">
+        <div class="login-eye">SHER ECO SANCTUARY</div>
+        <h1>Set New Password</h1>
+        <p>Choose a new password for your account</p>
+      </div>
+      <form id="newpass-form">
+        <div class="field">
+          <label>New Password</label>
+          <input type="password" id="np-pass" minlength="8" required/>
+        </div>
+        <div class="field">
+          <label>Confirm Password</label>
+          <input type="password" id="np-confirm" minlength="8" required/>
+        </div>
+        <div id="newpass-msg" class="error-msg" hidden></div>
+        <button type="submit" id="newpass-btn">Set new password</button>
+      </form>
     </div>
   </div>
 
@@ -52,6 +100,7 @@
         <a class="nav-item" data-section="today">Today</a>
         <div class="nav-divider"></div>
         <a class="nav-item" data-section="experiences">Experiences</a>
+        <a class="nav-item" data-section="partner-requests">Partner Requests <span id="pr-badge" style="display:none;background:var(--gold,#d4a843);color:#000;font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px;margin-left:4px"></span></a>
         <a class="nav-item" data-section="partners">Partners</a>
         <a class="nav-item" data-section="equipment">Equipment</a>
         <div class="nav-divider"></div>

@@ -6,16 +6,110 @@ const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsI
 const sb = window.supabase.createClient(SUPA_URL, SUPA_KEY);
 
 // ─────────────────────────────────────────────────────────────────────────────
+// Screen management
+// ─────────────────────────────────────────────────────────────────────────────
+
+function showScreen(id) {
+  ['login-screen','forgot-screen','newpass-screen'].forEach(s => {
+    const el = document.getElementById(s);
+    if (el) el.hidden = (s !== id);
+  });
+  const app = document.getElementById('app');
+  if (app) app.hidden = true;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Forgot password
+// ─────────────────────────────────────────────────────────────────────────────
+
+document.getElementById('forgot-link').addEventListener('click', e => {
+  e.preventDefault();
+  const email = document.getElementById('login-email').value;
+  if (email) document.getElementById('f-email').value = email;
+  showScreen('forgot-screen');
+});
+
+document.getElementById('back-login').addEventListener('click', e => {
+  e.preventDefault();
+  showScreen('login-screen');
+});
+
+document.getElementById('forgot-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const btn = document.getElementById('forgot-btn');
+  const msg = document.getElementById('forgot-msg');
+  msg.hidden = true;
+  btn.disabled = true;
+  btn.textContent = 'Sending…';
+
+  const { error } = await sb.auth.resetPasswordForEmail(
+    document.getElementById('f-email').value.trim(),
+    { redirectTo: 'https://tms.shersanctuary.com' }
+  );
+
+  if (error) {
+    msg.textContent = error.message;
+    msg.style.color = '';
+    msg.hidden = false;
+  } else {
+    msg.textContent = 'Reset link sent — check your email.';
+    msg.style.color = 'var(--green, #4caf7d)';
+    msg.hidden = false;
+  }
+  btn.disabled = false;
+  btn.textContent = 'Send reset link';
+});
+
+document.getElementById('newpass-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const btn = document.getElementById('newpass-btn');
+  const msg = document.getElementById('newpass-msg');
+  msg.hidden = true;
+
+  const pass    = document.getElementById('np-pass').value;
+  const confirm = document.getElementById('np-confirm').value;
+
+  if (pass !== confirm) {
+    msg.textContent = 'Passwords do not match.';
+    msg.hidden = false;
+    return;
+  }
+  if (pass.length < 8) {
+    msg.textContent = 'Password must be at least 8 characters.';
+    msg.hidden = false;
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Saving…';
+
+  const { error } = await sb.auth.updateUser({ password: pass });
+  if (error) {
+    msg.textContent = error.message;
+    msg.hidden = false;
+    btn.disabled = false;
+    btn.textContent = 'Set new password';
+    return;
+  }
+
+  // Password updated — proceed to app
+  const { data: { session } } = await sb.auth.getSession();
+  if (session) await afterLogin(session.user);
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
 // Auth
 // ─────────────────────────────────────────────────────────────────────────────
 
 async function init() {
   const { data: { session } } = await sb.auth.getSession();
   if (session) await afterLogin(session.user);
+  else showScreen('login-screen');
 
   sb.auth.onAuthStateChange(async (event, session) => {
+    if (event === 'PASSWORD_RECOVERY') { showScreen('newpass-screen'); return; }
     if (event === 'SIGNED_IN') await afterLogin(session.user);
-    if (event === 'SIGNED_OUT') showLoginScreen();
+    if (event === 'SIGNED_OUT') showScreen('login-screen');
   });
 }
 
@@ -32,7 +126,11 @@ async function afterLogin(user) {
     loginError('Access denied. Role returned: "' + (role ?? 'null') + '"');
     return;
   }
-  document.getElementById('login-screen').hidden = true;
+  // Hide all auth screens, show app
+  ['login-screen','forgot-screen','newpass-screen'].forEach(s => {
+    const el = document.getElementById(s);
+    if (el) el.hidden = true;
+  });
   document.getElementById('app').hidden = false;
   document.getElementById('user-email').textContent = user.email;
   document.getElementById('today-label').textContent = new Date().toLocaleDateString('en-US', {
@@ -42,8 +140,7 @@ async function afterLogin(user) {
 }
 
 function showLoginScreen() {
-  document.getElementById('login-screen').hidden = false;
-  document.getElementById('app').hidden = true;
+  showScreen('login-screen');
 }
 
 function loginError(msg) {
@@ -78,25 +175,27 @@ document.getElementById('logout-btn').addEventListener('click', () => sb.auth.si
 // ─────────────────────────────────────────────────────────────────────────────
 
 const SECTION_TITLES = {
-  dashboard:    'Dashboard',
-  bookings:     'Bookings',
-  today:        'Today',
-  experiences:  'Experiences',
-  partners:     'Partners',
-  equipment:    'Equipment',
-  conservation: 'Conservation',
-  waitlist:     'Waitlist'
+  dashboard:        'Dashboard',
+  bookings:         'Bookings',
+  today:            'Today',
+  'partner-requests': 'Partner Requests',
+  experiences:      'Experiences',
+  partners:         'Partners',
+  equipment:        'Equipment',
+  conservation:     'Conservation',
+  waitlist:         'Waitlist'
 };
 
 const RENDERERS = {
-  dashboard:    renderDashboard,
-  bookings:     renderBookings,
-  today:        renderToday,
-  experiences:  renderExperiences,
-  partners:     renderPartners,
-  equipment:    renderEquipment,
-  conservation: renderConservation,
-  waitlist:     renderWaitlist
+  dashboard:        renderDashboard,
+  bookings:         renderBookings,
+  today:            renderToday,
+  'partner-requests': renderPartnerRequests,
+  experiences:      renderExperiences,
+  partners:         renderPartners,
+  equipment:        renderEquipment,
+  conservation:     renderConservation,
+  waitlist:         renderWaitlist
 };
 
 document.querySelectorAll('.nav-item').forEach(el => {
@@ -139,9 +238,11 @@ function badge(val, cls) {
 }
 
 function bookingBadge(status) {
-  const map = { enquiry:'b-enquiry', qualified:'b-qualified', confirmed:'b-confirmed',
-                completed:'b-completed', cancelled:'b-cancelled', deferred:'b-deferred' };
-  return badge(status, map[status] || '');
+  const map = { enquiry:'b-enquiry', pending:'b-enquiry', qualified:'b-qualified',
+                confirmed:'b-confirmed', completed:'b-completed',
+                cancelled:'b-cancelled', deferred:'b-deferred',
+                balance_due:'b-enquiry', paid_in_full:'b-confirmed', no_show:'b-cancelled' };
+  return badge(status?.replace('_',' '), map[status] || '');
 }
 
 function expBadge(status) {
@@ -178,19 +279,28 @@ async function renderDashboard() {
 
   const [
     { count: pendingEnq },
+    { count: partnerPending },
     { count: todayTours },
     { count: weekTours },
     { count: activePartners },
     { data: recent }
   ] = await Promise.all([
-    sb.from('bookings').select('*', { count:'exact', head:true }).eq('status','enquiry'),
+    sb.from('bookings').select('*', { count:'exact', head:true }).eq('status','enquiry').neq('source','partner'),
+    sb.from('bookings').select('*', { count:'exact', head:true }).eq('source','partner').eq('status','enquiry'),
     sb.from('bookings').select('*', { count:'exact', head:true }).eq('booking_date', td).eq('status','confirmed'),
     sb.from('bookings').select('*', { count:'exact', head:true }).gte('booking_date', wStart).lte('booking_date', wEnd).in('status',['confirmed','completed']),
     sb.from('partners').select('*', { count:'exact', head:true }).eq('status','active'),
     sb.from('bookings')
-      .select('id,booking_ref,lead_name,status,created_at,experiences(name)')
+      .select('id,booking_ref,lead_name,status,source,created_at,experiences(name)')
       .order('created_at', { ascending:false }).limit(10)
   ]);
+
+  // Update partner requests badge in sidebar
+  const prBadge = document.getElementById('pr-badge');
+  if (prBadge) {
+    prBadge.textContent = partnerPending || 0;
+    prBadge.style.display = partnerPending > 0 ? 'inline' : 'none';
+  }
 
   setContent(`
     <div class="stat-grid">
@@ -198,6 +308,11 @@ async function renderDashboard() {
         <div class="stat-label">Pending Enquiries</div>
         <div class="stat-value gold">${pendingEnq || 0}</div>
         <div class="stat-sub">Awaiting response</div>
+      </div>
+      <div class="stat-card" style="${partnerPending > 0 ? 'border-color:var(--gold);' : ''}">
+        <div class="stat-label">Partner Requests</div>
+        <div class="stat-value ${partnerPending > 0 ? 'gold' : ''}">${partnerPending || 0}</div>
+        <div class="stat-sub"><a href="#" onclick="navigate('partner-requests')" style="color:var(--gold)">Review now →</a></div>
       </div>
       <div class="stat-card">
         <div class="stat-label">Today's Tours</div>
@@ -328,10 +443,15 @@ async function _openBooking(id) {
           <div class="detail-name">${b.lead_name}</div>
         </div>
         <div class="detail-actions">
-          ${b.status==='enquiry'  ? `<button class="btn btn-primary" onclick="_setStatus('${id}','qualified')">Mark Qualified</button>` : ''}
-          ${b.status==='qualified'? `<button class="btn btn-primary" onclick="_setStatus('${id}','confirmed')">Confirm Booking</button>` : ''}
-          ${b.status==='confirmed'? `<button class="btn btn-success" onclick="_setStatus('${id}','completed')">Mark Completed</button>` : ''}
-          ${!['cancelled','completed'].includes(b.status) ? `<button class="btn btn-danger" onclick="_setStatus('${id}','cancelled')">Cancel</button>` : ''}
+          ${b.source==='partner' && b.status==='enquiry' ? `
+            <button class="btn btn-primary" onclick="_approvePartnerBooking('${id}');renderBookings()">Approve</button>
+            <button class="btn btn-danger"  onclick="_declinePartnerBooking('${id}')">Decline</button>
+          ` : `
+            ${b.status==='enquiry'  ? `<button class="btn btn-primary" onclick="_setStatus('${id}','qualified')">Mark Qualified</button>` : ''}
+            ${b.status==='qualified'? `<button class="btn btn-primary" onclick="_setStatus('${id}','confirmed')">Confirm Booking</button>` : ''}
+            ${b.status==='confirmed'? `<button class="btn btn-success" onclick="_setStatus('${id}','completed')">Mark Completed</button>` : ''}
+            ${!['cancelled','completed'].includes(b.status) ? `<button class="btn btn-danger" onclick="_setStatus('${id}','cancelled')">Cancel</button>` : ''}
+          `}
           <button class="btn btn-ghost" onclick="_loadBookings()">&#8592; Back</button>
         </div>
       </div>
@@ -368,6 +488,97 @@ async function _setStatus(id, status) {
   const { error } = await sb.from('bookings').update(upd).eq('id', id);
   if (error) { alert('Error: ' + error.message); return; }
   renderBookings();
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Partner Requests
+// ─────────────────────────────────────────────────────────────────────────────
+
+async function renderPartnerRequests() {
+  setContent('<div class="loading">Loading partner requests…</div>');
+
+  const { data, error } = await sb
+    .from('bookings')
+    .select('id,booking_ref,lead_name,lead_email,lead_phone,booking_date,group_size,occasion_type,special_requirements,status,created_at,experiences(name),partners(name)')
+    .eq('source', 'partner')
+    .not('status', 'in', '("completed","cancelled")')
+    .order('created_at', { ascending: false })
+    .limit(100);
+
+  if (error) { setContent(`<div class="empty">Error: ${error.message}</div>`); return; }
+
+  const pending   = (data||[]).filter(b => b.status === 'enquiry');
+  const actioned  = (data||[]).filter(b => b.status !== 'enquiry');
+
+  setContent(`
+    <div class="sh" style="margin-bottom:16px">
+      <h3>Awaiting Review (${pending.length})</h3>
+    </div>
+
+    ${pending.length ? `
+    <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:32px">
+      ${pending.map(b => `
+        <div class="detail-panel" style="padding:16px 20px" id="pr-${b.id}">
+          <div class="detail-top" style="margin-bottom:10px">
+            <div>
+              <div class="detail-ref">${b.booking_ref}</div>
+              <div class="detail-name">${b.lead_name}</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:2px">${b.partners?.name||'—'}</div>
+            </div>
+            <div class="detail-actions">
+              <button class="btn btn-primary" onclick="_approvePartnerBooking('${b.id}')">Confirm</button>
+              <button class="btn btn-danger"  onclick="_declinePartnerBooking('${b.id}')">Decline</button>
+            </div>
+          </div>
+          <div class="detail-grid" style="grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px 16px">
+            <div><div class="df-label">Experience</div><div class="df-value">${b.experiences?.name||'—'}</div></div>
+            <div><div class="df-label">Date</div><div class="df-value">${b.booking_date?fmtDate(b.booking_date):'TBC'}</div></div>
+            <div><div class="df-label">Guests</div><div class="df-value">${b.group_size||'—'}</div></div>
+            <div><div class="df-label">Email</div><div class="df-value"><a href="mailto:${b.lead_email}" style="color:var(--gold)">${b.lead_email}</a></div></div>
+            ${b.lead_phone ? `<div><div class="df-label">Phone</div><div class="df-value">${b.lead_phone}</div></div>` : ''}
+            ${b.occasion_type ? `<div><div class="df-label">Occasion</div><div class="df-value">${b.occasion_type}</div></div>` : ''}
+            <div><div class="df-label">Received</div><div class="df-value" style="color:var(--muted)">${fmtDT(b.created_at)}</div></div>
+          </div>
+          ${b.special_requirements ? `<div class="detail-notes" style="margin-top:10px"><div class="df-label" style="margin-bottom:4px">Special Requirements</div>${b.special_requirements}</div>` : ''}
+        </div>
+      `).join('')}
+    </div>` : '<div class="empty" style="margin-bottom:32px">No partner requests awaiting review.</div>'}
+
+    ${actioned.length ? `
+    <div class="sh"><h3>Recently Actioned (${actioned.length})</h3></div>
+    <div class="table-wrap">
+      <table class="tms-table">
+        <thead><tr><th>Ref</th><th>Guest</th><th>Property</th><th>Experience</th><th>Date</th><th>Status</th></tr></thead>
+        <tbody>
+          ${actioned.map(b => `
+            <tr style="cursor:pointer" onclick="_openBooking('${b.id}')">
+              <td style="color:var(--gold);font-weight:600;font-size:11px">${b.booking_ref||'—'}</td>
+              <td>${b.lead_name}</td>
+              <td style="color:var(--muted)">${b.partners?.name||'—'}</td>
+              <td style="color:var(--muted)">${b.experiences?.name||'—'}</td>
+              <td style="color:var(--muted);font-size:12px">${b.booking_date?fmtDate(b.booking_date):'—'}</td>
+              <td>${bookingBadge(b.status)}</td>
+            </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>` : ''}
+  `);
+}
+
+async function _approvePartnerBooking(id) {
+  const { error } = await sb.from('bookings').update({
+    status: 'confirmed',
+    confirmed_at: new Date().toISOString()
+  }).eq('id', id);
+  if (error) { alert('Error: ' + error.message); return; }
+  renderPartnerRequests();
+}
+
+async function _declinePartnerBooking(id) {
+  if (!confirm('Decline this booking request?')) return;
+  const { error } = await sb.from('bookings').update({ status: 'cancelled' }).eq('id', id);
+  if (error) { alert('Error: ' + error.message); return; }
+  renderPartnerRequests();
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
