@@ -181,6 +181,7 @@ const SECTION_TITLES = {
   'partner-requests': 'Partner Requests',
   experiences:      'Experiences',
   partners:         'Partners',
+  concierges:       'Concierges',
   commissions:      'Commissions',
   payouts:          'Payouts',
   ripples:          'Ripples Redemptions',
@@ -196,6 +197,7 @@ const RENDERERS = {
   'partner-requests': renderPartnerRequests,
   experiences:      renderExperiences,
   partners:         renderPartners,
+  concierges:       renderConcierges,
   commissions:      renderCommissions,
   payouts:          renderPayouts,
   ripples:          renderRipples,
@@ -867,12 +869,14 @@ async function _runTierCompute(btn) {
 }
 
 async function _openPartner(id) {
-  const [{ data: p }, { count: pendComm }, { data: recentBk }] = await Promise.all([
+  const [{ data: p }, { count: pendComm }, { data: recentBk }, { data: concs }] = await Promise.all([
     sb.from('partners').select('*').eq('id', id).single(),
     sb.from('commissions').select('*', { count:'exact', head:true }).eq('partner_id', id).eq('status','pending'),
     sb.from('bookings')
       .select('id,booking_ref,lead_name,status,booking_date,experiences(name)')
       .eq('partner_id', id).order('created_at', { ascending:false }).limit(5),
+    sb.from('concierges').select('id,first_name,last_name,email,status,ripples_balance')
+      .eq('partner_id', id).order('created_at', { ascending:false }),
   ]);
   if (!p) return;
 
@@ -981,6 +985,28 @@ async function _openPartner(id) {
           </tbody>
         </table>
       </div>` : ''}
+
+      <div class="sh" style="margin-bottom:12px;margin-top:24px">
+        <h3>Concierges (${concs?.length||0})</h3>
+        <button class="btn btn-ghost" style="font-size:11px;padding:4px 10px"
+          onclick="navigate('concierges')">Manage all →</button>
+      </div>
+      ${concs?.length ? `
+      <div class="table-wrap">
+        <table class="tms-table">
+          <thead><tr><th>Name</th><th>Email</th><th>Ripples</th><th>Status</th><th></th></tr></thead>
+          <tbody>
+            ${concs.map(c => `
+              <tr>
+                <td style="font-weight:500">${c.first_name} ${c.last_name}</td>
+                <td style="font-size:12px;color:var(--muted)">${c.email}</td>
+                <td style="color:var(--gold);font-weight:600">${c.ripples_balance||0}</td>
+                <td><span class="badge b-${c.status==='active'?'active':'inactive'}">${c.status}</span></td>
+                <td><button class="btn btn-ghost" style="padding:3px 8px;font-size:11px" onclick="_editConcierge('${c.id}')">Edit</button></td>
+              </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>` : '<div style="font-size:12px;color:var(--muted);padding:8px 0">No concierges linked to this partner yet.</div>'}
     </div>`);
 }
 
@@ -999,6 +1025,250 @@ async function _savePartner(id) {
     trusted_since:            document.getElementById('pe-trusted').value || null,
     fam_tour_taken:           document.getElementById('pe-fam').checked,
     fam_tour_date:            document.getElementById('pe-fam-date').value || null,
+  }).eq('id', id);
+  if (error) { msg.textContent = 'Error: ' + error.message; msg.style.color = 'var(--red)'; }
+  else { msg.textContent = 'Saved.'; msg.style.color = 'var(--green)'; setTimeout(() => { msg.textContent = ''; }, 3000); }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Concierges
+// ─────────────────────────────────────────────────────────────────────────────
+
+async function renderConcierges() {
+  setContent('<div class="loading">Loading…</div>');
+  const { data, error } = await sb
+    .from('concierges')
+    .select('*,partners(name)')
+    .order('created_at', { ascending: false });
+  if (error) { setContent(`<div class="empty">${error.message}</div>`); return; }
+
+  setContent(`
+    <div class="sh">
+      <h3>All Concierges (${data?.length || 0})</h3>
+      <button class="btn btn-primary" onclick="_showAddConcierge()">+ Add Concierge</button>
+    </div>
+
+    <div id="conc-form-wrap"></div>
+
+    <div class="table-wrap">
+      <table class="tms-table">
+        <thead><tr>
+          <th>Name</th><th>Partner</th><th>Email</th>
+          <th>Ripples Balance</th><th>Earned Total</th><th>Status</th><th>Added</th><th></th>
+        </tr></thead>
+        <tbody>
+          ${(data||[]).map(c => `
+            <tr>
+              <td style="font-weight:500">${c.first_name} ${c.last_name}</td>
+              <td style="color:var(--muted)">${c.partners?.name||'—'}</td>
+              <td style="font-size:12px"><a href="mailto:${c.email}" style="color:var(--gold)">${c.email}</a></td>
+              <td style="color:var(--gold);font-weight:600">${c.ripples_balance||0}</td>
+              <td style="color:var(--muted)">${c.ripples_earned_total||0}</td>
+              <td><span class="badge b-${c.status==='active'?'active':'inactive'}">${c.status}</span></td>
+              <td style="color:var(--muted);font-size:12px">${fmtDT(c.created_at)}</td>
+              <td><button class="btn btn-ghost" style="padding:4px 10px;font-size:11px" onclick="_editConcierge('${c.id}')">Edit</button></td>
+            </tr>`).join('')
+            || '<tr><td colspan="8" class="empty">No concierges yet. Add one to get started.</td></tr>'}
+        </tbody>
+      </table>
+    </div>`);
+}
+
+async function _showAddConcierge() {
+  const { data: partners } = await sb.from('partners').select('id,name').eq('status','active').order('name');
+  const inp = `background:var(--bg);border:1px solid var(--border);border-radius:5px;color:var(--text);font-size:13px;padding:9px 12px;width:100%;margin-top:4px`;
+  const wrap = document.getElementById('conc-form-wrap');
+  if (!wrap) return;
+
+  wrap.innerHTML = `
+    <div class="detail-panel" style="margin-bottom:20px;padding:20px">
+      <div class="sh" style="margin-bottom:16px">
+        <h3>New Concierge Account</h3>
+        <button class="btn btn-ghost" onclick="document.getElementById('conc-form-wrap').innerHTML=''">Cancel</button>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px 24px;margin-bottom:16px">
+        <div>
+          <div class="df-label">First Name</div>
+          <input id="nc-fname" style="${inp}" placeholder="e.g. Marie">
+        </div>
+        <div>
+          <div class="df-label">Last Name</div>
+          <input id="nc-lname" style="${inp}" placeholder="e.g. Joseph">
+        </div>
+        <div>
+          <div class="df-label">Email Address</div>
+          <input id="nc-email" type="email" style="${inp}" placeholder="concierge@hotel.com">
+        </div>
+        <div>
+          <div class="df-label">Phone (optional)</div>
+          <input id="nc-phone" style="${inp}" placeholder="+1 758 …">
+        </div>
+        <div style="grid-column:1/-1">
+          <div class="df-label">Partner Property</div>
+          <select id="nc-partner" style="${inp};cursor:pointer">
+            <option value="">Select property…</option>
+            ${(partners||[]).map(p => `<option value="${p.id}">${p.name}</option>`).join('')}
+          </select>
+        </div>
+      </div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:14px">
+        A password-set link will be generated for the concierge to activate their account on the Partner PWA.
+      </div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <button class="btn btn-primary" onclick="_createConcierge(this)">Create Account</button>
+        <span id="nc-msg" style="font-size:12px"></span>
+      </div>
+      <div id="nc-link-wrap" hidden style="margin-top:16px;padding:14px;background:var(--green-bg);border:1px solid rgba(76,175,125,0.3);border-radius:6px">
+        <div style="font-size:11px;color:var(--green);font-weight:600;margin-bottom:8px">✓ Account created — send this link to the concierge to set their password:</div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <input id="nc-link" readonly style="${inp};font-size:11px;color:var(--muted);flex:1" value="">
+          <button class="btn btn-ghost" style="white-space:nowrap" onclick="navigator.clipboard.writeText(document.getElementById('nc-link').value).then(()=>this.textContent='Copied!').catch(()=>{})">Copy</button>
+        </div>
+        <div style="font-size:11px;color:var(--muted);margin-top:8px">Link expires in 24 hours. Share via WhatsApp or email.</div>
+      </div>
+    </div>`;
+}
+
+async function _createConcierge(btn) {
+  const msg    = document.getElementById('nc-msg');
+  const fname  = document.getElementById('nc-fname')?.value.trim();
+  const lname  = document.getElementById('nc-lname')?.value.trim();
+  const email  = document.getElementById('nc-email')?.value.trim();
+  const phone  = document.getElementById('nc-phone')?.value.trim();
+  const pid    = document.getElementById('nc-partner')?.value;
+
+  if (!fname || !lname || !email || !pid) {
+    msg.textContent = 'Please fill in all required fields.';
+    msg.style.color = 'var(--red)'; return;
+  }
+
+  btn.disabled = true; btn.textContent = 'Creating…';
+  msg.textContent = ''; msg.style.color = '';
+
+  const { data, error } = await sb.functions.invoke('create-concierge', {
+    body: { first_name: fname, last_name: lname, email, phone: phone||null, partner_id: pid },
+  });
+
+  btn.disabled = false; btn.textContent = 'Create Account';
+
+  if (error || data?.error) {
+    msg.textContent = 'Error: ' + (data?.error || error?.message);
+    msg.style.color = 'var(--red)'; return;
+  }
+
+  msg.textContent = 'Account created.';
+  msg.style.color = 'var(--green)';
+
+  if (data?.login_link) {
+    const wrap = document.getElementById('nc-link-wrap');
+    const inp  = document.getElementById('nc-link');
+    if (wrap && inp) { inp.value = data.login_link; wrap.hidden = false; }
+  }
+
+  // Refresh concierge table
+  const { data: concs } = await sb.from('concierges').select('*,partners(name)').order('created_at', { ascending:false });
+  const tbody = document.querySelector('.tms-table tbody');
+  if (tbody && concs) {
+    tbody.innerHTML = concs.map(c => `
+      <tr>
+        <td style="font-weight:500">${c.first_name} ${c.last_name}</td>
+        <td style="color:var(--muted)">${c.partners?.name||'—'}</td>
+        <td style="font-size:12px"><a href="mailto:${c.email}" style="color:var(--gold)">${c.email}</a></td>
+        <td style="color:var(--gold);font-weight:600">${c.ripples_balance||0}</td>
+        <td style="color:var(--muted)">${c.ripples_earned_total||0}</td>
+        <td><span class="badge b-${c.status==='active'?'active':'inactive'}">${c.status}</span></td>
+        <td style="color:var(--muted);font-size:12px">${fmtDT(c.created_at)}</td>
+        <td><button class="btn btn-ghost" style="padding:4px 10px;font-size:11px" onclick="_editConcierge('${c.id}')">Edit</button></td>
+      </tr>`).join('');
+  }
+}
+
+async function _editConcierge(id) {
+  const { data: c } = await sb.from('concierges').select('*,partners(name)').eq('id', id).single();
+  if (!c) return;
+
+  const { data: ledger } = await sb.from('ripples_ledger')
+    .select('transaction_type,ripples_delta,balance_after,created_at,notes')
+    .eq('concierge_id', id).order('created_at', { ascending:false }).limit(10);
+
+  const inp = `background:var(--bg);border:1px solid var(--border);border-radius:5px;color:var(--text);font-size:13px;padding:9px 12px;width:100%;margin-top:4px`;
+
+  setContent(`
+    <div class="detail-panel">
+      <div class="detail-top">
+        <div>
+          <div class="detail-ref">${c.partners?.name||'—'}</div>
+          <div class="detail-name">${c.first_name} ${c.last_name}</div>
+          <div style="display:flex;gap:8px;margin-top:6px;align-items:center">
+            <span class="badge b-${c.status==='active'?'active':'inactive'}">${c.status}</span>
+            <span style="font-size:12px;color:var(--gold)">⬡ ${c.ripples_balance||0} ripples</span>
+          </div>
+        </div>
+        <div class="detail-actions">
+          <button class="btn btn-ghost" onclick="renderConcierges()">&#8592; Back</button>
+        </div>
+      </div>
+
+      <div class="detail-grid" style="margin-bottom:24px">
+        <div><div class="df-label">Email</div><div class="df-value"><a href="mailto:${c.email}" style="color:var(--gold)">${c.email}</a></div></div>
+        <div><div class="df-label">Ripples Earned Total</div><div class="df-value" style="color:var(--gold)">${c.ripples_earned_total||0}</div></div>
+        <div><div class="df-label">Ripples Redeemed Total</div><div class="df-value">${c.ripples_redeemed_total||0}</div></div>
+        <div><div class="df-label">Member Since</div><div class="df-value" style="color:var(--muted)">${fmtDT(c.created_at)}</div></div>
+      </div>
+
+      <div class="sh" style="margin-bottom:14px"><h3>Edit Details</h3></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px 24px;margin-bottom:20px">
+        <div>
+          <div class="df-label">First Name</div>
+          <input id="ec-fname" style="${inp}" value="${esc(c.first_name||'')}">
+        </div>
+        <div>
+          <div class="df-label">Last Name</div>
+          <input id="ec-lname" style="${inp}" value="${esc(c.last_name||'')}">
+        </div>
+        <div>
+          <div class="df-label">Phone</div>
+          <input id="ec-phone" style="${inp}" value="${esc(c.phone||'')}">
+        </div>
+        <div>
+          <div class="df-label">Status</div>
+          <select id="ec-status" style="${inp};cursor:pointer">
+            <option value="active" ${c.status==='active'?'selected':''}>Active</option>
+            <option value="inactive" ${c.status==='inactive'?'selected':''}>Inactive</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:32px">
+        <button class="btn btn-primary" onclick="_saveConcierge('${id}')">Save Changes</button>
+        <span id="ec-msg" style="font-size:12px"></span>
+      </div>
+
+      ${ledger?.length ? `
+      <div class="sh" style="margin-bottom:12px"><h3>Ripples Ledger</h3></div>
+      <div class="table-wrap">
+        <table class="tms-table">
+          <thead><tr><th>Type</th><th>Delta</th><th>Balance After</th><th>Date</th></tr></thead>
+          <tbody>
+            ${ledger.map(l => `
+              <tr>
+                <td><span class="badge b-${l.transaction_type==='earned'?'confirmed':l.transaction_type==='redeemed'?'enquiry':'cancelled'}">${l.transaction_type}</span></td>
+                <td style="color:${l.ripples_delta>0?'var(--green)':'var(--red)'};font-weight:600">${l.ripples_delta>0?'+':''}${l.ripples_delta}</td>
+                <td style="color:var(--gold)">${l.balance_after}</td>
+                <td style="color:var(--muted);font-size:12px">${fmtDT(l.created_at)}</td>
+              </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>` : '<div style="font-size:12px;color:var(--muted);padding:12px 0">No Ripples transactions yet.</div>'}
+    </div>`);
+}
+
+async function _saveConcierge(id) {
+  const msg = document.getElementById('ec-msg');
+  const { error } = await sb.from('concierges').update({
+    first_name: document.getElementById('ec-fname').value.trim(),
+    last_name:  document.getElementById('ec-lname').value.trim(),
+    phone:      document.getElementById('ec-phone').value.trim() || null,
+    status:     document.getElementById('ec-status').value,
   }).eq('id', id);
   if (error) { msg.textContent = 'Error: ' + error.message; msg.style.color = 'var(--red)'; }
   else { msg.textContent = 'Saved.'; msg.style.color = 'var(--green)'; setTimeout(() => { msg.textContent = ''; }, 3000); }
