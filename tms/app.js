@@ -181,6 +181,9 @@ const SECTION_TITLES = {
   'partner-requests': 'Partner Requests',
   experiences:      'Experiences',
   partners:         'Partners',
+  commissions:      'Commissions',
+  payouts:          'Payouts',
+  ripples:          'Ripples Redemptions',
   equipment:        'Equipment',
   conservation:     'Conservation',
   waitlist:         'Waitlist'
@@ -193,6 +196,9 @@ const RENDERERS = {
   'partner-requests': renderPartnerRequests,
   experiences:      renderExperiences,
   partners:         renderPartners,
+  commissions:      renderCommissions,
+  payouts:          renderPayouts,
+  ripples:          renderRipples,
   equipment:        renderEquipment,
   conservation:     renderConservation,
   waitlist:         renderWaitlist
@@ -283,6 +289,8 @@ async function renderDashboard() {
     { count: todayTours },
     { count: weekTours },
     { count: activePartners },
+    { count: pendingComm },
+    { count: pendingRipl },
     { data: recent },
     { data: todayOccasions }
   ] = await Promise.all([
@@ -291,6 +299,8 @@ async function renderDashboard() {
     sb.from('bookings').select('*', { count:'exact', head:true }).eq('booking_date', td).eq('status','confirmed'),
     sb.from('bookings').select('*', { count:'exact', head:true }).gte('booking_date', wStart).lte('booking_date', wEnd).in('status',['confirmed','completed']),
     sb.from('partners').select('*', { count:'exact', head:true }).eq('status','active'),
+    sb.from('commissions').select('*', { count:'exact', head:true }).eq('status','pending'),
+    sb.from('redemptions').select('*', { count:'exact', head:true }).eq('status','requested'),
     sb.from('bookings')
       .select('id,booking_ref,lead_name,status,source,created_at,experiences(name)')
       .order('created_at', { ascending:false }).limit(10),
@@ -302,12 +312,13 @@ async function renderDashboard() {
       .order('created_at')
   ]);
 
-  // Update partner requests badge in sidebar
+  // Update sidebar badges
   const prBadge = document.getElementById('pr-badge');
-  if (prBadge) {
-    prBadge.textContent = partnerPending || 0;
-    prBadge.style.display = partnerPending > 0 ? 'inline' : 'none';
-  }
+  if (prBadge) { prBadge.textContent = partnerPending || 0; prBadge.style.display = partnerPending > 0 ? 'inline' : 'none'; }
+  const commBadge = document.getElementById('comm-badge');
+  if (commBadge) { commBadge.textContent = pendingComm || 0; commBadge.style.display = pendingComm > 0 ? 'inline' : 'none'; }
+  const riplBadge = document.getElementById('ripl-badge');
+  if (riplBadge) { riplBadge.textContent = pendingRipl || 0; riplBadge.style.display = pendingRipl > 0 ? 'inline' : 'none'; }
 
   setContent(`
     <div class="stat-grid">
@@ -336,6 +347,17 @@ async function renderDashboard() {
         <div class="stat-value">${activePartners || 0}</div>
         <div class="stat-sub">Hotels &amp; guesthouses</div>
       </div>
+      <div class="stat-card" style="${pendingComm > 0 ? 'border-color:var(--gold);' : ''}">
+        <div class="stat-label">Pending Commissions</div>
+        <div class="stat-value ${pendingComm > 0 ? 'gold' : ''}">${pendingComm || 0}</div>
+        <div class="stat-sub"><a href="#" onclick="navigate('commissions')" style="color:var(--gold)">Review →</a></div>
+      </div>
+      ${pendingRipl > 0 ? `
+      <div class="stat-card" style="border-color:var(--amber)">
+        <div class="stat-label">Ripples Requests</div>
+        <div class="stat-value" style="color:var(--amber)">${pendingRipl}</div>
+        <div class="stat-sub"><a href="#" onclick="navigate('ripples')" style="color:var(--amber)">Review →</a></div>
+      </div>` : ''}
     </div>
 
     ${todayOccasions?.length ? `
@@ -780,30 +802,47 @@ async function renderExperiences() {
 // Partners
 // ─────────────────────────────────────────────────────────────────────────────
 
+function tierBadge(tier) {
+  const cfg = {
+    standard:  { col:'var(--muted)',  bg:'rgba(255,255,255,0.06)' },
+    preferred: { col:'var(--gold)',   bg:'var(--gold-bg)' },
+    elite:     { col:'var(--green)',  bg:'var(--green-bg)' },
+  };
+  const { col, bg } = cfg[tier] || cfg.standard;
+  return `<span style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:3px;color:${col};background:${bg};text-transform:capitalize;white-space:nowrap">${tier||'standard'}</span>`;
+}
+
 async function renderPartners() {
   setContent('<div class="loading">Loading…</div>');
   const { data, error } = await sb.from('partners').select('*').order('name');
   if (error) { setContent(`<div class="empty">${error.message}</div>`); return; }
-
   if (!data?.length) { setContent('<div class="empty">No partners registered yet.</div>'); return; }
 
   setContent(`
+    <div class="sh">
+      <h3>All Partners (${data.length})</h3>
+      <button class="btn btn-ghost" onclick="_runTierCompute(this)">Run Tier Compute</button>
+    </div>
     <div class="table-wrap">
       <table class="tms-table">
         <thead><tr>
           <th>Partner</th><th>Type</th><th>Contact</th>
-          <th>Commission</th><th>FAM Tour</th><th>Status</th><th>Since</th>
+          <th>Tier</th><th>Commission</th><th>FAM Tour</th><th>Status</th><th>Since</th>
         </tr></thead>
         <tbody>
           ${data.map(p => `
-            <tr>
+            <tr style="cursor:pointer" onclick="_openPartner('${p.id}')">
               <td style="font-weight:500">${p.name}</td>
               <td style="color:var(--muted)">${p.type||'—'}</td>
               <td>
                 <div>${p.contact_name||'—'}</div>
                 ${p.contact_email?`<div style="font-size:11px;color:var(--muted)">${p.contact_email}</div>`:''}
               </td>
-              <td style="color:var(--gold)">${p.commission_rate?Number(p.commission_rate)+'%':'—'}</td>
+              <td>
+                ${tierBadge(p.commission_tier)}
+                ${p.tier_locked_at?`<div style="font-size:10px;color:var(--muted);margin-top:3px">Locked ${fmtDate(p.tier_locked_at)}</div>`:''}
+              </td>
+              <td style="color:var(--gold)">${p.commission_rate_override?Number(p.commission_rate_override)+'%*':p.commission_rate?Number(p.commission_rate)+'%':'—'}</td>
               <td>${p.fam_tour_taken
                   ?`<span style="color:var(--green)">✓${p.fam_tour_date?' '+fmtDate(p.fam_tour_date):''}</span>`
                   :'<span style="color:var(--muted)">—</span>'}</td>
@@ -813,6 +852,503 @@ async function renderPartners() {
         </tbody>
       </table>
     </div>`);
+}
+
+async function _runTierCompute(btn) {
+  if (!confirm('Run tier compute for all active partners?\n\nThis updates commission tiers based on last month\'s confirmed booking volume.')) return;
+  btn.disabled = true;
+  btn.textContent = 'Computing…';
+  const { error } = await sb.rpc('compute_partner_tiers');
+  btn.disabled = false;
+  btn.textContent = 'Run Tier Compute';
+  if (error) { alert('Error: ' + error.message); return; }
+  alert('Tier compute complete. Partner tiers have been updated.');
+  renderPartners();
+}
+
+async function _openPartner(id) {
+  const [{ data: p }, { count: pendComm }, { data: recentBk }] = await Promise.all([
+    sb.from('partners').select('*').eq('id', id).single(),
+    sb.from('commissions').select('*', { count:'exact', head:true }).eq('partner_id', id).eq('status','pending'),
+    sb.from('bookings')
+      .select('id,booking_ref,lead_name,status,booking_date,experiences(name)')
+      .eq('partner_id', id).order('created_at', { ascending:false }).limit(5),
+  ]);
+  if (!p) return;
+
+  const inp = (val) => `background:var(--bg);border:1px solid var(--border);border-radius:5px;color:var(--text);font-size:13px;padding:9px 12px;width:100%;margin-top:4px`;
+
+  setContent(`
+    <div class="detail-panel">
+      <div class="detail-top">
+        <div>
+          <div class="detail-ref">Partner · ${p.type||''}</div>
+          <div class="detail-name">${p.name}</div>
+          <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;align-items:center">
+            ${tierBadge(p.commission_tier)}
+            <span class="badge b-${p.status}">${p.status}</span>
+            ${p.tier_locked_at?`<span style="font-size:10px;color:var(--muted)">Tier locked ${fmtDate(p.tier_locked_at)}</span>`:''}
+          </div>
+        </div>
+        <div class="detail-actions">
+          <button class="btn btn-ghost" onclick="renderPartners()">&#8592; Back</button>
+        </div>
+      </div>
+
+      <div class="detail-grid" style="margin-bottom:24px">
+        <div><div class="df-label">Bookings Count</div><div class="df-value">${p.bookings_count||0}</div></div>
+        <div><div class="df-label">Pending Commissions</div><div class="df-value" style="color:${pendComm>0?'var(--gold)':'inherit'}">${pendComm||0} <a href="#" onclick="navigate('commissions')" style="font-size:11px;color:var(--gold)">→ Review</a></div></div>
+        <div><div class="df-label">Confirmation Mode</div><div class="df-value">${p.confirmation_mode||'standard'}</div></div>
+        <div><div class="df-label">Trusted Since</div><div class="df-value">${p.trusted_since?fmtDate(p.trusted_since):'—'}</div></div>
+      </div>
+
+      <div class="sh" style="margin-bottom:16px"><h3>Edit Partner</h3></div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px 24px;margin-bottom:24px">
+        <div>
+          <div class="df-label">Name</div>
+          <input id="pe-name" style="${inp()}" value="${esc(p.name||'')}">
+        </div>
+        <div>
+          <div class="df-label">Type</div>
+          <input id="pe-type" style="${inp()}" value="${esc(p.type||'')}" placeholder="Hotel, Guesthouse, Villa…">
+        </div>
+        <div>
+          <div class="df-label">Contact Name</div>
+          <input id="pe-cname" style="${inp()}" value="${esc(p.contact_name||'')}">
+        </div>
+        <div>
+          <div class="df-label">Contact Email</div>
+          <input id="pe-cemail" type="email" style="${inp()}" value="${esc(p.contact_email||'')}">
+        </div>
+        <div>
+          <div class="df-label">Contact Phone</div>
+          <input id="pe-cphone" style="${inp()}" value="${esc(p.contact_phone||'')}">
+        </div>
+        <div>
+          <div class="df-label">Status</div>
+          <select id="pe-status" style="${inp()};cursor:pointer">
+            <option value="active" ${p.status==='active'?'selected':''}>Active</option>
+            <option value="inactive" ${p.status==='inactive'?'selected':''}>Inactive</option>
+            <option value="pending" ${p.status==='pending'?'selected':''}>Pending</option>
+          </select>
+        </div>
+        <div>
+          <div class="df-label">Commission Rate Override (%)</div>
+          <input id="pe-rate-override" type="number" step="0.01" min="0" max="100" style="${inp()}"
+            value="${p.commission_rate_override||''}" placeholder="Leave blank to use tier rate">
+        </div>
+        <div>
+          <div class="df-label">Confirmation Mode</div>
+          <select id="pe-confmode" style="${inp()};cursor:pointer">
+            <option value="standard" ${p.confirmation_mode!=='trusted'?'selected':''}>Standard</option>
+            <option value="trusted" ${p.confirmation_mode==='trusted'?'selected':''}>Trusted (auto-confirm)</option>
+          </select>
+        </div>
+        <div>
+          <div class="df-label">Trusted Since</div>
+          <input id="pe-trusted" type="date" style="${inp()}" value="${p.trusted_since||''}">
+        </div>
+        <div>
+          <div class="df-label">FAM Tour Date</div>
+          <input id="pe-fam-date" type="date" style="${inp()}" value="${p.fam_tour_date||''}">
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding-top:18px">
+          <input id="pe-fam" type="checkbox" ${p.fam_tour_taken?'checked':''} style="width:15px;height:15px;cursor:pointer">
+          <label for="pe-fam" class="df-label" style="margin:0;cursor:pointer">FAM Tour Taken</label>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:32px">
+        <button class="btn btn-primary" onclick="_savePartner('${id}')">Save Changes</button>
+        <span id="partner-save-msg" style="font-size:12px"></span>
+      </div>
+
+      ${recentBk?.length ? `
+      <div class="sh" style="margin-bottom:12px"><h3>Recent Bookings</h3></div>
+      <div class="table-wrap">
+        <table class="tms-table">
+          <thead><tr><th>Ref</th><th>Guest</th><th>Experience</th><th>Date</th><th>Status</th></tr></thead>
+          <tbody>
+            ${recentBk.map(b => `
+              <tr style="cursor:pointer" onclick="_openBooking('${b.id}')">
+                <td style="color:var(--gold);font-size:11px;font-weight:600">${b.booking_ref||'—'}</td>
+                <td>${b.lead_name}</td>
+                <td style="color:var(--muted)">${b.experiences?.name||'—'}</td>
+                <td style="color:var(--muted);font-size:12px">${b.booking_date?fmtDate(b.booking_date):'—'}</td>
+                <td>${bookingBadge(b.status)}</td>
+              </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>` : ''}
+    </div>`);
+}
+
+async function _savePartner(id) {
+  const msg = document.getElementById('partner-save-msg');
+  const override = document.getElementById('pe-rate-override').value;
+  const { error } = await sb.from('partners').update({
+    name:                     document.getElementById('pe-name').value.trim(),
+    type:                     document.getElementById('pe-type').value.trim() || null,
+    contact_name:             document.getElementById('pe-cname').value.trim() || null,
+    contact_email:            document.getElementById('pe-cemail').value.trim() || null,
+    contact_phone:            document.getElementById('pe-cphone').value.trim() || null,
+    status:                   document.getElementById('pe-status').value,
+    commission_rate_override: override ? Number(override) : null,
+    confirmation_mode:        document.getElementById('pe-confmode').value,
+    trusted_since:            document.getElementById('pe-trusted').value || null,
+    fam_tour_taken:           document.getElementById('pe-fam').checked,
+    fam_tour_date:            document.getElementById('pe-fam-date').value || null,
+  }).eq('id', id);
+  if (error) { msg.textContent = 'Error: ' + error.message; msg.style.color = 'var(--red)'; }
+  else { msg.textContent = 'Saved.'; msg.style.color = 'var(--green)'; setTimeout(() => { msg.textContent = ''; }, 3000); }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Commissions
+// ─────────────────────────────────────────────────────────────────────────────
+
+let _commFilter = 'pending';
+
+async function renderCommissions() {
+  const tabs = ['pending','approved','paid','all'];
+  setContent(`
+    <div class="tabs">
+      ${tabs.map(s => `<button class="tab ${_commFilter===s?'active':''}" onclick="_filterCommissions('${s}')">${cap(s)}</button>`).join('')}
+    </div>
+    <div id="comm-wrap"><div class="loading">Loading…</div></div>
+  `);
+  await _loadCommissions();
+}
+
+function _filterCommissions(f) { _commFilter = f; renderCommissions(); }
+
+async function _loadCommissions() {
+  let q = sb.from('commissions')
+    .select('id,status,booking_value_usd,commission_rate,commission_amount_usd,commission_tier_at_booking,approved_at,created_at,bookings(booking_ref,lead_name,booking_date,experiences(name)),partners(name)')
+    .order('created_at', { ascending:false }).limit(300);
+  if (_commFilter !== 'all') q = q.eq('status', _commFilter);
+
+  const { data, error } = await q;
+  const wrap = document.getElementById('comm-wrap');
+  if (!wrap) return;
+  if (error) { wrap.innerHTML = `<div class="empty">Error: ${error.message}</div>`; return; }
+  if (!data?.length) { wrap.innerHTML = `<div class="empty">No ${_commFilter==='all'?'':_commFilter+' '}commissions found.</div>`; return; }
+
+  const total = data.reduce((s, c) => s + Number(c.commission_amount_usd || 0), 0);
+  wrap.innerHTML = `
+    <div style="display:flex;justify-content:flex-end;margin-bottom:12px">
+      <span style="font-size:12px;color:var(--muted)">Total shown: <strong style="color:var(--gold)">$${total.toFixed(2)} USD</strong></span>
+    </div>
+    <div class="table-wrap">
+      <table class="tms-table">
+        <thead><tr>
+          <th>Booking</th><th>Partner</th><th>Tour Date</th>
+          <th>Booking Value</th><th>Tier</th><th>Rate</th><th>Commission</th><th>Status</th><th></th>
+        </tr></thead>
+        <tbody>
+          ${data.map(c => `
+            <tr>
+              <td>
+                <div style="color:var(--gold);font-size:11px;font-weight:600">${c.bookings?.booking_ref||'—'}</div>
+                <div style="font-size:11px;color:var(--muted)">${c.bookings?.lead_name||''}</div>
+                <div style="font-size:10px;color:var(--muted)">${c.bookings?.experiences?.name||''}</div>
+              </td>
+              <td>${c.partners?.name||'—'}</td>
+              <td style="color:var(--muted);font-size:12px">${c.bookings?.booking_date?fmtDate(c.bookings.booking_date):'—'}</td>
+              <td style="color:var(--muted)">$${Number(c.booking_value_usd||0).toFixed(2)}</td>
+              <td>${tierBadge(c.commission_tier_at_booking)}</td>
+              <td style="color:var(--muted)">${c.commission_rate?Number(c.commission_rate)+'%':'—'}</td>
+              <td style="color:var(--gold);font-weight:600">$${Number(c.commission_amount_usd||0).toFixed(2)}</td>
+              <td><span class="badge b-${c.status==='pending'?'enquiry':c.status==='approved'?'qualified':c.status==='paid'?'confirmed':'cancelled'}">${c.status}</span></td>
+              <td style="white-space:nowrap">
+                ${c.status==='pending'?`<button class="btn btn-primary" style="padding:5px 10px;font-size:11px" onclick="_approveCommission('${c.id}')">Approve</button>`:''}
+                ${c.status==='approved'?`<button class="btn btn-ghost" style="padding:5px 10px;font-size:11px" onclick="_reverseCommission('${c.id}')">Reverse</button>`:''}
+              </td>
+            </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>`;
+}
+
+async function _approveCommission(id) {
+  const { error } = await sb.from('commissions').update({ status:'approved', approved_at:new Date().toISOString() }).eq('id', id);
+  if (error) { alert('Error: ' + error.message); return; }
+  _loadCommissions();
+}
+
+async function _reverseCommission(id) {
+  if (!confirm('Reverse this commission back to pending?')) return;
+  const { error } = await sb.from('commissions').update({ status:'pending', approved_at:null }).eq('id', id);
+  if (error) { alert('Error: ' + error.message); return; }
+  _loadCommissions();
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Payouts
+// ─────────────────────────────────────────────────────────────────────────────
+
+async function renderPayouts() {
+  setContent('<div class="loading">Loading…</div>');
+  const [{ data: partners }, { data: history }] = await Promise.all([
+    sb.from('partners').select('id,name').eq('status','active').order('name'),
+    sb.from('payouts')
+      .select('id,payout_amount_usd,payout_method,reference,paid_at,notes,created_at,partners(name)')
+      .order('created_at', { ascending:false }).limit(100),
+  ]);
+
+  const inp = `background:var(--bg);border:1px solid var(--border);border-radius:5px;color:var(--text);font-size:13px;padding:9px 12px;width:100%;margin-top:4px`;
+
+  setContent(`
+    <div style="display:grid;grid-template-columns:360px 1fr;gap:20px;align-items:start">
+
+      <div class="detail-panel" style="padding:20px">
+        <div class="sh" style="margin-bottom:16px"><h3>Create Payout</h3></div>
+
+        <div style="margin-bottom:12px">
+          <div class="df-label">Partner</div>
+          <select id="payout-partner" style="${inp};cursor:pointer" onchange="_loadPayoutPool(this.value)">
+            <option value="">Select partner…</option>
+            ${(partners||[]).map(p => `<option value="${p.id}">${p.name}</option>`).join('')}
+          </select>
+        </div>
+
+        <div id="payout-pool" style="font-size:12px;color:var(--muted);padding:10px 0">
+          Select a partner to load their approved commissions.
+        </div>
+
+        <div id="payout-form" hidden>
+          <div style="margin-bottom:12px">
+            <div class="df-label">Payout Method</div>
+            <select id="payout-method" style="${inp};cursor:pointer">
+              <option value="bank_transfer">Bank Transfer</option>
+              <option value="cheque">Cheque</option>
+              <option value="mobile_money">Mobile Money</option>
+            </select>
+          </div>
+          <div style="margin-bottom:12px">
+            <div class="df-label">Reference / Transaction ID</div>
+            <input id="payout-ref" style="${inp}" placeholder="e.g. TRF-20260630-001">
+          </div>
+          <div style="margin-bottom:12px">
+            <div class="df-label">Date Paid</div>
+            <input id="payout-date" type="date" style="${inp}" value="${today()}">
+          </div>
+          <div style="margin-bottom:16px">
+            <div class="df-label">Notes</div>
+            <textarea id="payout-notes" style="${inp};resize:vertical;min-height:60px"></textarea>
+          </div>
+          <div id="payout-total" style="font-size:14px;color:var(--gold);font-weight:600;margin-bottom:14px"></div>
+          <button class="btn btn-primary" onclick="_createPayout()">Create Payout Record</button>
+          <div id="payout-msg" style="font-size:12px;margin-top:8px"></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="sh" style="margin-bottom:12px"><h3>Payout History</h3></div>
+        <div class="table-wrap">
+          <table class="tms-table">
+            <thead><tr>
+              <th>Partner</th><th>Amount</th><th>Method</th><th>Reference</th><th>Date Paid</th><th>Notes</th>
+            </tr></thead>
+            <tbody>
+              ${(history||[]).map(p => `
+                <tr>
+                  <td style="font-weight:500">${p.partners?.name||'—'}</td>
+                  <td style="color:var(--gold);font-weight:600">$${Number(p.payout_amount_usd||0).toFixed(2)}</td>
+                  <td style="color:var(--muted)">${(p.payout_method||'').replace(/_/g,' ')}</td>
+                  <td style="font-size:12px;color:var(--muted)">${p.reference||'—'}</td>
+                  <td style="font-size:12px;color:var(--muted)">${p.paid_at?fmtDate(p.paid_at):'—'}</td>
+                  <td style="font-size:12px;color:var(--muted)">${p.notes||'—'}</td>
+                </tr>`).join('')
+                || '<tr><td colspan="6" class="empty">No payouts recorded yet.</td></tr>'}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>`);
+}
+
+async function _loadPayoutPool(partnerId) {
+  const pool = document.getElementById('payout-pool');
+  const form = document.getElementById('payout-form');
+  if (!partnerId) {
+    pool.innerHTML = `<div style="font-size:12px;color:var(--muted);padding:10px 0">Select a partner to load their approved commissions.</div>`;
+    form.hidden = true; return;
+  }
+
+  const { data, error } = await sb.from('commissions')
+    .select('id,commission_amount_usd,created_at,bookings(booking_ref,lead_name,booking_date)')
+    .eq('partner_id', partnerId).eq('status','approved').is('payout_id', null)
+    .order('created_at');
+
+  if (error) { pool.innerHTML = `<div class="empty">Error: ${error.message}</div>`; return; }
+  if (!data?.length) {
+    pool.innerHTML = `<div style="font-size:12px;color:var(--muted);padding:10px 0">No approved commissions awaiting payout for this partner.</div>`;
+    form.hidden = true; return;
+  }
+
+  pool.innerHTML = `
+    <div style="font-size:11px;color:var(--muted);margin-bottom:8px">Select commissions to include:</div>
+    <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:14px">
+      ${data.map(c => `
+        <label style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:8px 10px;background:var(--bg);border-radius:5px;border:1px solid var(--border)">
+          <input type="checkbox" value="${c.id}" data-amount="${c.commission_amount_usd||0}"
+            onchange="_updatePayoutTotal()" style="width:14px;height:14px;cursor:pointer">
+          <div style="flex:1;min-width:0">
+            <div style="font-size:11px;color:var(--gold);font-weight:600">${c.bookings?.booking_ref||'—'} · ${c.bookings?.lead_name||''}</div>
+            <div style="font-size:10px;color:var(--muted)">${c.bookings?.booking_date?fmtDate(c.bookings.booking_date):'—'}</div>
+          </div>
+          <div style="font-size:13px;color:var(--gold);font-weight:600;white-space:nowrap">$${Number(c.commission_amount_usd||0).toFixed(2)}</div>
+        </label>`).join('')}
+    </div>`;
+
+  document.getElementById('payout-total').textContent = 'Total selected: $0.00 USD';
+  form.hidden = false;
+}
+
+function _updatePayoutTotal() {
+  const boxes = document.querySelectorAll('#payout-pool input[type="checkbox"]:checked');
+  const total = Array.from(boxes).reduce((s, el) => s + Number(el.dataset.amount), 0);
+  const el = document.getElementById('payout-total');
+  if (el) el.textContent = `Total selected: $${total.toFixed(2)} USD`;
+}
+
+async function _createPayout() {
+  const boxes = Array.from(document.querySelectorAll('#payout-pool input[type="checkbox"]:checked'));
+  if (!boxes.length) { alert('Select at least one commission to include.'); return; }
+
+  const partnerId = document.getElementById('payout-partner').value;
+  const commIds   = boxes.map(el => el.value);
+  const total     = boxes.reduce((s, el) => s + Number(el.dataset.amount), 0);
+  const msg       = document.getElementById('payout-msg');
+
+  const { data: payout, error: pe } = await sb.from('payouts').insert({
+    partner_id:        partnerId,
+    payout_amount_usd: total,
+    commission_ids:    commIds,
+    payout_method:     document.getElementById('payout-method').value,
+    reference:         document.getElementById('payout-ref').value.trim() || null,
+    paid_at:           document.getElementById('payout-date').value || null,
+    notes:             document.getElementById('payout-notes').value.trim() || null,
+  }).select().single();
+
+  if (pe) { msg.textContent = 'Error: ' + pe.message; msg.style.color = 'var(--red)'; return; }
+
+  const { error: ce } = await sb.from('commissions')
+    .update({ status:'paid', payout_id:payout.id }).in('id', commIds);
+  if (ce) { msg.textContent = 'Payout created but commission update failed: ' + ce.message; msg.style.color = 'var(--amber)'; return; }
+
+  msg.textContent = `Payout of $${total.toFixed(2)} recorded.`;
+  msg.style.color = 'var(--green)';
+  setTimeout(() => renderPayouts(), 1500);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Ripples Redemptions
+// ─────────────────────────────────────────────────────────────────────────────
+
+let _riplFilter = 'requested';
+
+async function renderRipples() {
+  const tabs = ['requested','approved','paid','declined','all'];
+  setContent(`
+    <div class="tabs">
+      ${tabs.map(s => `<button class="tab ${_riplFilter===s?'active':''}" onclick="_filterRedemptions('${s}')">${cap(s)}</button>`).join('')}
+    </div>
+    <div id="ripl-wrap"><div class="loading">Loading…</div></div>
+  `);
+  await _loadRedemptions();
+}
+
+function _filterRedemptions(f) { _riplFilter = f; renderRipples(); }
+
+async function _loadRedemptions() {
+  let q = sb.from('redemptions')
+    .select('id,redemption_type,ripples_cost,cash_value_usd,payout_method,payout_reference,status,approved_at,paid_at,created_at,concierges(first_name,last_name,ripples_balance,partners(name)),experiences(name)')
+    .order('created_at', { ascending:false }).limit(200);
+  if (_riplFilter !== 'all') q = q.eq('status', _riplFilter);
+
+  const { data, error } = await q;
+  const wrap = document.getElementById('ripl-wrap');
+  if (!wrap) return;
+  if (error) { wrap.innerHTML = `<div class="empty">Error: ${error.message}</div>`; return; }
+  if (!data?.length) { wrap.innerHTML = `<div class="empty">No ${_riplFilter==='all'?'':_riplFilter+' '}redemption requests.</div>`; return; }
+
+  wrap.innerHTML = `
+    <div class="table-wrap">
+      <table class="tms-table">
+        <thead><tr>
+          <th>Concierge</th><th>Partner</th><th>Type</th>
+          <th>Ripples</th><th>Cash Value</th><th>Status</th><th>Requested</th><th></th>
+        </tr></thead>
+        <tbody>
+          ${data.map(r => `
+            <tr>
+              <td>
+                <div style="font-weight:500">${r.concierges?.first_name||''} ${r.concierges?.last_name||''}</div>
+                <div style="font-size:10px;color:var(--muted)">Balance: ${r.concierges?.ripples_balance||0} ripples</div>
+              </td>
+              <td style="color:var(--muted)">${r.concierges?.partners?.name||'—'}</td>
+              <td>
+                <div>${r.redemption_type==='free_tour'?'Free Tour':'Cash Payout'}</div>
+                ${r.redemption_type==='free_tour'&&r.experiences?.name?`<div style="font-size:10px;color:var(--muted)">${r.experiences.name}</div>`:''}
+                ${r.redemption_type==='cash'&&r.payout_method?`<div style="font-size:10px;color:var(--muted)">${r.payout_method.replace(/_/g,' ')}</div>`:''}
+              </td>
+              <td style="color:var(--gold);font-weight:600">${r.ripples_cost}</td>
+              <td style="color:var(--muted)">${r.cash_value_usd?'$'+Number(r.cash_value_usd).toFixed(2):'—'}</td>
+              <td><span class="badge b-${r.status==='requested'?'enquiry':r.status==='approved'?'qualified':r.status==='paid'?'confirmed':'cancelled'}">${r.status}</span></td>
+              <td style="color:var(--muted);font-size:12px">${fmtDT(r.created_at)}</td>
+              <td style="white-space:nowrap">
+                ${r.status==='requested'?`
+                  <button class="btn btn-primary" style="padding:5px 10px;font-size:11px;margin-right:4px" onclick="_approveRedemption('${r.id}')">Approve</button>
+                  <button class="btn btn-danger" style="padding:5px 10px;font-size:11px" onclick="_declineRedemption('${r.id}')">Decline</button>`:''}
+                ${r.status==='approved'?`<button class="btn btn-success" style="padding:5px 10px;font-size:11px" onclick="_markRedemptionPaid('${r.id}')">Mark Paid</button>`:''}
+                ${r.payout_reference?`<div style="font-size:10px;color:var(--muted);margin-top:4px">Ref: ${r.payout_reference}</div>`:''}
+              </td>
+            </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>`;
+}
+
+async function _approveRedemption(id) {
+  const { error } = await sb.from('redemptions').update({ status:'approved', approved_at:new Date().toISOString() }).eq('id', id);
+  if (error) { alert('Error: ' + error.message); return; }
+  _loadRedemptions();
+}
+
+async function _declineRedemption(id) {
+  if (!confirm('Decline this redemption request?\nThe concierge\'s Ripples balance will not be deducted.')) return;
+  const { error } = await sb.from('redemptions').update({ status:'declined' }).eq('id', id);
+  if (error) { alert('Error: ' + error.message); return; }
+  _loadRedemptions();
+}
+
+async function _markRedemptionPaid(id) {
+  const ref = prompt('Enter payout reference (optional):');
+  if (ref === null) return;
+
+  const { data: r } = await sb.from('redemptions').select('concierge_id,ripples_cost').eq('id', id).single();
+  if (!r) { alert('Could not load redemption.'); return; }
+
+  const updates = { status:'paid', paid_at:today() };
+  if (ref.trim()) updates.payout_reference = ref.trim();
+
+  const { error } = await sb.from('redemptions').update(updates).eq('id', id);
+  if (error) { alert('Error: ' + error.message); return; }
+
+  const { data: conc } = await sb.from('concierges').select('ripples_balance,ripples_redeemed_total').eq('id', r.concierge_id).single();
+  const newBalance  = Math.max(0, (conc?.ripples_balance || 0) - r.ripples_cost);
+  const newRedeemed = (conc?.ripples_redeemed_total || 0) + r.ripples_cost;
+
+  await sb.from('concierges').update({ ripples_balance:newBalance, ripples_redeemed_total:newRedeemed }).eq('id', r.concierge_id);
+  await sb.from('ripples_ledger').insert({
+    concierge_id: r.concierge_id, redemption_id: id,
+    transaction_type: 'redeemed', ripples_delta: -r.ripples_cost, balance_after: newBalance,
+  });
+
+  _loadRedemptions();
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
