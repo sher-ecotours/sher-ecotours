@@ -313,7 +313,7 @@ The `tms-app/` directory contains old Google Apps Script-era files (`build-pwa-l
 | Priority | Action | Where | Effort |
 |---|---|---|---|
 | ✅ Done | Run `supabase/11-fixes-concierge-commission.sql` in SQL Editor | Supabase Dashboard → SQL Editor | — |
-| 🔴 Now | Add `RESEND_API_KEY` to Supabase Edge Function secrets | Supabase Dashboard → Edge Functions → notify-new-booking → Secrets | 5 min |
+| ✅ Done | `RESEND_API_KEY` in Supabase Edge Function secrets | Set 29 Jun 2026 | — |
 | 🔴 Now | Add `https://tms.shersanctuary.com` to Auth redirect URLs | Supabase Dashboard → Authentication → URL Configuration | 2 min |
 | ✅ Done | PNG icons generated for TMS, Guide, Partner PWAs | Committed | — |
 | ✅ Done | Concierge My Bookings tab (read-only, shows rate + Ripples) | `partners/app.js` | — |
