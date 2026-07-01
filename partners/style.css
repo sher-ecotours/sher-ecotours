@@ -203,6 +203,13 @@ select.field-input  { cursor:pointer; }
 .bk-name { font-size:16px; font-weight:500; }
 .bk-exp  { font-size:14px; color:var(--muted); margin-bottom:8px; }
 .bk-date { font-size:13px; color:var(--muted); }
+.bk-rate-row { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; align-items:center; }
+.bk-rate   { font-size:12px; color:var(--muted); }
+.bk-total  { font-size:13px; font-weight:600; color:var(--text); }
+.bk-ripples         { font-size:12px; padding:3px 10px; border-radius:20px; font-weight:600; }
+.ripples-earned     { background:rgba(212,175,55,0.15); color:var(--gold); }
+.ripples-pending    { background:rgba(255,255,255,0.06); color:var(--muted); }
+.field-hint { display:block; font-size:11px; color:var(--muted); margin-top:6px; line-height:1.4; }
 .status-badge {
   font-size:11px; padding:4px 10px; border-radius:20px; white-space:nowrap;
 }

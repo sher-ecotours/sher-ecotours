@@ -267,15 +267,16 @@ const PARTNER_TABS    = [
   { id:'action',      label:'Payouts'     },
 ];
 const CONCIERGE_TABS_BASE = [
-  { id:'earn',   label:'My Ripples' },
-  { id:'action', label:'Redeem'     },
+  { id:'bookings', label:'My Bookings' },
+  { id:'earn',     label:'My Ripples'  },
+  { id:'action',   label:'Redeem'      },
 ];
 const CONCIERGE_TABS_OPERATOR = [
-  { id:'experiences', label:'Experiences' },
-  { id:'book',        label:'New Booking' },
-  { id:'bookings',    label:'My Sales'    },
-  { id:'earn',        label:'My Ripples'  },
-  { id:'action',      label:'Redeem'      },
+  { id:'experiences', label:'Experiences'  },
+  { id:'book',        label:'New Booking'  },
+  { id:'bookings',    label:'My Bookings'  },
+  { id:'earn',        label:'My Ripples'   },
+  { id:'action',      label:'Redeem'       },
 ];
 
 function renderTabBar() {
@@ -386,9 +387,36 @@ function preSelectExperience(expId) {
 /* ════════════════════════════════════════════════════════
    NEW BOOKING TAB
 ════════════════════════════════════════════════════════ */
-function loadBookTab() {
+async function loadBookTab() {
   const cont = $('content-book');
   const liveExps = _experiences.filter(e => e.status === 'live');
+
+  // Fetch property concierges for attribution dropdown (partner login only)
+  let conciergeOptions = '';
+  if (_role === 'partner' && _partnerId) {
+    const { data: concs } = await sb
+      .from('concierges')
+      .select('id, first_name, last_name')
+      .eq('partner_id', _partnerId)
+      .eq('status', 'active')
+      .order('first_name');
+    if (concs?.length) {
+      conciergeOptions = concs.map(c =>
+        `<option value="${c.id}">${esc(c.first_name)} ${esc(c.last_name)}</option>`
+      ).join('');
+    }
+  }
+
+  const agentSection = _role === 'partner' ? `
+      <p class="section-title">Concierge Attribution</p>
+      <div class="form-field">
+        <label>Referred / Handled by Agent</label>
+        <select id="bf-concierge" class="field-input">
+          <option value="">— Direct booking (no agent) —</option>
+          ${conciergeOptions}
+        </select>
+        <span class="field-hint">Select the concierge who referred or is handling this guest. Their Ripples will be credited automatically on confirmation.</span>
+      </div>` : '';
 
   cont.innerHTML = `
     <p class="panel-subtitle">Submit a Booking Request</p>
@@ -471,6 +499,8 @@ function loadBookTab() {
           placeholder="Dietary needs, accessibility, special requests…"></textarea>
       </div>
 
+      ${agentSection}
+
       <button type="submit" class="submit-btn" id="bf-submit">Submit Booking Request</button>
     </form>
   `;
@@ -521,6 +551,9 @@ async function submitBooking(e) {
 
   if (_role === 'concierge' && _conciergeId) {
     payload.concierge_id = _conciergeId;
+  } else if (_role === 'partner') {
+    const agentEl = $('bf-concierge');
+    if (agentEl?.value) payload.concierge_id = agentEl.value;
   }
 
   const { error } = await sb.from('bookings').insert([payload]);
@@ -545,21 +578,26 @@ async function submitBooking(e) {
 }
 
 /* ════════════════════════════════════════════════════════
-   BOOKINGS / MY SALES TAB
+   BOOKINGS / MY BOOKINGS TAB
 ════════════════════════════════════════════════════════ */
 async function loadBookingsTab() {
   const cont  = $('content-bookings');
-  const title = _role === 'partner' ? 'All Property Bookings' : 'My Sales';
+  const title = _role === 'partner' ? 'All Property Bookings' : 'My Bookings';
   cont.innerHTML = `<p class="panel-subtitle">${title}</p><p class="empty">Loading…</p>`;
+
+  // For concierge view, join ripples_ledger to show Ripples earned per booking
+  const selectCols = _role === 'concierge'
+    ? `id, booking_ref, status, booking_date, group_size,
+       lead_name, occasion_type,
+       experiences(name, public_price_usd, ripples_awarded),
+       ripples_ledger(ripples_awarded, created_at)`
+    : `id, booking_ref, status, booking_date, group_size,
+       lead_name, lead_email, created_at, occasion_type, source,
+       experiences(name)`;
 
   let query = sb
     .from('bookings')
-    .select(`
-      id, booking_ref, status, booking_date, group_size,
-      lead_name, lead_email,
-      created_at, occasion_type, source,
-      experiences(name)
-    `)
+    .select(selectCols)
     .order('booking_date', { ascending: false })
     .limit(50);
 
@@ -581,10 +619,8 @@ async function loadBookingsTab() {
     return;
   }
 
-  cont.innerHTML =
-    `<p class="panel-subtitle">${title} (${data.length})</p>` +
-    '<div class="booking-list">' +
-    data.map(bk => `
+  const cards = data.map(bk => {
+    const baseCard = `
       <div class="booking-card">
         <div class="bk-top">
           <span class="bk-ref">${esc(bk.booking_ref || '')}</span>
@@ -595,10 +631,32 @@ async function loadBookingsTab() {
         <div class="bk-date">
           ${bk.booking_date ? fmtDate(bk.booking_date) : 'Date TBC'} · ${bk.group_size} guest${bk.group_size > 1 ? 's' : ''}
           ${bk.occasion_type ? ` · ${esc(bk.occasion_type)}` : ''}
+        </div>`;
+
+    if (_role === 'concierge') {
+      const pricePerPerson = bk.experiences?.public_price_usd;
+      const totalValue     = pricePerPerson ? (Number(pricePerPerson) * bk.group_size) : null;
+      // ripples_ledger is 1-to-many; grab first matching row for this concierge
+      const rippleRow = Array.isArray(bk.ripples_ledger) ? bk.ripples_ledger[0] : bk.ripples_ledger;
+      const ripples   = rippleRow?.ripples_awarded ?? null;
+
+      return baseCard + `
+        <div class="bk-rate-row">
+          ${pricePerPerson != null ? `<span class="bk-rate">USD ${Number(pricePerPerson).toFixed(0)} pp</span>` : ''}
+          ${totalValue    != null ? `<span class="bk-total">Total: USD ${Number(totalValue).toFixed(0)}</span>` : ''}
+          ${ripples       != null
+            ? `<span class="bk-ripples ripples-earned">+${ripples} Ripples${bk.status === 'confirmed' ? '' : ' (pending)'}</span>`
+            : `<span class="bk-ripples ripples-pending">Ripples on confirmation</span>`}
         </div>
-      </div>
-    `).join('') +
-    '</div>';
+      </div>`;
+    }
+
+    return baseCard + '</div>';
+  }).join('');
+
+  cont.innerHTML =
+    `<p class="panel-subtitle">${title} (${data.length})</p>` +
+    '<div class="booking-list">' + cards + '</div>';
 }
 
 /* ════════════════════════════════════════════════════════
