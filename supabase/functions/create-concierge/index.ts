@@ -1,7 +1,6 @@
 // create-concierge — Supabase Edge Function
 // Called from TMS admin panel to create a concierge account atomically:
 //   auth.users → concierges → user_roles
-// Verify JWT: ON (TMS sends user JWT; function confirms admin role before proceeding)
 
 import { createClient } from 'jsr:@supabase/supabase-js@2'
 
@@ -12,25 +11,38 @@ const sb = createClient(SB_URL, SB_KEY, {
   auth: { autoRefreshToken: false, persistSession: false },
 })
 
+const CORS = {
+  'Access-Control-Allow-Origin':  '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+}
+
 const json = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), {
     status,
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', ...CORS },
   })
 
 export default {
   async fetch(req: Request): Promise<Response> {
+
+    // Handle CORS preflight
+    if (req.method === 'OPTIONS') {
+      return new Response('ok', { headers: CORS })
+    }
+
     try {
       // ── 1. Verify caller is an authenticated admin ──────────────────────────
       const auth = req.headers.get('Authorization')
       if (!auth) return json({ error: 'Unauthorized' }, 401)
 
       const { data: { user }, error: ue } = await sb.auth.getUser(auth.replace('Bearer ', ''))
-      if (ue || !user) return json({ error: 'Invalid session' }, 401)
+      if (ue || !user) return json({ error: `Invalid session: ${ue?.message}` }, 401)
 
-      const { data: roleRow } = await sb
+      const { data: roleRow, error: re } = await sb
         .from('user_roles').select('role').eq('user_id', user.id).single()
-      if (roleRow?.role !== 'admin') return json({ error: 'Forbidden — admin only' }, 403)
+      if (re) return json({ error: `Role lookup failed: ${re.message}` }, 500)
+      if (roleRow?.role !== 'admin') return json({ error: `Forbidden — role is "${roleRow?.role ?? 'null'}", expected admin` }, 403)
 
       // ── 2. Parse and validate body ─────────────────────────────────────────
       const body = await req.json()

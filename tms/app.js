@@ -1152,7 +1152,9 @@ async function _createConcierge(btn) {
   btn.disabled = false; btn.textContent = 'Create Account';
 
   if (error || data?.error) {
-    msg.textContent = 'Error: ' + (data?.error || error?.message);
+    let errMsg = data?.error || error?.message || 'Unknown error';
+    try { const ctx = await error?.context?.json(); if (ctx?.error) errMsg = ctx.error; } catch(_) {}
+    msg.textContent = 'Error: ' + errMsg;
     msg.style.color = 'var(--red)'; return;
   }
 
