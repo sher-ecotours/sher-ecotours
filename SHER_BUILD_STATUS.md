@@ -36,7 +36,7 @@
 | `08-email-notification-fields.sql` | Adds `confirmation_sent_at`, `confirmation_email_template` to bookings | ✅ Run |
 | `09-booking-webhook-trigger.sql` | pg_net webhook trigger → fires `notify-new-booking` edge function on booking INSERT/UPDATE | ✅ Run |
 | `10-auto-triggers.sql` | Additional automation triggers | ✅ Run |
-| `11-fixes-concierge-commission.sql` | Fix `amount_usd NOT NULL` in auto_create_commission; drop duplicate migration-06 trigger; add `is_independent_operator` to concierges | ❌ **WRITTEN — NOT YET RUN** |
+| `11-fixes-concierge-commission.sql` | Fix `amount_usd NOT NULL` in auto_create_commission; drop duplicate migration-06 trigger; add `is_independent_operator` to concierges | ✅ Run |
 
 **Roles in Supabase Auth:**
 - `admin` → TMS access only
@@ -312,7 +312,7 @@ The `tms-app/` directory contains old Google Apps Script-era files (`build-pwa-l
 
 | Priority | Action | Where | Effort |
 |---|---|---|---|
-| 🔴 **BLOCKING** | Run `supabase/11-fixes-concierge-commission.sql` in SQL Editor | Supabase Dashboard → SQL Editor | 2 min |
+| ✅ Done | Run `supabase/11-fixes-concierge-commission.sql` in SQL Editor | Supabase Dashboard → SQL Editor | — |
 | 🔴 Now | Add `RESEND_API_KEY` to Supabase Edge Function secrets | Supabase Dashboard → Edge Functions → notify-new-booking → Secrets | 5 min |
 | 🔴 Now | Add `https://tms.shersanctuary.com` to Auth redirect URLs | Supabase Dashboard → Authentication → URL Configuration | 2 min |
 | ✅ Done | PNG icons generated for TMS, Guide, Partner PWAs | Committed | — |
@@ -323,7 +323,7 @@ The `tms-app/` directory contains old Google Apps Script-era files (`build-pwa-l
 | 🟢 Optional | Add root `manifest.json` or remove the `<link>` tag | `index.html` | 5 min |
 | 🔵 Future | Payment gateway (Stripe) | New feature | Multi-day |
 
-> **Why migration 11 is blocking:** Until it runs, approving any partner booking in TMS will throw `null value in column "amount_usd" of relation "commissions" violates not-null constraint`. The migration also adds the `is_independent_operator` column that the new concierge tab logic depends on.
+> Migration 11 confirmed run 1 July 2026. Verify: `trg_booking_confirmed_actions` dropped; `trg_auto_commission` + `trg_auto_ripples` both enabled (tgenabled = O).
 
 ---
 
