@@ -211,7 +211,7 @@ async function bootApp() {
       _conciergeId = cid;
       const { data: cdata } = await sb
         .from('concierges')
-        .select('id,first_name,last_name,partner_id,ripples_balance,ripples_earned_total,ripples_redeemed_total')
+        .select('id,first_name,last_name,partner_id,ripples_balance,ripples_earned_total,ripples_redeemed_total,is_independent_operator')
         .eq('id', _conciergeId)
         .single();
       _conciergeData = cdata;
@@ -266,7 +266,11 @@ const PARTNER_TABS    = [
   { id:'earn',        label:'Commission'  },
   { id:'action',      label:'Payouts'     },
 ];
-const CONCIERGE_TABS  = [
+const CONCIERGE_TABS_BASE = [
+  { id:'earn',   label:'My Ripples' },
+  { id:'action', label:'Redeem'     },
+];
+const CONCIERGE_TABS_OPERATOR = [
   { id:'experiences', label:'Experiences' },
   { id:'book',        label:'New Booking' },
   { id:'bookings',    label:'My Sales'    },
@@ -275,7 +279,14 @@ const CONCIERGE_TABS  = [
 ];
 
 function renderTabBar() {
-  const tabs = _role === 'partner' ? PARTNER_TABS : CONCIERGE_TABS;
+  let tabs;
+  if (_role === 'partner') {
+    tabs = PARTNER_TABS;
+  } else {
+    tabs = _conciergeData?.is_independent_operator
+      ? CONCIERGE_TABS_OPERATOR
+      : CONCIERGE_TABS_BASE;
+  }
   const bar  = $('tab-bar');
   bar.innerHTML = '';
   tabs.forEach(t => {
