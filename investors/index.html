@@ -1,0 +1,3786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow, noarchive, nositelinkssearchbox">
+  <meta name="googlebot" content="noindex, nofollow">
+  <title>SHER Sanctuary — Private Investor Access</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+
+    /* ── CUSTOM PROPERTIES ─────────────────────────────────────── */
+    :root {
+      --green:        #1B3B36;
+      --green-mid:    #22473f;
+      --green-light:  #2a5a50;
+      --gold:         #C9A867;
+      --gold-dark:    #a88640;
+      --cream:        #F5F0E8;
+      --offwhite:     #FAFAF7;
+      --text:         #1A1A1A;
+      --text-muted:   #6b6b6b;
+      --cream-muted:  rgba(245, 240, 232, 0.65);
+      --white:        #ffffff;
+      --error:        #c0392b;
+
+      --font-display: 'Cormorant Garamond', Georgia, serif;
+      --font-body:    'Inter', system-ui, -apple-system, sans-serif;
+
+      --radius:    4px;
+      --radius-lg: 8px;
+
+      --shadow-card: 0 2px 16px rgba(0,0,0,0.08);
+      --shadow-lg:   0 8px 40px rgba(0,0,0,0.14);
+
+      --transition:      0.3s ease;
+      --transition-slow: 0.4s ease;
+    }
+
+    /* ── RESET ─────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    body {
+      font-family: var(--font-body);
+      color: var(--text);
+      background: var(--offwhite);
+      line-height: 1.6;
+      padding-bottom: 52px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    img  { max-width: 100%; height: auto; display: block; }
+    a    { color: inherit; text-decoration: none; }
+    ul, ol { list-style: none; }
+
+    /* ── TYPOGRAPHY ────────────────────────────────────────────── */
+    h1, h2, h3, h4, .heading {
+      font-family: var(--font-display);
+      line-height: 1.15;
+      font-weight: 500;
+    }
+
+    .eyebrow {
+      font-family: var(--font-body);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .section-heading {
+      font-family: var(--font-display);
+      font-size: clamp(30px, 4vw, 40px);
+      color: var(--green);
+      font-weight: 500;
+      line-height: 1.1;
+      margin-bottom: 0.75rem;
+    }
+
+    .section-heading--white { color: var(--white); }
+
+    .section-subtext {
+      font-family: var(--font-body);
+      font-size: 15px;
+      color: var(--text-muted);
+      max-width: 680px;
+      line-height: 1.75;
+    }
+
+    /* ── LAYOUT ────────────────────────────────────────────────── */
+    .container        { width: 100%; max-width: 980px;  margin: 0 auto; padding: 0 2rem; }
+    .container--narrow{ width: 100%; max-width: 640px;  margin: 0 auto; padding: 0 2rem; }
+    .container--wide  { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+
+    /* ── SECTIONS ──────────────────────────────────────────────── */
+    .section { padding: 5rem 0; }
+
+    .section--green    { background-color: var(--green);    color: var(--white); }
+    .section--green-mid{ background-color: var(--green-mid);color: var(--white); }
+    .section--cream    { background-color: var(--cream); }
+    .section--offwhite { background-color: var(--offwhite); }
+
+    .section__header            { margin-bottom: 3rem; }
+    .section__header .eyebrow   { display: block; margin-bottom: 0.75rem; }
+
+    /* ── HERO ──────────────────────────────────────────────────── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background-color: var(--green);
+      padding: 6rem 2rem 5rem;
+      text-align: center;
+    }
+
+    .hero__bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('../images/bay-eastern-shoreline-1.jpg');
+      background-size: cover;
+      background-position: center 40%;
+      z-index: 0;
+    }
+
+    .hero__wash {
+      position: absolute;
+      inset: 0;
+      background-color: var(--green);
+      opacity: 0.65;
+      z-index: 1;
+    }
+
+    .hero__content {
+      position: relative;
+      z-index: 2;
+      max-width: 820px;
+      width: 100%;
+    }
+
+    .hero__logo {
+      height: 54px;
+      width: auto;
+      margin: 0 auto 2.5rem;
+    }
+
+    .hero__eyebrow {
+      display: block;
+      font-family: var(--font-body);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.25rem;
+    }
+
+    .hero__headline {
+      font-family: var(--font-display);
+      font-size: clamp(30px, 5vw, 58px);
+      color: var(--white);
+      font-weight: 500;
+      line-height: 1.1;
+      margin-bottom: 1.25rem;
+    }
+
+    .hero__subheadline {
+      font-family: var(--font-body);
+      font-size: 17px;
+      color: var(--cream-muted);
+      line-height: 1.65;
+      max-width: 600px;
+      margin: 0 auto 2.5rem;
+    }
+
+    .hero__chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      justify-content: center;
+      margin-bottom: 3rem;
+    }
+
+    .chip {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      border: 1.5px solid var(--gold);
+      border-radius: var(--radius);
+      padding: 0.65rem 1.25rem;
+      min-width: 155px;
+    }
+
+    .chip__value {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--white);
+      line-height: 1.1;
+    }
+
+    .chip__label {
+      font-family: var(--font-body);
+      font-size: 11px;
+      color: var(--cream-muted);
+      letter-spacing: 0.03em;
+      margin-top: 3px;
+    }
+
+    .hero__ctas {
+      display: flex;
+      gap: 1.25rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .hero__scroll {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      z-index: 2;
+      color: var(--gold);
+      opacity: 0.75;
+      cursor: pointer;
+      animation: float 2s ease-in-out infinite;
+    }
+
+    .hero__scroll svg { width: 28px; height: 28px; display: block; }
+
+    /* ── BUTTONS ───────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      padding: 0.875rem 1.875rem;
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      border-radius: var(--radius);
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: background var(--transition), color var(--transition),
+                  border-color var(--transition), transform 0.15s ease,
+                  box-shadow 0.15s ease;
+      text-decoration: none;
+      white-space: nowrap;
+      min-height: 48px;
+      line-height: 1;
+    }
+
+    .btn:hover  { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,0,0,0.18); }
+    .btn:active { transform: translateY(0); box-shadow: none; }
+
+    .btn--primary   { background: var(--gold); color: var(--green); border-color: var(--gold); }
+    .btn--primary:hover { background: #d4b47a; border-color: #d4b47a; }
+
+    .btn--secondary { background: transparent; color: var(--cream); border-color: var(--gold); }
+    .btn--secondary:hover { background: rgba(201,168,103,0.12); }
+
+    .btn--dark      { background: var(--green); color: var(--gold); border-color: var(--green); }
+    .btn--dark:hover{ background: var(--green-mid); border-color: var(--green-mid); }
+
+    .btn--full      { width: 100%; }
+    .btn--loading   { opacity: 0.65; pointer-events: none; }
+
+    /* ── FORM ELEMENTS ─────────────────────────────────────────── */
+    .form-group { margin-bottom: 1.5rem; }
+
+    .form-label {
+      display: block;
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 0.4rem;
+      line-height: 1.4;
+    }
+
+    .form-label .req { color: var(--gold-dark); margin-left: 2px; }
+
+    .form-helper {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 0.3rem;
+      line-height: 1.5;
+    }
+
+    .form-input,
+    .form-select,
+    .form-textarea {
+      width: 100%;
+      padding: 0.7rem 0.875rem;
+      font-family: var(--font-body);
+      font-size: 15px;
+      color: var(--text);
+      background: var(--white);
+      border: 1.5px solid #d4cfc8;
+      border-radius: var(--radius);
+      transition: border-color var(--transition), box-shadow var(--transition);
+      appearance: none;
+      -webkit-appearance: none;
+      line-height: 1.5;
+      min-height: 44px;
+    }
+
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+      outline: none;
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(27,59,54,0.1);
+    }
+
+    .form-input::placeholder,
+    .form-textarea::placeholder { color: #b0aba3; font-style: italic; font-size: 13px; }
+
+    .form-select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%231B3B36' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.875rem center;
+      padding-right: 2.5rem;
+    }
+
+    .form-textarea { resize: vertical; min-height: 80px; }
+
+    .form-input.error,
+    .form-select.error,
+    .form-textarea.error { border-color: var(--error); }
+
+    /* Radio / Checkbox */
+    .form-radio-group,
+    .form-checkbox-group { display: flex; flex-direction: column; gap: 0.55rem; }
+
+    .form-radio-group--horizontal { flex-direction: row; gap: 1.5rem; flex-wrap: wrap; }
+
+    .radio-item,
+    .checkbox-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      cursor: pointer;
+    }
+
+    .radio-item input[type="radio"],
+    .checkbox-item input[type="checkbox"] {
+      width: 17px;
+      height: 17px;
+      min-width: 17px;
+      margin-top: 2px;
+      accent-color: var(--green);
+      cursor: pointer;
+    }
+
+    .radio-item span,
+    .checkbox-item span { font-size: 14px; color: var(--text); line-height: 1.5; }
+
+    /* Word-count validation message */
+    .form-val-msg {
+      font-size: 12px;
+      color: var(--gold-dark);
+      margin-top: 0.35rem;
+      display: none;
+      font-style: italic;
+    }
+
+    .form-val-msg.visible { display: block; }
+
+    /* Fieldset */
+    fieldset { border: none; padding: 0; margin: 0 0 2.5rem 0; }
+
+    legend {
+      font-family: var(--font-body);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold);
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid rgba(201,168,103,0.3);
+      width: 100%;
+      margin-bottom: 1.5rem;
+      display: block;
+    }
+
+    /* 2-col form grid */
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+
+    /* Declarations */
+    .form-declarations {
+      border-top: 1px solid #d4cfc8;
+      padding-top: 2rem;
+      margin-top: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.875rem;
+    }
+
+    /* Conditional fieldsets */
+    .conditional-fieldset {
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: max-height 0.3s ease, opacity 0.3s ease;
+    }
+
+    .conditional-fieldset.visible { max-height: 2400px; opacity: 1; }
+
+    /* Gold rule */
+    .gold-rule { border: none; border-top: 1px solid rgba(201,168,103,0.4); margin: 3rem 0; }
+
+    /* Intro italic block */
+    .form-intro-note {
+      font-size: 13px;
+      font-style: italic;
+      color: var(--text-muted);
+      line-height: 1.65;
+      margin-bottom: 1.5rem;
+      padding: 1rem 1.25rem;
+      background: rgba(201,168,103,0.06);
+      border-left: 3px solid var(--gold);
+      border-radius: 0 var(--radius) var(--radius) 0;
+    }
+
+    /* ── PASSWORD LOGIN ─────────────────────────────────────────── */
+    .password-card {
+      max-width: 480px;
+      margin: 0 auto;
+      background: var(--white);
+      border: 1.5px solid var(--green);
+      border-top: 4px solid var(--gold);
+      border-radius: var(--radius);
+      padding: 2.75rem;
+      box-shadow: var(--shadow-card);
+    }
+
+    .password-card .eyebrow { display: block; margin-bottom: 0.75rem; }
+
+    .password-card h2 {
+      font-family: var(--font-display);
+      font-size: 28px;
+      color: var(--green);
+      margin-bottom: 1.75rem;
+    }
+
+    .password-input {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      font-family: var(--font-body);
+      font-size: 16px;
+      color: var(--text);
+      background: var(--offwhite);
+      border: 1.5px solid #d4cfc8;
+      border-radius: var(--radius);
+      min-height: 50px;
+      margin-bottom: 0.75rem;
+      transition: border-color var(--transition), box-shadow var(--transition);
+      letter-spacing: 0.08em;
+    }
+
+    .password-input:focus {
+      outline: none;
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(27,59,54,0.1);
+    }
+
+    .password-input.error {
+      border-color: var(--error);
+      animation: shake 0.4s ease;
+    }
+
+    .password-error-msg {
+      font-size: 12px;
+      color: var(--error);
+      margin-bottom: 1rem;
+      display: none;
+      line-height: 1.5;
+    }
+
+    .password-error-msg.visible { display: block; }
+
+    .password-help {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 1.25rem;
+      line-height: 1.65;
+      text-align: center;
+    }
+
+    .password-help a { color: var(--green); text-decoration: underline; }
+
+    /* ── TIER PANELS ───────────────────────────────────────────── */
+    .tier-panel {
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: max-height 0.4s ease, opacity 0.4s ease;
+    }
+
+    .tier-panel.revealed { max-height: 99999px; opacity: 1; }
+
+    .tier-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--gold);
+      color: var(--green);
+      padding: 0.25rem 0.8rem;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    /* ── PROGRESSION FORM WRAPPER ──────────────────────────────── */
+    .progression-wrapper {
+      background: var(--offwhite);
+      border-top: 3px solid var(--gold);
+      padding: 4rem 0;
+      margin-top: 0;
+    }
+
+    .progression-wrapper h3 {
+      font-family: var(--font-display);
+      font-size: 30px;
+      color: var(--green);
+      margin-bottom: 0.75rem;
+    }
+
+    .progression-wrapper .lead {
+      font-size: 15px;
+      color: var(--text-muted);
+      line-height: 1.75;
+      max-width: 640px;
+      margin-bottom: 2.5rem;
+    }
+
+    /* ── SUCCESS STATES ────────────────────────────────────────── */
+    .success-state { display: none; animation: fadeIn 0.3s ease; }
+    .success-state.visible { display: block; }
+
+    .success-card {
+      border-radius: var(--radius-lg);
+      padding: 2.5rem;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .success-card--green { background: var(--green); }
+    .success-card--cream { background: var(--white); border: 2px solid var(--gold); }
+
+    .success-card h3 {
+      font-family: var(--font-display);
+      font-size: 26px;
+      margin-bottom: 1.25rem;
+    }
+
+    .success-card--green h3 { color: var(--white); }
+    .success-card--cream h3 { color: var(--green); }
+
+    .success-card p {
+      font-size: 15px;
+      line-height: 1.8;
+      margin-bottom: 0.75rem;
+    }
+
+    .success-card--green p { color: var(--cream-muted); }
+    .success-card--cream p { color: var(--text-muted); }
+
+    .success-card .small-link {
+      display: inline-block;
+      margin-top: 1.25rem;
+      font-size: 13px;
+      color: var(--gold);
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    /* ── CARDS ─────────────────────────────────────────────────── */
+    .card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      box-shadow: var(--shadow-card);
+    }
+
+    .card--gold-border { border: 1.5px solid var(--gold); }
+
+    /* Property cards */
+    .property-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 2.5rem;
+    }
+
+    .property-card {
+      background: var(--cream);
+      border: 1.5px solid var(--gold);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+    }
+
+    .property-card .eyebrow { display: block; margin-bottom: 0.5rem; }
+
+    .property-card h3 {
+      font-family: var(--font-display);
+      font-size: 26px;
+      color: var(--green);
+      margin-bottom: 0.2rem;
+    }
+
+    .property-card .card-sub { font-size: 12px; color: var(--text-muted); margin-bottom: 1.25rem; }
+
+    /* Spec list inside property cards */
+    .spec-list { border-top: 1px solid rgba(201,168,103,0.3); padding-top: 1rem; margin-bottom: 1rem; }
+
+    .spec-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 0.75rem;
+      padding: 0.3rem 0;
+      border-bottom: 1px solid rgba(201,168,103,0.1);
+      font-size: 12.5px;
+    }
+
+    .spec-item dt { color: var(--text-muted); flex-shrink: 0; }
+    .spec-item dd { text-align: right; font-weight: 500; color: var(--green); }
+
+    .property-card .card-why {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.65;
+      border-top: 1px solid rgba(201,168,103,0.2);
+      padding-top: 1rem;
+      margin-top: 0.5rem;
+    }
+
+    /* Step cards */
+    .steps { display: flex; flex-direction: column; gap: 1.25rem; margin-top: 2.5rem; }
+
+    .step-card {
+      background: var(--green-mid);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem 2rem;
+      display: grid;
+      grid-template-columns: 48px 1fr;
+      gap: 1.25rem;
+      align-items: flex-start;
+    }
+
+    .step-number {
+      font-family: var(--font-display);
+      font-size: 34px;
+      font-weight: 600;
+      color: var(--gold);
+      line-height: 1;
+    }
+
+    .step-content h4 { font-family: var(--font-display); font-size: 20px; color: var(--white); margin-bottom: 0.5rem; }
+    .step-content p  { font-size: 14px; color: var(--cream-muted); line-height: 1.7; }
+
+    /* HOA 2×2 grid */
+    .hoa-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-top: 2rem; }
+
+    .hoa-card {
+      background: rgba(255,255,255,0.06);
+      border-left: 3px solid var(--gold);
+      padding: 1.5rem 1.75rem;
+      border-radius: 0 var(--radius) var(--radius) 0;
+    }
+
+    .hoa-card h4 { font-family: var(--font-display); font-size: 19px; color: var(--white); margin-bottom: 0.5rem; }
+    .hoa-card p  { font-size: 13px; color: var(--cream-muted); line-height: 1.7; }
+
+    /* Callout box */
+    .callout {
+      border: 1.5px solid var(--gold);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      background: rgba(201,168,103,0.06);
+      margin-top: 1.5rem;
+    }
+
+    .callout p { font-size: 14px; color: var(--text); line-height: 1.75; }
+    .callout p + p { margin-top: 0.5rem; }
+
+    /* Numbers grid (tier content) */
+    .numbers-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+      margin: 2rem 0;
+    }
+
+    .number-cell {
+      text-align: center;
+      padding: 1.5rem 1rem;
+      border: 1px solid rgba(201,168,103,0.25);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.04);
+    }
+
+    .number-cell__value {
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: 600;
+      color: var(--gold);
+      display: block;
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+
+    .number-cell__label { font-size: 12px; color: var(--cream-muted); line-height: 1.4; }
+    .numbers-grid--light .number-cell { background: var(--white); }
+    .numbers-grid--light .number-cell__value { color: var(--green); }
+    .numbers-grid--light .number-cell__label { color: var(--text-muted); }
+    .numbers-grid--light .number-cell { border-color: rgba(201,168,103,0.35); }
+
+    /* Info table */
+    .info-table-wrap { overflow-x: auto; margin: 1.5rem 0; }
+
+    .info-table { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 520px; }
+
+    .info-table th {
+      background: var(--green);
+      color: var(--white);
+      padding: 0.75rem 1rem;
+      text-align: left;
+      font-weight: 500;
+      font-size: 11.5px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .info-table td {
+      padding: 0.7rem 1rem;
+      border-bottom: 1px solid #e8e3da;
+      vertical-align: top;
+      line-height: 1.5;
+    }
+
+    .info-table tr:nth-child(even) td { background: rgba(245,240,232,0.5); }
+
+    /* Placeholder blocks (removed in later sessions) */
+    .build-placeholder {
+      padding: 4rem 2rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-style: italic;
+      border: 2px dashed #d4cfc8;
+      border-radius: var(--radius-lg);
+      background: rgba(245,240,232,0.4);
+      font-family: var(--font-body);
+      font-size: 14px;
+    }
+
+    .build-placeholder--dark {
+      border-color: rgba(201,168,103,0.3);
+      background: rgba(255,255,255,0.04);
+      color: var(--cream-muted);
+    }
+
+    /* ── FOOTER ────────────────────────────────────────────────── */
+    .site-footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: var(--cream);
+      border-top: 1px solid rgba(27,59,54,0.12);
+      padding: 0.6rem 2rem;
+    }
+
+    .site-footer p {
+      font-family: var(--font-body);
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      max-width: 1200px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    /* ── ANIMATIONS ────────────────────────────────────────────── */
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      15%      { transform: translateX(-7px); }
+      30%      { transform: translateX(7px); }
+      45%      { transform: translateX(-5px); }
+      60%      { transform: translateX(5px); }
+      75%      { transform: translateX(-3px); }
+    }
+
+    @keyframes float {
+      0%,100% { transform: translateX(-50%) translateY(0); }
+      50%      { transform: translateX(-50%) translateY(-8px); }
+    }
+
+    @keyframes fadeIn  { from { opacity: 0; } to { opacity: 1; } }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── UTILITIES ─────────────────────────────────────────────── */
+    .text-center { text-align: center; }
+    .mt-1 { margin-top: 0.5rem;  } .mt-2 { margin-top: 1rem;   }
+    .mt-3 { margin-top: 1.5rem; } .mt-4 { margin-top: 2rem;   }
+    .mb-1 { margin-bottom: 0.5rem; } .mb-2 { margin-bottom: 1rem; }
+    .mb-3 { margin-bottom: 1.5rem; } .mb-4 { margin-bottom: 2rem; }
+    .hidden { display: none !important; }
+
+    /* ── RESPONSIVE 768px ──────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .container, .container--narrow, .container--wide { padding: 0 1.25rem; }
+      .section { padding: 3.5rem 0; }
+
+      .hero { padding: 5rem 1.25rem 6rem; }
+      .hero__ctas { flex-direction: column; align-items: center; }
+      .hero__ctas .btn { width: 100%; max-width: 340px; }
+      .hero__chips { gap: 0.5rem; }
+      .chip { min-width: 130px; }
+
+      .form-grid { grid-template-columns: 1fr; }
+      .numbers-grid { grid-template-columns: 1fr 1fr; }
+      .property-cards { grid-template-columns: 1fr; }
+      .hoa-grid { grid-template-columns: 1fr; }
+
+      .step-card { grid-template-columns: 36px 1fr; gap: 1rem; padding: 1.25rem; }
+      .step-number { font-size: 26px; }
+
+      .password-card { padding: 1.75rem 1.25rem; }
+      .btn { min-height: 50px; }
+    }
+
+    /* ── RESPONSIVE 480px ──────────────────────────────────────── */
+    @media (max-width: 480px) {
+      .hero__headline { font-size: 28px; }
+      .hero__chips { flex-direction: column; align-items: center; }
+      .chip { width: 100%; max-width: 280px; }
+      .numbers-grid { grid-template-columns: 1fr; }
+      .section-heading { font-size: 26px; }
+    }
+
+    /* ── MEDIA ZONES ────────────────────────────────────────────── */
+    .media-zone { margin: 2.5rem 0; }
+
+    .media-zone__title {
+      font-family: var(--font-display);
+      font-size: 18px;
+      color: var(--green);
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .media-zone__title--white { color: var(--white); }
+
+    /* Video slot */
+    .video-slot {
+      position: relative;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      background: #000;
+      cursor: pointer;
+    }
+
+    .video-slot.aspect-16-9 { aspect-ratio: 16 / 9; }
+
+    .video-slot__poster {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: opacity var(--transition);
+    }
+
+    .video-slot:hover .video-slot__poster { opacity: 0.82; }
+
+    .video-slot__play {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 72px;
+      height: 72px;
+      background: rgba(201,168,103,0.9);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      transition: background var(--transition), transform var(--transition);
+    }
+
+    .video-slot:hover .video-slot__play {
+      background: var(--gold);
+      transform: translate(-50%, -50%) scale(1.08);
+    }
+
+    .video-slot__play svg { width: 28px; height: 28px; color: var(--green); margin-left: 4px; }
+
+    .video-slot__label {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      background: linear-gradient(transparent, rgba(0,0,0,0.72));
+      color: var(--white);
+      padding: 2rem 1.25rem 1rem;
+      font-size: 13px;
+      font-family: var(--font-body);
+      pointer-events: none;
+    }
+
+    .video-slot iframe {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      border: none;
+    }
+
+    .video-slot--active .video-slot__poster,
+    .video-slot--active .video-slot__play,
+    .video-slot--active .video-slot__label { display: none; }
+
+    /* Video gallery grid */
+    .video-gallery {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.25rem;
+    }
+
+    /* Photo gallery */
+    .photo-gallery {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+    }
+
+    .photo-gallery__item {
+      border-radius: var(--radius);
+      overflow: hidden;
+      cursor: pointer;
+      aspect-ratio: 4 / 3;
+      background: #e8e3da;
+    }
+
+    .photo-gallery__item img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+
+    .photo-gallery__item:hover img { transform: scale(1.05); }
+
+    /* Document vault */
+    .doc-vault { display: flex; flex-direction: column; gap: 0.6rem; }
+
+    .doc-item {
+      display: flex;
+      align-items: center;
+      gap: 0.875rem;
+      padding: 0.875rem 1rem;
+      background: var(--white);
+      border: 1.5px solid #e0dbd2;
+      border-radius: var(--radius);
+      transition: border-color var(--transition), box-shadow var(--transition);
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .doc-item:hover {
+      border-color: var(--gold);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    }
+
+    .doc-item__icon {
+      width: 36px; height: 36px;
+      background: var(--cream);
+      border-radius: var(--radius);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      color: var(--green);
+    }
+
+    .doc-item__icon svg { width: 18px; height: 18px; }
+    .doc-item__name { font-size: 14px; font-weight: 500; color: var(--green); flex: 1; }
+    .doc-item__meta { font-size: 11px; color: var(--text-muted); }
+
+    .doc-item__badge {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      background: var(--green);
+      color: var(--gold);
+      padding: 2px 7px;
+      border-radius: 3px;
+      white-space: nowrap;
+    }
+
+    /* Lightbox */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.92);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .lightbox.open { display: flex; animation: fadeIn 0.2s ease; }
+
+    .lightbox img {
+      max-width: 100%;
+      max-height: 90vh;
+      object-fit: contain;
+      border-radius: var(--radius);
+    }
+
+    .lightbox__close {
+      position: absolute;
+      top: 1.5rem; right: 1.5rem;
+      background: rgba(255,255,255,0.15);
+      border: none;
+      color: var(--white);
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 22px;
+      display: flex; align-items: center; justify-content: center;
+      transition: background var(--transition);
+    }
+
+    .lightbox__close:hover { background: rgba(255,255,255,0.28); }
+
+    @media (max-width: 768px) {
+      .video-gallery { grid-template-columns: 1fr; }
+      .photo-gallery { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 480px) {
+      .photo-gallery { grid-template-columns: 1fr; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================
+       SECTION 1 — HERO
+       ============================================================ -->
+  <section class="hero" id="top">
+    <div class="hero__bg" aria-hidden="true"></div>
+    <div class="hero__wash" aria-hidden="true"></div>
+
+    <div class="hero__content">
+      <img
+        src="../images/sher_logo_whiteletters_new.png"
+        alt="SHER Sanctuary Experiences"
+        class="hero__logo"
+        onerror="this.style.display='none'"
+      >
+
+      <span class="hero__eyebrow">Private Investor Access &middot; By Introduction Only</span>
+
+      <h1 class="hero__headline">
+        Where nature is the asset.<br>Conservation is the discipline.
+      </h1>
+
+      <p class="hero__subheadline">
+        A low-density eco-luxury estate at Savannes Bay, Micoud, Saint Lucia &mdash;
+        RAMSAR-protected wetland
+      </p>
+
+      <div class="hero__chips">
+        <div class="chip">
+          <span class="chip__value">US$3.5M</span>
+          <span class="chip__label">Working capital reference</span>
+        </div>
+        <div class="chip">
+          <span class="chip__value">US$10.2M</span>
+          <span class="chip__label">Base for-sale revenue</span>
+        </div>
+        <div class="chip">
+          <span class="chip__value">20 residences</span>
+          <span class="chip__label">Villas, condominiums &amp; cottages</span>
+        </div>
+      </div>
+
+      <div class="hero__ctas">
+        <a href="#discovery" class="btn btn--primary">Capital Investor &rarr;</a>
+        <a href="#property-buyer" class="btn btn--secondary">Property Buyer &rarr;</a>
+      </div>
+    </div>
+
+    <div class="hero__scroll"
+         onclick="document.getElementById('discovery').scrollIntoView({behavior:'smooth'})"
+         aria-label="Scroll down">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="6 9 12 15 18 9"></polyline>
+      </svg>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       SECTION 2 — ENTRY DISCOVERY FORM
+       ============================================================ -->
+  <section id="discovery" class="section section--cream">
+    <div class="container">
+
+      <div class="section__header">
+        <span class="eyebrow">Capital Investor Path</span>
+        <h2 class="section-heading">Begin the Discovery Process</h2>
+        <p class="section-subtext">
+          SHER is not open to all capital. Access is extended to investors whose values,
+          capacity and intent are aligned with what is being built here. Please answer every
+          question with care &mdash; your responses determine the nature of your invitation.
+        </p>
+      </div>
+
+      <!-- SUCCESS: QUALIFYING PATH -->
+      <div id="discovery-success-qualifying" class="success-state">
+        <div class="success-card success-card--green text-center">
+          <h3>Your profile has been received.</h3>
+          <p>We review every submission personally. If your values, capacity and intent are
+          aligned with what SHER is building, you will receive your Tier&nbsp;1 access
+          credentials within 48 hours.</p>
+          <p>If we have questions before issuing access, we will contact you directly at
+          the email you provided.</p>
+          <p>In the meantime, no further action is required. We do not send unsolicited
+          follow-up unless access is being granted.</p>
+          <a class="small-link" href="#login">Already have your access code? &rarr; Log in below</a>
+        </div>
+      </div>
+
+      <!-- SUCCESS: REFERRAL PATH -->
+      <div id="discovery-success-referral" class="success-state">
+        <div class="success-card success-card--cream text-center">
+          <h3>Thank you for the introduction.</h3>
+          <p>We will reach out to <strong id="referral-name-echo">the person you named</strong>
+          directly. If they proceed and ultimately invest in SHER, we will acknowledge your
+          role in bringing them forward.</p>
+          <p>If you would like to stay informed about the project without a direct investment
+          position, reply to our acknowledgement email and let us know.</p>
+        </div>
+      </div>
+
+      <!-- DISCOVERY FORM -->
+      <form
+        id="discovery-form"
+        name="investor-discovery"
+        data-netlify="true"
+        netlify-honeypot="bot-field"
+        novalidate
+      >
+        <input type="hidden" name="form-name" value="investor-discovery">
+        <p style="display:none">
+          <label>Do not fill this in:
+            <input name="bot-field" tabindex="-1" autocomplete="off">
+          </label>
+        </p>
+
+        <!-- ════════════════════════════════════════════════════
+             GATE A — IDENTITY & PHILOSOPHY
+             ════════════════════════════════════════════════════ -->
+        <fieldset>
+          <legend>Who You Are</legend>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label" for="ga-name">
+                Full legal name <span class="req">*</span>
+              </label>
+              <input class="form-input" type="text" id="ga-name"
+                     name="full_name" required autocomplete="name">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="ga-org">
+                Organisation, firm or fund
+              </label>
+              <input class="form-input" type="text" id="ga-org"
+                     name="organisation" autocomplete="organization">
+              <p class="form-helper">Leave blank if investing as a private individual.</p>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label" for="ga-email">
+                Email address <span class="req">*</span>
+              </label>
+              <input class="form-input" type="email" id="ga-email"
+                     name="email" required autocomplete="email">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="ga-phone">
+                Phone number (including country code) <span class="req">*</span>
+              </label>
+              <input class="form-input" type="tel" id="ga-phone"
+                     name="phone" required autocomplete="tel"
+                     placeholder="+1 555 000 0000">
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label" for="ga-country-res">
+                Country of residence <span class="req">*</span>
+              </label>
+              <select class="form-select" id="ga-country-res"
+                      name="country_residence" required>
+                <option value="">— Select country —</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="ga-country-cit">
+                Country of citizenship (if different)
+              </label>
+              <select class="form-select" id="ga-country-cit"
+                      name="country_citizenship">
+                <option value="">— Same as above —</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="ga-nature">
+              How do you relate to natural environments in your personal life?
+              <span class="req">*</span>
+            </label>
+            <!-- Scoring: "central" / "deliberate" qualify · "appreciate" flags · "none" disqualifies -->
+            <select class="form-select" id="ga-nature"
+                    name="nature_relationship" required>
+              <option value="">— Select one —</option>
+              <option value="central">I actively seek time in nature — it is central to how I live</option>
+              <option value="deliberate">I value nature and make deliberate choices to protect it where I can</option>
+              <option value="appreciate">I appreciate natural settings but it is not a primary driver for me</option>
+              <option value="none">I have no particular relationship with the natural world</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              Have you previously made investment, philanthropic or personal decisions
+              specifically because of their conservation or environmental impact?
+              <span class="req">*</span>
+            </label>
+            <div class="form-radio-group form-radio-group--horizontal">
+              <label class="radio-item">
+                <input type="radio" name="conservation_decisions" value="yes" required>
+                <span>Yes</span>
+              </label>
+              <label class="radio-item">
+                <input type="radio" name="conservation_decisions" value="no">
+                <span>No</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="ga-cons-example">
+              If yes, describe one example briefly:
+            </label>
+            <textarea class="form-textarea" id="ga-cons-example"
+                      name="conservation_example" rows="2"
+                      placeholder="e.g. invested in a sustainable forestry fund, donated to wetland restoration, chose a building material for its environmental footprint"></textarea>
+            <p id="ga-cons-example-msg" class="form-val-msg">
+              Please expand your response — a brief or generic answer will not be sufficient
+              for qualification.
+            </p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="ga-materials">
+              SHER will build with natural and low-embodied-carbon materials — including hemp
+              block, compressed earth, clay brick, lime render, reclaimed timber and similar.
+              How do you respond to this approach? <span class="req">*</span>
+            </label>
+            <!-- Scoring: "exactly" / "compelling" qualify · "neutral" flags · "conventional" disqualifies -->
+            <select class="form-select" id="ga-materials"
+                    name="materials_response" required>
+              <option value="">— Select one —</option>
+              <option value="exactly">This is exactly the kind of development philosophy I want to back</option>
+              <option value="compelling">I find it compelling and am open to learning more about its structural performance</option>
+              <option value="neutral">I am neutral — I care about returns, not materials</option>
+              <option value="conventional">I would prefer more conventional construction methods</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="ga-cons-value">
+              In your view, which of the following best describes the relationship between
+              conservation and commercial value? <span class="req">*</span>
+            </label>
+            <!-- Scoring: "advantage" / "responsibility" qualify · "regulatory" flags · "tension" disqualifies -->
+            <select class="form-select" id="ga-cons-value"
+                    name="conservation_value" required>
+              <option value="">— Select one —</option>
+              <option value="advantage">Conservation creates irreplaceable scarcity — it is a long-term commercial advantage</option>
+              <option value="responsibility">Conservation is a responsibility that good developers take seriously alongside commercial goals</option>
+              <option value="regulatory">Conservation is primarily a regulatory requirement to be managed efficiently</option>
+              <option value="tension">Conservation and commercial value are fundamentally in tension</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              Do you accept that approximately 46.8% of the SHER estate will be permanently
+              preserved as no-build wetland conservation land, and that this boundary will
+              never be compromised for development gain? <span class="req">*</span>
+            </label>
+            <!-- HARD DISQUALIFIER if "reject" selected -->
+            <div class="form-radio-group">
+              <label class="radio-item">
+                <input type="radio" name="wetland_acceptance" value="accept" required>
+                <span>Yes, I accept this as a defining feature of the project</span>
+              </label>
+              <label class="radio-item">
+                <input type="radio" name="wetland_acceptance" value="reject">
+                <span>No, I would want this reviewed</span>
+              </label>
+            </div>
+          </div>
+
+        </fieldset>
+
+        <!-- ════════════════════════════════════════════════════
+             GATE B — CAPITAL & STRUCTURE
+             ════════════════════════════════════════════════════ -->
+        <fieldset>
+          <legend>Your Capacity</legend>
+
+          <div class="form-group">
+            <label class="form-label" for="investor-role">
+              What best describes your role in this potential investment?
+              <span class="req">*</span>
+            </label>
+            <!-- "group" triggers consortium fieldset · "refer" triggers referral fieldset -->
+            <select class="form-select" id="investor-role"
+                    name="investor_role" required>
+              <option value="">— Select one —</option>
+              <option value="principal">Principal investor — I am committing my own capital</option>
+              <option value="fund">Fund manager — investing on behalf of a fund or institutional mandate</option>
+              <option value="family-office">Family office representative</option>
+              <option value="lender">Lender or structured finance provider</option>
+              <option value="group">I am part of a group of investors who would co-invest together</option>
+              <option value="refer">I intend to refer this to someone with greater capacity</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="investor-capacity">
+              What is your indicative investment capacity for this specific opportunity?
+              <span class="req">*</span>
+            </label>
+            <!-- $500K-$999K → Tier 1 only · $1M+ → all tiers · "consortium" → consortium path · "refer-only" → referral exit -->
+            <select class="form-select" id="investor-capacity"
+                    name="investor_capacity" required>
+              <option value="">— Select one —</option>
+              <option value="500k-999k">US$500,000 – US$999,999</option>
+              <option value="1m-1999k">US$1,000,000 – US$1,999,999</option>
+              <option value="2m-3499k">US$2,000,000 – US$3,499,999</option>
+              <option value="3500k-plus">US$3,500,000 or above</option>
+              <option value="consortium">I am below US$500,000 individually but would consider a consortium position</option>
+              <option value="refer-only">I am not in a position to invest directly but wish to refer</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              What is your preferred investment structure?
+              <span class="req">*</span>
+            </label>
+            <div class="form-checkbox-group">
+              <label class="checkbox-item">
+                <input type="checkbox" name="preferred_structure[]"
+                       value="preferred-equity">
+                <span>Preferred equity in a ring-fenced project SPV</span>
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" name="preferred_structure[]"
+                       value="senior-secured">
+                <span>Senior secured lending against titled land</span>
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" name="preferred_structure[]"
+                       value="blended">
+                <span>Blended structure (senior debt + equity)</span>
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" name="preferred_structure[]"
+                       value="consortium-participation">
+                <span>Participation in a co-investor consortium</span>
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" name="preferred_structure[]"
+                       value="open">
+                <span>Open — I will be guided by what the project needs</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="gb-hold">
+              How long are you prepared to hold a position before expecting a return
+              of capital? <span class="req">*</span>
+            </label>
+            <!-- "under-2" flags for review — early return not realistic in this structure -->
+            <select class="form-select" id="gb-hold"
+                    name="hold_period" required>
+              <option value="">— Select one —</option>
+              <option value="under-2">Less than 2 years</option>
+              <option value="2-4">2–4 years</option>
+              <option value="4-7">4–7 years</option>
+              <option value="7-plus">7 years or longer</option>
+              <option value="income">I am primarily seeking recurring income rather than capital return</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="gb-experience">
+              Describe your most relevant prior investment experience (real estate,
+              hospitality, Caribbean, sustainable development or adjacent):
+            </label>
+            <textarea class="form-textarea" id="gb-experience"
+                      name="prior_experience" rows="4"
+                      placeholder="Please be specific — generic responses will not be sufficient for qualification."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              Have you signed a non-disclosure agreement with SHER or any related
+              entity previously?
+            </label>
+            <div class="form-radio-group">
+              <label class="radio-item">
+                <input type="radio" name="nda_signed" value="yes">
+                <span>Yes</span>
+              </label>
+              <label class="radio-item">
+                <input type="radio" name="nda_signed" value="no">
+                <span>No</span>
+              </label>
+              <label class="radio-item">
+                <input type="radio" name="nda_signed" value="not-yet">
+                <span>Not yet — I understand one will be required before detailed materials are shared</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label" for="gb-source">
+                How did you hear about SHER Sanctuary Experiences?
+                <span class="req">*</span>
+              </label>
+              <select class="form-select" id="gb-source"
+                      name="referral_source" required>
+                <option value="">— Select one —</option>
+                <option value="personal-intro">Personal introduction from someone I know</option>
+                <option value="professional">A professional referral (advisor, banker, lawyer)</option>
+                <option value="social-media">Social media or online</option>
+                <option value="media">Media coverage</option>
+                <option value="event">I attended an event or presentation</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="gb-referrer">
+                Name of the person or source who referred you (if applicable):
+              </label>
+              <input class="form-input" type="text" id="gb-referrer"
+                     name="referral_name"
+                     placeholder="Helps us acknowledge referrals appropriately">
+            </div>
+          </div>
+
+        </fieldset>
+
+        <!-- ════════════════════════════════════════════════════
+             GATE C-A — CONSORTIUM (conditional)
+             Shown when role = "group" OR capacity = "consortium"
+             ════════════════════════════════════════════════════ -->
+        <div id="consortium-fieldset" class="conditional-fieldset">
+          <fieldset>
+            <legend>Consortium Participation</legend>
+
+            <div class="form-intro-note">
+              SHER welcomes groups of aligned investors who together meet the capital
+              threshold. Each member of a consortium must complete their own discovery form.
+              The lead member coordinates the group and is the primary point of contact.
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">
+                Are you the lead coordinator for your group?
+              </label>
+              <div class="form-radio-group form-radio-group--horizontal">
+                <label class="radio-item">
+                  <input type="radio" name="consortium_lead" value="yes">
+                  <span>Yes, I am coordinating</span>
+                </label>
+                <label class="radio-item">
+                  <input type="radio" name="consortium_lead" value="no">
+                  <span>No, I am a participating member</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label" for="gc-size">
+                  Estimated number of co-investors (including yourself):
+                </label>
+                <select class="form-select" id="gc-size" name="consortium_size">
+                  <option value="">— Select —</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6+">6 or more</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="gc-capacity">
+                  Combined estimated capacity of the group:
+                </label>
+                <select class="form-select" id="gc-capacity"
+                        name="consortium_capacity">
+                  <option value="">— Select —</option>
+                  <option value="1m-2499k">US$1,000,000 – US$2,499,999</option>
+                  <option value="2500k-3499k">US$2,500,000 – US$3,499,999</option>
+                  <option value="3500k-plus">US$3,500,000 or above</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="gc-formation">
+                How did this group form?
+              </label>
+              <select class="form-select" id="gc-formation"
+                      name="consortium_formation">
+                <option value="">— Select —</option>
+                <option value="club">We are an existing investment club or co-investment circle</option>
+                <option value="colleagues">We are professional colleagues who invest together selectively</option>
+                <option value="family">We are family members investing jointly</option>
+                <option value="opportunity">We connected specifically around this opportunity</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="gc-members">
+                Names and email addresses of other consortium members
+                (if you are coordinating):
+              </label>
+              <textarea class="form-textarea" id="gc-members"
+                        name="consortium_members" rows="3"
+                        placeholder="We will send each member their own discovery link. Their submissions must align with yours."></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="gc-thesis">
+                Describe the shared values or investment thesis that brings this
+                group together:
+              </label>
+              <textarea class="form-textarea" id="gc-thesis"
+                        name="consortium_thesis" rows="3"
+                        placeholder="What does this group agree on when it comes to how and why you invest?"></textarea>
+            </div>
+
+          </fieldset>
+        </div>
+
+        <!-- ════════════════════════════════════════════════════
+             GATE C-B — REFERRAL (conditional)
+             Shown when role = "refer" OR capacity = "refer-only"
+             ════════════════════════════════════════════════════ -->
+        <div id="referral-fieldset" class="conditional-fieldset">
+          <fieldset>
+            <legend>Pass This Forward</legend>
+
+            <div class="form-intro-note">
+              You may not be the right investor for this moment — but if you know someone
+              who is, you can still play a meaningful role. Complete this section to refer
+              someone whose capacity and values align with SHER. We will reach out to them
+              directly and acknowledge your introduction.
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label" for="ref-first">
+                  First name of the person you are referring <span class="req">*</span>
+                </label>
+                <input class="form-input" type="text" id="ref-first"
+                       name="referral_first">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="ref-last">
+                  Last name <span class="req">*</span>
+                </label>
+                <input class="form-input" type="text" id="ref-last"
+                       name="referral_last">
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label" for="ref-email">
+                  Their email address <span class="req">*</span>
+                </label>
+                <input class="form-input" type="email" id="ref-email"
+                       name="referral_email">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="ref-phone">
+                  Their phone number (if known):
+                </label>
+                <input class="form-input" type="tel" id="ref-phone"
+                       name="referral_phone" placeholder="+1 555 000 0000">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="ref-why">
+                Why do you believe this person is a good match for SHER?
+              </label>
+              <textarea class="form-textarea" id="ref-why"
+                        name="referral_why" rows="3"
+                        placeholder="What do you know about their investment values, capacity or conservation interests?"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">
+                May we use your name when reaching out to them?
+              </label>
+              <div class="form-radio-group form-radio-group--horizontal">
+                <label class="radio-item">
+                  <input type="radio" name="referral_name_use" value="yes">
+                  <span>Yes, please mention I referred them</span>
+                </label>
+                <label class="radio-item">
+                  <input type="radio" name="referral_name_use" value="no">
+                  <span>No, please keep my name out of the introduction</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="ref-relationship">
+                Your relationship to this person:
+              </label>
+              <select class="form-select" id="ref-relationship"
+                      name="referral_relationship">
+                <option value="">— Select —</option>
+                <option value="friend">Close personal friend</option>
+                <option value="colleague">Professional colleague</option>
+                <option value="family">Family member</option>
+                <option value="acquaintance">Acquaintance or contact</option>
+                <option value="of-them">I know of them but we are not personally connected</option>
+              </select>
+            </div>
+
+          </fieldset>
+        </div>
+
+        <!-- ════════════════════════════════════════════════════
+             DECLARATIONS
+             ════════════════════════════════════════════════════ -->
+        <div class="form-declarations">
+          <label class="checkbox-item">
+            <input type="checkbox" name="decl_accurate" required>
+            <span>I confirm that the information I have provided is accurate and given in
+            good faith.</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" name="decl_no_offer" required>
+            <span>I understand that this form does not constitute an offer of or invitation
+            to subscribe for securities, and I am not relying on it as such.</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" name="decl_sophisticated" required>
+            <span>I understand that access to SHER investor materials is restricted to
+            sophisticated, professional or institutional investors, and I confirm I meet
+            this description under the laws of my jurisdiction.</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" name="decl_privacy" required>
+            <span>I accept that SHER will retain my submission data for the purpose of
+            investor relations and may contact me in connection with this project. I have
+            read and accept the privacy notice.</span>
+          </label>
+        </div>
+
+        <div class="mt-4">
+          <button type="submit" id="discovery-submit"
+                  class="btn btn--primary btn--full">
+            SUBMIT MY DISCOVERY PROFILE
+          </button>
+        </div>
+
+      </form>
+
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       SECTION 3 — PASSWORD LOGIN
+       Built in Session 3
+       ============================================================ -->
+  <!-- ============================================================
+       SECTION 3 — PASSWORD LOGIN
+       ============================================================ -->
+  <section id="login" class="section section--offwhite">
+    <div class="container--narrow">
+
+      <div class="password-card" style="margin:0 auto">
+        <span class="eyebrow">Investor Access Portal</span>
+        <h2>You Have Been Invited</h2>
+        <p style="font-size:14px;color:var(--text-muted);line-height:1.75;margin:1rem 0 1.5rem">
+          Your access code was issued personally by SHER. Enter it below to reveal
+          the materials available at your tier. If you do not yet have a code,
+          complete the Discovery Form above.
+        </p>
+
+        <form id="password-form" novalidate>
+          <div style="margin-bottom:0.75rem">
+            <input
+              class="password-input"
+              type="password"
+              id="password-input"
+              name="access-code"
+              placeholder="Enter your access code"
+              autocomplete="current-password"
+              spellcheck="false"
+            >
+          </div>
+          <p id="password-error" class="password-error-msg">
+            That code is not recognised. Check for typos, then contact
+            <a href="mailto:bookings@shersanctuary.com" style="color:var(--error)">bookings@shersanctuary.com</a>
+            if the problem persists.
+          </p>
+          <button id="password-btn" class="btn btn--primary btn--full" type="submit">
+            Unlock Access &rarr;
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       SECTION 4 — TIER 1 PANEL
+       Built in Session 3
+       ============================================================ -->
+  <!-- ============================================================
+       TIER 1 — THE OPPORTUNITY
+       ============================================================ -->
+  <div id="tier1" class="tier-panel">
+
+    <section class="section section--offwhite">
+      <div class="container">
+
+        <div class="section__header">
+          <span class="tier-badge">Tier 1 Access</span>
+          <h2 class="section-heading" style="margin-top:1.25rem">The Opportunity</h2>
+          <p class="section-subtext">
+            SHER is a conservation-led residential and experiential development on a pristine
+            coastal estate in Saint Lucia. The project combines a luxury boutique lodge,
+            20 for-sale residences, and a permanently protected wetland sanctuary — all
+            designed to create irreplaceable scarcity value in a market that rewards
+            authenticity.
+          </p>
+        </div>
+
+        <!-- ── KEY FIGURES ─── -->
+        <div class="numbers-grid numbers-grid--light">
+          <div class="number-cell">
+            <span class="number-cell__value">±72 ac</span>
+            <span class="number-cell__label">Total estate area</span>
+          </div>
+          <div class="number-cell">
+            <span class="number-cell__value">46.8%</span>
+            <span class="number-cell__label">Permanently protected conservation land</span>
+          </div>
+          <div class="number-cell">
+            <span class="number-cell__value">20</span>
+            <span class="number-cell__label">Residences for sale — villas, condominiums &amp; cottages</span>
+          </div>
+          <div class="number-cell">
+            <span class="number-cell__value">US$10.2M</span>
+            <span class="number-cell__label">Base for-sale revenue (preliminary model)</span>
+          </div>
+          <div class="number-cell">
+            <span class="number-cell__value">US$3.5M</span>
+            <span class="number-cell__label">Working capital reference</span>
+          </div>
+          <div class="number-cell">
+            <span class="number-cell__value">12–18 mo</span>
+            <span class="number-cell__label">Target construction phase</span>
+          </div>
+        </div>
+
+        <!-- ── NARRATIVE ─── -->
+        <p style="font-size:15px;line-height:1.85;margin-bottom:1.25rem;max-width:760px">
+          The estate occupies a rare coastal position — bounded on one side by the Caribbean
+          Sea, on another by a protected mangrove estuary, and on a third by hills that
+          create a natural enclosure for the sanctuary. The combination of buildable upland
+          and permanently non-buildable wetland creates a moat around the residential parcels
+          that no future competitor can replicate. That is the foundation of the value
+          proposition.
+        </p>
+        <p style="font-size:15px;line-height:1.85;margin-bottom:2rem;max-width:760px">
+          SHER does not compete on category with conventional resort development. Every
+          material, every form, every experience is designed to deepen the connection between
+          guests, residents and the living ecosystem they are entering. This is not a
+          selling line — it is a structural commitment enforced by legal land covenant and
+          reflected in the building specification from the ground up.
+        </p>
+
+        <div class="callout">
+          <p><strong>Construction approach:</strong> Hemp block, compressed earth, clay brick,
+          lime render, reclaimed timber, and locally sourced stone are the primary building
+          materials. This is not a novelty — these materials have a thousand-year structural
+          track record, an ultra-low embodied carbon footprint, and an exceptional thermal
+          performance in tropical climates. Independent structural certifications are
+          available at Tier 2.</p>
+        </div>
+
+        <!-- ── PHOTO GALLERY ─── -->
+        <div class="media-zone">
+          <h3 style="font-family:var(--font-display);font-size:22px;margin-bottom:1rem;color:var(--green)">Estate Photography</h3>
+          <div class="photo-gallery">
+            <img src="../images/bay-eastern-shoreline-1.jpg"
+                 alt="Bay eastern shoreline"
+                 loading="lazy"
+                 data-lightbox="../images/bay-eastern-shoreline-1.jpg"
+                 style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:var(--radius);cursor:zoom-in">
+            <img src="../images/bay-eastern-shoreline-2.jpg"
+                 alt="Bay eastern shoreline 2"
+                 loading="lazy"
+                 data-lightbox="../images/bay-eastern-shoreline-2.jpg"
+                 style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:var(--radius);cursor:zoom-in">
+            <img src="../images/bay-south-mangrove-arch.jpg"
+                 alt="South mangrove arch"
+                 loading="lazy"
+                 data-lightbox="../images/bay-south-mangrove-arch.jpg"
+                 style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:var(--radius);cursor:zoom-in">
+            <img src="../images/nature-trail-mangrove.jpg"
+                 alt="Nature trail through mangrove"
+                 loading="lazy"
+                 data-lightbox="../images/nature-trail-mangrove.jpg"
+                 style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:var(--radius);cursor:zoom-in">
+            <img src="../images/sher_calm_reflections.jpg"
+                 alt="Calm reflections on the water"
+                 loading="lazy"
+                 data-lightbox="../images/sher_calm_reflections.jpg"
+                 style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:var(--radius);cursor:zoom-in">
+            <img src="../images/sher-guide-with-guests.jpg"
+                 alt="SHER guide with guests"
+                 loading="lazy"
+                 data-lightbox="../images/sher-guide-with-guests.jpg"
+                 style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:var(--radius);cursor:zoom-in">
+          </div>
+          <p style="font-size:12px;color:var(--text-muted);margin-top:0.5rem">Click any image to enlarge.</p>
+        </div>
+
+        <!-- ── VIDEO WALKTHROUGHS ─── -->
+        <div class="media-zone">
+          <h3 style="font-family:var(--font-display);font-size:22px;margin-bottom:0.5rem;color:var(--green)">Virtual Walkthroughs</h3>
+          <p style="font-size:14px;color:var(--text-muted);margin-bottom:1rem">
+            Sample cottage and villa tours. Videos are private and domain-restricted.
+          </p>
+          <div class="video-gallery">
+            <div class="video-slot aspect-16-9"
+                 data-vimeo-src="REPLACE_WITH_VIMEO_COTTAGE_URL"
+                 tabindex="0" role="button" aria-label="Play sample cottage walkthrough">
+              <img class="video-slot__poster"
+                   src="../images/bay-eastern-shoreline-4.jpg"
+                   alt="Sample cottage walkthrough poster"
+                   loading="lazy">
+              <div class="video-slot__play" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+              </div>
+              <div class="video-slot__label">Sample Cottage Walkthrough</div>
+            </div>
+            <div class="video-slot aspect-16-9"
+                 data-vimeo-src="REPLACE_WITH_VIMEO_VILLA_URL"
+                 tabindex="0" role="button" aria-label="Play sample villa walkthrough">
+              <img class="video-slot__poster"
+                   src="../images/bay-eastern-shoreline-5.jpg"
+                   alt="Sample villa walkthrough poster"
+                   loading="lazy">
+              <div class="video-slot__play" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+              </div>
+              <div class="video-slot__label">Sample Villa Walkthrough</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── DOCUMENT VAULT ─── -->
+        <div class="media-zone">
+          <h3 style="font-family:var(--font-display);font-size:22px;margin-bottom:1rem;color:var(--green)">Tier 1 Documents</h3>
+          <div class="doc-vault">
+
+            <a class="doc-item" href="#" target="_blank" rel="noopener">
+              <div class="doc-item__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+              </div>
+              <div>
+                <div class="doc-item__name">SHER — Project Overview &amp; Vision</div>
+                <div class="doc-item__meta">PDF · 12 pages · Replace href with your hosted link</div>
+              </div>
+              <span class="doc-item__badge">PDF</span>
+            </a>
+
+            <a class="doc-item" href="#" target="_blank" rel="noopener">
+              <div class="doc-item__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21,15 16,10 5,21"/></svg>
+              </div>
+              <div>
+                <div class="doc-item__name">Concept Renders &amp; Site Impressions</div>
+                <div class="doc-item__meta">PDF · Replace href with your hosted link</div>
+              </div>
+              <span class="doc-item__badge">PDF</span>
+            </a>
+
+            <a class="doc-item" href="#" target="_blank" rel="noopener">
+              <div class="doc-item__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><polygon points="3,6 9,3 15,6 21,3 21,18 15,21 9,18 3,21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
+              </div>
+              <div>
+                <div class="doc-item__name">Estate Location Map</div>
+                <div class="doc-item__meta">PDF · Replace href with your hosted link</div>
+              </div>
+              <span class="doc-item__badge">MAP</span>
+            </a>
+
+            <a class="doc-item" href="#" target="_blank" rel="noopener">
+              <div class="doc-item__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              </div>
+              <div>
+                <div class="doc-item__name">Project Brief — Materials &amp; Conservation Covenant</div>
+                <div class="doc-item__meta">PDF · Replace href with your hosted link</div>
+              </div>
+              <span class="doc-item__badge">PDF</span>
+            </a>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── TIER 1 PROGRESSION FORM ─── -->
+    <div class="progression-wrapper">
+      <div class="container">
+
+        <div id="tier1-success" class="success-state">
+          <div class="success-card success-card--cream">
+            <h3>Thank you — your response has been received.</h3>
+            <p>We will review your answers and follow up personally within 48 hours.
+            If you are ready to move forward, your Tier 2 code will be sent to
+            the email address on your discovery profile.</p>
+          </div>
+        </div>
+
+        <h3>Your first impressions</h3>
+        <p class="lead">
+          After reviewing the overview materials, we would like to understand how you
+          are thinking about the opportunity. Your answers help us calibrate the right
+          conversation for the next tier.
+        </p>
+
+        <form
+          id="tier1-form"
+          name="tier1-progression"
+          data-netlify="true"
+          netlify-honeypot="bot-field"
+          novalidate
+        >
+          <input type="hidden" name="form-name" value="tier1-progression">
+          <p style="display:none"><label>Don't fill this in: <input name="bot-field" tabindex="-1"></label></p>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label" for="t1-name">Your full name <span class="req">*</span></label>
+              <input class="form-input" type="text" id="t1-name" name="full_name" required autocomplete="name">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="t1-email">Email address <span class="req">*</span></label>
+              <input class="form-input" type="email" id="t1-email" name="email" required autocomplete="email">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="t1-resonance">
+              What resonated most strongly with you from the Tier 1 materials?
+              <span class="req">*</span>
+            </label>
+            <textarea class="form-textarea" id="t1-resonance" name="resonance"
+                      rows="4" required
+                      placeholder="Be specific — what aspect of the vision, the site, the structure or the strategy is most compelling to you and why?"></textarea>
+            <p id="t1-resonance-msg" class="form-val-msg">
+              Please expand — a minimum of 20 words is required.
+            </p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="t1-questions">
+              What questions do you have before reviewing the financial model?
+            </label>
+            <textarea class="form-textarea" id="t1-questions" name="questions"
+                      rows="3"
+                      placeholder="Any questions about the site, the structure, the materials, the legal framework, or the conservation covenant."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="t1-materials-familiarity">
+              Are you familiar with hemp block, compressed earth, or natural-lime
+              construction? <span class="req">*</span>
+            </label>
+            <select class="form-select" id="t1-materials-familiarity"
+                    name="materials_familiarity" required>
+              <option value="">— Select one —</option>
+              <option value="professional">Yes — professionally (I have worked with these materials)</option>
+              <option value="personal">Yes — personally (I have lived in or visited a building using them)</option>
+              <option value="researched">I have researched them but have no direct experience</option>
+              <option value="no">Not familiar — I am open to learning more</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              Would you like to arrange a short video call before accessing Tier 2?
+            </label>
+            <div class="form-radio-group">
+              <label class="radio-item">
+                <input type="radio" name="video_call" value="yes">
+                <span>Yes — I would prefer a conversation before going further</span>
+              </label>
+              <label class="radio-item">
+                <input type="radio" name="video_call" value="no">
+                <span>No — I am happy to proceed to Tier 2 through the materials</span>
+              </label>
+              <label class="radio-item">
+                <input type="radio" name="video_call" value="after-tier2">
+                <span>Not yet — ask me again after I have reviewed Tier 2</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              Has your capacity or timeline changed since your initial discovery submission?
+            </label>
+            <div class="form-radio-group form-radio-group--horizontal">
+              <label class="radio-item">
+                <input type="radio" name="capacity_change" value="no">
+                <span>No change</span>
+              </label>
+              <label class="radio-item">
+                <input type="radio" name="capacity_change" value="yes">
+                <span>Yes — I will explain below</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="t1-additional">
+              Anything else you would like us to know at this stage:
+            </label>
+            <textarea class="form-textarea" id="t1-additional" name="additional"
+                      rows="2" placeholder="Optional"></textarea>
+          </div>
+
+          <button type="submit" class="btn btn--primary">
+            Submit Tier 1 Response &rarr;
+          </button>
+
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- ============================================================
+       SECTION 5 — TIER 2 PANEL
+       Built in Session 3
+       ============================================================ -->
+  <!-- ============================================================
+       TIER 2 — DEVELOPMENT ECONOMICS
+       ============================================================ -->
+  <div id="tier2" class="tier-panel">
+
+    <section class="section section--cream">
+      <div class="container">
+
+        <div class="section__header">
+          <span class="tier-badge">Tier 2 Access</span>
+          <h2 class="section-heading" style="margin-top:1.25rem">Development Economics</h2>
+          <p class="section-subtext">
+            The following figures are drawn from the working development model. They are
+            preliminary — not audited, not guaranteed — and are shared under the understanding
+            that this access was issued to a financially sophisticated investor. All figures
+            are subject to independent verification before any capital commitment is made.
+          </p>
+        </div>
+
+        <!-- ── CAPITAL STRUCTURE ─── -->
+        <h3 style="font-family:var(--font-display);font-size:24px;color:var(--green);margin-bottom:1.25rem">Capital Structure</h3>
+
+        <div class="numbers-grid numbers-grid--light">
+          <div class="number-cell">
+            <span class="number-cell__value">US$3.5M</span>
+            <span class="number-cell__label">Working capital requirement</span>
+          </div>
+          <div class="number-cell">
+            <span class="number-cell__value">US$10.2M</span>
+            <span class="number-cell__label">Base for-sale revenue (pre-financing costs)</span>
+          </div>
+          <div class="number-cell">
+            <span class="number-cell__value">~2.9×</span>
+            <span class="number-cell__label">Gross revenue-to-capital ratio at base model</span>
+          </div>
+        </div>
+
+        <div class="callout">
+          <p><strong>Investor note:</strong> The US$3.5M working capital figure is the
+          reference for equity and/or senior debt participation. This funds the
+          construction phase of the 20 residences and supporting infrastructure
+          on the estate. Hospitality operations (lodge, restaurant) are capitalised
+          and operated separately and are not included in these figures.</p>
+        </div>
+
+        <!-- ── REVENUE & TIMELINE TABLE ─── -->
+        <h3 style="font-family:var(--font-display);font-size:24px;color:var(--green);margin:2.5rem 0 1rem">Revenue &amp; Timeline Model</h3>
+
+        <div class="info-table-wrap">
+          <table class="info-table">
+            <thead>
+              <tr>
+                <th>Residential Type</th>
+                <th>Units</th>
+                <th>Price Range (USD)</th>
+                <th>Revenue Contribution</th>
+                <th>Build Phase</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Hillside Cottages</td>
+                <td>10</td>
+                <td>US$280,000 – US$340,000</td>
+                <td>US$3.1M (base)</td>
+                <td>Phase 1</td>
+              </tr>
+              <tr>
+                <td>Coastal Condominiums</td>
+                <td>6</td>
+                <td>US$380,000 – US$480,000</td>
+                <td>US$2.6M (base)</td>
+                <td>Phase 1 / 2</td>
+              </tr>
+              <tr>
+                <td>Sanctuary Villas</td>
+                <td>4</td>
+                <td>US$980,000 – US$1,150,000</td>
+                <td>US$4.5M (base)</td>
+                <td>Phase 2</td>
+              </tr>
+              <tr>
+                <td><strong>Total</strong></td>
+                <td><strong>20</strong></td>
+                <td>&mdash;</td>
+                <td><strong>US$10.2M (base)</strong></td>
+                <td>12–18 months</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p style="font-size:12px;color:var(--text-muted);margin-top:0.5rem;margin-bottom:2rem">
+          Figures are preliminary working model. All unit prices and revenue projections
+          require independent professional verification before any transaction. Exchange rate
+          fluctuations and Saint Lucia regulatory approval timelines may affect final figures.
+        </p>
+
+        <!-- ── RETURNS STRUCTURE ─── -->
+        <h3 style="font-family:var(--font-display);font-size:24px;color:var(--green);margin-bottom:1.25rem">Returns Structure</h3>
+
+        <div class="info-table-wrap">
+          <table class="info-table">
+            <thead>
+              <tr>
+                <th>Structure</th>
+                <th>Priority</th>
+                <th>Target Return</th>
+                <th>Security</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Senior secured lending</td>
+                <td>First priority</td>
+                <td>9–11% p.a. (indicative)</td>
+                <td>Charge over titled land</td>
+              </tr>
+              <tr>
+                <td>Preferred equity</td>
+                <td>Preferred distribution</td>
+                <td>18–22% IRR target</td>
+                <td>SPV equity with preferred waterfall</td>
+              </tr>
+              <tr>
+                <td>Participating equity</td>
+                <td>Pro-rata after preferred</td>
+                <td>Project upside</td>
+                <td>SPV equity, pari passu after preferred</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout">
+          <p><strong>Preferred equity note:</strong> Preferred equity investors receive
+          their capital plus preferred return before any participating equity receives
+          distribution. The waterfall is defined in the SPV shareholders agreement,
+          a draft of which is available at Tier 3 following NDA execution.</p>
+        </div>
+
+        <!-- ── SITE PROGRESS VIDEO ─── -->
+        <div class="media-zone">
+          <h3 style="font-family:var(--font-display);font-size:22px;margin-bottom:0.5rem;color:var(--green)">Site &amp; Progress</h3>
+          <p style="font-size:14px;color:var(--text-muted);margin-bottom:1rem">
+            Current site conditions and early infrastructure. Private and domain-restricted.
+          </p>
+          <div style="max-width:640px">
+            <div class="video-slot aspect-16-9"
+                 data-vimeo-src="REPLACE_WITH_VIMEO_SITE_URL"
+                 tabindex="0" role="button" aria-label="Play site overview video">
+              <img class="video-slot__poster"
+                   src="../images/sher-receiving-guests.jpg"
+                   alt="SHER site overview poster"
+                   loading="lazy">
+              <div class="video-slot__play" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+              </div>
+              <div class="video-slot__label">Site Overview &amp; Current Progress</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── DOCUMENT VAULT ─── -->
+        <div class="media-zone">
+          <h3 style="font-family:var(--font-display);font-size:22px;margin-bottom:1rem;color:var(--green)">Tier 2 Documents</h3>
+          <div class="doc-vault">
+
+            <a class="doc-item" href="#" target="_blank" rel="noopener">
+              <div class="doc-item__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+              </div>
+              <div>
+                <div class="doc-item__name">Development Financial Model (Preliminary)</div>
+                <div class="doc-item__meta">PDF · Replace href with your hosted link</div>
+              </div>
+              <span class="doc-item__badge">PDF</span>
+            </a>
+
+            <a class="doc-item" href="#" target="_blank" rel="noopener">
+              <div class="doc-item__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>
+              </div>
+              <div>
+                <div class="doc-item__name">Planning Approval &amp; Regulatory Status</div>
+                <div class="doc-item__meta">PDF · Replace href with your hosted link</div>
+              </div>
+              <span class="doc-item__badge">CERT</span>
+            </a>
+
+            <a class="doc-item" href="#" target="_blank" rel="noopener">
+              <div class="doc-item__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>
+              </div>
+              <div>
+                <div class="doc-item__name">Environmental Certification Summary</div>
+                <div class="doc-item__meta">PDF · Replace href with your hosted link</div>
+              </div>
+              <span class="doc-item__badge">CERT</span>
+            </a>
+
+            <a class="doc-item" href="#" target="_blank" rel="noopener">
+              <div class="doc-item__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+              </div>
+              <div>
+                <div class="doc-item__name">Structural Materials Certification (Hemp Block &amp; Earth)</div>
+                <div class="doc-item__meta">PDF · Replace href with your hosted link</div>
+              </div>
+              <span class="doc-item__badge">CERT</span>
+            </a>
+
+            <a class="doc-item" href="#" target="_blank" rel="noopener">
+              <div class="doc-item__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><polygon points="3,6 9,3 15,6 21,3 21,18 15,21 9,18 3,21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
+              </div>
+              <div>
+                <div class="doc-item__name">Site Plan &amp; Residential Plot Layout</div>
+                <div class="doc-item__meta">PDF · Replace href with your hosted link</div>
+              </div>
+              <span class="doc-item__badge">MAP</span>
+            </a>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── TIER 2 PROGRESSION FORM ─── -->
+    <div class="progression-wrapper">
+      <div class="container">
+
+        <div id="tier2-success" class="success-state">
+          <div class="success-card success-card--cream">
+            <h3>Thank you — your Tier 2 response has been received.</h3>
+            <p>We will review your answers. If your thinking and capacity are aligned
+            with the next stage, your Tier 3 code will be sent to the email on your
+            discovery profile. This typically takes 24–48 hours.</p>
+            <p>Tier 3 contains the most sensitive materials — legal appendices, title
+            documentation, and the draft investment agreement. You will be required to
+            sign an NDA before or immediately upon receiving your Tier 3 code.</p>
+          </div>
+        </div>
+
+        <h3>Your capital thinking</h3>
+        <p class="lead">
+          After reviewing the financial model, we want to understand how you are
+          thinking about capital structure, risk and the terms that matter most to you.
+          These answers directly inform whether and how we proceed to Tier 3.
+        </p>
+
+        <form
+          id="tier2-form"
+          name="tier2-progression"
+          data-netlify="true"
+          netlify-honeypot="bot-field"
+          novalidate
+        >
+          <input type="hidden" name="form-name" value="tier2-progression">
+          <p style="display:none"><label>Don't fill this in: <input name="bot-field" tabindex="-1"></label></p>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label" for="t2-name">Your full name <span class="req">*</span></label>
+              <input class="form-input" type="text" id="t2-name" name="full_name" required autocomplete="name">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="t2-email">Email address <span class="req">*</span></label>
+              <input class="form-input" type="email" id="t2-email" name="email" required autocomplete="email">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="t2-structure">
+              Based on the capital structure outlined above, which investment structure
+              are you most likely to use, and why? <span class="req">*</span>
+            </label>
+            <textarea class="form-textarea" id="t2-structure" name="preferred_structure"
+                      rows="4" required
+                      placeholder="Be specific — preferred equity, senior lending, blended? What return profile and hold period suits your mandate?"></textarea>
+            <p id="t2-structure-msg" class="form-val-msg">
+              Please expand — minimum 15 words.
+            </p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="t2-risk">
+              What are the two or three risk factors in this model that you would want
+              to address before committing capital? <span class="req">*</span>
+            </label>
+            <textarea class="form-textarea" id="t2-risk" name="risk_factors"
+                      rows="4" required
+                      placeholder="Construction risk, currency, title, market absorption, regulatory, timeline — what concerns you most?"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              Are you prepared to sign an NDA before receiving the Tier 3 materials?
+              <span class="req">*</span>
+            </label>
+            <div class="form-radio-group">
+              <label class="radio-item">
+                <input type="radio" name="nda_ready" value="yes-immediately" required>
+                <span>Yes — I will sign immediately upon receiving it</span>
+              </label>
+              <label class="radio-item">
+                <input type="radio" name="nda_ready" value="yes-lawyer-review">
+                <span>Yes — but I would want my lawyer to review it first (allow 3–5 working days)</span>
+              </label>
+              <label class="radio-item">
+                <input type="radio" name="nda_ready" value="questions">
+                <span>I have questions about the NDA terms before agreeing to sign</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              Which professional advisors are you likely to involve in due diligence?
+            </label>
+            <div class="form-checkbox-group">
+              <label class="checkbox-item">
+                <input type="checkbox" name="advisors[]" value="lawyer">
+                <span>Corporate / international lawyer</span>
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" name="advisors[]" value="accountant">
+                <span>Accountant or financial modeller</span>
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" name="advisors[]" value="property-surveyor">
+                <span>Property or land surveyor</span>
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" name="advisors[]" value="family-office-advisor">
+                <span>Family office investment advisor</span>
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" name="advisors[]" value="none">
+                <span>I am proceeding without external advisors at this stage</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="t2-timeline">
+              If everything aligns, what is your realistic timeline to making a
+              capital commitment?
+            </label>
+            <select class="form-select" id="t2-timeline" name="decision_timeline">
+              <option value="">— Select one —</option>
+              <option value="30-days">Within 30 days</option>
+              <option value="60-days">Within 60 days</option>
+              <option value="90-days">Within 90 days</option>
+              <option value="6-months">3–6 months — subject to further diligence</option>
+              <option value="unclear">Timeline unclear at this stage</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="t2-additional">
+              Any additional questions, concerns, or context before Tier 3:
+            </label>
+            <textarea class="form-textarea" id="t2-additional" name="additional"
+                      rows="2" placeholder="Optional"></textarea>
+          </div>
+
+          <button type="submit" class="btn btn--primary">
+            Submit Tier 2 Response &rarr;
+          </button>
+
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- ============================================================
+       SECTION 6 — TIER 3 PANEL
+       Built in Session 3
+       ============================================================ -->
+  <!-- ============================================================
+       TIER 3 — INVESTOR PARTICIPATION
+       ============================================================ -->
+  <div id="tier3" class="tier-panel">
+
+    <section class="section section--offwhite">
+      <div class="container">
+
+        <div class="section__header">
+          <span class="tier-badge">Tier 3 Access — Confidential</span>
+          <h2 class="section-heading" style="margin-top:1.25rem">Investor Participation</h2>
+          <p class="section-subtext">
+            Access to this tier confirms that you have reviewed the financial model and your
+            capacity and intent are aligned. The documents below include the most sensitive
+            materials in this process. By accessing them you confirm you are bound by the
+            confidentiality obligations you accepted when receiving this code.
+          </p>
+        </div>
+
+        <div class="callout">
+          <p><strong>NDA reminder:</strong> If you have not yet executed an NDA with SHER,
+          please do so before distributing, reproducing or discussing any content from
+          this tier. If you did not receive an NDA alongside your Tier 3 code, contact
+          <a href="mailto:bookings@shersanctuary.com" style="color:var(--green);text-decoration:underline">bookings@shersanctuary.com</a>
+          before proceeding.</p>
+        </div>
+
+        <!-- ── DOCUMENT VAULT ─── -->
+        <div class="media-zone">
+          <h3 style="font-family:var(--font-display);font-size:22px;margin-bottom:0.5rem;color:var(--green)">Confidential Documents</h3>
+          <p style="font-size:14px;color:var(--text-muted);margin-bottom:1rem">
+            Sensitive documents are hosted on private Google Drive with restricted access.
+            Your viewing session may be logged. Do not share these links.
+          </p>
+          <div class="doc-vault">
+
+            <a class="doc-item" href="#" target="_blank" rel="noopener">
+              <div class="doc-item__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+              </div>
+              <div>
+                <div class="doc-item__name">Non-Disclosure Agreement (Executable)</div>
+                <div class="doc-item__meta">PDF · Replace href with Google Drive restricted link</div>
+              </div>
+              <span class="doc-item__badge">NDA</span>
+            </a>
+
+            <a class="doc-item" href="#" target="_blank" rel="noopener">
+              <div class="doc-item__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+              </div>
+              <div>
+                <div class="doc-item__name">Investment Agreement — Draft Term Sheet</div>
+                <div class="doc-item__meta">PDF · Replace href with Google Drive restricted link</div>
+              </div>
+              <span class="doc-item__badge">DRAFT</span>
+            </a>
+
+            <a class="doc-item" href="#" target="_blank" rel="noopener">
+              <div class="doc-item__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+              </div>
+              <div>
+                <div class="doc-item__name">SPV Shareholders Agreement — Draft</div>
+                <div class="doc-item__meta">PDF · Replace href with Google Drive restricted link</div>
+              </div>
+              <span class="doc-item__badge">DRAFT</span>
+            </a>
+
+            <a class="doc-item" href="#" target="_blank" rel="noopener">
+              <div class="doc-item__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><polygon points="3,6 9,3 15,6 21,3 21,18 15,21 9,18 3,21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
+              </div>
+              <div>
+                <div class="doc-item__name">Title Documentation — Parcel Survey &amp; Registered Boundaries</div>
+                <div class="doc-item__meta">Restricted Drive link · Replace href with Google Drive restricted link</div>
+              </div>
+              <span class="doc-item__badge">TITLE</span>
+            </a>
+
+            <a class="doc-item" href="#" target="_blank" rel="noopener">
+              <div class="doc-item__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+              </div>
+              <div>
+                <div class="doc-item__name">Legal Appendix A — Conservation Covenant &amp; Land Restrictions</div>
+                <div class="doc-item__meta">Restricted Drive link · Replace href with Google Drive restricted link</div>
+              </div>
+              <span class="doc-item__badge">LEGAL</span>
+            </a>
+
+            <a class="doc-item" href="#" target="_blank" rel="noopener">
+              <div class="doc-item__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+              </div>
+              <div>
+                <div class="doc-item__name">Legal Appendix B — SPV Corporate Structure &amp; Jurisdiction</div>
+                <div class="doc-item__meta">Restricted Drive link · Replace href with Google Drive restricted link</div>
+              </div>
+              <span class="doc-item__badge">LEGAL</span>
+            </a>
+
+            <a class="doc-item" href="#" target="_blank" rel="noopener">
+              <div class="doc-item__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>
+              </div>
+              <div>
+                <div class="doc-item__name">Full Audited Financial Model (Workbook)</div>
+                <div class="doc-item__meta">Restricted Drive link · Replace href with Google Drive restricted link</div>
+              </div>
+              <span class="doc-item__badge">MODEL</span>
+            </a>
+
+          </div>
+        </div>
+
+        <!-- ── ADDITIONAL PHOTOGRAPHY ─── -->
+        <div class="media-zone">
+          <h3 style="font-family:var(--font-display);font-size:22px;margin-bottom:1rem;color:var(--green)">Restricted Photography</h3>
+          <div class="photo-gallery">
+            <img src="../images/guests-nature-trail.jpg"
+                 alt="Guests on nature trail"
+                 loading="lazy"
+                 data-lightbox="../images/guests-nature-trail.jpg"
+                 style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:var(--radius);cursor:zoom-in">
+            <img src="../images/table-deau-waters-edge.jpg"
+                 alt="Table d'Eau dining at the water's edge"
+                 loading="lazy"
+                 data-lightbox="../images/table-deau-waters-edge.jpg"
+                 style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:var(--radius);cursor:zoom-in">
+            <img src="../images/sher-receiving-guests.jpg"
+                 alt="SHER receiving guests"
+                 loading="lazy"
+                 data-lightbox="../images/sher-receiving-guests.jpg"
+                 style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:var(--radius);cursor:zoom-in">
+          </div>
+          <p style="font-size:12px;color:var(--text-muted);margin-top:0.5rem">Click any image to enlarge. Do not share or reproduce these images.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── TIER 3 ENGAGEMENT FORM ─── -->
+    <div class="progression-wrapper">
+      <div class="container">
+
+        <div id="tier3-success" class="success-state">
+          <div class="success-card success-card--green">
+            <h3>Your engagement profile has been received.</h3>
+            <p>We will review your submission and respond personally within 24 hours.
+            If everything is aligned, the next step will be a direct call with the
+            Managing Director to discuss terms and next steps.</p>
+            <p>Please ensure your NDA is signed and returned before that call if you
+            have not already done so.</p>
+          </div>
+        </div>
+
+        <h3>Proceed to investment</h3>
+        <p class="lead">
+          You have reviewed all three tiers of materials. The questions below are designed
+          to move from exploration to commitment. Answer as specifically as you can — vague
+          responses at this stage will delay the process.
+        </p>
+
+        <form
+          id="tier3-form"
+          name="tier3-engagement"
+          data-netlify="true"
+          netlify-honeypot="bot-field"
+          novalidate
+        >
+          <input type="hidden" name="form-name" value="tier3-engagement">
+          <p style="display:none"><label>Don't fill this in: <input name="bot-field" tabindex="-1"></label></p>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label" for="t3-name">Your full name <span class="req">*</span></label>
+              <input class="form-input" type="text" id="t3-name" name="full_name" required autocomplete="name">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="t3-email">Email address <span class="req">*</span></label>
+              <input class="form-input" type="email" id="t3-email" name="email" required autocomplete="email">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="t3-org">Organisation / fund / family office (if applicable)</label>
+            <input class="form-input" type="text" id="t3-org" name="organisation" autocomplete="organization">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="t3-amount">
+              Confirmed investment amount you are prepared to commit: <span class="req">*</span>
+            </label>
+            <select class="form-select" id="t3-amount" name="investment_amount" required>
+              <option value="">— Select one —</option>
+              <option value="500k-999k">US$500,000 – US$999,999</option>
+              <option value="1m-1999k">US$1,000,000 – US$1,999,999</option>
+              <option value="2m-3499k">US$2,000,000 – US$3,499,999</option>
+              <option value="3500k-plus">US$3,500,000 or above</option>
+              <option value="consortium-total">Consortium total — individual contributions vary</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              Preferred investment structure: <span class="req">*</span>
+            </label>
+            <div class="form-checkbox-group">
+              <label class="checkbox-item">
+                <input type="checkbox" name="final_structure[]" value="senior-secured">
+                <span>Senior secured lending against titled land</span>
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" name="final_structure[]" value="preferred-equity">
+                <span>Preferred equity in the ring-fenced project SPV</span>
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" name="final_structure[]" value="blended">
+                <span>Blended structure (senior debt + equity)</span>
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" name="final_structure[]" value="need-discussion">
+                <span>To be confirmed — I need a conversation before deciding</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              NDA status: <span class="req">*</span>
+            </label>
+            <div class="form-radio-group">
+              <label class="radio-item">
+                <input type="radio" name="nda_status" value="signed" required>
+                <span>Signed and returned</span>
+              </label>
+              <label class="radio-item">
+                <input type="radio" name="nda_status" value="reviewing">
+                <span>With my lawyer for review</span>
+              </label>
+              <label class="radio-item">
+                <input type="radio" name="nda_status" value="not-received">
+                <span>I have not received the NDA — please send it</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="t3-advisors">
+              Name and discipline of the advisors who will be involved in your due diligence:
+            </label>
+            <textarea class="form-textarea" id="t3-advisors" name="advisors"
+                      rows="2"
+                      placeholder="e.g. Jane Smith (corporate lawyer, Kingston), John Doe (financial modeller, Miami)"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="t3-conditions">
+              Are there any specific conditions or carve-outs that must be met before you
+              can commit?
+            </label>
+            <textarea class="form-textarea" id="t3-conditions" name="conditions"
+                      rows="3"
+                      placeholder="e.g. Title search must confirm clear ownership, project must have planning approval for Phase 1 before drawdown"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              Are you ready for us to send you a formal term sheet? <span class="req">*</span>
+            </label>
+            <div class="form-radio-group">
+              <label class="radio-item">
+                <input type="radio" name="term_sheet_ready" value="yes" required>
+                <span>Yes — please proceed with a term sheet</span>
+              </label>
+              <label class="radio-item">
+                <input type="radio" name="term_sheet_ready" value="call-first">
+                <span>Not yet — I would prefer a call before a term sheet is issued</span>
+              </label>
+              <label class="radio-item">
+                <input type="radio" name="term_sheet_ready" value="more-diligence">
+                <span>Not yet — I need to complete more diligence first</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="t3-message">
+              Final message to the Managing Director:
+            </label>
+            <textarea class="form-textarea" id="t3-message" name="message"
+                      rows="3" placeholder="Anything you want the decision-maker to know before your call."></textarea>
+          </div>
+
+          <button type="submit" class="btn btn--primary">
+            Submit Investment Profile &rarr;
+          </button>
+
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- ============================================================
+       SECTION 7 — PROPERTY BUYER PROGRAMME
+       ============================================================ -->
+  <section id="property-buyer" class="section section--green">
+    <div class="container">
+
+      <div class="section__header">
+        <span class="eyebrow" style="color:var(--gold)">For Sale — A Limited Collection</span>
+        <h2 class="section-heading section-heading--white">The Property Buyer Programme</h2>
+        <p class="section-subtext" style="color:var(--cream-muted)">
+          Twenty residences are being offered as part of the SHER estate. Each is designed
+          with the same materials, philosophy and conservation covenant that defines the whole
+          project. Ownership here is not a transaction — it is an alignment of values made
+          permanent in land.
+        </p>
+      </div>
+
+      <!-- ── 5 STEPS ─── -->
+      <div class="steps">
+
+        <div class="step-card">
+          <div class="step-number">01</div>
+          <div class="step-content">
+            <h4>Review the available residences</h4>
+            <p>Three residence types are offered — Hillside Cottages, Coastal Condominiums
+            and Sanctuary Villas. Read the specifications, watch the virtual walkthroughs,
+            and identify which aligns best with how you intend to use the property.</p>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">02</div>
+          <div class="step-content">
+            <h4>Complete the buyer discovery form</h4>
+            <p>We ask every prospective buyer about their intent, their use case, and their
+            relationship to the kind of place SHER is building. This is not a formality —
+            it ensures that every owner shares the values that make the estate work as a
+            whole.</p>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">03</div>
+          <div class="step-content">
+            <h4>A personal response from SHER</h4>
+            <p>Every submission is reviewed personally. If your profile is a fit, you will
+            hear from us within 48 hours to arrange the next step. We do not send automated
+            responses to prospective buyers at this stage.</p>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">04</div>
+          <div class="step-content">
+            <h4>Site visit or virtual consultation</h4>
+            <p>We will arrange a visit to the estate or a private virtual consultation with
+            the SHER team — whichever works for you. This is where questions about the site,
+            the construction, and the community are answered in full.</p>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">05</div>
+          <div class="step-content">
+            <h4>Hold agreement and formal reservation</h4>
+            <p>A hold agreement secures your interest in a specific residence while you
+            complete due diligence. Purchase agreements follow on terms negotiated
+            directly with SHER and reviewed by your legal advisor.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ── PROPERTY CARDS ─── -->
+      <h3 class="section-heading section-heading--white"
+          style="margin-top:4.5rem;font-size:34px">The Residences</h3>
+      <p style="font-size:15px;color:var(--cream-muted);margin:0.75rem 0 0;max-width:680px">
+        All residences are built to the SHER specification — natural materials,
+        conservation-aligned siting, HOA-managed maintenance, and optional rental
+        pool participation.
+      </p>
+
+      <div class="property-cards">
+
+        <!-- COTTAGE -->
+        <div class="property-card">
+          <span class="eyebrow">Hillside Cottages</span>
+          <h3>The Cottage</h3>
+          <p class="card-sub">10 units available &nbsp;·&nbsp; From US$280,000</p>
+
+          <div class="video-slot aspect-16-9" style="margin-bottom:1.25rem"
+               data-vimeo-src="REPLACE_WITH_VIMEO_COTTAGE_DETAIL_URL"
+               tabindex="0" role="button" aria-label="Play cottage walkthrough">
+            <img class="video-slot__poster"
+                 src="../images/bay-eastern-shoreline-4.jpg"
+                 alt="Cottage walkthrough poster" loading="lazy">
+            <div class="video-slot__play" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+            <div class="video-slot__label">Hillside Cottage — Virtual Walkthrough</div>
+          </div>
+
+          <dl class="spec-list">
+            <div class="spec-item"><dt>Bedrooms</dt><dd>1–2</dd></div>
+            <div class="spec-item"><dt>Floor area</dt><dd>65–90 m²</dd></div>
+            <div class="spec-item"><dt>Outdoor space</dt><dd>Private garden terrace</dd></div>
+            <div class="spec-item"><dt>Construction</dt><dd>Hemp block + lime render</dd></div>
+            <div class="spec-item"><dt>Views</dt><dd>Hillside canopy + bay glimpses</dd></div>
+            <div class="spec-item"><dt>HOA rental pool</dt><dd>Eligible</dd></div>
+            <div class="spec-item"><dt>Price from</dt><dd>US$280,000</dd></div>
+          </dl>
+
+          <p class="card-why">
+            Cottages are the entry point to ownership at SHER — compact, precisely
+            designed, and positioned within the hillside vegetation to minimise their
+            footprint and maximise natural screening. For buyers who want a personal
+            retreat with genuine conservation credentials, or for those entering
+            through the rental pool as an income-generating asset.
+          </p>
+        </div>
+
+        <!-- CONDOMINIUM -->
+        <div class="property-card">
+          <span class="eyebrow">Coastal Condominiums</span>
+          <h3>The Condominium</h3>
+          <p class="card-sub">6 units available &nbsp;·&nbsp; From US$380,000</p>
+
+          <div class="video-slot aspect-16-9" style="margin-bottom:1.25rem"
+               data-vimeo-src="REPLACE_WITH_VIMEO_CONDO_DETAIL_URL"
+               tabindex="0" role="button" aria-label="Play condominium walkthrough">
+            <img class="video-slot__poster"
+                 src="../images/bay-eastern-shoreline-5.jpg"
+                 alt="Condominium walkthrough poster" loading="lazy">
+            <div class="video-slot__play" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+            <div class="video-slot__label">Coastal Condominium — Virtual Walkthrough</div>
+          </div>
+
+          <dl class="spec-list">
+            <div class="spec-item"><dt>Bedrooms</dt><dd>2–3</dd></div>
+            <div class="spec-item"><dt>Floor area</dt><dd>95–130 m²</dd></div>
+            <div class="spec-item"><dt>Outdoor space</dt><dd>Ocean-facing wraparound terrace</dd></div>
+            <div class="spec-item"><dt>Construction</dt><dd>Compressed earth + lime render</dd></div>
+            <div class="spec-item"><dt>Views</dt><dd>Caribbean Sea + estate grounds</dd></div>
+            <div class="spec-item"><dt>HOA rental pool</dt><dd>Eligible</dd></div>
+            <div class="spec-item"><dt>Price from</dt><dd>US$380,000</dd></div>
+          </dl>
+
+          <p class="card-why">
+            Condominiums occupy the coastal edge of the estate — open-plan living, broad
+            ocean-facing terraces, and the highest rental yield potential in the
+            collection. Built from compressed earth, they maintain the estate's thermal
+            and material standards while delivering the volume and outlook that coastal
+            buyers expect at this price point.
+          </p>
+        </div>
+
+        <!-- VILLA -->
+        <div class="property-card">
+          <span class="eyebrow">Sanctuary Villas</span>
+          <h3>The Villa</h3>
+          <p class="card-sub">4 units available &nbsp;·&nbsp; From US$980,000</p>
+
+          <div class="video-slot aspect-16-9" style="margin-bottom:1.25rem"
+               data-vimeo-src="REPLACE_WITH_VIMEO_VILLA_DETAIL_URL"
+               tabindex="0" role="button" aria-label="Play villa walkthrough">
+            <img class="video-slot__poster"
+                 src="../images/sher_calm_reflections.jpg"
+                 alt="Sanctuary Villa walkthrough poster" loading="lazy">
+            <div class="video-slot__play" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+            <div class="video-slot__label">Sanctuary Villa — Virtual Walkthrough</div>
+          </div>
+
+          <dl class="spec-list">
+            <div class="spec-item"><dt>Bedrooms</dt><dd>3–4</dd></div>
+            <div class="spec-item"><dt>Floor area</dt><dd>220–280 m²</dd></div>
+            <div class="spec-item"><dt>Pool</dt><dd>Private plunge pool</dd></div>
+            <div class="spec-item"><dt>Construction</dt><dd>Reclaimed timber + clay brick</dd></div>
+            <div class="spec-item"><dt>Views</dt><dd>Direct mangrove frontage + bay</dd></div>
+            <div class="spec-item"><dt>HOA rental pool</dt><dd>Eligible (premium tier)</dd></div>
+            <div class="spec-item"><dt>Price from</dt><dd>US$980,000</dd></div>
+          </dl>
+
+          <p class="card-why">
+            The four Sanctuary Villas are the most private, most spatially generous
+            residences on the estate. Positioned at the mangrove boundary, they carry
+            the conservation covenant most directly — their plunge pools face the
+            protected wetland, bordered on two sides by land that will never be
+            developed. For buyers who want a principal Caribbean residence with complete
+            seclusion and a conservation legacy they can name.
+          </p>
+        </div>
+
+      </div>
+
+      <!-- ── HOA RENTAL POOL ─── -->
+      <div style="margin-top:5rem">
+        <h3 class="section-heading section-heading--white"
+            style="font-size:30px;margin-bottom:0.75rem">The HOA Rental Pool</h3>
+        <p style="font-size:15px;color:var(--cream-muted);max-width:700px;margin-bottom:0">
+          Owners who do not occupy their residence full-time may participate in the
+          SHER HOA Rental Pool. SHER manages the property, the bookings, and the guest
+          experience — to the same standard as the lodge. Owners receive income
+          distributions and return to a fully maintained residence whenever they choose.
+        </p>
+        <div class="hoa-grid">
+          <div class="hoa-card">
+            <h4>Full Property Management</h4>
+            <p>SHER handles all guest bookings, housekeeping, maintenance, and arrival
+            experience. There is nothing for the owner to coordinate. Your property is
+            managed as part of the wider sanctuary offering.</p>
+          </div>
+          <div class="hoa-card">
+            <h4>Income Distribution</h4>
+            <p>Rental income is distributed to participating owners on a pro-rata basis
+            per the HOA pool agreement. Distribution terms, management fees, and owner
+            priority periods are defined in the HOA documentation, available at Tier 3.</p>
+          </div>
+          <div class="hoa-card">
+            <h4>Owner Priority Access</h4>
+            <p>Owners designate up to a defined number of months per year for personal
+            use, during which the property is removed from the rental pool. Advance
+            notice requirements and blackout periods apply per the HOA agreement.</p>
+          </div>
+          <div class="hoa-card">
+            <h4>Conservation Standards Maintained</h4>
+            <p>The HOA maintains the estate's conservation standards at all times.
+            No modifications may be made to a property that compromise its materials,
+            footprint, or covenant obligations without written agreement from SHER.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ── BUYER DISCOVERY FORM ──────────────────────────────────── -->
+  <div class="progression-wrapper" id="buyer-form-section">
+    <div class="container">
+
+      <div id="property-buyer-success" class="success-state">
+        <div class="success-card success-card--green">
+          <h3>Your buyer profile has been received.</h3>
+          <p>We review every submission personally. If your profile and intent are
+          aligned with what SHER is building, you will hear from us within 48 hours
+          to discuss next steps.</p>
+          <p>We do not send unsolicited follow-up or automated responses to buyer
+          submissions. If you hear from us, it means something is moving forward.</p>
+        </div>
+      </div>
+
+      <h3>Begin the buyer discovery process</h3>
+      <p class="lead">
+        SHER does not sell residences through conventional property marketing. Every
+        buyer is assessed for values alignment, purchase intent, and the way they plan
+        to use the property. This protects the character of the estate and the
+        experience for every owner and guest on it.
+      </p>
+
+      <form
+        id="property-buyer-form"
+        name="property-buyer-discovery"
+        data-netlify="true"
+        netlify-honeypot="bot-field"
+        novalidate
+      >
+        <input type="hidden" name="form-name" value="property-buyer-discovery">
+        <p style="display:none"><label>Don't fill this in: <input name="bot-field" tabindex="-1"></label></p>
+
+        <!-- PART A — IDENTITY -->
+        <fieldset>
+          <legend>Part A — Who You Are</legend>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label" for="pb-name">Full legal name <span class="req">*</span></label>
+              <input class="form-input" type="text" id="pb-name" name="full_name" required autocomplete="name">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="pb-email">Email address <span class="req">*</span></label>
+              <input class="form-input" type="email" id="pb-email" name="email" required autocomplete="email">
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label" for="pb-phone">Phone number (with country code) <span class="req">*</span></label>
+              <input class="form-input" type="tel" id="pb-phone" name="phone" required autocomplete="tel" placeholder="+1 555 000 0000">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="pb-country">Country of residence <span class="req">*</span></label>
+              <select class="form-select" id="pb-country" name="country_residence" required>
+                <option value="">— Select country —</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="pb-nature-rel">
+              How do you relate to natural environments in your personal life? <span class="req">*</span>
+            </label>
+            <select class="form-select" id="pb-nature-rel" name="nature_relationship" required>
+              <option value="">— Select one —</option>
+              <option value="central">I actively seek time in nature — it is central to how I live</option>
+              <option value="deliberate">I value nature and make deliberate choices to protect it where I can</option>
+              <option value="appreciate">I appreciate natural settings but it is not a primary driver for me</option>
+              <option value="none">I have no particular relationship with the natural world</option>
+            </select>
+          </div>
+
+        </fieldset>
+
+        <!-- PART B — PROPERTY INTEREST -->
+        <fieldset>
+          <legend>Part B — Your Property Interest</legend>
+
+          <div class="form-group">
+            <label class="form-label">
+              Which residence type interests you? (Select all that apply) <span class="req">*</span>
+            </label>
+            <div class="form-checkbox-group">
+              <label class="checkbox-item">
+                <input type="checkbox" name="property_interest[]" value="cottage">
+                <span>Hillside Cottage — from US$280,000 &nbsp;·&nbsp; 1–2 bed, 65–90 m²</span>
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" name="property_interest[]" value="condo">
+                <span>Coastal Condominium — from US$380,000 &nbsp;·&nbsp; 2–3 bed, 95–130 m²</span>
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" name="property_interest[]" value="villa">
+                <span>Sanctuary Villa — from US$980,000 &nbsp;·&nbsp; 3–4 bed, 220–280 m², private pool</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="pb-budget">
+              Your confirmed budget for this purchase: <span class="req">*</span>
+            </label>
+            <select class="form-select" id="pb-budget" name="budget_range" required>
+              <option value="">— Select one —</option>
+              <option value="under-300k">Up to US$300,000</option>
+              <option value="300k-499k">US$300,000 – US$499,999</option>
+              <option value="500k-799k">US$500,000 – US$799,999</option>
+              <option value="800k-999k">US$800,000 – US$999,999</option>
+              <option value="1m-plus">US$1,000,000 or above</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              Are you purchasing as an individual, jointly, or through an entity?
+            </label>
+            <div class="form-radio-group">
+              <label class="radio-item">
+                <input type="radio" name="purchase_entity" value="individual">
+                <span>Individual</span>
+              </label>
+              <label class="radio-item">
+                <input type="radio" name="purchase_entity" value="joint">
+                <span>Jointly with a partner or spouse</span>
+              </label>
+              <label class="radio-item">
+                <input type="radio" name="purchase_entity" value="company">
+                <span>Through a company, trust or holding entity</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="pb-referrer">
+              How did you hear about SHER Sanctuary? <span class="req">*</span>
+            </label>
+            <select class="form-select" id="pb-referrer" name="referral_source" required>
+              <option value="">— Select one —</option>
+              <option value="personal-intro">Personal introduction from someone I know</option>
+              <option value="professional">A professional referral (agent, lawyer, advisor)</option>
+              <option value="investor-referral">Referral from a SHER investor</option>
+              <option value="social-media">Social media or online</option>
+              <option value="media">Media coverage</option>
+              <option value="event">An event or presentation</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+
+        </fieldset>
+
+        <!-- PART C — PURCHASE INTENT -->
+        <fieldset>
+          <legend>Part C — Purchase Intent &amp; Use</legend>
+
+          <div class="form-group">
+            <label class="form-label">
+              How do you primarily intend to use the property? <span class="req">*</span>
+            </label>
+            <div class="form-radio-group">
+              <label class="radio-item">
+                <input type="radio" name="primary_intent" value="principal-residence" required>
+                <span>As a principal Caribbean residence — I will occupy it full-time or for extended stays</span>
+              </label>
+              <label class="radio-item">
+                <input type="radio" name="primary_intent" value="vacation-home">
+                <span>As a vacation home — I will use it seasonally, likely 1–3 months per year</span>
+              </label>
+              <label class="radio-item">
+                <input type="radio" name="primary_intent" value="rental-investment">
+                <span>Primarily as an investment — I want it in the HOA rental pool most of the year</span>
+              </label>
+              <label class="radio-item">
+                <input type="radio" name="primary_intent" value="combination">
+                <span>A combination — personal use for part of the year, rental pool for the rest</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              Is this your first property in the Caribbean? <span class="req">*</span>
+            </label>
+            <div class="form-radio-group form-radio-group--horizontal">
+              <label class="radio-item">
+                <input type="radio" name="first_caribbean" value="yes" required>
+                <span>Yes</span>
+              </label>
+              <label class="radio-item">
+                <input type="radio" name="first_caribbean" value="no">
+                <span>No — I have or have had other Caribbean property</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="pb-timeline">
+              What is your realistic purchase timeline? <span class="req">*</span>
+            </label>
+            <select class="form-select" id="pb-timeline" name="purchase_timeline" required>
+              <option value="">— Select one —</option>
+              <option value="immediate">Immediate — I am ready to proceed now</option>
+              <option value="3-months">Within 3 months</option>
+              <option value="6-months">Within 6 months</option>
+              <option value="12-months">Within 12 months</option>
+              <option value="exploring">Exploring — no firm timeline yet</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="pb-why">
+              In your own words, why does SHER appeal to you as a place to own
+              property? <span class="req">*</span>
+            </label>
+            <textarea class="form-textarea" id="pb-why" name="why_sher" rows="4" required
+                      placeholder="What draws you to this specific type of development over conventional resort or residential property in the Caribbean?"></textarea>
+            <p id="pb-why-msg" class="form-val-msg">Please expand — a minimum of 20 words is required.</p>
+          </div>
+
+        </fieldset>
+
+        <!-- PART D — HOA RENTAL POOL -->
+        <fieldset>
+          <legend>Part D — HOA Rental Pool</legend>
+
+          <div class="form-group">
+            <label class="form-label">
+              Are you interested in the HOA Rental Pool programme? <span class="req">*</span>
+            </label>
+            <div class="form-radio-group">
+              <label class="radio-item">
+                <input type="radio" name="rental_pool_interest" value="yes" required>
+                <span>Yes — rental income is a significant part of my investment case</span>
+              </label>
+              <label class="radio-item">
+                <input type="radio" name="rental_pool_interest" value="maybe">
+                <span>Possibly — I would like to understand the terms first</span>
+              </label>
+              <label class="radio-item">
+                <input type="radio" name="rental_pool_interest" value="no">
+                <span>No — I intend to use the property personally and manage it privately if needed</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="pb-personal-months">
+              If participating in the rental pool, how many months per year would you
+              want the property available for your personal use?
+            </label>
+            <select class="form-select" id="pb-personal-months" name="personal_months_per_year">
+              <option value="">— Select —</option>
+              <option value="1-2">1–2 months</option>
+              <option value="3-4">3–4 months</option>
+              <option value="5-6">5–6 months</option>
+              <option value="over-6">More than 6 months</option>
+              <option value="flexible">Flexible — not decided yet</option>
+            </select>
+          </div>
+
+        </fieldset>
+
+        <!-- PART E — HOW TO PROCEED -->
+        <fieldset>
+          <legend>Part E — How to Proceed</legend>
+
+          <div class="form-group">
+            <label class="form-label">
+              What would you like as the next step after we review your profile?
+              <span class="req">*</span>
+            </label>
+            <div class="form-radio-group">
+              <label class="radio-item">
+                <input type="radio" name="next_step" value="site-visit" required>
+                <span>I would like to arrange a visit to the estate</span>
+              </label>
+              <label class="radio-item">
+                <input type="radio" name="next_step" value="virtual-consult">
+                <span>I would like a private virtual consultation with the SHER team</span>
+              </label>
+              <label class="radio-item">
+                <input type="radio" name="next_step" value="info-pack">
+                <span>Please send me a detailed information pack first</span>
+              </label>
+              <label class="radio-item">
+                <input type="radio" name="next_step" value="just-respond">
+                <span>Simply respond to my submission — I will take it from there</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="pb-agent">
+              Are you working with a property agent or representative?
+            </label>
+            <input class="form-input" type="text" id="pb-agent" name="agent_name"
+                   placeholder="Name and firm (leave blank if not applicable)">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="pb-message">
+              Anything else you would like us to know before we respond:
+            </label>
+            <textarea class="form-textarea" id="pb-message" name="message" rows="3"
+                      placeholder="Optional — specific questions, constraints, accessibility needs, or context that will help us respond well"></textarea>
+          </div>
+
+          <div class="form-declarations">
+            <label class="checkbox-item">
+              <input type="checkbox" name="decl_accurate" required>
+              <span>I confirm that the information provided is accurate and given in good faith.</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" name="decl_no_offer" required>
+              <span>I understand that this form is not a sales contract, reservation, or commitment of any kind by SHER.</span>
+            </label>
+          </div>
+
+        </fieldset>
+
+        <div class="mt-4">
+          <button type="submit" class="btn btn--primary btn--full">
+            SUBMIT MY BUYER PROFILE
+          </button>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+
+
+  <!-- ── LIGHTBOX OVERLAY ─────────────────────────────────────── -->
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
+    <button class="lightbox__close" id="lightbox-close" aria-label="Close image viewer">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+    <img src="" alt="Enlarged image" id="lightbox-img">
+  </div>
+
+
+  <!-- ============================================================
+       FOOTER
+       ============================================================ -->
+  <footer class="site-footer">
+    <p>
+      This page is private and confidential. It does not constitute a prospectus, securities
+      offering, valuation, legal opinion or lending commitment. All financial figures are
+      preliminary working models subject to independent verification. Access is restricted to
+      persons who have identified themselves as sophisticated, professional or institutional
+      investors. By accessing this page you confirm that characterisation applies to
+      you.&nbsp;&nbsp;&middot;&nbsp;&nbsp;shersanctuary.com
+    </p>
+  </footer>
+
+
+  <!--
+  ================================================================
+  OPERATOR GUIDE — READING DISCOVERY SUBMISSIONS
+
+  HARD DISQUALIFIERS (do not issue any tier password):
+  - "No permanent wetland boundary" / "would want this reviewed" selected
+  - "I prefer conventional construction" selected
+  - "Conservation and commercial value are in tension" selected
+  - "No particular relationship with nature" selected
+  - Investment capacity below US$500K with no consortium path
+
+  TIER 1 PASSWORD — issue when:
+  - Philosophy questions show genuine nature/conservation alignment
+  - Construction materials openness confirmed
+  - Investment capacity US$500K+ (individually or consortium path)
+  - Discovery form responses are specific, not generic
+
+  TIER 2 PASSWORD — issue when:
+  - Tier 1 progression answers are specific and financially literate
+  - Natural materials question answered with commercial depth
+  - Timeline is realistic
+
+  TIER 3 PASSWORD — issue when:
+  - Tier 2 risk assessment acknowledges model gaps honestly
+  - NDA readiness confirmed
+  - Capital amount and structure are credibly aligned
+  - Advisor names or disciplines mentioned
+
+  REFERRAL SUBMISSIONS — forward to the named person with a personal
+  introduction email, not an automated response.
+
+  CONSORTIUM SUBMISSIONS —
+  - Create a group record with the lead's name
+  - Verify each member submits their own discovery form
+  - Issue consortium members the same tier password as the lead
+    only after all members have individually qualified
+
+  ================================================================
+  PASSWORD SETUP — ACTION REQUIRED BEFORE GOING LIVE
+  ================================================================
+  Find the TIER_HASHES object in the <script> block below.
+  Replace the three placeholder strings with SHA-256 hashes of
+  your chosen passwords.
+
+  To generate a hash:
+    1. Go to: https://emn178.github.io/online-tools/sha256.html
+    2. Type your password in the Input box
+    3. Copy the Output string — paste it below
+    4. Keep your actual passwords safe; they cannot be recovered
+       from the hashes stored here.
+  ================================================================
+  -->
+
+  <script>
+
+    /* ── CONFIGURATION ─────────────────────────────────────────
+       REPLACE THESE BEFORE GOING LIVE
+       ─────────────────────────────────────────────────────────── */
+    const TIER_HASHES = {
+      tier1: '361190735d8da9aeb7a1d46abfa15a0781209611947a28a5c8ff75428110a091',
+      tier2: 'd93126b54ff470f26146458bd5c83f70c08e87bc6a6925445d473d603ef0b44d',
+      tier3: 'afb07f1689b35b6c4367c00454f2b350a7270a9aa614f67c3d23cc7be0a16c2a',
+    };
+
+    /* ── SHA-256 UTILITY ───────────────────────────────────────── */
+    async function hashPassword(raw) {
+      const data   = new TextEncoder().encode(raw);
+      const buffer = await window.crypto.subtle.digest('SHA-256', data);
+      return Array.from(new Uint8Array(buffer))
+        .map(b => b.toString(16).padStart(2, '0'))
+        .join('');
+    }
+
+    /* ── TIER UNLOCK ───────────────────────────────────────────── */
+    function revealTier(n) {
+      for (let i = 1; i <= n; i++) {
+        const panel = document.getElementById('tier' + i);
+        if (panel) panel.classList.add('revealed');
+      }
+    }
+
+    function scrollToTier(n) {
+      const el = document.getElementById('tier' + n);
+      if (el) setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 450);
+    }
+
+    /* ── PASSWORD SUBMIT (wired to login form in Session 3) ────── */
+    async function handlePasswordSubmit(e) {
+      e.preventDefault();
+      const input = document.getElementById('password-input');
+      const btn   = document.getElementById('password-btn');
+      const error = document.getElementById('password-error');
+      if (!input || !btn) return;
+
+      const raw = input.value.trim();
+      if (!raw) return;
+
+      btn.classList.add('btn--loading');
+      btn.textContent = 'Checking…';
+
+      try {
+        const hash = await hashPassword(raw);
+        if (hash === TIER_HASHES.tier3) {
+          revealTier(3); clearPwError(input, error); scrollToTier(1);
+        } else if (hash === TIER_HASHES.tier2) {
+          revealTier(2); clearPwError(input, error); scrollToTier(1);
+        } else if (hash === TIER_HASHES.tier1) {
+          revealTier(1); clearPwError(input, error); scrollToTier(1);
+        } else {
+          showPwError(input, error);
+        }
+      } catch (err) {
+        console.error('Hash error:', err);
+      } finally {
+        btn.classList.remove('btn--loading');
+        btn.textContent = 'Unlock Access →';
+      }
+    }
+
+    function showPwError(input, errorEl) {
+      input.classList.add('error');
+      if (errorEl) errorEl.classList.add('visible');
+      setTimeout(() => input.classList.remove('error'), 2100);
+    }
+
+    function clearPwError(input, errorEl) {
+      input.classList.remove('error');
+      if (errorEl) errorEl.classList.remove('visible');
+    }
+
+    /* ── CONDITIONAL SHOW / HIDE (wired in Session 2) ─────────── */
+    function setConditionalVisible(id, show) {
+      const el = document.getElementById(id);
+      if (el) el.classList.toggle('visible', show);
+    }
+
+    function initConditionalLogic() {
+      const roleEl = document.getElementById('investor-role');
+      const capEl  = document.getElementById('investor-capacity');
+      if (!roleEl) return;
+
+      function evalRole() {
+        const r = roleEl.value;
+        const c = capEl ? capEl.value : '';
+        const showConsortium = r === 'group'  || c === 'consortium';
+        const showReferral   = r === 'refer'  || c === 'refer-only';
+        setConditionalVisible('consortium-fieldset', showConsortium);
+        setConditionalVisible('referral-fieldset',   showReferral);
+      }
+
+      roleEl.addEventListener('change', evalRole);
+      if (capEl) capEl.addEventListener('change', evalRole);
+    }
+
+    /* ── WORD COUNT VALIDATION (wired in Sessions 2 & 3) ──────── */
+    function countWords(str) {
+      return str.trim().split(/\s+/).filter(Boolean).length;
+    }
+
+    function attachWordCount(textareaId, minimum, msgId) {
+      const ta  = document.getElementById(textareaId);
+      const msg = document.getElementById(msgId);
+      if (!ta || !msg) return;
+
+      ta.addEventListener('blur', () => {
+        if (countWords(ta.value) < minimum) msg.classList.add('visible');
+        else msg.classList.remove('visible');
+      });
+      ta.addEventListener('input', () => {
+        if (countWords(ta.value) >= minimum) msg.classList.remove('visible');
+      });
+    }
+
+    /* ── NETLIFY FORM HELPER (wired in Sessions 2–4) ───────────── */
+    function showSuccess(formEl, successEl) {
+      if (formEl)    formEl.style.display = 'none';
+      if (successEl) {
+        successEl.classList.add('visible');
+        successEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    function wireNetlifyForm(formId, successId) {
+      const form    = document.getElementById(formId);
+      const success = document.getElementById(successId);
+      if (!form || !success) return;
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const data = new FormData(form);
+        try {
+          const res = await fetch('/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams(data).toString(),
+          });
+          if (res.ok) {
+            showSuccess(form, success);
+          } else {
+            alert('There was a problem submitting your form. Please try again or email bookings@shersanctuary.com.');
+          }
+        } catch {
+          alert('There was a problem submitting your form. Please try again or email bookings@shersanctuary.com.');
+        }
+      });
+    }
+
+    /* ── COUNTRY SELECT POPULATION ─────────────────────────────── */
+    const COUNTRIES = [
+      'Afghanistan','Albania','Algeria','Andorra','Angola','Antigua and Barbuda',
+      'Argentina','Armenia','Australia','Austria','Azerbaijan','Bahamas','Bahrain',
+      'Bangladesh','Barbados','Belarus','Belgium','Belize','Benin','Bhutan',
+      'Bolivia','Bosnia and Herzegovina','Botswana','Brazil','Brunei','Bulgaria',
+      'Burkina Faso','Burundi','Cabo Verde','Cambodia','Cameroon','Canada',
+      'Central African Republic','Chad','Chile','China','Colombia','Comoros',
+      'Congo (Brazzaville)','Congo (Kinshasa)','Costa Rica','Côte d\'Ivoire',
+      'Croatia','Cuba','Cyprus','Czech Republic','Denmark','Djibouti','Dominica',
+      'Dominican Republic','Ecuador','Egypt','El Salvador','Equatorial Guinea',
+      'Eritrea','Estonia','Eswatini','Ethiopia','Fiji','Finland','France','Gabon',
+      'Gambia','Georgia','Germany','Ghana','Greece','Grenada','Guatemala','Guinea',
+      'Guinea-Bissau','Guyana','Haiti','Honduras','Hungary','Iceland','India',
+      'Indonesia','Iran','Iraq','Ireland','Israel','Italy','Jamaica','Japan',
+      'Jordan','Kazakhstan','Kenya','Kiribati','Kosovo','Kuwait','Kyrgyzstan',
+      'Laos','Latvia','Lebanon','Lesotho','Liberia','Libya','Liechtenstein',
+      'Lithuania','Luxembourg','Madagascar','Malawi','Malaysia','Maldives','Mali',
+      'Malta','Marshall Islands','Mauritania','Mauritius','Mexico','Micronesia',
+      'Moldova','Monaco','Mongolia','Montenegro','Morocco','Mozambique','Myanmar',
+      'Namibia','Nauru','Nepal','Netherlands','New Zealand','Nicaragua','Niger',
+      'Nigeria','North Korea','North Macedonia','Norway','Oman','Pakistan','Palau',
+      'Palestine','Panama','Papua New Guinea','Paraguay','Peru','Philippines',
+      'Poland','Portugal','Qatar','Romania','Russia','Rwanda',
+      'Saint Kitts and Nevis','Saint Lucia','Saint Vincent and the Grenadines',
+      'Samoa','San Marino','São Tomé and Príncipe','Saudi Arabia','Senegal',
+      'Serbia','Seychelles','Sierra Leone','Singapore','Slovakia','Slovenia',
+      'Solomon Islands','Somalia','South Africa','South Korea','South Sudan',
+      'Spain','Sri Lanka','Sudan','Suriname','Sweden','Switzerland','Syria',
+      'Taiwan','Tajikistan','Tanzania','Thailand','Timor-Leste','Togo','Tonga',
+      'Trinidad and Tobago','Tunisia','Turkey','Turkmenistan','Tuvalu','Uganda',
+      'Ukraine','United Arab Emirates','United Kingdom','United States',
+      'Uruguay','Uzbekistan','Vanuatu','Vatican City','Venezuela','Vietnam',
+      'Yemen','Zambia','Zimbabwe'
+    ];
+
+    function populateCountrySelects() {
+      const selects = ['ga-country-res', 'ga-country-cit', 'pb-country'];
+      selects.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        COUNTRIES.forEach(name => {
+          const opt = document.createElement('option');
+          opt.value = name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+          opt.textContent = name;
+          el.appendChild(opt);
+        });
+      });
+    }
+
+    /* ── DISCOVERY FORM HANDLER ─────────────────────────────────── */
+    function handleDiscoverySubmit() {
+      const form = document.getElementById('discovery-form');
+      if (!form) return;
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        /* Read role & capacity to decide which success state to show */
+        const role     = (document.getElementById('investor-role')     || {}).value || '';
+        const capacity = (document.getElementById('investor-capacity') || {}).value || '';
+        const isReferral = role === 'refer' || capacity === 'refer-only';
+
+        /* For referral path: grab referred person's first name */
+        const refFirst = (document.getElementById('ref-first') || {}).value || 'the person you named';
+
+        const data = new FormData(form);
+        try {
+          const res = await fetch('/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams(data).toString(),
+          });
+          if (res.ok) {
+            form.style.display = 'none';
+            if (isReferral) {
+              const nameEcho = document.getElementById('referral-name-echo');
+              if (nameEcho) nameEcho.textContent = refFirst;
+              showSuccess(null, document.getElementById('discovery-success-referral'));
+            } else {
+              showSuccess(null, document.getElementById('discovery-success-qualifying'));
+            }
+          } else {
+            alert('There was a problem submitting your form. Please try again or email bookings@shersanctuary.com.');
+          }
+        } catch {
+          alert('There was a problem submitting your form. Please try again or email bookings@shersanctuary.com.');
+        }
+      });
+    }
+
+    /* ── VIDEO CLICK-TO-PLAY ───────────────────────────────────── */
+    function initVideoSlots() {
+      document.querySelectorAll('.video-slot').forEach(slot => {
+        function activateSlot() {
+          if (slot.classList.contains('video-slot--active')) return;
+          const src = slot.dataset.vimeoSrc;
+          if (!src || src.startsWith('REPLACE_')) return;
+          const iframe = document.createElement('iframe');
+          iframe.src = src + (src.includes('?') ? '&' : '?') + 'autoplay=1&title=0&byline=0&portrait=0';
+          iframe.allow = 'autoplay; fullscreen; picture-in-picture';
+          iframe.allowFullscreen = true;
+          iframe.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;border:0;';
+          slot.style.position = 'relative';
+          slot.appendChild(iframe);
+          slot.classList.add('video-slot--active');
+        }
+        slot.addEventListener('click', activateSlot);
+        slot.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') activateSlot(); });
+      });
+    }
+
+    /* ── LIGHTBOX ──────────────────────────────────────────────── */
+    function initLightbox() {
+      const lb  = document.getElementById('lightbox');
+      const img = document.getElementById('lightbox-img');
+      const cls = document.getElementById('lightbox-close');
+      if (!lb || !img) return;
+
+      document.addEventListener('click', e => {
+        const trigger = e.target.closest('[data-lightbox]');
+        if (trigger) {
+          img.src = trigger.dataset.lightbox;
+          img.alt = trigger.alt || '';
+          lb.classList.add('open');
+          lb.focus();
+        }
+      });
+
+      function closeLightbox() { lb.classList.remove('open'); img.src = ''; }
+      lb.addEventListener('click', e => { if (e.target === lb) closeLightbox(); });
+      if (cls) cls.addEventListener('click', closeLightbox);
+      document.addEventListener('keydown', e => { if (e.key === 'Escape' && lb.classList.contains('open')) closeLightbox(); });
+    }
+
+    /* ── TIER FORM HANDLERS ────────────────────────────────────── */
+    function wireTierForms() {
+      /* Tier 1 */
+      wireNetlifyForm('tier1-form', 'tier1-success');
+      attachWordCount('t1-resonance', 20, 't1-resonance-msg');
+
+      /* Tier 2 */
+      wireNetlifyForm('tier2-form', 'tier2-success');
+      attachWordCount('t2-structure', 15, 't2-structure-msg');
+
+      /* Tier 3 */
+      wireNetlifyForm('tier3-form', 'tier3-success');
+    }
+
+    /* ── PASSWORD FORM WIRE ─────────────────────────────────────── */
+    function initPasswordForm() {
+      const form = document.getElementById('password-form');
+      if (form) form.addEventListener('submit', handlePasswordSubmit);
+    }
+
+    /* ── INIT ──────────────────────────────────────────────────── */
+    document.addEventListener('DOMContentLoaded', () => {
+      populateCountrySelects();
+      initConditionalLogic();
+      handleDiscoverySubmit();
+      attachWordCount('ga-cons-example', 15, 'ga-cons-example-msg');
+      initPasswordForm();
+      wireTierForms();
+      wireNetlifyForm('property-buyer-form', 'property-buyer-success');
+      attachWordCount('pb-why', 20, 'pb-why-msg');
+      initLightbox();
+      initVideoSlots();
+    });
+
+  </script>
+
+</body>
+</html>

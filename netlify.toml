@@ -25,6 +25,20 @@
   [headers.values]
     Cache-Control = "public, max-age=86400"
 
+# ── /investors — noindex + no-cache headers ──────────────────────────────────
+[[headers]]
+  for = "/investors/*"
+  [headers.values]
+    X-Robots-Tag  = "noindex, nofollow, noarchive"
+    Cache-Control = "no-store, must-revalidate"
+    X-Frame-Options = "DENY"
+
+# ── /investors — explicit file serve (must precede catch-all) ─────────────────
+[[redirects]]
+  from   = "/investors"
+  to     = "/investors/index.html"
+  status = 200
+
 # ── /command — serve the password-protected dashboard ────────────────────────
 [[redirects]]
   from = "/command"
