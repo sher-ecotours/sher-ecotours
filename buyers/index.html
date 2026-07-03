@@ -1,0 +1,1510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow, noarchive, nositelinkssearchbox">
+  <meta name="googlebot" content="noindex, nofollow">
+  <title>SHER Sanctuary &mdash; Property Buyer Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+
+    /* ── CUSTOM PROPERTIES ─────────────────────────────────────── */
+    :root {
+      --green:        #1B3B36;
+      --green-mid:    #22473f;
+      --green-light:  #2a5a50;
+      --gold:         #C9A867;
+      --gold-dark:    #a88640;
+      --cream:        #F5F0E8;
+      --offwhite:     #FAFAF7;
+      --text:         #1A1A1A;
+      --text-muted:   #6b6b6b;
+      --cream-muted:  rgba(245, 240, 232, 0.65);
+      --white:        #ffffff;
+      --error:        #c0392b;
+
+      --font-display: 'Cormorant Garamond', Georgia, serif;
+      --font-body:    'Inter', system-ui, -apple-system, sans-serif;
+
+      --radius:    4px;
+      --radius-lg: 8px;
+
+      --shadow-card: 0 2px 16px rgba(0,0,0,0.08);
+      --shadow-lg:   0 8px 40px rgba(0,0,0,0.14);
+
+      --transition:      0.3s ease;
+      --transition-slow: 0.4s ease;
+    }
+
+    /* ── RESET ─────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body { font-family: var(--font-body); color: var(--text); background: var(--offwhite); line-height: 1.6; }
+    img { display: block; max-width: 100%; }
+    a { color: inherit; }
+
+    /* ── LAYOUT ────────────────────────────────────────────────── */
+    .section         { padding: 5rem 0; }
+    .section--green  { background-color: var(--green); color: var(--white); }
+    .section--cream  { background-color: var(--cream); }
+    .section--offwhite { background-color: var(--offwhite); }
+
+    .container         { width: 100%; max-width: 980px;  margin: 0 auto; padding: 0 2rem; }
+    .container--narrow { width: 100%; max-width: 640px;  margin: 0 auto; padding: 0 2rem; }
+
+    /* ── TYPOGRAPHY ────────────────────────────────────────────── */
+    .eyebrow {
+      font-family: var(--font-body);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .section-heading {
+      font-family: var(--font-display);
+      font-size: 38px;
+      font-weight: 500;
+      line-height: 1.15;
+      color: var(--green);
+      margin-top: 0.75rem;
+    }
+
+    .section-heading--white { color: var(--white); }
+
+    .section-subtext {
+      font-size: 16px;
+      line-height: 1.8;
+      color: var(--text-muted);
+      max-width: 680px;
+      margin-top: 1rem;
+    }
+
+    .section__header { margin-bottom: 3rem; }
+    .section__header .eyebrow { display: block; margin-bottom: 0.75rem; }
+
+    /* ── BUTTONS ────────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.875rem 2rem;
+      border: none;
+      border-radius: var(--radius);
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background var(--transition), color var(--transition), transform 0.15s ease;
+      min-height: 48px;
+    }
+    .btn:hover  { transform: translateY(-1px); }
+    .btn:active { transform: translateY(0); }
+
+    .btn--primary  { background: var(--green);    color: var(--white); }
+    .btn--primary:hover { background: var(--green-mid); }
+    .btn--secondary { background: transparent; color: var(--green); border: 1.5px solid var(--green); }
+    .btn--secondary:hover { background: var(--green); color: var(--white); }
+    .btn--gold  { background: var(--gold); color: var(--green); }
+    .btn--gold:hover { background: var(--gold-dark); }
+    .btn--full  { width: 100%; }
+
+    .btn--loading { opacity: 0.7; pointer-events: none; }
+
+    /* ── HERO ───────────────────────────────────────────────────── */
+    .hero {
+      background: var(--green);
+      padding: 5rem 0 4rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 60% 40%, rgba(201,168,103,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero__mark {
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+    }
+
+    .hero__headline {
+      font-family: var(--font-display);
+      font-size: 48px;
+      font-weight: 500;
+      color: var(--white);
+      line-height: 1.1;
+      max-width: 700px;
+      margin: 0 auto 1.25rem;
+    }
+
+    .hero__sub {
+      font-size: 15px;
+      color: var(--cream-muted);
+      line-height: 1.8;
+      max-width: 540px;
+      margin: 0 auto 2.5rem;
+    }
+
+    .hero__ctas {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* ── PASSWORD CARD ──────────────────────────────────────────── */
+    .password-card {
+      background: var(--white);
+      border: 1.5px solid rgba(201,168,103,0.35);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem 2rem;
+      box-shadow: var(--shadow-card);
+    }
+
+    .password-card .eyebrow { display: block; margin-bottom: 0.75rem; }
+
+    .password-card h2 {
+      font-family: var(--font-display);
+      font-size: 30px;
+      color: var(--green);
+      margin-bottom: 0;
+    }
+
+    .password-input {
+      width: 100%;
+      padding: 0.875rem 1rem;
+      border: 1.5px solid #d5d0c8;
+      border-radius: var(--radius);
+      font-family: var(--font-body);
+      font-size: 15px;
+      letter-spacing: 0.08em;
+      color: var(--text);
+      background: var(--offwhite);
+      margin-bottom: 0;
+      transition: border-color var(--transition);
+    }
+
+    .password-input:focus {
+      outline: none;
+      border-color: var(--green);
+      background: var(--white);
+    }
+
+    .password-input.error {
+      border-color: var(--error);
+      animation: shake 0.4s ease;
+    }
+
+    .password-error-msg {
+      font-size: 12px;
+      color: var(--error);
+      margin-top: 0.5rem;
+      margin-bottom: 0.75rem;
+      display: none;
+      line-height: 1.5;
+    }
+
+    .password-error-msg.visible { display: block; }
+
+    /* ── BUYER PANEL ────────────────────────────────────────────── */
+    .buyer-panel { max-height: 0; overflow: hidden; opacity: 0; transition: max-height 0.5s ease, opacity 0.4s ease; }
+    .buyer-panel.revealed { max-height: 99999px; opacity: 1; }
+
+    /* ── TIER BADGE ─────────────────────────────────────────────── */
+    .tier-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--gold);
+      color: var(--green);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 3px;
+    }
+
+    /* ── STEPS ──────────────────────────────────────────────────── */
+    .steps { display: flex; flex-direction: column; gap: 1.25rem; margin-top: 2.5rem; }
+
+    .step-card {
+      background: var(--green-mid);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem 2rem;
+      display: grid;
+      grid-template-columns: 48px 1fr;
+      gap: 1.5rem;
+      align-items: flex-start;
+    }
+
+    .step-number {
+      font-family: var(--font-display);
+      font-size: 34px;
+      font-weight: 600;
+      color: var(--gold);
+      line-height: 1;
+    }
+
+    .step-content h4 { font-family: var(--font-display); font-size: 20px; color: var(--white); margin-bottom: 0.5rem; }
+    .step-content p  { font-size: 14px; color: var(--cream-muted); line-height: 1.7; }
+
+    /* ── PROPERTY CARDS ─────────────────────────────────────────── */
+    .property-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 2.5rem;
+    }
+
+    .property-card {
+      background: var(--cream);
+      border: 1.5px solid var(--gold);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+    }
+
+    .property-card .eyebrow { display: block; margin-bottom: 0.5rem; }
+
+    .property-card h3 {
+      font-family: var(--font-display);
+      font-size: 26px;
+      color: var(--green);
+      margin-bottom: 0.2rem;
+    }
+
+    .property-card .card-sub { font-size: 12px; color: var(--text-muted); margin-bottom: 1.25rem; }
+
+    .spec-list { border-top: 1px solid rgba(201,168,103,0.3); padding-top: 1rem; margin-bottom: 1rem; }
+
+    .spec-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 0.35rem 0;
+      border-bottom: 1px solid rgba(201,168,103,0.12);
+      font-size: 12.5px;
+    }
+
+    .spec-item dt { color: var(--text-muted); flex-shrink: 0; }
+    .spec-item dd { text-align: right; font-weight: 500; color: var(--green); }
+
+    .property-card .card-why {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.65;
+      margin-top: 0.75rem;
+    }
+
+    /* ── VIDEO SLOT ─────────────────────────────────────────────── */
+    .video-slot {
+      position: relative;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      background: #000;
+      cursor: pointer;
+    }
+
+    .video-slot.aspect-16-9 { aspect-ratio: 16 / 9; }
+
+    .video-slot__poster { width: 100%; height: 100%; object-fit: cover; display: block; transition: opacity 0.3s ease; }
+    .video-slot:hover .video-slot__poster { opacity: 0.82; }
+
+    .video-slot__play {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 56px; height: 56px;
+      background: rgba(255,255,255,0.92);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background var(--transition), transform var(--transition);
+    }
+
+    .video-slot:hover .video-slot__play { background: var(--gold); transform: translate(-50%, -50%) scale(1.08); }
+    .video-slot__play svg { width: 28px; height: 28px; color: var(--green); margin-left: 4px; }
+
+    .video-slot__label {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      background: linear-gradient(transparent, rgba(0,0,0,0.7));
+      color: var(--white);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      padding: 1.5rem 1rem 0.75rem;
+    }
+
+    .video-slot--active .video-slot__poster,
+    .video-slot--active .video-slot__play,
+    .video-slot--active .video-slot__label { display: none; }
+
+    .video-gallery { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem; }
+
+    /* ── HOA GRID ───────────────────────────────────────────────── */
+    .hoa-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-top: 2rem; }
+
+    .hoa-card {
+      background: rgba(255,255,255,0.06);
+      border-left: 3px solid var(--gold);
+      padding: 1.5rem 1.75rem;
+      border-radius: 0 var(--radius) var(--radius) 0;
+    }
+
+    .hoa-card h4 { font-family: var(--font-display); font-size: 19px; color: var(--white); margin-bottom: 0.5rem; }
+    .hoa-card p  { font-size: 13px; color: var(--cream-muted); line-height: 1.7; }
+
+    /* ── PHOTO GALLERY ──────────────────────────────────────────── */
+    .photo-gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
+
+    /* ── CALLOUT ────────────────────────────────────────────────── */
+    .callout {
+      border: 1.5px solid var(--gold);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      background: rgba(201,168,103,0.06);
+      margin: 1.5rem 0;
+    }
+
+    .callout p { font-size: 14px; color: var(--text); line-height: 1.75; }
+
+    /* ── MEDIA ZONE ─────────────────────────────────────────────── */
+    .media-zone { margin: 2.5rem 0; }
+
+    /* ── FORM ELEMENTS ──────────────────────────────────────────── */
+    .form-group { margin-bottom: 1.5rem; }
+
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+      line-height: 1.4;
+    }
+
+    .form-label .req { color: var(--gold-dark); margin-left: 2px; }
+
+    .form-helper { font-size: 12px; color: var(--text-muted); margin-top: 0.35rem; }
+
+    .form-input,
+    .form-select,
+    .form-textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1.5px solid #d5d0c8;
+      border-radius: var(--radius);
+      font-family: var(--font-body);
+      font-size: 14px;
+      color: var(--text);
+      background: var(--white);
+      transition: border-color var(--transition);
+      appearance: none;
+    }
+
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+      outline: none;
+      border-color: var(--green);
+    }
+
+    .form-input::placeholder,
+    .form-textarea::placeholder { color: #b0aba3; font-style: italic; font-size: 13px; }
+
+    .form-select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b6b6b' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.875rem center;
+      padding-right: 2.25rem;
+      cursor: pointer;
+    }
+
+    .form-textarea { resize: vertical; min-height: 80px; }
+
+    .form-radio-group,
+    .form-checkbox-group { display: flex; flex-direction: column; gap: 0.55rem; }
+    .form-radio-group--horizontal { flex-direction: row; gap: 1.5rem; flex-wrap: wrap; }
+
+    .radio-item,
+    .checkbox-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      cursor: pointer;
+    }
+
+    .radio-item input[type="radio"],
+    .checkbox-item input[type="checkbox"] {
+      margin-top: 3px;
+      flex-shrink: 0;
+      accent-color: var(--green);
+      width: 15px;
+      height: 15px;
+    }
+
+    .radio-item span,
+    .checkbox-item span { font-size: 14px; color: var(--text); line-height: 1.5; }
+
+    .form-val-msg {
+      font-size: 12px;
+      color: var(--error);
+      margin-top: 0.4rem;
+      display: none;
+      line-height: 1.5;
+    }
+
+    .form-val-msg.visible { display: block; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+
+    .form-declarations {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      padding: 1.5rem;
+      background: var(--cream);
+      border-radius: var(--radius);
+      border: 1px solid rgba(201,168,103,0.25);
+      margin-bottom: 1.75rem;
+      margin-top: 1rem;
+    }
+
+    .form-intro-note {
+      background: rgba(27,59,54,0.06);
+      border-left: 3px solid var(--green);
+      padding: 1rem 1.25rem;
+      font-size: 13.5px;
+      color: var(--text-muted);
+      line-height: 1.7;
+      border-radius: 0 var(--radius) var(--radius) 0;
+      margin-bottom: 1.5rem;
+    }
+
+    fieldset { border: none; padding: 0; margin: 0 0 2.5rem 0; }
+
+    fieldset legend {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 500;
+      color: var(--green);
+      padding-bottom: 0.75rem;
+      margin-bottom: 1.5rem;
+      border-bottom: 2px solid rgba(201,168,103,0.3);
+      width: 100%;
+      display: block;
+    }
+
+    /* ── PROGRESSION WRAPPER ────────────────────────────────────── */
+    .progression-wrapper {
+      background: var(--offwhite);
+      border-top: 3px solid var(--gold);
+      padding: 4rem 0;
+    }
+
+    .progression-wrapper h3 {
+      font-family: var(--font-display);
+      font-size: 30px;
+      color: var(--green);
+      margin-bottom: 0.75rem;
+    }
+
+    .progression-wrapper .lead {
+      font-size: 15px;
+      color: var(--text-muted);
+      line-height: 1.75;
+      max-width: 640px;
+      margin-bottom: 2.5rem;
+    }
+
+    /* ── SUCCESS STATES ─────────────────────────────────────────── */
+    .success-state { display: none; animation: fadeIn 0.3s ease; }
+    .success-state.visible { display: block; }
+
+    .success-card {
+      border-radius: var(--radius-lg);
+      padding: 2.5rem;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .success-card--green { background: var(--green); }
+    .success-card--cream { background: var(--white); border: 2px solid var(--gold); }
+
+    .success-card h3 { font-family: var(--font-display); font-size: 26px; margin-bottom: 1.25rem; }
+    .success-card--green h3 { color: var(--white); }
+    .success-card--cream h3 { color: var(--green); }
+
+    .success-card p { font-size: 15px; line-height: 1.8; margin-bottom: 0.75rem; }
+    .success-card--green p { color: var(--cream-muted); }
+    .success-card--cream p { color: var(--text-muted); }
+
+    /* ── LIGHTBOX ───────────────────────────────────────────────── */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.92);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .lightbox.open { display: flex; animation: fadeIn 0.2s ease; }
+
+    .lightbox img {
+      max-width: 100%;
+      max-height: 90vh;
+      object-fit: contain;
+      border-radius: var(--radius);
+    }
+
+    .lightbox__close {
+      position: absolute;
+      top: 1.5rem; right: 1.5rem;
+      width: 40px; height: 40px;
+      background: rgba(255,255,255,0.15);
+      border: none;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--white);
+      transition: background var(--transition);
+    }
+
+    .lightbox__close:hover { background: rgba(255,255,255,0.28); }
+
+    /* ── FOOTER ─────────────────────────────────────────────────── */
+    .site-footer {
+      background: var(--green);
+      padding: 2rem;
+      text-align: center;
+      font-size: 11.5px;
+      color: rgba(245,240,232,0.5);
+      line-height: 1.7;
+    }
+
+    /* ── ANIMATIONS ─────────────────────────────────────────────── */
+    @keyframes fadeIn  { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes shake   { 0%,100%{transform:translateX(0)} 15%{transform:translateX(-7px)} 30%{transform:translateX(7px)} 45%{transform:translateX(-5px)} 60%{transform:translateX(5px)} 75%{transform:translateX(-3px)} }
+
+    /* ── UTILITIES ──────────────────────────────────────────────── */
+    .text-center { text-align: center; }
+    .mt-1 { margin-top: 0.5rem; }
+    .mt-2 { margin-top: 1rem; }
+    .mt-3 { margin-top: 1.5rem; }
+    .mt-4 { margin-top: 2rem; }
+
+    /* ── RESPONSIVE 768px ───────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .container, .container--narrow { padding: 0 1.25rem; }
+      .section { padding: 3.5rem 0; }
+      .hero__headline { font-size: 32px; }
+      .hero__ctas .btn { width: 100%; max-width: 340px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .property-cards { grid-template-columns: 1fr; }
+      .hoa-grid { grid-template-columns: 1fr; }
+      .video-gallery { grid-template-columns: 1fr; }
+      .photo-gallery { grid-template-columns: 1fr 1fr; }
+      .step-card { grid-template-columns: 36px 1fr; gap: 1rem; padding: 1.25rem; }
+      .step-number { font-size: 26px; }
+      .password-card { padding: 1.75rem 1.25rem; }
+    }
+
+    @media (max-width: 480px) {
+      .hero__headline { font-size: 26px; }
+      .section-heading { font-size: 26px; }
+      .photo-gallery { grid-template-columns: 1fr; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- ── HERO ──────────────────────────────────────────────────── -->
+  <header class="hero">
+    <div class="container--narrow">
+      <p class="hero__mark">SHER Sanctuary Experiences</p>
+      <h1 class="hero__headline">A Place Worth Owning</h1>
+      <p class="hero__sub">
+        Twenty residences. A permanently protected wetland estate. Natural
+        materials that have stood for a thousand years. Ownership at SHER is
+        not a transaction &mdash; it is a position on what matters.
+      </p>
+      <div class="hero__ctas">
+        <a href="#login" class="btn btn--gold">View Properties &rarr;</a>
+        <a href="/investors/" class="btn btn--secondary" style="color:var(--cream-muted);border-color:rgba(245,240,232,0.3)">Capital Investor &rarr;</a>
+      </div>
+    </div>
+  </header>
+
+
+  <!-- ── LOGIN ─────────────────────────────────────────────────── -->
+  <section id="login" class="section section--offwhite">
+    <div class="container--narrow">
+
+      <div class="password-card" style="margin:0 auto">
+        <span class="eyebrow">Buyer Access Portal</span>
+        <h2>You Have Been Invited</h2>
+        <p style="font-size:14px;color:var(--text-muted);line-height:1.75;margin:1rem 0 1.5rem">
+          Your access code was issued personally by SHER. Enter it below to
+          view the available residences, specifications, and the buyer discovery
+          form. If you do not yet have a code, contact
+          <a href="mailto:bookings@shersanctuary.com" style="color:var(--green);text-decoration:underline">bookings@shersanctuary.com</a>.
+        </p>
+
+        <form id="password-form" novalidate>
+          <div style="margin-bottom:0.75rem">
+            <input
+              class="password-input"
+              type="password"
+              id="password-input"
+              name="access-code"
+              placeholder="Enter your buyer access code"
+              autocomplete="current-password"
+              spellcheck="false"
+            >
+          </div>
+          <p id="password-error" class="password-error-msg">
+            That code is not recognised. Check for typos, then contact
+            <a href="mailto:bookings@shersanctuary.com" style="color:var(--error)">bookings@shersanctuary.com</a>
+            if the problem persists.
+          </p>
+          <button id="password-btn" class="btn btn--primary btn--full" type="submit">
+            View Properties &rarr;
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ── BUYER PANEL (revealed on correct password) ────────────── -->
+  <div id="buyer-panel" class="buyer-panel">
+
+    <!-- SECTION: PROCESS STEPS -->
+    <section class="section section--green">
+      <div class="container">
+
+        <div class="section__header">
+          <span class="tier-badge">Buyer Access Unlocked</span>
+          <h2 class="section-heading section-heading--white" style="margin-top:1.25rem">The Property Buyer Programme</h2>
+          <p class="section-subtext" style="color:var(--cream-muted)">
+            Twenty residences are being offered as part of the SHER estate. Each is designed
+            with the same materials, philosophy and conservation covenant that defines the
+            whole project. Ownership here is not a transaction &mdash; it is an alignment
+            of values made permanent in land.
+          </p>
+        </div>
+
+        <div class="steps">
+
+          <div class="step-card">
+            <div class="step-number">01</div>
+            <div class="step-content">
+              <h4>Review the available residences</h4>
+              <p>Three residence types are offered &mdash; Hillside Cottages, Coastal
+              Condominiums and Sanctuary Villas. Read the specifications, watch the
+              virtual walkthroughs, and identify which aligns best with how you intend
+              to use the property.</p>
+            </div>
+          </div>
+
+          <div class="step-card">
+            <div class="step-number">02</div>
+            <div class="step-content">
+              <h4>Complete the buyer discovery form</h4>
+              <p>We ask every prospective buyer about their intent, their use case, and
+              their relationship to the kind of place SHER is building. This is not a
+              formality &mdash; it ensures that every owner shares the values that make
+              the estate work as a whole.</p>
+            </div>
+          </div>
+
+          <div class="step-card">
+            <div class="step-number">03</div>
+            <div class="step-content">
+              <h4>A personal response from SHER</h4>
+              <p>Every submission is reviewed personally. If your profile is a fit, you
+              will hear from us within 48 hours to arrange the next step. We do not
+              send automated responses to prospective buyers at this stage.</p>
+            </div>
+          </div>
+
+          <div class="step-card">
+            <div class="step-number">04</div>
+            <div class="step-content">
+              <h4>Site visit or virtual consultation</h4>
+              <p>We will arrange a visit to the estate or a private virtual consultation
+              with the SHER team &mdash; whichever works for you. This is where questions
+              about the site, the construction, and the community are answered in full.</p>
+            </div>
+          </div>
+
+          <div class="step-card">
+            <div class="step-number">05</div>
+            <div class="step-content">
+              <h4>Hold agreement and formal reservation</h4>
+              <p>A hold agreement secures your interest in a specific residence while you
+              complete due diligence. Purchase agreements follow on terms negotiated
+              directly with SHER and reviewed by your legal advisor.</p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- SECTION: PROPERTY CARDS -->
+    <section class="section section--cream">
+      <div class="container">
+
+        <div class="section__header">
+          <span class="eyebrow">A Limited Collection</span>
+          <h2 class="section-heading">The Residences</h2>
+          <p class="section-subtext">
+            All residences are built to the SHER specification &mdash; natural materials,
+            conservation-aligned siting, HOA-managed maintenance, and optional rental
+            pool participation.
+          </p>
+        </div>
+
+        <div class="property-cards">
+
+          <!-- COTTAGE -->
+          <div class="property-card">
+            <span class="eyebrow">Hillside Cottages</span>
+            <h3>The Cottage</h3>
+            <p class="card-sub">10 units available &nbsp;&middot;&nbsp; From US$280,000</p>
+
+            <div class="video-slot aspect-16-9" style="margin-bottom:1.25rem"
+                 data-vimeo-src="REPLACE_WITH_VIMEO_COTTAGE_URL"
+                 tabindex="0" role="button" aria-label="Play cottage walkthrough">
+              <img class="video-slot__poster"
+                   src="../images/bay-eastern-shoreline-4.jpg"
+                   alt="Hillside Cottage walkthrough poster" loading="lazy">
+              <div class="video-slot__play" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+              </div>
+              <div class="video-slot__label">Hillside Cottage &mdash; Virtual Walkthrough</div>
+            </div>
+
+            <dl class="spec-list">
+              <div class="spec-item"><dt>Bedrooms</dt><dd>1&ndash;2</dd></div>
+              <div class="spec-item"><dt>Floor area</dt><dd>65&ndash;90 m&sup2;</dd></div>
+              <div class="spec-item"><dt>Outdoor space</dt><dd>Private garden terrace</dd></div>
+              <div class="spec-item"><dt>Construction</dt><dd>Hemp block + lime render</dd></div>
+              <div class="spec-item"><dt>Views</dt><dd>Hillside canopy + bay glimpses</dd></div>
+              <div class="spec-item"><dt>HOA rental pool</dt><dd>Eligible</dd></div>
+              <div class="spec-item"><dt>Price from</dt><dd>US$280,000</dd></div>
+            </dl>
+
+            <p class="card-why">
+              Cottages are the entry point to ownership at SHER &mdash; compact, precisely
+              designed, and positioned within the hillside vegetation to minimise their
+              footprint and maximise natural screening. For buyers who want a personal
+              retreat with genuine conservation credentials, or for those entering through
+              the rental pool as an income-generating asset.
+            </p>
+          </div>
+
+          <!-- CONDOMINIUM -->
+          <div class="property-card">
+            <span class="eyebrow">Coastal Condominiums</span>
+            <h3>The Condominium</h3>
+            <p class="card-sub">6 units available &nbsp;&middot;&nbsp; From US$380,000</p>
+
+            <div class="video-slot aspect-16-9" style="margin-bottom:1.25rem"
+                 data-vimeo-src="REPLACE_WITH_VIMEO_CONDO_URL"
+                 tabindex="0" role="button" aria-label="Play condominium walkthrough">
+              <img class="video-slot__poster"
+                   src="../images/bay-eastern-shoreline-5.jpg"
+                   alt="Coastal Condominium walkthrough poster" loading="lazy">
+              <div class="video-slot__play" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+              </div>
+              <div class="video-slot__label">Coastal Condominium &mdash; Virtual Walkthrough</div>
+            </div>
+
+            <dl class="spec-list">
+              <div class="spec-item"><dt>Bedrooms</dt><dd>2&ndash;3</dd></div>
+              <div class="spec-item"><dt>Floor area</dt><dd>95&ndash;130 m&sup2;</dd></div>
+              <div class="spec-item"><dt>Outdoor space</dt><dd>Ocean-facing wraparound terrace</dd></div>
+              <div class="spec-item"><dt>Construction</dt><dd>Compressed earth + lime render</dd></div>
+              <div class="spec-item"><dt>Views</dt><dd>Caribbean Sea + estate grounds</dd></div>
+              <div class="spec-item"><dt>HOA rental pool</dt><dd>Eligible</dd></div>
+              <div class="spec-item"><dt>Price from</dt><dd>US$380,000</dd></div>
+            </dl>
+
+            <p class="card-why">
+              Condominiums occupy the coastal edge of the estate &mdash; open-plan living,
+              broad ocean-facing terraces, and the highest rental yield potential in the
+              collection. Built from compressed earth, they maintain the estate&rsquo;s
+              thermal and material standards while delivering the volume and outlook that
+              coastal buyers expect at this price point.
+            </p>
+          </div>
+
+          <!-- VILLA -->
+          <div class="property-card">
+            <span class="eyebrow">Sanctuary Villas</span>
+            <h3>The Villa</h3>
+            <p class="card-sub">4 units available &nbsp;&middot;&nbsp; From US$980,000</p>
+
+            <div class="video-slot aspect-16-9" style="margin-bottom:1.25rem"
+                 data-vimeo-src="REPLACE_WITH_VIMEO_VILLA_URL"
+                 tabindex="0" role="button" aria-label="Play villa walkthrough">
+              <img class="video-slot__poster"
+                   src="../images/sher_calm_reflections.jpg"
+                   alt="Sanctuary Villa walkthrough poster" loading="lazy">
+              <div class="video-slot__play" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+              </div>
+              <div class="video-slot__label">Sanctuary Villa &mdash; Virtual Walkthrough</div>
+            </div>
+
+            <dl class="spec-list">
+              <div class="spec-item"><dt>Bedrooms</dt><dd>3&ndash;4</dd></div>
+              <div class="spec-item"><dt>Floor area</dt><dd>220&ndash;280 m&sup2;</dd></div>
+              <div class="spec-item"><dt>Pool</dt><dd>Private plunge pool</dd></div>
+              <div class="spec-item"><dt>Construction</dt><dd>Reclaimed timber + clay brick</dd></div>
+              <div class="spec-item"><dt>Views</dt><dd>Direct mangrove frontage + bay</dd></div>
+              <div class="spec-item"><dt>HOA rental pool</dt><dd>Eligible (premium tier)</dd></div>
+              <div class="spec-item"><dt>Price from</dt><dd>US$980,000</dd></div>
+            </dl>
+
+            <p class="card-why">
+              The four Sanctuary Villas are the most private, most spatially generous
+              residences on the estate. Positioned at the mangrove boundary, they carry
+              the conservation covenant most directly &mdash; their plunge pools face the
+              protected wetland, bordered on two sides by land that will never be
+              developed. For buyers who want a principal Caribbean residence with complete
+              seclusion and a conservation legacy they can name.
+            </p>
+          </div>
+
+        </div>
+
+        <!-- PHOTO GALLERY -->
+        <div class="media-zone">
+          <h3 style="font-family:var(--font-display);font-size:22px;margin-bottom:1rem;color:var(--green)">Estate Photography</h3>
+          <div class="photo-gallery">
+            <img src="../images/bay-eastern-shoreline-1.jpg" alt="Bay eastern shoreline" loading="lazy"
+                 data-lightbox="../images/bay-eastern-shoreline-1.jpg"
+                 style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:var(--radius);cursor:zoom-in">
+            <img src="../images/bay-south-mangrove-arch.jpg" alt="South mangrove arch" loading="lazy"
+                 data-lightbox="../images/bay-south-mangrove-arch.jpg"
+                 style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:var(--radius);cursor:zoom-in">
+            <img src="../images/sher_calm_reflections.jpg" alt="Calm reflections" loading="lazy"
+                 data-lightbox="../images/sher_calm_reflections.jpg"
+                 style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:var(--radius);cursor:zoom-in">
+            <img src="../images/nature-trail-mangrove.jpg" alt="Nature trail through mangrove" loading="lazy"
+                 data-lightbox="../images/nature-trail-mangrove.jpg"
+                 style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:var(--radius);cursor:zoom-in">
+            <img src="../images/table-deau-waters-edge.jpg" alt="Table d'Eau at water's edge" loading="lazy"
+                 data-lightbox="../images/table-deau-waters-edge.jpg"
+                 style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:var(--radius);cursor:zoom-in">
+            <img src="../images/guests-nature-trail.jpg" alt="Guests on nature trail" loading="lazy"
+                 data-lightbox="../images/guests-nature-trail.jpg"
+                 style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:var(--radius);cursor:zoom-in">
+          </div>
+          <p style="font-size:12px;color:var(--text-muted);margin-top:0.5rem">Click any image to enlarge.</p>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- SECTION: HOA RENTAL POOL -->
+    <section class="section section--green">
+      <div class="container">
+
+        <div class="section__header">
+          <h2 class="section-heading section-heading--white">The HOA Rental Pool</h2>
+          <p class="section-subtext" style="color:var(--cream-muted)">
+            Owners who do not occupy their residence full-time may participate in the
+            SHER HOA Rental Pool. SHER manages the property, the bookings, and the
+            guest experience &mdash; to the same standard as the lodge. Owners receive
+            income distributions and return to a fully maintained residence whenever
+            they choose.
+          </p>
+        </div>
+
+        <div class="hoa-grid">
+          <div class="hoa-card">
+            <h4>Full Property Management</h4>
+            <p>SHER handles all guest bookings, housekeeping, maintenance, and arrival
+            experience. There is nothing for the owner to coordinate. Your property is
+            managed as part of the wider sanctuary offering.</p>
+          </div>
+          <div class="hoa-card">
+            <h4>Income Distribution</h4>
+            <p>Rental income is distributed to participating owners on a pro-rata basis
+            per the HOA pool agreement. Distribution terms, management fees, and owner
+            priority periods are defined in the HOA documentation.</p>
+          </div>
+          <div class="hoa-card">
+            <h4>Owner Priority Access</h4>
+            <p>Owners designate up to a defined number of months per year for personal
+            use, during which the property is removed from the rental pool. Advance
+            notice requirements and blackout periods apply per the HOA agreement.</p>
+          </div>
+          <div class="hoa-card">
+            <h4>Conservation Standards Maintained</h4>
+            <p>The HOA maintains the estate&rsquo;s conservation standards at all times.
+            No modifications may be made to a property that compromise its materials,
+            footprint, or covenant obligations without written agreement from SHER.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- BUYER DISCOVERY FORM -->
+    <div class="progression-wrapper">
+      <div class="container">
+
+        <div id="buyer-success" class="success-state">
+          <div class="success-card success-card--green">
+            <h3>Your buyer profile has been received.</h3>
+            <p>We review every submission personally. If your profile and intent are
+            aligned with what SHER is building, you will hear from us within 48 hours
+            to discuss next steps.</p>
+            <p>We do not send unsolicited follow-up or automated responses to buyer
+            submissions. If you hear from us, it means something is moving forward.</p>
+          </div>
+        </div>
+
+        <h3>Begin the buyer discovery process</h3>
+        <p class="lead">
+          SHER does not sell residences through conventional property marketing. Every
+          buyer is assessed for values alignment, purchase intent, and the way they plan
+          to use the property. This protects the character of the estate and the
+          experience for every owner and guest on it.
+        </p>
+
+        <form
+          id="buyer-form"
+          name="property-buyer-discovery"
+          data-netlify="true"
+          netlify-honeypot="bot-field"
+          novalidate
+        >
+          <input type="hidden" name="form-name" value="property-buyer-discovery">
+          <p style="display:none"><label>Don't fill this in: <input name="bot-field" tabindex="-1"></label></p>
+
+          <!-- PART A -->
+          <fieldset>
+            <legend>Part A &mdash; Who You Are</legend>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label" for="pb-name">Full legal name <span class="req">*</span></label>
+                <input class="form-input" type="text" id="pb-name" name="full_name" required autocomplete="name">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="pb-email">Email address <span class="req">*</span></label>
+                <input class="form-input" type="email" id="pb-email" name="email" required autocomplete="email">
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label" for="pb-phone">Phone number (with country code) <span class="req">*</span></label>
+                <input class="form-input" type="tel" id="pb-phone" name="phone" required autocomplete="tel" placeholder="+1 555 000 0000">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="pb-country">Country of residence <span class="req">*</span></label>
+                <select class="form-select" id="pb-country" name="country_residence" required>
+                  <option value="">&#8212; Select country &#8212;</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="pb-nature-rel">
+                How do you relate to natural environments in your personal life? <span class="req">*</span>
+              </label>
+              <select class="form-select" id="pb-nature-rel" name="nature_relationship" required>
+                <option value="">&#8212; Select one &#8212;</option>
+                <option value="central">I actively seek time in nature &mdash; it is central to how I live</option>
+                <option value="deliberate">I value nature and make deliberate choices to protect it where I can</option>
+                <option value="appreciate">I appreciate natural settings but it is not a primary driver for me</option>
+                <option value="none">I have no particular relationship with the natural world</option>
+              </select>
+            </div>
+          </fieldset>
+
+          <!-- PART B -->
+          <fieldset>
+            <legend>Part B &mdash; Your Property Interest</legend>
+
+            <div class="form-group">
+              <label class="form-label">
+                Which residence type interests you? (Select all that apply) <span class="req">*</span>
+              </label>
+              <div class="form-checkbox-group">
+                <label class="checkbox-item">
+                  <input type="checkbox" name="property_interest[]" value="cottage">
+                  <span>Hillside Cottage &mdash; from US$280,000 &nbsp;&middot;&nbsp; 1&ndash;2 bed, 65&ndash;90 m&sup2;</span>
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" name="property_interest[]" value="condo">
+                  <span>Coastal Condominium &mdash; from US$380,000 &nbsp;&middot;&nbsp; 2&ndash;3 bed, 95&ndash;130 m&sup2;</span>
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" name="property_interest[]" value="villa">
+                  <span>Sanctuary Villa &mdash; from US$980,000 &nbsp;&middot;&nbsp; 3&ndash;4 bed, 220&ndash;280 m&sup2;, private pool</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="pb-budget">Your confirmed budget for this purchase: <span class="req">*</span></label>
+              <select class="form-select" id="pb-budget" name="budget_range" required>
+                <option value="">&#8212; Select one &#8212;</option>
+                <option value="under-300k">Up to US$300,000</option>
+                <option value="300k-499k">US$300,000 &ndash; US$499,999</option>
+                <option value="500k-799k">US$500,000 &ndash; US$799,999</option>
+                <option value="800k-999k">US$800,000 &ndash; US$999,999</option>
+                <option value="1m-plus">US$1,000,000 or above</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Are you purchasing as an individual, jointly, or through an entity?</label>
+              <div class="form-radio-group">
+                <label class="radio-item"><input type="radio" name="purchase_entity" value="individual"><span>Individual</span></label>
+                <label class="radio-item"><input type="radio" name="purchase_entity" value="joint"><span>Jointly with a partner or spouse</span></label>
+                <label class="radio-item"><input type="radio" name="purchase_entity" value="company"><span>Through a company, trust or holding entity</span></label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="pb-referrer">How did you hear about SHER Sanctuary? <span class="req">*</span></label>
+              <select class="form-select" id="pb-referrer" name="referral_source" required>
+                <option value="">&#8212; Select one &#8212;</option>
+                <option value="personal-intro">Personal introduction from someone I know</option>
+                <option value="professional">A professional referral (agent, lawyer, advisor)</option>
+                <option value="investor-referral">Referral from a SHER investor</option>
+                <option value="social-media">Social media or online</option>
+                <option value="media">Media coverage</option>
+                <option value="event">An event or presentation</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+          </fieldset>
+
+          <!-- PART C -->
+          <fieldset>
+            <legend>Part C &mdash; Purchase Intent &amp; Use</legend>
+
+            <div class="form-group">
+              <label class="form-label">How do you primarily intend to use the property? <span class="req">*</span></label>
+              <div class="form-radio-group">
+                <label class="radio-item">
+                  <input type="radio" name="primary_intent" value="principal-residence" required>
+                  <span>As a principal Caribbean residence &mdash; I will occupy it full-time or for extended stays</span>
+                </label>
+                <label class="radio-item">
+                  <input type="radio" name="primary_intent" value="vacation-home">
+                  <span>As a vacation home &mdash; I will use it seasonally, likely 1&ndash;3 months per year</span>
+                </label>
+                <label class="radio-item">
+                  <input type="radio" name="primary_intent" value="rental-investment">
+                  <span>Primarily as an investment &mdash; I want it in the HOA rental pool most of the year</span>
+                </label>
+                <label class="radio-item">
+                  <input type="radio" name="primary_intent" value="combination">
+                  <span>A combination &mdash; personal use for part of the year, rental pool for the rest</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Is this your first property in the Caribbean? <span class="req">*</span></label>
+              <div class="form-radio-group form-radio-group--horizontal">
+                <label class="radio-item"><input type="radio" name="first_caribbean" value="yes" required><span>Yes</span></label>
+                <label class="radio-item"><input type="radio" name="first_caribbean" value="no"><span>No &mdash; I have or have had other Caribbean property</span></label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="pb-timeline">What is your realistic purchase timeline? <span class="req">*</span></label>
+              <select class="form-select" id="pb-timeline" name="purchase_timeline" required>
+                <option value="">&#8212; Select one &#8212;</option>
+                <option value="immediate">Immediate &mdash; I am ready to proceed now</option>
+                <option value="3-months">Within 3 months</option>
+                <option value="6-months">Within 6 months</option>
+                <option value="12-months">Within 12 months</option>
+                <option value="exploring">Exploring &mdash; no firm timeline yet</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="pb-why">
+                In your own words, why does SHER appeal to you as a place to own property? <span class="req">*</span>
+              </label>
+              <textarea class="form-textarea" id="pb-why" name="why_sher" rows="4" required
+                        placeholder="What draws you to this specific type of development over conventional resort or residential property?"></textarea>
+              <p id="pb-why-msg" class="form-val-msg">Please expand &mdash; a minimum of 20 words is required.</p>
+            </div>
+          </fieldset>
+
+          <!-- PART D -->
+          <fieldset>
+            <legend>Part D &mdash; HOA Rental Pool</legend>
+
+            <div class="form-group">
+              <label class="form-label">Are you interested in the HOA Rental Pool programme? <span class="req">*</span></label>
+              <div class="form-radio-group">
+                <label class="radio-item">
+                  <input type="radio" name="rental_pool_interest" value="yes" required>
+                  <span>Yes &mdash; rental income is a significant part of my investment case</span>
+                </label>
+                <label class="radio-item">
+                  <input type="radio" name="rental_pool_interest" value="maybe">
+                  <span>Possibly &mdash; I would like to understand the terms first</span>
+                </label>
+                <label class="radio-item">
+                  <input type="radio" name="rental_pool_interest" value="no">
+                  <span>No &mdash; I intend to use the property personally and manage it privately if needed</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="pb-personal-months">
+                If participating in the rental pool, how many months per year would you want for personal use?
+              </label>
+              <select class="form-select" id="pb-personal-months" name="personal_months_per_year">
+                <option value="">&#8212; Select &#8212;</option>
+                <option value="1-2">1&ndash;2 months</option>
+                <option value="3-4">3&ndash;4 months</option>
+                <option value="5-6">5&ndash;6 months</option>
+                <option value="over-6">More than 6 months</option>
+                <option value="flexible">Flexible &mdash; not decided yet</option>
+              </select>
+            </div>
+          </fieldset>
+
+          <!-- PART E -->
+          <fieldset>
+            <legend>Part E &mdash; How to Proceed</legend>
+
+            <div class="form-group">
+              <label class="form-label">What would you like as the next step? <span class="req">*</span></label>
+              <div class="form-radio-group">
+                <label class="radio-item">
+                  <input type="radio" name="next_step" value="site-visit" required>
+                  <span>I would like to arrange a visit to the estate</span>
+                </label>
+                <label class="radio-item">
+                  <input type="radio" name="next_step" value="virtual-consult">
+                  <span>I would like a private virtual consultation with the SHER team</span>
+                </label>
+                <label class="radio-item">
+                  <input type="radio" name="next_step" value="info-pack">
+                  <span>Please send me a detailed information pack first</span>
+                </label>
+                <label class="radio-item">
+                  <input type="radio" name="next_step" value="just-respond">
+                  <span>Simply respond to my submission &mdash; I will take it from there</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="pb-agent">Are you working with a property agent or representative?</label>
+              <input class="form-input" type="text" id="pb-agent" name="agent_name"
+                     placeholder="Name and firm (leave blank if not applicable)">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="pb-message">Anything else you would like us to know:</label>
+              <textarea class="form-textarea" id="pb-message" name="message" rows="3"
+                        placeholder="Optional &mdash; questions, constraints, accessibility needs, or anything that helps us respond well"></textarea>
+            </div>
+
+            <div class="form-declarations">
+              <label class="checkbox-item">
+                <input type="checkbox" name="decl_accurate" required>
+                <span>I confirm that the information provided is accurate and given in good faith.</span>
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" name="decl_no_offer" required>
+                <span>I understand that this form is not a sales contract, reservation, or commitment of any kind by SHER.</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <div class="mt-4">
+            <button type="submit" class="btn btn--primary btn--full">SUBMIT MY BUYER PROFILE</button>
+          </div>
+
+        </form>
+
+      </div>
+    </div>
+
+  </div><!-- /buyer-panel -->
+
+
+  <!-- ── LIGHTBOX OVERLAY ───────────────────────────────────────── -->
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
+    <button class="lightbox__close" id="lightbox-close" aria-label="Close">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+    <img src="" alt="Enlarged image" id="lightbox-img">
+  </div>
+
+
+  <!-- ── FOOTER ────────────────────────────────────────────────── -->
+  <footer class="site-footer">
+    <p>
+      This page is private and confidential. It does not constitute a sales contract,
+      prospectus, or commitment of any kind by SHER. All figures are indicative and
+      subject to independent verification. Access is restricted to persons who have
+      been personally invited by SHER Sanctuary Experiences.&nbsp;&nbsp;&middot;&nbsp;&nbsp;shersanctuary.com
+    </p>
+  </footer>
+
+
+  <script>
+
+    /* ── CONFIGURATION ─────────────────────────────────────────
+       Generate hash at: https://emn178.github.io/online-tools/sha256.html
+       Settings: Input UTF-8 · Output Hex (Lower Case) · HMAC off
+       ─────────────────────────────────────────────────────────── */
+    const BUYER_HASH = 'REPLACE_WITH_SHA256_OF_YOUR_BUYER_PASSWORD';
+
+    /* ── SHA-256 ────────────────────────────────────────────────── */
+    async function hashPassword(raw) {
+      const data   = new TextEncoder().encode(raw);
+      const buffer = await window.crypto.subtle.digest('SHA-256', data);
+      return Array.from(new Uint8Array(buffer))
+        .map(b => b.toString(16).padStart(2, '0'))
+        .join('');
+    }
+
+    /* ── PASSWORD GATE ──────────────────────────────────────────── */
+    function revealBuyerPanel() {
+      const panel = document.getElementById('buyer-panel');
+      if (panel) {
+        panel.classList.add('revealed');
+        setTimeout(() => panel.scrollIntoView({ behavior: 'smooth', block: 'start' }), 450);
+      }
+    }
+
+    async function handlePasswordSubmit(e) {
+      e.preventDefault();
+      const input = document.getElementById('password-input');
+      const btn   = document.getElementById('password-btn');
+      const error = document.getElementById('password-error');
+      if (!input || !btn) return;
+
+      const raw = input.value.trim();
+      if (!raw) return;
+
+      btn.classList.add('btn--loading');
+      btn.textContent = 'Checking…';
+
+      try {
+        const hash = await hashPassword(raw);
+        if (hash === BUYER_HASH) {
+          input.classList.remove('error');
+          if (error) error.classList.remove('visible');
+          revealBuyerPanel();
+        } else {
+          input.classList.add('error');
+          if (error) error.classList.add('visible');
+          setTimeout(() => input.classList.remove('error'), 2100);
+        }
+      } catch (err) {
+        console.error('Hash error:', err);
+      } finally {
+        btn.classList.remove('btn--loading');
+        btn.textContent = 'View Properties →';
+      }
+    }
+
+    /* ── COUNTRY SELECT ─────────────────────────────────────────── */
+    const COUNTRIES = [
+      'Afghanistan','Albania','Algeria','Andorra','Angola','Antigua and Barbuda',
+      'Argentina','Armenia','Australia','Austria','Azerbaijan','Bahamas','Bahrain',
+      'Bangladesh','Barbados','Belarus','Belgium','Belize','Benin','Bhutan',
+      'Bolivia','Bosnia and Herzegovina','Botswana','Brazil','Brunei','Bulgaria',
+      'Burkina Faso','Burundi','Cabo Verde','Cambodia','Cameroon','Canada',
+      'Central African Republic','Chad','Chile','China','Colombia','Comoros',
+      'Congo (Brazzaville)','Congo (Kinshasa)','Costa Rica','Ä°voire',
+      'Croatia','Cuba','Cyprus','Czech Republic','Denmark','Djibouti','Dominica',
+      'Dominican Republic','Ecuador','Egypt','El Salvador','Equatorial Guinea',
+      'Eritrea','Estonia','Eswatini','Ethiopia','Fiji','Finland','France','Gabon',
+      'Gambia','Georgia','Germany','Ghana','Greece','Grenada','Guatemala','Guinea',
+      'Guinea-Bissau','Guyana','Haiti','Honduras','Hungary','Iceland','India',
+      'Indonesia','Iran','Iraq','Ireland','Israel','Italy','Jamaica','Japan',
+      'Jordan','Kazakhstan','Kenya','Kiribati','Kosovo','Kuwait','Kyrgyzstan',
+      'Laos','Latvia','Lebanon','Lesotho','Liberia','Libya','Liechtenstein',
+      'Lithuania','Luxembourg','Madagascar','Malawi','Malaysia','Maldives','Mali',
+      'Malta','Marshall Islands','Mauritania','Mauritius','Mexico','Micronesia',
+      'Moldova','Monaco','Mongolia','Montenegro','Morocco','Mozambique','Myanmar',
+      'Namibia','Nauru','Nepal','Netherlands','New Zealand','Nicaragua','Niger',
+      'Nigeria','North Korea','North Macedonia','Norway','Oman','Pakistan','Palau',
+      'Palestine','Panama','Papua New Guinea','Paraguay','Peru','Philippines',
+      'Poland','Portugal','Qatar','Romania','Russia','Rwanda',
+      'Saint Kitts and Nevis','Saint Lucia','Saint Vincent and the Grenadines',
+      'Samoa','San Marino','São Tomé and Príncipe','Saudi Arabia',
+      'Senegal','Serbia','Seychelles','Sierra Leone','Singapore','Slovakia',
+      'Slovenia','Solomon Islands','Somalia','South Africa','South Korea',
+      'South Sudan','Spain','Sri Lanka','Sudan','Suriname','Sweden','Switzerland',
+      'Syria','Taiwan','Tajikistan','Tanzania','Thailand','Timor-Leste','Togo',
+      'Tonga','Trinidad and Tobago','Tunisia','Turkey','Turkmenistan','Tuvalu',
+      'Uganda','Ukraine','United Arab Emirates','United Kingdom','United States',
+      'Uruguay','Uzbekistan','Vanuatu','Vatican City','Venezuela','Vietnam',
+      'Yemen','Zambia','Zimbabwe'
+    ];
+
+    function populateCountrySelect() {
+      const el = document.getElementById('pb-country');
+      if (!el) return;
+      COUNTRIES.forEach(name => {
+        const opt = document.createElement('option');
+        opt.value = name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+        opt.textContent = name;
+        el.appendChild(opt);
+      });
+    }
+
+    /* ── WORD COUNT VALIDATION ──────────────────────────────────── */
+    function countWords(str) { return str.trim().split(/\s+/).filter(Boolean).length; }
+
+    function attachWordCount(textareaId, minimum, msgId) {
+      const ta  = document.getElementById(textareaId);
+      const msg = document.getElementById(msgId);
+      if (!ta || !msg) return;
+      ta.addEventListener('blur',  () => { if (countWords(ta.value) < minimum) msg.classList.add('visible'); else msg.classList.remove('visible'); });
+      ta.addEventListener('input', () => { if (countWords(ta.value) >= minimum) msg.classList.remove('visible'); });
+    }
+
+    /* ── NETLIFY FORM HELPER ────────────────────────────────────── */
+    function showSuccess(formEl, successEl) {
+      if (formEl)    formEl.style.display = 'none';
+      if (successEl) {
+        successEl.classList.add('visible');
+        successEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    function wireBuyerForm() {
+      const form    = document.getElementById('buyer-form');
+      const success = document.getElementById('buyer-success');
+      if (!form || !success) return;
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const data = new FormData(form);
+        try {
+          const res = await fetch('/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams(data).toString(),
+          });
+          if (res.ok) {
+            showSuccess(form, success);
+          } else {
+            alert('There was a problem submitting your form. Please try again or email bookings@shersanctuary.com.');
+          }
+        } catch {
+          alert('There was a problem submitting your form. Please try again or email bookings@shersanctuary.com.');
+        }
+      });
+    }
+
+    /* ── VIDEO CLICK-TO-PLAY ────────────────────────────────────── */
+    function initVideoSlots() {
+      document.querySelectorAll('.video-slot').forEach(slot => {
+        function activateSlot() {
+          if (slot.classList.contains('video-slot--active')) return;
+          const src = slot.dataset.vimeoSrc;
+          if (!src || src.startsWith('REPLACE_')) return;
+          const iframe = document.createElement('iframe');
+          iframe.src = src + (src.includes('?') ? '&' : '?') + 'autoplay=1&title=0&byline=0&portrait=0';
+          iframe.allow = 'autoplay; fullscreen; picture-in-picture';
+          iframe.allowFullscreen = true;
+          iframe.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;border:0;';
+          slot.style.position = 'relative';
+          slot.appendChild(iframe);
+          slot.classList.add('video-slot--active');
+        }
+        slot.addEventListener('click', activateSlot);
+        slot.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') activateSlot(); });
+      });
+    }
+
+    /* ── LIGHTBOX ───────────────────────────────────────────────── */
+    function initLightbox() {
+      const lb  = document.getElementById('lightbox');
+      const img = document.getElementById('lightbox-img');
+      const cls = document.getElementById('lightbox-close');
+      if (!lb || !img) return;
+
+      document.addEventListener('click', e => {
+        const trigger = e.target.closest('[data-lightbox]');
+        if (trigger) {
+          img.src = trigger.dataset.lightbox;
+          img.alt = trigger.alt || '';
+          lb.classList.add('open');
+        }
+      });
+
+      function closeLightbox() { lb.classList.remove('open'); img.src = ''; }
+      lb.addEventListener('click', e => { if (e.target === lb) closeLightbox(); });
+      if (cls) cls.addEventListener('click', closeLightbox);
+      document.addEventListener('keydown', e => { if (e.key === 'Escape' && lb.classList.contains('open')) closeLightbox(); });
+    }
+
+    /* ── INIT ───────────────────────────────────────────────────── */
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.getElementById('password-form');
+      if (form) form.addEventListener('submit', handlePasswordSubmit);
+      populateCountrySelect();
+      attachWordCount('pb-why', 20, 'pb-why-msg');
+      wireBuyerForm();
+      initLightbox();
+      initVideoSlots();
+    });
+
+  </script>
+
+</body>
+</html>

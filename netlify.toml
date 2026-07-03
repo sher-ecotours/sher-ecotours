@@ -25,6 +25,19 @@
   [headers.values]
     Cache-Control = "public, max-age=86400"
 
+# ── /buyers — noindex + no-cache headers ─────────────────────────────────────
+[[headers]]
+  for = "/buyers/*"
+  [headers.values]
+    X-Robots-Tag    = "noindex, nofollow, noarchive"
+    Cache-Control   = "no-store, must-revalidate"
+    X-Frame-Options = "DENY"
+
+[[redirects]]
+  from   = "/buyers"
+  to     = "/buyers/index.html"
+  status = 200
+
 # ── /investors — noindex + no-cache headers ──────────────────────────────────
 [[headers]]
   for = "/investors/*"
