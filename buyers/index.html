@@ -1,5 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+<!--
+  NETLIFY FORMS — ACTION REQUIRED BEFORE SHARING THE BUYER PASSWORD
+  Configure email notification in:
+  Netlify Dashboard → Forms → property-buyer-discovery → Notifications → Add notification → Email → bookings@shersanctuary.com
+
+  Until configured: buyer discovery submissions are captured by Netlify but no email alert is sent.
+  Buyer leads will arrive unseen. Configure before distributing the buyer password.
+-->
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -802,7 +810,7 @@
           <div class="property-card">
             <span class="eyebrow">Hillside Cottages</span>
             <h3>The Cottage</h3>
-            <p class="card-sub">10 units available &nbsp;&middot;&nbsp; From US$280,000</p>
+            <p class="card-sub">10 units available &nbsp;&middot;&nbsp; Starting from US$280,000</p>
 
             <div class="video-slot aspect-16-9" style="margin-bottom:1.25rem"
                  data-vimeo-src="REPLACE_WITH_VIMEO_COTTAGE_URL"
@@ -823,7 +831,7 @@
               <div class="spec-item"><dt>Construction</dt><dd>Hemp block + lime render</dd></div>
               <div class="spec-item"><dt>Views</dt><dd>Hillside canopy + bay glimpses</dd></div>
               <div class="spec-item"><dt>HOA rental pool</dt><dd>Eligible</dd></div>
-              <div class="spec-item"><dt>Price from</dt><dd>US$280,000</dd></div>
+              <div class="spec-item"><dt>Price</dt><dd>Starting from US$280,000</dd></div>
             </dl>
 
             <p class="card-why">
@@ -839,7 +847,7 @@
           <div class="property-card">
             <span class="eyebrow">Coastal Condominiums</span>
             <h3>The Condominium</h3>
-            <p class="card-sub">6 units available &nbsp;&middot;&nbsp; From US$380,000</p>
+            <p class="card-sub">6 units available &nbsp;&middot;&nbsp; Starting from US$380,000</p>
 
             <div class="video-slot aspect-16-9" style="margin-bottom:1.25rem"
                  data-vimeo-src="REPLACE_WITH_VIMEO_CONDO_URL"
@@ -860,7 +868,7 @@
               <div class="spec-item"><dt>Construction</dt><dd>Compressed earth + lime render</dd></div>
               <div class="spec-item"><dt>Views</dt><dd>Caribbean Sea + estate grounds</dd></div>
               <div class="spec-item"><dt>HOA rental pool</dt><dd>Eligible</dd></div>
-              <div class="spec-item"><dt>Price from</dt><dd>US$380,000</dd></div>
+              <div class="spec-item"><dt>Price</dt><dd>Starting from US$380,000</dd></div>
             </dl>
 
             <p class="card-why">
@@ -876,7 +884,7 @@
           <div class="property-card">
             <span class="eyebrow">Sanctuary Villas</span>
             <h3>The Villa</h3>
-            <p class="card-sub">4 units available &nbsp;&middot;&nbsp; From US$980,000</p>
+            <p class="card-sub">4 units available &nbsp;&middot;&nbsp; Starting from US$980,000</p>
 
             <div class="video-slot aspect-16-9" style="margin-bottom:1.25rem"
                  data-vimeo-src="REPLACE_WITH_VIMEO_VILLA_URL"
@@ -897,7 +905,7 @@
               <div class="spec-item"><dt>Construction</dt><dd>Reclaimed timber + clay brick</dd></div>
               <div class="spec-item"><dt>Views</dt><dd>Direct mangrove frontage + bay</dd></div>
               <div class="spec-item"><dt>HOA rental pool</dt><dd>Eligible (premium tier)</dd></div>
-              <div class="spec-item"><dt>Price from</dt><dd>US$980,000</dd></div>
+              <div class="spec-item"><dt>Price</dt><dd>Starting from US$980,000</dd></div>
             </dl>
 
             <p class="card-why">
@@ -1074,15 +1082,15 @@
               <div class="form-checkbox-group">
                 <label class="checkbox-item">
                   <input type="checkbox" name="property_interest[]" value="cottage">
-                  <span>Hillside Cottage &mdash; from US$280,000 &nbsp;&middot;&nbsp; 1&ndash;2 bed, 65&ndash;90 m&sup2;</span>
+                  <span>Hillside Cottage &mdash; starting from US$280,000 &nbsp;&middot;&nbsp; 1&ndash;2 bed, 65&ndash;90 m&sup2;</span>
                 </label>
                 <label class="checkbox-item">
                   <input type="checkbox" name="property_interest[]" value="condo">
-                  <span>Coastal Condominium &mdash; from US$380,000 &nbsp;&middot;&nbsp; 2&ndash;3 bed, 95&ndash;130 m&sup2;</span>
+                  <span>Coastal Condominium &mdash; starting from US$380,000 &nbsp;&middot;&nbsp; 2&ndash;3 bed, 95&ndash;130 m&sup2;</span>
                 </label>
                 <label class="checkbox-item">
                   <input type="checkbox" name="property_interest[]" value="villa">
-                  <span>Sanctuary Villa &mdash; from US$980,000 &nbsp;&middot;&nbsp; 3&ndash;4 bed, 220&ndash;280 m&sup2;, private pool</span>
+                  <span>Sanctuary Villa &mdash; starting from US$980,000 &nbsp;&middot;&nbsp; 3&ndash;4 bed, 220&ndash;280 m&sup2;, private pool</span>
                 </label>
               </div>
             </div>
@@ -1456,7 +1464,17 @@
         function activateSlot() {
           if (slot.classList.contains('video-slot--active')) return;
           const src = slot.dataset.vimeoSrc;
-          if (!src || src.startsWith('REPLACE_')) return;
+          if (!src || src.startsWith('REPLACE_')) {
+            let overlay = slot.querySelector('.video-slot__coming-soon');
+            if (!overlay) {
+              overlay = document.createElement('div');
+              overlay.className = 'video-slot__coming-soon';
+              overlay.style.cssText = 'position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(27,59,54,0.72);border-radius:inherit;pointer-events:none;';
+              overlay.innerHTML = '<p style="font-family:var(--font-display);font-size:18px;font-style:italic;color:var(--gold);text-align:center;padding:1.5rem;line-height:1.5">Video walkthrough<br>coming soon</p>';
+              slot.appendChild(overlay);
+            }
+            return;
+          }
           const iframe = document.createElement('iframe');
           iframe.src = src + (src.includes('?') ? '&' : '?') + 'autoplay=1&title=0&byline=0&portrait=0';
           iframe.allow = 'autoplay; fullscreen; picture-in-picture';

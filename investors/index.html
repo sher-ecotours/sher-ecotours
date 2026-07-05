@@ -1,5 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+<!--
+  NETLIFY FORMS — ACTION REQUIRED BEFORE SHARING ANY PASSWORDS
+  Configure email notifications for all four forms in:
+  Netlify Dashboard → Forms → [form name] → Notifications → Add notification → Email → bookings@shersanctuary.com
+
+  Forms requiring configuration:
+    - investor-discovery       (Gate A/B/C qualification form)
+    - tier1-progression        (Tier 1 response form)
+    - tier2-progression        (Tier 2 response form)
+    - tier3-engagement         (Tier 3 investment profile form)
+
+  Until configured: submissions are captured by Netlify but no email alert is sent.
+  Investor leads will arrive unseen. Configure before distributing any password.
+-->
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -1094,16 +1108,16 @@
 
       <div class="hero__chips">
         <div class="chip">
-          <span class="chip__value">US$3.5M</span>
-          <span class="chip__label">Working capital reference</span>
+          <span class="chip__value">RAMSAR Protected</span>
+          <span class="chip__label">Wetland of International Importance &middot; Designated 2002</span>
         </div>
         <div class="chip">
-          <span class="chip__value">US$10.2M</span>
-          <span class="chip__label">Base for-sale revenue</span>
+          <span class="chip__value">1,038 Hectares</span>
+          <span class="chip__label">Pointe Sable Environmental Protection Area</span>
         </div>
         <div class="chip">
-          <span class="chip__value">20 residences</span>
-          <span class="chip__label">Villas, condominiums &amp; cottages</span>
+          <span class="chip__value">Scorpion Islet</span>
+          <span class="chip__label">Private access &middot; One landing per day &middot; Zero emission</span>
         </div>
       </div>
 
@@ -1327,7 +1341,7 @@
 
           <div class="form-group">
             <label class="form-label">
-              Do you accept that approximately 46.8% of the SHER estate will be permanently
+              Do you accept that approximately 46.7% of the SHER estate will be permanently
               preserved as no-build wetland conservation land, and that this boundary will
               never be compromised for development gain? <span class="req">*</span>
             </label>
@@ -1799,30 +1813,38 @@
         </div>
 
         <!-- ── KEY FIGURES ─── -->
-        <div class="numbers-grid numbers-grid--light">
+        <div class="numbers-grid numbers-grid--light" style="grid-template-columns:repeat(4,1fr)">
           <div class="number-cell">
-            <span class="number-cell__value">±72 ac</span>
-            <span class="number-cell__label">Total estate area</span>
+            <span class="number-cell__value" style="font-size:22px">204,148 sf</span>
+            <span class="number-cell__label">Total estate &mdash; 4.69 acres</span>
           </div>
           <div class="number-cell">
-            <span class="number-cell__value">46.8%</span>
-            <span class="number-cell__label">Permanently protected conservation land</span>
+            <span class="number-cell__value" style="font-size:22px">108,774 sf</span>
+            <span class="number-cell__label">Developable land &mdash; 2.50 acres</span>
+          </div>
+          <div class="number-cell">
+            <span class="number-cell__value" style="font-size:22px">95,374 sf</span>
+            <span class="number-cell__label">Conservation zone &mdash; 2.19 acres (46.7% of estate)</span>
           </div>
           <div class="number-cell">
             <span class="number-cell__value">20</span>
-            <span class="number-cell__label">Residences for sale — villas, condominiums &amp; cottages</span>
+            <span class="number-cell__label">Residences across three categories</span>
           </div>
           <div class="number-cell">
-            <span class="number-cell__value">US$10.2M</span>
-            <span class="number-cell__label">Base for-sale revenue (preliminary model)</span>
+            <span class="number-cell__value" style="font-size:20px">US$3,500,000</span>
+            <span class="number-cell__label">Working capital target</span>
           </div>
           <div class="number-cell">
-            <span class="number-cell__value">US$3.5M</span>
-            <span class="number-cell__label">Working capital reference</span>
+            <span class="number-cell__value" style="font-size:20px">US$10,200,000</span>
+            <span class="number-cell__label">Base for-sale revenue</span>
           </div>
           <div class="number-cell">
-            <span class="number-cell__value">12–18 mo</span>
-            <span class="number-cell__label">Target construction phase</span>
+            <span class="number-cell__value">2.9&times;</span>
+            <span class="number-cell__label">Gross revenue-to-capital ratio (approx.)</span>
+          </div>
+          <div class="number-cell">
+            <span class="number-cell__value">12&ndash;18 mo</span>
+            <span class="number-cell__label">Construction phase per phase</span>
           </div>
         </div>
 
@@ -1929,49 +1951,49 @@
           <h3 style="font-family:var(--font-display);font-size:22px;margin-bottom:1rem;color:var(--green)">Tier 1 Documents</h3>
           <div class="doc-vault">
 
-            <a class="doc-item" href="#" target="_blank" rel="noopener">
+            <span class="doc-item" style="cursor:default">
               <div class="doc-item__icon">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
               </div>
               <div>
-                <div class="doc-item__name">SHER — Project Overview &amp; Vision</div>
-                <div class="doc-item__meta">PDF · 12 pages · Replace href with your hosted link</div>
+                <div class="doc-item__name">SHER — Project Overview &amp; Vision <span style="font-size:11px;font-style:italic;color:var(--text-muted)">&middot; Available shortly</span></div>
+                <div class="doc-item__meta">PDF &middot; 12 pages</div>
               </div>
               <span class="doc-item__badge">PDF</span>
-            </a>
+            </span>
 
-            <a class="doc-item" href="#" target="_blank" rel="noopener">
+            <span class="doc-item" style="cursor:default">
               <div class="doc-item__icon">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21,15 16,10 5,21"/></svg>
               </div>
               <div>
-                <div class="doc-item__name">Concept Renders &amp; Site Impressions</div>
-                <div class="doc-item__meta">PDF · Replace href with your hosted link</div>
+                <div class="doc-item__name">Concept Renders &amp; Site Impressions <span style="font-size:11px;font-style:italic;color:var(--text-muted)">&middot; Available shortly</span></div>
+                <div class="doc-item__meta">PDF</div>
               </div>
               <span class="doc-item__badge">PDF</span>
-            </a>
+            </span>
 
-            <a class="doc-item" href="#" target="_blank" rel="noopener">
+            <span class="doc-item" style="cursor:default">
               <div class="doc-item__icon">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><polygon points="3,6 9,3 15,6 21,3 21,18 15,21 9,18 3,21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
               </div>
               <div>
-                <div class="doc-item__name">Estate Location Map</div>
-                <div class="doc-item__meta">PDF · Replace href with your hosted link</div>
+                <div class="doc-item__name">Estate Location Map <span style="font-size:11px;font-style:italic;color:var(--text-muted)">&middot; Available shortly</span></div>
+                <div class="doc-item__meta">PDF</div>
               </div>
               <span class="doc-item__badge">MAP</span>
-            </a>
+            </span>
 
-            <a class="doc-item" href="#" target="_blank" rel="noopener">
+            <span class="doc-item" style="cursor:default">
               <div class="doc-item__icon">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
               </div>
               <div>
-                <div class="doc-item__name">Project Brief — Materials &amp; Conservation Covenant</div>
-                <div class="doc-item__meta">PDF · Replace href with your hosted link</div>
+                <div class="doc-item__name">Project Brief — Materials &amp; Conservation Covenant <span style="font-size:11px;font-style:italic;color:var(--text-muted)">&middot; Available shortly</span></div>
+                <div class="doc-item__meta">PDF</div>
               </div>
               <span class="doc-item__badge">PDF</span>
-            </a>
+            </span>
 
           </div>
         </div>
@@ -2284,60 +2306,60 @@
           <h3 style="font-family:var(--font-display);font-size:22px;margin-bottom:1rem;color:var(--green)">Tier 2 Documents</h3>
           <div class="doc-vault">
 
-            <a class="doc-item" href="#" target="_blank" rel="noopener">
+            <span class="doc-item" style="cursor:default">
               <div class="doc-item__icon">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
               </div>
               <div>
-                <div class="doc-item__name">Development Financial Model (Preliminary)</div>
-                <div class="doc-item__meta">PDF · Replace href with your hosted link</div>
+                <div class="doc-item__name">Development Financial Model (Preliminary) <span style="font-size:11px;font-style:italic;color:var(--text-muted)">&middot; Available shortly</span></div>
+                <div class="doc-item__meta">PDF</div>
               </div>
               <span class="doc-item__badge">PDF</span>
-            </a>
+            </span>
 
-            <a class="doc-item" href="#" target="_blank" rel="noopener">
+            <span class="doc-item" style="cursor:default">
               <div class="doc-item__icon">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>
               </div>
               <div>
-                <div class="doc-item__name">Planning Approval &amp; Regulatory Status</div>
-                <div class="doc-item__meta">PDF · Replace href with your hosted link</div>
+                <div class="doc-item__name">Planning Approval &amp; Regulatory Status <span style="font-size:11px;font-style:italic;color:var(--text-muted)">&middot; Available shortly</span></div>
+                <div class="doc-item__meta">PDF</div>
               </div>
               <span class="doc-item__badge">CERT</span>
-            </a>
+            </span>
 
-            <a class="doc-item" href="#" target="_blank" rel="noopener">
+            <span class="doc-item" style="cursor:default">
               <div class="doc-item__icon">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>
               </div>
               <div>
-                <div class="doc-item__name">Environmental Certification Summary</div>
-                <div class="doc-item__meta">PDF · Replace href with your hosted link</div>
+                <div class="doc-item__name">Environmental Certification Summary <span style="font-size:11px;font-style:italic;color:var(--text-muted)">&middot; Available shortly</span></div>
+                <div class="doc-item__meta">PDF</div>
               </div>
               <span class="doc-item__badge">CERT</span>
-            </a>
+            </span>
 
-            <a class="doc-item" href="#" target="_blank" rel="noopener">
+            <span class="doc-item" style="cursor:default">
               <div class="doc-item__icon">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
               </div>
               <div>
-                <div class="doc-item__name">Structural Materials Certification (Hemp Block &amp; Earth)</div>
-                <div class="doc-item__meta">PDF · Replace href with your hosted link</div>
+                <div class="doc-item__name">Structural Materials Certification (Hemp Block &amp; Earth) <span style="font-size:11px;font-style:italic;color:var(--text-muted)">&middot; Available shortly</span></div>
+                <div class="doc-item__meta">PDF</div>
               </div>
               <span class="doc-item__badge">CERT</span>
-            </a>
+            </span>
 
-            <a class="doc-item" href="#" target="_blank" rel="noopener">
+            <span class="doc-item" style="cursor:default">
               <div class="doc-item__icon">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><polygon points="3,6 9,3 15,6 21,3 21,18 15,21 9,18 3,21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
               </div>
               <div>
-                <div class="doc-item__name">Site Plan &amp; Residential Plot Layout</div>
-                <div class="doc-item__meta">PDF · Replace href with your hosted link</div>
+                <div class="doc-item__name">Site Plan &amp; Residential Plot Layout <span style="font-size:11px;font-style:italic;color:var(--text-muted)">&middot; Available shortly</span></div>
+                <div class="doc-item__meta">PDF</div>
               </div>
               <span class="doc-item__badge">MAP</span>
-            </a>
+            </span>
 
           </div>
         </div>
@@ -2535,82 +2557,82 @@
           </p>
           <div class="doc-vault">
 
-            <a class="doc-item" href="#" target="_blank" rel="noopener">
+            <span class="doc-item" style="cursor:default">
               <div class="doc-item__icon">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
               </div>
               <div>
-                <div class="doc-item__name">Non-Disclosure Agreement (Executable)</div>
-                <div class="doc-item__meta">PDF · Replace href with Google Drive restricted link</div>
+                <div class="doc-item__name">Non-Disclosure Agreement (Executable) <span style="font-size:11px;font-style:italic;color:var(--text-muted)">&middot; Available shortly</span></div>
+                <div class="doc-item__meta">PDF &middot; Restricted access</div>
               </div>
               <span class="doc-item__badge">NDA</span>
-            </a>
+            </span>
 
-            <a class="doc-item" href="#" target="_blank" rel="noopener">
+            <span class="doc-item" style="cursor:default">
               <div class="doc-item__icon">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
               </div>
               <div>
-                <div class="doc-item__name">Investment Agreement — Draft Term Sheet</div>
-                <div class="doc-item__meta">PDF · Replace href with Google Drive restricted link</div>
+                <div class="doc-item__name">Investment Agreement — Draft Term Sheet <span style="font-size:11px;font-style:italic;color:var(--text-muted)">&middot; Available shortly</span></div>
+                <div class="doc-item__meta">PDF &middot; Restricted access</div>
               </div>
               <span class="doc-item__badge">DRAFT</span>
-            </a>
+            </span>
 
-            <a class="doc-item" href="#" target="_blank" rel="noopener">
+            <span class="doc-item" style="cursor:default">
               <div class="doc-item__icon">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
               </div>
               <div>
-                <div class="doc-item__name">SPV Shareholders Agreement — Draft</div>
-                <div class="doc-item__meta">PDF · Replace href with Google Drive restricted link</div>
+                <div class="doc-item__name">SPV Shareholders Agreement — Draft <span style="font-size:11px;font-style:italic;color:var(--text-muted)">&middot; Available shortly</span></div>
+                <div class="doc-item__meta">PDF &middot; Restricted access</div>
               </div>
               <span class="doc-item__badge">DRAFT</span>
-            </a>
+            </span>
 
-            <a class="doc-item" href="#" target="_blank" rel="noopener">
+            <span class="doc-item" style="cursor:default">
               <div class="doc-item__icon">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><polygon points="3,6 9,3 15,6 21,3 21,18 15,21 9,18 3,21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
               </div>
               <div>
-                <div class="doc-item__name">Title Documentation — Parcel Survey &amp; Registered Boundaries</div>
-                <div class="doc-item__meta">Restricted Drive link · Replace href with Google Drive restricted link</div>
+                <div class="doc-item__name">Title Documentation — Parcel Survey &amp; Registered Boundaries <span style="font-size:11px;font-style:italic;color:var(--text-muted)">&middot; Available shortly</span></div>
+                <div class="doc-item__meta">Restricted access</div>
               </div>
               <span class="doc-item__badge">TITLE</span>
-            </a>
+            </span>
 
-            <a class="doc-item" href="#" target="_blank" rel="noopener">
+            <span class="doc-item" style="cursor:default">
               <div class="doc-item__icon">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
               </div>
               <div>
-                <div class="doc-item__name">Legal Appendix A — Conservation Covenant &amp; Land Restrictions</div>
-                <div class="doc-item__meta">Restricted Drive link · Replace href with Google Drive restricted link</div>
+                <div class="doc-item__name">Legal Appendix A — Conservation Covenant &amp; Land Restrictions <span style="font-size:11px;font-style:italic;color:var(--text-muted)">&middot; Available shortly</span></div>
+                <div class="doc-item__meta">Restricted access</div>
               </div>
               <span class="doc-item__badge">LEGAL</span>
-            </a>
+            </span>
 
-            <a class="doc-item" href="#" target="_blank" rel="noopener">
+            <span class="doc-item" style="cursor:default">
               <div class="doc-item__icon">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
               </div>
               <div>
-                <div class="doc-item__name">Legal Appendix B — SPV Corporate Structure &amp; Jurisdiction</div>
-                <div class="doc-item__meta">Restricted Drive link · Replace href with Google Drive restricted link</div>
+                <div class="doc-item__name">Legal Appendix B — SPV Corporate Structure &amp; Jurisdiction <span style="font-size:11px;font-style:italic;color:var(--text-muted)">&middot; Available shortly</span></div>
+                <div class="doc-item__meta">Restricted access</div>
               </div>
               <span class="doc-item__badge">LEGAL</span>
-            </a>
+            </span>
 
-            <a class="doc-item" href="#" target="_blank" rel="noopener">
+            <span class="doc-item" style="cursor:default">
               <div class="doc-item__icon">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>
               </div>
               <div>
-                <div class="doc-item__name">Full Audited Financial Model (Workbook)</div>
-                <div class="doc-item__meta">Restricted Drive link · Replace href with Google Drive restricted link</div>
+                <div class="doc-item__name">Full Audited Financial Model (Workbook) <span style="font-size:11px;font-style:italic;color:var(--text-muted)">&middot; Available shortly</span></div>
+                <div class="doc-item__meta">Restricted access</div>
               </div>
               <span class="doc-item__badge">MODEL</span>
-            </a>
+            </span>
 
           </div>
         </div>
@@ -3153,7 +3175,17 @@
         function activateSlot() {
           if (slot.classList.contains('video-slot--active')) return;
           const src = slot.dataset.vimeoSrc;
-          if (!src || src.startsWith('REPLACE_')) return;
+          if (!src || src.startsWith('REPLACE_')) {
+            let overlay = slot.querySelector('.video-slot__coming-soon');
+            if (!overlay) {
+              overlay = document.createElement('div');
+              overlay.className = 'video-slot__coming-soon';
+              overlay.style.cssText = 'position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(27,59,54,0.72);border-radius:inherit;pointer-events:none;';
+              overlay.innerHTML = '<p style="font-family:var(--font-display);font-size:18px;font-style:italic;color:var(--gold);text-align:center;padding:1.5rem;line-height:1.5">Video walkthrough<br>coming soon</p>';
+              slot.appendChild(overlay);
+            }
+            return;
+          }
           const iframe = document.createElement('iframe');
           iframe.src = src + (src.includes('?') ? '&' : '?') + 'autoplay=1&title=0&byline=0&portrait=0';
           iframe.allow = 'autoplay; fullscreen; picture-in-picture';
