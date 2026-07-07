@@ -649,9 +649,414 @@
       .photo-gallery { grid-template-columns: 1fr; }
     }
 
+    /* ── PUBLIC LANDING (Phase 1) ───────────────────────────────── */
+
+    /* Section A — Hero */
+    .pub-hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+    }
+    .pub-hero__bg {
+      position: absolute;
+      inset: 0;
+      background: url('../images/cottage-type-a/03_Dusk_Exterior_Low_Lighting_web.jpg') center/cover no-repeat;
+    }
+    .pub-hero__overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(27,59,54,0.55);
+    }
+    .pub-hero__content {
+      position: relative;
+      z-index: 1;
+      padding: 5rem 2rem;
+      max-width: 760px;
+      width: 100%;
+    }
+    .pub-hero__eyebrow {
+      display: block;
+      font-family: var(--font-body);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+    }
+    .pub-hero__headline {
+      font-family: var(--font-display);
+      font-size: 58px;
+      font-weight: 500;
+      color: var(--cream);
+      line-height: 1.1;
+      margin-bottom: 1.25rem;
+    }
+    .pub-hero__sub {
+      font-size: 16px;
+      color: rgba(245,240,232,0.85);
+      line-height: 1.75;
+      margin-bottom: 2rem;
+    }
+    .pub-chips {
+      display: flex;
+      gap: 0.65rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 2.25rem;
+    }
+    .pub-chip {
+      background: rgba(27,59,54,0.65);
+      color: var(--gold);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.4rem 1rem;
+      border-radius: 999px;
+    }
+    .pub-hero__note {
+      display: block;
+      font-size: 12px;
+      font-style: italic;
+      color: rgba(245,240,232,0.6);
+      margin-top: 0.9rem;
+    }
+
+    /* Section B — Residences */
+    .pub-residences { background: var(--cream); padding: 5rem 0; }
+    .pub-section__header { text-align: center; margin-bottom: 3rem; }
+    .pub-section__heading {
+      font-family: var(--font-display);
+      font-size: 38px;
+      font-weight: 500;
+      color: var(--green);
+      margin-bottom: 0.5rem;
+    }
+    .pub-section__sub { font-size: 15px; color: var(--text-muted); font-style: italic; }
+    .pub-cards {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 1.5rem;
+    }
+    .pub-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+    }
+    .pub-card__img { width:100%; aspect-ratio:4/3; object-fit:cover; display:block; }
+    .pub-card__body { padding: 1.5rem 1.5rem 1.75rem; }
+    .pub-card__eyebrow {
+      display: block;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.35rem;
+    }
+    .pub-card__name {
+      font-family: var(--font-display);
+      font-size: 24px;
+      color: var(--green);
+      margin-bottom: 0.2rem;
+    }
+    .pub-card__count { font-size: 12px; color: var(--text-muted); margin-bottom: 0.75rem; }
+    .pub-card__materials {
+      font-size: 12px;
+      color: var(--gold-dark);
+      letter-spacing: 0.04em;
+      border-top: 1px solid rgba(201,168,103,0.3);
+      padding-top: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+    .pub-card__copy { font-size: 13px; color: var(--text-muted); line-height: 1.65; }
+    .pub-disclaimer {
+      text-align: center;
+      font-size: 11.5px;
+      font-style: italic;
+      color: var(--text-muted);
+      margin-top: 2rem;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Section C — Bay Gallery */
+    .pub-gallery { background: var(--green); padding: 5rem 0; }
+    .pub-gallery__heading {
+      font-family: var(--font-display);
+      font-size: 38px;
+      font-weight: 500;
+      color: var(--cream);
+      text-align: center;
+      margin-bottom: 0.5rem;
+    }
+    .pub-gallery__sub {
+      font-size: 14px;
+      font-style: italic;
+      color: var(--gold);
+      text-align: center;
+      line-height: 1.75;
+      max-width: 620px;
+      margin: 0 auto 2.5rem;
+    }
+    .pub-photo-grid {
+      display: grid;
+      grid-template-columns: repeat(2,1fr);
+      gap: 0.75rem;
+    }
+    .pub-photo-grid img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      border-radius: var(--radius);
+      cursor: zoom-in;
+      display: block;
+    }
+
+    /* Section D — Location */
+    .pub-location { background: var(--cream); padding: 5rem 0; }
+    .pub-location__grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3.5rem;
+      align-items: start;
+    }
+    .pub-location__heading {
+      font-family: var(--font-display);
+      font-size: 34px;
+      font-weight: 500;
+      color: var(--green);
+      line-height: 1.2;
+      margin-bottom: 1.25rem;
+    }
+    .pub-location__body {
+      font-size: 15px;
+      color: var(--text);
+      line-height: 1.8;
+      margin-bottom: 1.75rem;
+    }
+    .pub-loc-chips { display: flex; gap: 0.65rem; flex-wrap: wrap; }
+    .pub-map-wrap { border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-card); }
+
+    /* Section E — Area Validation */
+    .pub-validation { background: var(--green); padding: 5rem 0; text-align: center; }
+    .pub-validation__heading {
+      font-family: var(--font-display);
+      font-size: 38px;
+      font-weight: 500;
+      color: var(--cream);
+      margin-bottom: 2rem;
+      line-height: 1.2;
+    }
+    .pub-validation__body {
+      max-width: 680px;
+      margin: 0 auto;
+      text-align: left;
+    }
+    .pub-validation__body p {
+      font-size: 15px;
+      color: rgba(245,240,232,0.85);
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+    }
+    .pub-validation__cta { text-align: center; margin-top: 2.5rem; }
+
+    /* Public landing responsive */
+    @media (max-width: 820px) {
+      .pub-hero__headline { font-size: 40px; }
+      .pub-cards { grid-template-columns: 1fr; max-width: 480px; margin-left: auto; margin-right: auto; }
+      .pub-location__grid { grid-template-columns: 1fr; gap: 2rem; }
+    }
+    @media (max-width: 600px) {
+      .pub-hero__headline { font-size: 32px; }
+      .pub-hero__sub { font-size: 14px; }
+      .pub-section__heading,
+      .pub-gallery__heading,
+      .pub-location__heading,
+      .pub-validation__heading { font-size: 28px; }
+      .pub-photo-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 380px) {
+      .pub-hero__headline { font-size: 26px; }
+      .pub-hero__eyebrow { font-size: 9px; letter-spacing: 0.12em; }
+      .pub-chip { font-size: 9px; padding: 0.3rem 0.7rem; }
+    }
+
   </style>
 </head>
 <body>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       PUBLIC LANDING — Phase 1 of 5
+       Sections A–E: visible before password gate
+       ══════════════════════════════════════════════════════════════ -->
+
+  <!-- SECTION A — HERO ──────────────────────────────────────────── -->
+  <section class="pub-hero">
+    <div class="pub-hero__bg"></div>
+    <div class="pub-hero__overlay"></div>
+    <div class="pub-hero__content">
+      <span class="pub-hero__eyebrow">SHER Sanctuary Experiences &middot; Savannes Bay, Saint Lucia</span>
+      <h1 class="pub-hero__headline">A Place Worth Owning</h1>
+      <p class="pub-hero__sub">
+        Twenty residences on a permanently protected wetland estate.<br>
+        Natural materials. Managed rental programme.<br>
+        Fifteen minutes from Hewanorra International Airport.
+      </p>
+      <div class="pub-chips">
+        <span class="pub-chip">RAMSAR Protected &middot; Savannes Bay Wetland</span>
+        <span class="pub-chip">15 Minutes &middot; Hewanorra International Airport</span>
+        <span class="pub-chip">Nature Whispers &middot; Souls Listen</span>
+      </div>
+      <a href="mailto:info@shersanctuary.com?subject=Property%20Collection%20Access%20Request&body=I%20would%20like%20to%20request%20access%20to%20the%20SHER%20Property%20Collection.%0A%0AMy%20name%20is%3A%0A%0ACountry%20of%20residence%3A%0A%0AType%20of%20property%20I%20am%20interested%20in%20(Cottage%2C%20Condominium%20or%20Villa)%3A%0A%0AHow%20I%20heard%20about%20SHER%3A"
+         class="btn btn--gold" style="border-radius:999px;padding:1rem 2.25rem;font-size:13px">
+        Request Access to the Property Collection
+      </a>
+      <span class="pub-hero__note">Access is by personal introduction. Responses within 24 hours.</span>
+    </div>
+  </section>
+
+  <!-- SECTION B — THE RESIDENCES ────────────────────────────────── -->
+  <section class="pub-residences">
+    <div class="container">
+      <div class="pub-section__header">
+        <h2 class="pub-section__heading">The Residences</h2>
+        <p class="pub-section__sub">Twenty homes across three categories &mdash; designed for the land, built from it.</p>
+      </div>
+      <div class="pub-cards">
+
+        <div class="pub-card">
+          <img src="../images/cottage-type-a/01_Exterior_Nature_Veranda_web.jpg"
+               alt="Hillside Cottage — exterior nature veranda"
+               class="pub-card__img" loading="lazy">
+          <div class="pub-card__body">
+            <span class="pub-card__eyebrow">Cottage Type A</span>
+            <p class="pub-card__name">Hillside Cottage</p>
+            <p class="pub-card__count">6 residences</p>
+            <p class="pub-card__materials">Butterfly roof &middot; timber &middot; stone &middot; lime render</p>
+            <p class="pub-card__copy">A private one-bedroom sanctuary set within lush tropical planting, with deep veranda, screened-glazed indoor-outdoor living and a private outdoor shower court.</p>
+          </div>
+        </div>
+
+        <div class="pub-card">
+          <img src="../images/bay-eastern-shoreline-5.jpg"
+               alt="Coastal Condominium — bay view (placeholder)"
+               class="pub-card__img" loading="lazy">
+          <div class="pub-card__body">
+            <span class="pub-card__eyebrow">Boutique Condominium</span>
+            <p class="pub-card__name">Coastal Condominium</p>
+            <p class="pub-card__count">8 residences</p>
+            <p class="pub-card__materials">Compressed earth &middot; lime render</p>
+            <p class="pub-card__copy">Eight boutique residences on Lot E, structured under a separate condominium title with its own legal and financing pathway.</p>
+          </div>
+        </div>
+
+        <div class="pub-card">
+          <img src="../images/sher_calm_reflections.jpg"
+               alt="Sanctuary Villa — bay view (placeholder)"
+               class="pub-card__img" loading="lazy">
+          <div class="pub-card__body">
+            <span class="pub-card__eyebrow">Luxury Villa</span>
+            <p class="pub-card__name">Sanctuary Villa</p>
+            <p class="pub-card__count">6 residences</p>
+            <p class="pub-card__materials">Reclaimed timber &middot; clay brick &middot; natural stone</p>
+            <p class="pub-card__copy">Six luxury residences across two configurations, each with private pool, open living pavilion and deep landscape privacy on the southern estate.</p>
+          </div>
+        </div>
+
+      </div>
+      <p class="pub-disclaimer">
+        Artist's impression / design intent. Final design subject to professional drawings, statutory approvals, site conditions and environmental review.
+      </p>
+    </div>
+  </section>
+
+  <!-- SECTION C — BAY PHOTOGRAPHY GALLERY ───────────────────────── -->
+  <section class="pub-gallery">
+    <div class="container">
+      <h2 class="pub-gallery__heading">Savannes Bay</h2>
+      <p class="pub-gallery__sub">
+        A RAMSAR-designated wetland of international importance.
+        One of Saint Lucia's most ecologically significant and least-discovered coastal sites.
+      </p>
+      <div class="pub-photo-grid">
+        <img src="../images/bay-south-mangrove-arch.jpg"
+             alt="South mangrove arch, Savannes Bay" loading="lazy"
+             data-lightbox="../images/bay-south-mangrove-arch.jpg">
+        <img src="../images/sher_calm_reflections.jpg"
+             alt="Calm reflections on the bay" loading="lazy"
+             data-lightbox="../images/sher_calm_reflections.jpg">
+        <img src="../images/nature-trail-mangrove.jpg"
+             alt="Nature trail through mangrove" loading="lazy"
+             data-lightbox="../images/nature-trail-mangrove.jpg">
+        <img src="../images/table-deau-waters-edge.jpg"
+             alt="Table d'Eau at the water's edge" loading="lazy"
+             data-lightbox="../images/table-deau-waters-edge.jpg">
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION D — LOCATION ──────────────────────────────────────── -->
+  <section class="pub-location">
+    <div class="container">
+      <div class="pub-location__grid">
+        <div>
+          <h2 class="pub-location__heading">Closer Than You Think</h2>
+          <p class="pub-location__body">
+            Savannes Bay sits at the southern tip of Saint Lucia, 15 minutes by road from
+            Hewanorra International Airport. For a guest arriving from Miami, London, Toronto,
+            or New York, the journey from plane to bay is one of the shortest in the
+            Caribbean &mdash; no two-hour transfer, no winding mountain road. Direct access to
+            a protected wetland estate on arrival.
+          </p>
+          <div class="pub-loc-chips">
+            <span class="pub-chip">15 min &middot; Hewanorra International Airport</span>
+            <span class="pub-chip">Micoud &middot; Saint Lucia &middot; Southern Caribbean</span>
+          </div>
+        </div>
+        <div>
+          <div class="pub-map-wrap">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m28!1m12!1m3!1d31282.8!2d-60.9350!3d13.7450!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m13!3e6!4m5!1s0x8c407c3b9c3c3b3b%3A0x0!2sHewanorra+International+Airport%2C+Vieux+Fort%2C+Saint+Lucia!3m2!1d13.7332!2d-60.9526!4m5!1s0x8c407a1b1b1b1b1b%3A0x0!2sSavannes+Bay%2C+Micoud%2C+Saint+Lucia!3m2!1d13.7580!2d-60.9150!5e0!3m2!1sen!2slc!4v1720000000000!5m2!1sen!2slc"
+              width="100%"
+              height="340"
+              style="border:0; border-radius:8px;"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION E — AREA VALIDATION ───────────────────────────────── -->
+  <section class="pub-validation">
+    <div class="container--narrow">
+      <h2 class="pub-validation__heading">The Right Moment to Own Here</h2>
+      <div class="pub-validation__body">
+        <p>Savannes Bay is entering a period of considered, high-quality development. A major five-star resort is currently under construction on the shared oceanfront a short distance away &mdash; bringing international visitor traffic and hospitality infrastructure to a coastline that has historically been known only to those who looked for it.</p>
+        <p>SHER residences placed in the HOA rental pool are managed, maintained, and marketed to guests who have already chosen this part of Saint Lucia. Owners who prefer personal use retain priority access. The structure is designed to serve both.</p>
+        <p>This is not a speculative position. It is an early, well-located stake in an area that institutional hospitality investment has already validated.</p>
+      </div>
+      <div class="pub-validation__cta">
+        <a href="mailto:info@shersanctuary.com?subject=Property%20Collection%20Access%20Request&body=I%20would%20like%20to%20request%20access%20to%20the%20SHER%20Property%20Collection.%0A%0AMy%20name%20is%3A%0A%0ACountry%20of%20residence%3A%0A%0AType%20of%20property%20I%20am%20interested%20in%20(Cottage%2C%20Condominium%20or%20Villa)%3A%0A%0AHow%20I%20heard%20about%20SHER%3A"
+           class="btn btn--gold" style="border-radius:999px;padding:1rem 2.25rem;font-size:13px">
+          Request Access to the Property Collection
+        </a>
+        <span class="pub-hero__note">Access is by personal introduction. Responses within 24 hours.</span>
+      </div>
+    </div>
+  </section>
+
 
   <!-- ── HERO ──────────────────────────────────────────────────── -->
   <header class="hero">
@@ -810,7 +1215,7 @@
           <div class="property-card">
             <span class="eyebrow">Hillside Cottages</span>
             <h3>The Cottage</h3>
-            <p class="card-sub">10 units available &nbsp;&middot;&nbsp; Starting from US$280,000</p>
+            <p class="card-sub">6 units available &nbsp;&middot;&nbsp; Starting from US$280,000</p>
 
             <div class="video-slot aspect-16-9" style="margin-bottom:1.25rem"
                  data-vimeo-src="REPLACE_WITH_VIMEO_COTTAGE_URL"
@@ -884,7 +1289,7 @@
           <div class="property-card">
             <span class="eyebrow">Sanctuary Villas</span>
             <h3>The Villa</h3>
-            <p class="card-sub">4 units available &nbsp;&middot;&nbsp; Starting from US$980,000</p>
+            <p class="card-sub">6 units available &nbsp;&middot;&nbsp; Starting from US$980,000</p>
 
             <div class="video-slot aspect-16-9" style="margin-bottom:1.25rem"
                  data-vimeo-src="REPLACE_WITH_VIMEO_VILLA_URL"
