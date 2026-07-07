@@ -943,6 +943,82 @@
       .cottage-type-a-gallery img { aspect-ratio: 16/9; }
     }
 
+
+    /* ── LIFESTYLE SECTION (Phase 3) ───────────────────────────── */
+    .lifestyle-section { background: var(--green); overflow: hidden; }
+    .lifestyle-header {
+      text-align: center;
+      padding: 5rem 2rem 4rem;
+    }
+    .lifestyle-header .eyebrow { display: block; margin-bottom: 0.75rem; }
+    .lifestyle-header h2 { margin-top: 0.75rem; }
+    .lifestyle-scene {
+      display: grid;
+      grid-template-columns: 55fr 45fr;
+      min-height: 420px;
+      border-top: 1px solid rgba(255,255,255,0.04);
+    }
+    .lifestyle-scene--alt {
+      grid-template-columns: 45fr 55fr;
+    }
+    .lifestyle-scene__img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      min-height: 380px;
+    }
+    .lifestyle-scene__text {
+      padding: 4rem 3.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: var(--green-mid);
+    }
+    .lifestyle-scene--alt .lifestyle-scene__text {
+      background: rgba(27,59,54,0.6);
+    }
+    .lifestyle-scene__num {
+      font-family: var(--font-display);
+      font-size: 52px;
+      font-weight: 600;
+      color: rgba(201,168,103,0.18);
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+    .lifestyle-scene__title {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 500;
+      color: var(--cream);
+      line-height: 1.2;
+      margin-bottom: 1.25rem;
+    }
+    .lifestyle-scene__copy {
+      font-size: 14px;
+      color: var(--cream-muted);
+      line-height: 1.9;
+    }
+    .lifestyle-footer {
+      text-align: center;
+      padding: 3.5rem 2rem 4rem;
+    }
+    .lifestyle-footer p {
+      font-family: var(--font-display);
+      font-size: 19px;
+      font-style: italic;
+      color: var(--gold);
+      letter-spacing: 0.04em;
+    }
+    @media (max-width: 768px) {
+      .lifestyle-scene,
+      .lifestyle-scene--alt { grid-template-columns: 1fr; min-height: auto; }
+      .lifestyle-scene__img { min-height: 260px; }
+      .lifestyle-scene__text { padding: 2.5rem 1.5rem; }
+      .lifestyle-scene__num { font-size: 36px; }
+      .lifestyle-scene__title { font-size: 22px; }
+    }
+
   </style>
 </head>
 <body>
@@ -1463,6 +1539,151 @@
         </div>
 
       </div>
+    </section>
+
+
+    <!-- SECTION: LIVING AT SHER SANCTUARY -->
+    <section class="lifestyle-section">
+
+      <div class="lifestyle-header">
+        <span class="eyebrow">A Property Owner&rsquo;s Life in Savannes Bay</span>
+        <h2 class="section-heading section-heading--white">Living at SHER Sanctuary</h2>
+      </div>
+
+      <!-- 01 — The Arrival -->
+      <div class="lifestyle-scene">
+        <img class="lifestyle-scene__img"
+             src="../images/lifestyle-arrival-gate.jpg"
+             alt="Aerial view of the SHER Sanctuary estate at golden hour — stone gate, arriving vehicle, café and reception pavilions, Savannes Bay beyond"
+             loading="lazy">
+        <div class="lifestyle-scene__text">
+          <span class="lifestyle-scene__num">01</span>
+          <h3 class="lifestyle-scene__title">The Arrival</h3>
+          <p class="lifestyle-scene__copy">The gate at SHER is made of stone and timber &mdash; restrained, unhurried, nothing announcing arrival except the change in atmosphere. The path narrows past a screen of palms, and the car delivers you not to a lobby but to a pause. Low lighting, still air, and the quiet certainty that you are somewhere designed to be found.</p>
+        </div>
+      </div>
+
+      <!-- 02 — The Welcome Pavilion -->
+      <div class="lifestyle-scene lifestyle-scene--alt">
+        <div class="lifestyle-scene__text">
+          <span class="lifestyle-scene__num">02</span>
+          <h3 class="lifestyle-scene__title">The Welcome Pavilion</h3>
+          <p class="lifestyle-scene__copy">The morning starts at the pavilion &mdash; an open-sided space where coffee arrives without ceremony and the bay is already visible through the trees. The concierge knows your name and your preferred table. No queue, no key cards, no welcome speech. Just the beginning of whatever the day decides to be.</p>
+        </div>
+        <img class="lifestyle-scene__img"
+             src="../images/lifestyle-welcome-pavilion.jpg"
+             alt="SHER Sanctuary reception pavilion — couple checking in at open-air desk with luggage, bay visible through tropical planting behind"
+             loading="lazy">
+      </div>
+
+      <!-- 03 — The Walk Home -->
+      <div class="lifestyle-scene">
+        <img class="lifestyle-scene__img"
+             src="../images/lifestyle-garden-path.jpg"
+             alt="Couple walking through SHER Sanctuary&rsquo;s lit garden path at dusk — low lanterns, tropical planting, villa glowing beyond"
+             loading="lazy">
+        <div class="lifestyle-scene__text">
+          <span class="lifestyle-scene__num">03</span>
+          <h3 class="lifestyle-scene__title">The Walk Home</h3>
+          <p class="lifestyle-scene__copy">Movement at SHER is on foot or by quiet electric cart &mdash; through paths lit at ground level, past ferns and stone walls and the shapes of buildings you will learn by memory. There is no car intrusion beyond the arrival hub. The walk back to your residence is part of the experience, not an inconvenience.</p>
+        </div>
+      </div>
+
+      <!-- 04 — The Villa Morning -->
+      <div class="lifestyle-scene lifestyle-scene--alt">
+        <div class="lifestyle-scene__text">
+          <span class="lifestyle-scene__num">04</span>
+          <h3 class="lifestyle-scene__title">The Villa Morning</h3>
+          <p class="lifestyle-scene__copy">Wake to warm timber ceilings, open louvres and the sound of the bay below. The villa veranda is as much a room as any other &mdash; deep eaves, a reading chair, a view of treetops and water that changes with the light. Mornings at SHER are not rushed into. They are inhabited.</p>
+        </div>
+        <img class="lifestyle-scene__img"
+             src="../images/lifestyle-villa-morning.jpg"
+             alt="SHER Sanctuary villa interior at morning &mdash; open-plan bedroom and living flowing onto veranda, couple relaxing, jungle and bay beyond"
+             loading="lazy">
+      </div>
+
+      <!-- 05 — The Cottage Sanctuary -->
+      <div class="lifestyle-scene">
+        <img class="lifestyle-scene__img"
+             src="../images/lifestyle-cottage-hillside.jpg"
+             alt="View from Savannes Bay toward the SHER hillside &mdash; SHER-branded canoe on still water, cottage set into the vegetation above the shoreline"
+             loading="lazy">
+        <div class="lifestyle-scene__text">
+          <span class="lifestyle-scene__num">05</span>
+          <h3 class="lifestyle-scene__title">The Cottage Sanctuary</h3>
+          <p class="lifestyle-scene__copy">From the water, the cottage appears just as it was designed &mdash; set back into the hillside vegetation, present without imposing. Inside, the scale is deliberate: one sleeping suite, a private outdoor shower court, a veranda that faces the bay through a natural frame of trees. A place designed for those who measure quality not in volume, but in precision.</p>
+        </div>
+      </div>
+
+      <!-- 06 — The Condo Owner's View -->
+      <div class="lifestyle-scene lifestyle-scene--alt">
+        <div class="lifestyle-scene__text">
+          <span class="lifestyle-scene__num">06</span>
+          <h3 class="lifestyle-scene__title">The Condo Owner&rsquo;s View</h3>
+          <p class="lifestyle-scene__copy">The condominium owner begins the morning elevated &mdash; a private terrace open to the treeline and the shimmer of bay beyond. Timber ceiling, soft breeze through louvred panels, the smell of surrounding vegetation before the day fully opens. No neighbour visible. No noise except the birds. Easy access to the café, the trail, and the water below.</p>
+        </div>
+        <img class="lifestyle-scene__img"
+             src="../images/lifestyle-condo-veranda.jpg"
+             alt="Elevated timber veranda at SHER Sanctuary &mdash; couple in morning stillness, open tropical pavilion, bay and jungle view through trees"
+             loading="lazy">
+      </div>
+
+      <!-- 07 — Nature Trail Ritual -->
+      <div class="lifestyle-scene">
+        <img class="lifestyle-scene__img"
+             src="../images/lifestyle-nature-trail.jpg"
+             alt="Owner and partner walking the SHER Sanctuary mangrove nature trail at sunset &mdash; heron visible in the shallows, lantern-lit path, conservation signage"
+             loading="lazy">
+        <div class="lifestyle-scene__text">
+          <span class="lifestyle-scene__num">07</span>
+          <h3 class="lifestyle-scene__title">Nature Trail Ritual</h3>
+          <p class="lifestyle-scene__copy">The estate&rsquo;s nature trail follows the mangrove edge &mdash; a conservation-managed path where birds stand undisturbed in the shallows and the ground smells of salt and earth. This is not a resort amenity. It is a privilege of being here. Owners walk it in the golden hour without encountering a crowd, because SHER was not built for crowds.</p>
+        </div>
+      </div>
+
+      <!-- 08 — Bay Life -->
+      <div class="lifestyle-scene lifestyle-scene--alt">
+        <div class="lifestyle-scene__text">
+          <span class="lifestyle-scene__num">08</span>
+          <h3 class="lifestyle-scene__title">Bay Life</h3>
+          <p class="lifestyle-scene__copy">The bay is still in the mornings &mdash; calm enough to reflect the sky, warm enough to be in at any hour. The SHER canoe launches from a quiet edge of the estate, and the water asks for nothing back except your attention. An hour on Savannes Bay rewires something.</p>
+        </div>
+        <img class="lifestyle-scene__img"
+             src="../images/lifestyle-bay-kayak.jpg"
+             alt="Couple paddling a SHER Sanctuary canoe through the mangrove waterway at golden hour &mdash; still water, rich light, tropical canopy"
+             loading="lazy">
+      </div>
+
+      <!-- 09 — Evening Dining -->
+      <div class="lifestyle-scene">
+        <img class="lifestyle-scene__img"
+             src="../images/lifestyle-evening-dining.jpg"
+             alt="SHER Sanctuary evening dining terrace at dusk &mdash; guests at candlelit tables, open pavilion glowing, Savannes Bay holding the last light"
+             loading="lazy">
+        <div class="lifestyle-scene__text">
+          <span class="lifestyle-scene__num">09</span>
+          <h3 class="lifestyle-scene__title">Evening Dining</h3>
+          <p class="lifestyle-scene__copy">Dinner at SHER is not a resort restaurant &mdash; it is an open pavilion above the treeline, with candles and a quiet service that knows when to arrive and when to disappear. Owners gather here without formality, drawn together by proximity and shared sensibility, as the bay holds the last light until well after the plates are cleared.</p>
+        </div>
+      </div>
+
+      <!-- 10 — Night at SHER -->
+      <div class="lifestyle-scene lifestyle-scene--alt">
+        <div class="lifestyle-scene__text">
+          <span class="lifestyle-scene__num">10</span>
+          <h3 class="lifestyle-scene__title">Night at SHER</h3>
+          <p class="lifestyle-scene__copy">At night, the estate settles into itself &mdash; low-glare lanterns along the stone paths, the shapes of rooflines against the dark canopy, and above it more stars than most owners have seen in years. The cottages and villas are swallowed by vegetation. SHER disappears into the landscape it was built to belong to. Nature whispers. Souls listen.</p>
+        </div>
+        <img class="lifestyle-scene__img"
+             src="../images/lifestyle-night-aerial.jpg"
+             alt="Aerial night view of SHER Sanctuary &mdash; warm glowing buildings set deep in tropical canopy, Savannes Bay stretching into the dark beyond"
+             loading="lazy">
+      </div>
+
+      <div class="lifestyle-footer">
+        <p>Nature whispers. Souls listen.</p>
+      </div>
+
     </section>
 
 
