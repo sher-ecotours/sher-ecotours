@@ -889,6 +889,60 @@
       .pub-chip { font-size: 9px; padding: 0.3rem 0.7rem; }
     }
 
+
+    /* ── COTTAGE TYPE A GALLERY (Phase 2) ──────────────────────── */
+    .cottage-type-a-gallery {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px;
+      margin: 0.75rem 0 1rem;
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .cottage-type-a-gallery figure { margin: 0; }
+    .cottage-type-a-gallery img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      cursor: zoom-in;
+      display: block;
+      transition: opacity 0.2s;
+    }
+    .cottage-type-a-gallery img:hover { opacity: 0.88; }
+    .cottage-type-a-gallery figcaption {
+      font-size: 10px;
+      font-style: italic;
+      color: var(--text-muted);
+      text-align: center;
+      padding: 0.25rem 0.35rem 0.4rem;
+      background: var(--cream);
+      line-height: 1.4;
+    }
+    .cottage-gallery-disclaimer {
+      font-size: 11px;
+      font-style: italic;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin: 0.25rem 0 1.25rem;
+    }
+    @media (max-width: 640px) {
+      .cottage-type-a-gallery {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        border-radius: 0;
+        gap: 6px;
+      }
+      .cottage-type-a-gallery figure {
+        flex: 0 0 85%;
+        scroll-snap-align: start;
+        border-radius: var(--radius);
+        overflow: hidden;
+      }
+      .cottage-type-a-gallery img { aspect-ratio: 16/9; }
+    }
+
   </style>
 </head>
 <body>
@@ -1120,6 +1174,20 @@
   <!-- ── BUYER PANEL (revealed on correct password) ────────────── -->
   <div id="buyer-panel" class="buyer-panel">
 
+    <!-- SECTION: WELCOME INTRO -->
+    <section class="section section--green" style="padding:4rem 0 4.5rem">
+      <div class="container--narrow" style="text-align:center">
+        <span class="eyebrow" style="letter-spacing:0.18em;font-size:11px">Welcome to the Property Collection</span>
+        <p style="font-family:var(--font-display);font-size:20px;color:var(--cream);line-height:1.85;max-width:680px;margin:1.75rem auto 0">
+          What follows is a considered introduction to the SHER residential collection &mdash; not a sales catalogue. Each residence has been designed from the land outward, governed by the SHER Design and Experience Charter, and built on the principle that luxury is sensed through proportion, privacy and craft rather than conspicuous excess.
+        </p>
+        <p style="font-family:var(--font-display);font-size:20px;color:var(--cream);line-height:1.85;max-width:680px;margin:1.25rem auto 0">
+          Take your time. When you are ready, complete the buyer discovery form at the bottom of this page and we will respond personally within 48 hours.
+        </p>
+      </div>
+    </section>
+
+
     <!-- SECTION: PROCESS STEPS -->
     <section class="section section--green">
       <div class="container">
@@ -1217,6 +1285,42 @@
             <h3>The Cottage</h3>
             <p class="card-sub">6 units available &nbsp;&middot;&nbsp; Starting from US$280,000</p>
 
+            <div class="cottage-type-a-gallery">
+              <figure>
+                <img src="../images/cottage-type-a/01_Exterior_Nature_Veranda_web.jpg"
+                     alt="Photorealistic design-intent rendering of cottage type a - exterior nature / veranda view for SHER Cottage Type A at Savannes Bay, Saint Lucia"
+                     loading="lazy"
+                     data-lightbox="../images/cottage-type-a/01_Exterior_Nature_Veranda_web.jpg"
+                     data-lightbox-group="cottage-type-a-gallery">
+                <figcaption>Exterior &middot; Nature and veranda view</figcaption>
+              </figure>
+              <figure>
+                <img src="../images/cottage-type-a/02_Interior_Sleeping_Lounge_Veranda_web.jpg"
+                     alt="Photorealistic design-intent rendering of cottage type a - interior sleeping lounge / veranda view for SHER Cottage Type A at Savannes Bay, Saint Lucia"
+                     loading="lazy"
+                     data-lightbox="../images/cottage-type-a/02_Interior_Sleeping_Lounge_Veranda_web.jpg"
+                     data-lightbox-group="cottage-type-a-gallery">
+                <figcaption>Interior &middot; Sleeping lounge and veranda</figcaption>
+              </figure>
+              <figure>
+                <img src="../images/cottage-type-a/03_Dusk_Exterior_Low_Lighting_web.jpg"
+                     alt="Photorealistic design-intent rendering of cottage type a - dusk exterior / low-level lighting for SHER Cottage Type A at Savannes Bay, Saint Lucia"
+                     loading="lazy"
+                     data-lightbox="../images/cottage-type-a/03_Dusk_Exterior_Low_Lighting_web.jpg"
+                     data-lightbox-group="cottage-type-a-gallery">
+                <figcaption>Dusk &middot; Low-level evening lighting</figcaption>
+              </figure>
+              <figure>
+                <img src="../images/cottage-type-a/04_Bathroom_Outdoor_Shower_Court_web.jpg"
+                     alt="Photorealistic design-intent rendering of cottage type a - bathroom / private outdoor shower court for SHER Cottage Type A at Savannes Bay, Saint Lucia"
+                     loading="lazy"
+                     data-lightbox="../images/cottage-type-a/04_Bathroom_Outdoor_Shower_Court_web.jpg"
+                     data-lightbox-group="cottage-type-a-gallery">
+                <figcaption>Bathroom &middot; Private outdoor shower court</figcaption>
+              </figure>
+            </div>
+            <p class="cottage-gallery-disclaimer">Artist&rsquo;s impression / design intent. Final design subject to professional drawings, statutory approvals, site conditions and environmental review. Document reference: SHER-CTA-005-R02.</p>
+
             <div class="video-slot aspect-16-9" style="margin-bottom:1.25rem"
                  data-vimeo-src="REPLACE_WITH_VIMEO_COTTAGE_URL"
                  tabindex="0" role="button" aria-label="Play cottage walkthrough">
@@ -1230,13 +1334,16 @@
             </div>
 
             <dl class="spec-list">
-              <div class="spec-item"><dt>Bedrooms</dt><dd>1&ndash;2</dd></div>
-              <div class="spec-item"><dt>Floor area</dt><dd>65&ndash;90 m&sup2;</dd></div>
-              <div class="spec-item"><dt>Outdoor space</dt><dd>Private garden terrace</dd></div>
-              <div class="spec-item"><dt>Construction</dt><dd>Hemp block + lime render</dd></div>
-              <div class="spec-item"><dt>Views</dt><dd>Hillside canopy + bay glimpses</dd></div>
-              <div class="spec-item"><dt>HOA rental pool</dt><dd>Eligible</dd></div>
-              <div class="spec-item"><dt>Price</dt><dd>Starting from US$280,000</dd></div>
+              <div class="spec-item"><dt>Type</dt><dd>Cottage Type A &mdash; Linear Sanctuary Plan</dd></div>
+              <div class="spec-item"><dt>Residences</dt><dd>6 units &mdash; C-01 to C-06</dd></div>
+              <div class="spec-item"><dt>Enclosed area</dt><dd>Approx. 600&ndash;725 sf</dd></div>
+              <div class="spec-item"><dt>Total experience area</dt><dd>Approx. 825&ndash;1,050 sf incl. veranda and outdoor living</dd></div>
+              <div class="spec-item"><dt>Bedrooms</dt><dd>1 king sleeping suite</dd></div>
+              <div class="spec-item"><dt>Outdoor</dt><dd>Private covered veranda &middot; Private outdoor shower court</dd></div>
+              <div class="spec-item"><dt>Construction</dt><dd>Butterfly roof &middot; marine-protected steel frame &middot; stone &middot; timber &middot; lime/mineral render</dd></div>
+              <div class="spec-item"><dt>Programme</dt><dd>Sleeping/lounge sanctuary &middot; luxury bathroom &middot; wardrobe/storage &middot; screened-glazed indoor-outdoor living</dd></div>
+              <div class="spec-item"><dt>HOA Rental Pool</dt><dd>Eligible</dd></div>
+              <div class="spec-item"><dt>Price</dt><dd>Available in the next section &mdash; request Tier 2 access below</dd></div>
             </dl>
 
             <p class="card-why">
@@ -1267,14 +1374,16 @@
             </div>
 
             <dl class="spec-list">
-              <div class="spec-item"><dt>Bedrooms</dt><dd>2&ndash;3</dd></div>
-              <div class="spec-item"><dt>Floor area</dt><dd>95&ndash;130 m&sup2;</dd></div>
-              <div class="spec-item"><dt>Outdoor space</dt><dd>Ocean-facing wraparound terrace</dd></div>
-              <div class="spec-item"><dt>Construction</dt><dd>Compressed earth + lime render</dd></div>
-              <div class="spec-item"><dt>Views</dt><dd>Caribbean Sea + estate grounds</dd></div>
-              <div class="spec-item"><dt>HOA rental pool</dt><dd>Eligible</dd></div>
-              <div class="spec-item"><dt>Price</dt><dd>Starting from US$380,000</dd></div>
+              <div class="spec-item"><dt>Type</dt><dd>Boutique Condominium</dd></div>
+              <div class="spec-item"><dt>Residences</dt><dd>8 units &mdash; Lot E</dd></div>
+              <div class="spec-item"><dt>Title</dt><dd>Separate condominium title &mdash; own legal and financing pathway</dd></div>
+              <div class="spec-item"><dt>Programme</dt><dd>To be confirmed in Tier 2</dd></div>
+              <div class="spec-item"><dt>HOA Rental Pool</dt><dd>Eligible</dd></div>
+              <div class="spec-item"><dt>Price</dt><dd>Available in the next section &mdash; request Tier 2 access below</dd></div>
             </dl>
+            <p style="font-size:12px;font-style:italic;color:var(--gold);line-height:1.65;margin-top:0.75rem">
+              The Coastal Condominium is structured under a separate legal instrument from the villa and cottage products. Financing and legal pathways are discussed personally in Tier 2.
+            </p>
 
             <p class="card-why">
               Condominiums occupy the coastal edge of the estate &mdash; open-plan living,
@@ -1304,13 +1413,15 @@
             </div>
 
             <dl class="spec-list">
-              <div class="spec-item"><dt>Bedrooms</dt><dd>3&ndash;4</dd></div>
-              <div class="spec-item"><dt>Floor area</dt><dd>220&ndash;280 m&sup2;</dd></div>
-              <div class="spec-item"><dt>Pool</dt><dd>Private plunge pool</dd></div>
-              <div class="spec-item"><dt>Construction</dt><dd>Reclaimed timber + clay brick</dd></div>
-              <div class="spec-item"><dt>Views</dt><dd>Direct mangrove frontage + bay</dd></div>
-              <div class="spec-item"><dt>HOA rental pool</dt><dd>Eligible (premium tier)</dd></div>
-              <div class="spec-item"><dt>Price</dt><dd>Starting from US$980,000</dd></div>
+              <div class="spec-item"><dt>Type</dt><dd>Luxury Villa &mdash; Type A and Flagship Type B grouped</dd></div>
+              <div class="spec-item"><dt>Residences</dt><dd>6 units &mdash; V-01 to V-06</dd></div>
+              <div class="spec-item"><dt>Configurations</dt><dd>Type A1 Estate Villa (V-01, V-02) &middot; Type A2 Sanctuary Villa (V-03 to V-05) &middot; Flagship Villa (V-06)</dd></div>
+              <div class="spec-item"><dt>Enclosed area</dt><dd>Approx. 1,800&ndash;2,800 sf depending on configuration</dd></div>
+              <div class="spec-item"><dt>Bedrooms</dt><dd>2&ndash;3 bedrooms plus flexible spaces</dd></div>
+              <div class="spec-item"><dt>Outdoor</dt><dd>Private pool &middot; covered terrace &middot; deep landscape privacy</dd></div>
+              <div class="spec-item"><dt>Construction</dt><dd>Reclaimed timber &middot; clay brick &middot; natural stone &middot; low-slung tropical pavilion roof</dd></div>
+              <div class="spec-item"><dt>HOA Rental Pool</dt><dd>Eligible</dd></div>
+              <div class="spec-item"><dt>Price</dt><dd>Available in the next section &mdash; request Tier 2 access below</dd></div>
             </dl>
 
             <p class="card-why">
@@ -1424,6 +1535,13 @@
           experience for every owner and guest on it.
         </p>
 
+        <div style="background:var(--cream);border-radius:var(--radius-lg);padding:2.5rem 2rem;max-width:640px;margin:0 auto 3rem;text-align:center;">
+          <h4 style="font-family:var(--font-display);font-size:28px;font-weight:500;color:var(--green);margin-bottom:1rem;line-height:1.2">Pricing and Financial Overview</h4>
+          <p style="font-size:15px;color:var(--text-muted);line-height:1.8;font-family:var(--font-body)">
+            Pricing, payment structure, HOA rental income context, and mortgage partnership details are shared personally in Tier 2 &mdash; after we have reviewed your buyer discovery response below. Complete the form and we will follow up within 48 hours with your Tier 2 access.
+          </p>
+        </div>
+
         <form
           id="buyer-form"
           name="property-buyer-discovery"
@@ -1487,15 +1605,15 @@
               <div class="form-checkbox-group">
                 <label class="checkbox-item">
                   <input type="checkbox" name="property_interest[]" value="Hillside Cottage">
-                  <span>Hillside Cottage &mdash; starting from US$280,000 &nbsp;&middot;&nbsp; 1&ndash;2 bed, 65&ndash;90 m&sup2;</span>
+                  <span>Hillside Cottage &mdash; Cottage Type A &middot; 6 residences</span>
                 </label>
                 <label class="checkbox-item">
                   <input type="checkbox" name="property_interest[]" value="Coastal Condominium">
-                  <span>Coastal Condominium &mdash; starting from US$380,000 &nbsp;&middot;&nbsp; 2&ndash;3 bed, 95&ndash;130 m&sup2;</span>
+                  <span>Coastal Condominium &mdash; Boutique &middot; 8 residences</span>
                 </label>
                 <label class="checkbox-item">
                   <input type="checkbox" name="property_interest[]" value="Sanctuary Villa">
-                  <span>Sanctuary Villa &mdash; starting from US$980,000 &nbsp;&middot;&nbsp; 3&ndash;4 bed, 220&ndash;280 m&sup2;, private pool</span>
+                  <span>Sanctuary Villa &mdash; Luxury Villa &middot; 6 residences</span>
                 </label>
               </div>
             </div>
@@ -1874,8 +1992,8 @@
             if (!overlay) {
               overlay = document.createElement('div');
               overlay.className = 'video-slot__coming-soon';
-              overlay.style.cssText = 'position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(27,59,54,0.72);border-radius:inherit;pointer-events:none;';
-              overlay.innerHTML = '<p style="font-family:var(--font-display);font-size:18px;font-style:italic;color:var(--gold);text-align:center;padding:1.5rem;line-height:1.5">Video walkthrough<br>coming soon</p>';
+              overlay.style.cssText = 'position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(27,59,54,0.8);border-radius:inherit;pointer-events:none;';
+              overlay.innerHTML = '<p style="font-family:var(--font-display);font-size:18px;font-style:italic;color:var(--gold);text-align:center;padding:1.5rem;line-height:1.5">Video walkthrough &middot; Coming soon</p>';
               slot.appendChild(overlay);
             }
             return;
