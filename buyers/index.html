@@ -885,19 +885,32 @@
       max-width: 620px;
       margin: 0 auto 2.5rem;
     }
-    /* Bay photo slider */
-    .bay-slider { position: relative; width: 100%; overflow: hidden; }
+    /* Bay photo slider — fade */
+    .bay-slider { position: relative; width: 100%; }
     .bay-slider__track {
-      display: flex;
-      transition: transform 0.65s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-      will-change: transform;
-    }
-    .bay-slider__slide { min-width: 100%; }
-    .bay-slider__slide img {
-      width: 100%;
+      position: relative;
       height: clamp(260px, 52vw, 620px);
+      overflow: hidden;
+    }
+    .bay-slider__slide {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: opacity 1.6s ease-in-out;
+      z-index: 0;
+    }
+    .bay-slider__slide--active { opacity: 1; z-index: 1; }
+    .bay-slider__slide img {
+      width: 100%; height: 100%;
       object-fit: cover;
       display: block;
+    }
+    /* Clockwise rotation correction for portrait-oriented images */
+    .bay-slider__slide--rotcw { overflow: hidden; }
+    .bay-slider__slide--rotcw img {
+      transform-origin: center center;
+      transform: rotate(90deg) scale(1.15);
     }
     .bay-slider__btn {
       position: absolute;
@@ -1260,41 +1273,29 @@
     </div>
     <div class="bay-slider">
       <div class="bay-slider__track">
-        <div class="bay-slider__slide">
+        <div class="bay-slider__slide bay-slider__slide--active">
           <img src="../images/sher_calm_reflections.jpg"
                alt="Golden sunset reflected across the still waters of Savannes Bay" loading="lazy">
         </div>
         <div class="bay-slider__slide">
-          <img src="../images/bay-turquoise-water.jpg"
-               alt="Turquoise clear water lapping a hidden mangrove beach, Savannes Bay" loading="lazy">
+          <img src="../images/bay-south-mangrove-arch.jpg"
+               alt="Ancient mangrove arch framing the south end of Savannes Bay" loading="lazy">
         </div>
         <div class="bay-slider__slide">
+          <img src="../images/calm-reflections-bay.jpg"
+               alt="Still morning reflections on Savannes Bay" loading="lazy">
+        </div>
+        <div class="bay-slider__slide">
+          <img src="../images/bay-eastern-shoreline-1.jpg"
+               alt="Eastern shoreline of Savannes Bay at golden light" loading="lazy">
+        </div>
+        <div class="bay-slider__slide bay-slider__slide--rotcw">
+          <img src="../images/bay-turquoise-water.jpg"
+               alt="Turquoise clear water, Savannes Bay" loading="lazy">
+        </div>
+        <div class="bay-slider__slide bay-slider__slide--rotcw">
           <img src="../images/savannes-bay-on-the-point-green.jpg"
                alt="Green hillside panorama overlooking Savannes Bay and the Caribbean Sea" loading="lazy">
-        </div>
-        <div class="bay-slider__slide">
-          <img src="../images/bay-south-mangrove-arch.jpg"
-               alt="Ancient mangrove arch framing the quiet south end of Savannes Bay" loading="lazy">
-        </div>
-        <div class="bay-slider__slide">
-          <img src="../images/Savannes Bay Pointe and Scorpion Islet 1.png"
-               alt="Aerial view — Savannes Bay point and Scorpion Islet beyond" loading="lazy">
-        </div>
-        <div class="bay-slider__slide">
-          <img src="../images/Savannes Bay Rich Greenery 1.png"
-               alt="Royal palms rising above the dense tropical canopy beside Savannes Bay" loading="lazy">
-        </div>
-        <div class="bay-slider__slide">
-          <img src="../images/Savannes Bay Cottage and Condo View of the east bay 1.png"
-               alt="Aerial view of the east bay — the cottage and condominium vantage point" loading="lazy">
-        </div>
-        <div class="bay-slider__slide">
-          <img src="../images/Savannes Bay Villa 6 Condo View of the Southern  bay 1.png"
-               alt="Aerial view of the southern bay from the villa and condominium ridge" loading="lazy">
-        </div>
-        <div class="bay-slider__slide">
-          <img src="../images/Savannes Bay Condo Area Butterfly lots and part of the Conservation Wetlands 1.png"
-               alt="Aerial view of the conservation wetlands and condominium land, Savannes Bay" loading="lazy">
         </div>
       </div>
       <button class="bay-slider__btn bay-slider__btn--prev" aria-label="Previous photo">&#8249;</button>
@@ -1307,9 +1308,6 @@
       <button class="bay-slider__dot" aria-label="Photo 4"></button>
       <button class="bay-slider__dot" aria-label="Photo 5"></button>
       <button class="bay-slider__dot" aria-label="Photo 6"></button>
-      <button class="bay-slider__dot" aria-label="Photo 7"></button>
-      <button class="bay-slider__dot" aria-label="Photo 8"></button>
-      <button class="bay-slider__dot" aria-label="Photo 9"></button>
     </div>
   </section>
 
@@ -2236,38 +2234,39 @@
       document.addEventListener('keydown', e => { if (e.key === 'Escape' && lb.classList.contains('open')) closeLightbox(); });
     }
 
-    /* ── BAY SLIDER ─────────────────────────────────────────────── */
+    /* ── BAY SLIDER — fade ──────────────────────────────────────── */
     function initBaySlider() {
-      const track = document.querySelector('.bay-slider__track');
-      if (!track) return;
-      const total = track.children.length;
+      const slides = [...document.querySelectorAll('.bay-slider__slide')];
+      if (!slides.length) return;
+      const total  = slides.length;
       let cur = 0, timer;
-      const dots = [...document.querySelectorAll('.bay-slider__dot')];
+      const dots   = [...document.querySelectorAll('.bay-slider__dot')];
+      const slider = document.querySelector('.bay-slider');
 
       function go(n) {
+        slides[cur].classList.remove('bay-slider__slide--active');
         cur = (n + total) % total;
-        track.style.transform = `translateX(-${cur * 100}%)`;
+        slides[cur].classList.add('bay-slider__slide--active');
         dots.forEach((d, i) => d.classList.toggle('bay-slider__dot--active', i === cur));
       }
 
       document.querySelector('.bay-slider__btn--prev')
-        .addEventListener('click', () => { clearInterval(timer); go(cur - 1); start(); });
+        ?.addEventListener('click', () => { clearInterval(timer); go(cur - 1); start(); });
       document.querySelector('.bay-slider__btn--next')
-        .addEventListener('click', () => { clearInterval(timer); go(cur + 1); start(); });
+        ?.addEventListener('click', () => { clearInterval(timer); go(cur + 1); start(); });
       dots.forEach((d, i) => d.addEventListener('click', () => { clearInterval(timer); go(i); start(); }));
 
       let tx = 0;
-      track.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
-      track.addEventListener('touchend', e => {
+      slider?.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
+      slider?.addEventListener('touchend',   e => {
         const dx = tx - e.changedTouches[0].clientX;
         if (Math.abs(dx) > 40) { clearInterval(timer); go(cur + (dx > 0 ? 1 : -1)); start(); }
       }, { passive: true });
 
-      const slider = track.closest('.bay-slider');
-      slider.addEventListener('mouseenter', () => clearInterval(timer));
-      slider.addEventListener('mouseleave', start);
+      slider?.addEventListener('mouseenter', () => clearInterval(timer));
+      slider?.addEventListener('mouseleave', start);
 
-      function start() { timer = setInterval(() => go(cur + 1), 5500); }
+      function start() { timer = setInterval(() => go(cur + 1), 6500); }
       start();
     }
 
