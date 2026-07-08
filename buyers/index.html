@@ -649,6 +649,48 @@
       .photo-gallery { grid-template-columns: 1fr; }
     }
 
+    /* ── PUBLIC NAV ────────────────────────────────────────────── */
+    .pub-nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      padding: 0.85rem 0;
+      background: rgba(27,59,54,0);
+      border-bottom: 1px solid transparent;
+      transition: background 0.45s ease, border-color 0.45s ease, backdrop-filter 0.45s ease;
+    }
+    .pub-nav.scrolled {
+      background: rgba(27,59,54,0.93);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom-color: rgba(201,168,103,0.18);
+    }
+    .pub-nav__inner {
+      width: 100%; max-width: 980px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .pub-nav__logo { height: 32px; width: auto; display: block; }
+    .pub-nav__contact {
+      font-size: 10px; font-weight: 600;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: rgba(245,240,232,0.8);
+      text-decoration: none;
+      border: 1px solid rgba(201,168,103,0.38);
+      padding: 0.45rem 1.25rem;
+      border-radius: 999px;
+      transition: color 0.2s, border-color 0.2s, background 0.2s;
+    }
+    .pub-nav__contact:hover {
+      color: var(--gold); border-color: var(--gold);
+      background: rgba(201,168,103,0.08);
+    }
+
     /* ── PUBLIC LANDING (Phase 1) ───────────────────────────────── */
 
     /* Section A — Hero */
@@ -726,10 +768,42 @@
       color: rgba(245,240,232,0.6);
       margin-top: 0.9rem;
     }
+    .pub-hero__logo {
+      width: 140px; height: auto;
+      margin: 0 auto 2.25rem;
+      display: block;
+      opacity: 0.97;
+    }
+    .pub-hero__scroll {
+      position: absolute;
+      bottom: 2.25rem;
+      left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column;
+      align-items: center; gap: 0.55rem;
+      font-size: 9px; font-weight: 600;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: rgba(245,240,232,0.45);
+      pointer-events: none;
+    }
+    .pub-hero__scroll-line {
+      width: 1px; height: 38px;
+      background: linear-gradient(to bottom, rgba(201,168,103,0.55), transparent);
+      animation: scrollPulse 2.2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse {
+      0%,100% { opacity:1; transform:scaleY(1) translateY(0); }
+      55%      { opacity:0.4; transform:scaleY(0.75) translateY(6px); }
+    }
 
     /* Section B — Residences */
     .pub-residences { background: var(--cream); padding: 5rem 0; }
     .pub-section__header { text-align: center; margin-bottom: 3rem; }
+    .pub-section__eyebrow {
+      display: block;
+      font-size: 10px; font-weight: 600;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 0.75rem;
+    }
     .pub-section__heading {
       font-family: var(--font-display);
       font-size: 38px;
@@ -766,7 +840,12 @@
       color: var(--green);
       margin-bottom: 0.2rem;
     }
-    .pub-card__count { font-size: 12px; color: var(--text-muted); margin-bottom: 0.75rem; }
+    .pub-card__count { font-size: 12px; color: var(--text-muted); margin-bottom: 0.3rem; }
+    .pub-card__price {
+      font-family: var(--font-display);
+      font-size: 17px; font-weight: 500;
+      color: var(--green); margin-bottom: 0.75rem;
+    }
     .pub-card__materials {
       font-size: 12px;
       color: var(--gold-dark);
@@ -806,19 +885,57 @@
       max-width: 620px;
       margin: 0 auto 2.5rem;
     }
-    .pub-photo-grid {
-      display: grid;
-      grid-template-columns: repeat(2,1fr);
-      gap: 0.75rem;
+    /* Bay photo slider */
+    .bay-slider { position: relative; width: 100%; overflow: hidden; }
+    .bay-slider__track {
+      display: flex;
+      transition: transform 0.65s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      will-change: transform;
     }
-    .pub-photo-grid img {
+    .bay-slider__slide { min-width: 100%; }
+    .bay-slider__slide img {
       width: 100%;
-      aspect-ratio: 4/3;
+      height: clamp(260px, 52vw, 620px);
       object-fit: cover;
-      border-radius: var(--radius);
-      cursor: zoom-in;
       display: block;
     }
+    .bay-slider__btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(27,59,54,0.72);
+      border: 1px solid rgba(201,168,103,0.45);
+      color: var(--gold);
+      width: 46px; height: 46px;
+      border-radius: 50%;
+      font-size: 26px;
+      cursor: pointer;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+      line-height: 1;
+    }
+    .bay-slider__btn:hover { background: rgba(27,59,54,0.95); }
+    .bay-slider__btn--prev { left: 1rem; }
+    .bay-slider__btn--next { right: 1rem; }
+    .bay-slider__dots {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      padding: 1.25rem 0 0;
+    }
+    .bay-slider__dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: rgba(201,168,103,0.3);
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+      padding: 0;
+    }
+    .bay-slider__dot--active { background: var(--gold); }
 
     /* Section D — Location */
     .pub-location { background: var(--cream); padding: 5rem 0; }
@@ -846,7 +963,12 @@
     .pub-map-wrap { border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-card); }
 
     /* Section E — Area Validation */
-    .pub-validation { background: var(--green); padding: 5rem 0; text-align: center; }
+    .pub-validation {
+      background: linear-gradient(rgba(8,22,18,0.65), rgba(8,22,18,0.65)),
+                  url('../images/lifestyle-night-aerial.jpg') center/cover no-repeat;
+      padding: 5rem 0;
+      text-align: center;
+    }
     .pub-validation__heading {
       font-family: var(--font-display);
       font-size: 38px;
@@ -881,7 +1003,7 @@
       .pub-gallery__heading,
       .pub-location__heading,
       .pub-validation__heading { font-size: 28px; }
-      .pub-photo-grid { grid-template-columns: 1fr; }
+      /* bay-slider is naturally responsive */
     }
     @media (max-width: 380px) {
       .pub-hero__headline { font-size: 26px; }
@@ -1023,6 +1145,14 @@
 </head>
 <body>
 
+  <!-- ── STICKY NAV ───────────────────────────────────────────── -->
+  <nav class="pub-nav" aria-label="SHER Sanctuary navigation">
+    <div class="pub-nav__inner">
+      <img src="../images/SHER-nav-logo.png" alt="SHER Sanctuary" class="pub-nav__logo">
+      <a href="mailto:info@shersanctuary.com?subject=Property%20Collection%20Access%20Request" class="pub-nav__contact">Request Access</a>
+    </div>
+  </nav>
+
   <!-- ══════════════════════════════════════════════════════════════
        PUBLIC LANDING — Phase 1 of 5
        Sections A–E: visible before password gate
@@ -1033,7 +1163,8 @@
     <div class="pub-hero__bg"></div>
     <div class="pub-hero__overlay"></div>
     <div class="pub-hero__content">
-      <span class="pub-hero__eyebrow">SHER Sanctuary Experiences &middot; Savannes Bay, Saint Lucia</span>
+      <img src="../images/SHER-homepage-white-gold-transparent.png" alt="SHER Sanctuary" class="pub-hero__logo">
+      <span class="pub-hero__eyebrow">Savannes Bay &middot; Saint Lucia &middot; Southern Caribbean</span>
       <h1 class="pub-hero__headline">A Place Worth Owning</h1>
       <p class="pub-hero__sub">
         Twenty residences on a permanently protected wetland estate.<br>
@@ -1051,14 +1182,19 @@
       </a>
       <span class="pub-hero__note">Access is by personal introduction. Responses within 24 hours.</span>
     </div>
+    <div class="pub-hero__scroll" aria-hidden="true">
+      <span>Discover</span>
+      <div class="pub-hero__scroll-line"></div>
+    </div>
   </section>
 
   <!-- SECTION B — THE RESIDENCES ────────────────────────────────── -->
   <section class="pub-residences">
     <div class="container">
       <div class="pub-section__header">
+        <span class="pub-section__eyebrow">A Limited Collection</span>
         <h2 class="pub-section__heading">The Residences</h2>
-        <p class="pub-section__sub">Twenty homes across three categories &mdash; designed for the land, built from it.</p>
+        <p class="pub-section__sub">Twenty homes across three residence types &mdash; each placed with intention, built from natural materials, and aligned to the conservation covenant that defines the land itself.</p>
       </div>
       <div class="pub-cards">
 
@@ -1070,32 +1206,35 @@
             <span class="pub-card__eyebrow">Cottage Type A</span>
             <p class="pub-card__name">Hillside Cottage</p>
             <p class="pub-card__count">6 residences</p>
+            <p class="pub-card__price">From US$280,000</p>
             <p class="pub-card__materials">Butterfly roof &middot; timber &middot; stone &middot; lime render</p>
             <p class="pub-card__copy">A private one-bedroom sanctuary set within lush tropical planting, with deep veranda, screened-glazed indoor-outdoor living and a private outdoor shower court.</p>
           </div>
         </div>
 
         <div class="pub-card">
-          <div style="width:100%;aspect-ratio:4/3;background:var(--green);display:flex;align-items:center;justify-content:center;">
-            <span style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.2rem;color:var(--gold);">Coastal Condominium</span>
-          </div>
+          <img src="../images/lifestyle-condo-veranda.jpg"
+               alt="Coastal Condominium — elevated timber veranda with bay view through tropical canopy"
+               class="pub-card__img" loading="lazy">
           <div class="pub-card__body">
             <span class="pub-card__eyebrow">Boutique Condominium</span>
             <p class="pub-card__name">Coastal Condominium</p>
             <p class="pub-card__count">8 residences</p>
+            <p class="pub-card__price">From US$380,000</p>
             <p class="pub-card__materials">Compressed earth &middot; lime render</p>
             <p class="pub-card__copy">Eight boutique residences on Lot E, structured under a separate condominium title with its own legal and financing pathway.</p>
           </div>
         </div>
 
         <div class="pub-card">
-          <div style="width:100%;aspect-ratio:4/3;background:var(--green);display:flex;align-items:center;justify-content:center;">
-            <span style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.2rem;color:var(--gold);">Sanctuary Villa</span>
-          </div>
+          <img src="../images/lifestyle-villa-morning.jpg"
+               alt="Sanctuary Villa — warm open-plan interior flowing onto private veranda with jungle and bay view"
+               class="pub-card__img" loading="lazy">
           <div class="pub-card__body">
             <span class="pub-card__eyebrow">Luxury Villa</span>
             <p class="pub-card__name">Sanctuary Villa</p>
             <p class="pub-card__count">6 residences</p>
+            <p class="pub-card__price">From US$980,000</p>
             <p class="pub-card__materials">Reclaimed timber &middot; clay brick &middot; natural stone</p>
             <p class="pub-card__copy">Six luxury residences across two configurations, each with private pool, open living pavilion and deep landscape privacy on the southern estate.</p>
           </div>
@@ -1111,25 +1250,66 @@
   <!-- SECTION C — BAY PHOTOGRAPHY GALLERY ───────────────────────── -->
   <section class="pub-gallery">
     <div class="container">
+      <span class="eyebrow" style="display:block;text-align:center;margin-bottom:0.9rem">Your Estate</span>
       <h2 class="pub-gallery__heading">Savannes Bay</h2>
       <p class="pub-gallery__sub">
         A RAMSAR-designated wetland of international importance.
-        One of Saint Lucia's most ecologically significant and least-discovered coastal sites.
+        One of Saint Lucia&rsquo;s most ecologically significant and least-discovered coastal sites &mdash;
+        and the land on which SHER Sanctuary is built.
       </p>
-      <div class="pub-photo-grid">
-        <img src="../images/bay-south-mangrove-arch.jpg"
-             alt="South mangrove arch, Savannes Bay" loading="lazy"
-             data-lightbox="../images/bay-south-mangrove-arch.jpg">
-        <img src="../images/sher_calm_reflections.jpg"
-             alt="Calm reflections on the bay" loading="lazy"
-             data-lightbox="../images/sher_calm_reflections.jpg">
-        <img src="../images/nature-trail-mangrove.jpg"
-             alt="Nature trail through mangrove" loading="lazy"
-             data-lightbox="../images/nature-trail-mangrove.jpg">
-        <img src="../images/table-deau-waters-edge.jpg"
-             alt="Table d'Eau at the water's edge" loading="lazy"
-             data-lightbox="../images/table-deau-waters-edge.jpg">
+    </div>
+    <div class="bay-slider">
+      <div class="bay-slider__track">
+        <div class="bay-slider__slide">
+          <img src="../images/sher_calm_reflections.jpg"
+               alt="Golden sunset reflected across the still waters of Savannes Bay" loading="lazy">
+        </div>
+        <div class="bay-slider__slide">
+          <img src="../images/bay-turquoise-water.jpg"
+               alt="Turquoise clear water lapping a hidden mangrove beach, Savannes Bay" loading="lazy">
+        </div>
+        <div class="bay-slider__slide">
+          <img src="../images/savannes-bay-on-the-point-green.jpg"
+               alt="Green hillside panorama overlooking Savannes Bay and the Caribbean Sea" loading="lazy">
+        </div>
+        <div class="bay-slider__slide">
+          <img src="../images/bay-south-mangrove-arch.jpg"
+               alt="Ancient mangrove arch framing the quiet south end of Savannes Bay" loading="lazy">
+        </div>
+        <div class="bay-slider__slide">
+          <img src="../images/Savannes Bay Pointe and Scorpion Islet 1.png"
+               alt="Aerial view — Savannes Bay point and Scorpion Islet beyond" loading="lazy">
+        </div>
+        <div class="bay-slider__slide">
+          <img src="../images/Savannes Bay Rich Greenery 1.png"
+               alt="Royal palms rising above the dense tropical canopy beside Savannes Bay" loading="lazy">
+        </div>
+        <div class="bay-slider__slide">
+          <img src="../images/Savannes Bay Cottage and Condo View of the east bay 1.png"
+               alt="Aerial view of the east bay — the cottage and condominium vantage point" loading="lazy">
+        </div>
+        <div class="bay-slider__slide">
+          <img src="../images/Savannes Bay Villa 6 Condo View of the Southern  bay 1.png"
+               alt="Aerial view of the southern bay from the villa and condominium ridge" loading="lazy">
+        </div>
+        <div class="bay-slider__slide">
+          <img src="../images/Savannes Bay Condo Area Butterfly lots and part of the Conservation Wetlands 1.png"
+               alt="Aerial view of the conservation wetlands and condominium land, Savannes Bay" loading="lazy">
+        </div>
       </div>
+      <button class="bay-slider__btn bay-slider__btn--prev" aria-label="Previous photo">&#8249;</button>
+      <button class="bay-slider__btn bay-slider__btn--next" aria-label="Next photo">&#8250;</button>
+    </div>
+    <div class="bay-slider__dots">
+      <button class="bay-slider__dot bay-slider__dot--active" aria-label="Photo 1"></button>
+      <button class="bay-slider__dot" aria-label="Photo 2"></button>
+      <button class="bay-slider__dot" aria-label="Photo 3"></button>
+      <button class="bay-slider__dot" aria-label="Photo 4"></button>
+      <button class="bay-slider__dot" aria-label="Photo 5"></button>
+      <button class="bay-slider__dot" aria-label="Photo 6"></button>
+      <button class="bay-slider__dot" aria-label="Photo 7"></button>
+      <button class="bay-slider__dot" aria-label="Photo 8"></button>
+      <button class="bay-slider__dot" aria-label="Photo 9"></button>
     </div>
   </section>
 
@@ -1211,6 +1391,8 @@
     <div class="container--narrow">
 
       <div class="password-card" style="margin:0 auto">
+        <img src="../images/SHER-final-logo.png" alt="SHER Sanctuary"
+             style="width:110px;height:auto;display:block;margin:0 auto 1.75rem">
         <span class="eyebrow">Buyer Access Portal</span>
         <h2>You Have Been Invited</h2>
         <p style="font-size:14px;color:var(--text-muted);line-height:1.75;margin:1rem 0 1.5rem">
@@ -1251,8 +1433,10 @@
   <div id="buyer-panel" class="buyer-panel">
 
     <!-- SECTION: WELCOME INTRO -->
-    <section class="section section--green" style="padding:4rem 0 4.5rem">
+    <section class="section section--green" style="padding:4.5rem 0 5rem">
       <div class="container--narrow" style="text-align:center">
+        <img src="../images/SHER-CREAM-300px.png" alt="SHER Sanctuary"
+             style="width:100px;height:auto;display:block;margin:0 auto 2rem;opacity:0.92">
         <span class="eyebrow" style="letter-spacing:0.18em;font-size:11px">Welcome to the Property Collection</span>
         <p style="font-family:var(--font-display);font-size:20px;color:var(--cream);line-height:1.85;max-width:680px;margin:1.75rem auto 0">
           What follows is a considered introduction to the SHER residential collection &mdash; not a sales catalogue. Each residence has been designed from the land outward, governed by the SHER Design and Experience Charter, and built on the principle that luxury is sensed through proportion, privacy and craft rather than conspicuous excess.
@@ -1260,284 +1444,6 @@
         <p style="font-family:var(--font-display);font-size:20px;color:var(--cream);line-height:1.85;max-width:680px;margin:1.25rem auto 0">
           Take your time. When you are ready, complete the buyer discovery form at the bottom of this page and we will respond personally within 48 hours.
         </p>
-      </div>
-    </section>
-
-
-    <!-- SECTION: PROCESS STEPS -->
-    <section class="section section--green">
-      <div class="container">
-
-        <div class="section__header">
-          <span class="tier-badge">Buyer Access Unlocked</span>
-          <h2 class="section-heading section-heading--white" style="margin-top:1.25rem">The Property Buyer Programme</h2>
-          <p class="section-subtext" style="color:var(--cream-muted)">
-            Twenty residences are being offered as part of the SHER estate. Each is designed
-            with the same materials, philosophy and conservation covenant that defines the
-            whole project. Ownership here is not a transaction &mdash; it is an alignment
-            of values made permanent in land.
-          </p>
-        </div>
-
-        <div class="steps">
-
-          <div class="step-card">
-            <div class="step-number">01</div>
-            <div class="step-content">
-              <h4>Review the available residences</h4>
-              <p>Three residence types are offered &mdash; Hillside Cottages, Coastal
-              Condominiums and Sanctuary Villas. Read the specifications, watch the
-              virtual walkthroughs, and identify which aligns best with how you intend
-              to use the property.</p>
-            </div>
-          </div>
-
-          <div class="step-card">
-            <div class="step-number">02</div>
-            <div class="step-content">
-              <h4>Complete the buyer discovery form</h4>
-              <p>We ask every prospective buyer about their intent, their use case, and
-              their relationship to the kind of place SHER is building. This is not a
-              formality &mdash; it ensures that every owner shares the values that make
-              the estate work as a whole.</p>
-            </div>
-          </div>
-
-          <div class="step-card">
-            <div class="step-number">03</div>
-            <div class="step-content">
-              <h4>A personal response from SHER</h4>
-              <p>Every submission is reviewed personally. If your profile is a fit, you
-              will hear from us within 48 hours to arrange the next step. We do not
-              send automated responses to prospective buyers at this stage.</p>
-            </div>
-          </div>
-
-          <div class="step-card">
-            <div class="step-number">04</div>
-            <div class="step-content">
-              <h4>Site visit or virtual consultation</h4>
-              <p>We will arrange a visit to the estate or a private virtual consultation
-              with the SHER team &mdash; whichever works for you. This is where questions
-              about the site, the construction, and the community are answered in full.</p>
-            </div>
-          </div>
-
-          <div class="step-card">
-            <div class="step-number">05</div>
-            <div class="step-content">
-              <h4>Hold agreement and formal reservation</h4>
-              <p>A hold agreement secures your interest in a specific residence while you
-              complete due diligence. Purchase agreements follow on terms negotiated
-              directly with SHER and reviewed by your legal advisor.</p>
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-    </section>
-
-
-    <!-- SECTION: PROPERTY CARDS -->
-    <section class="section section--cream">
-      <div class="container">
-
-        <div class="section__header">
-          <span class="eyebrow">A Limited Collection</span>
-          <h2 class="section-heading">The Residences</h2>
-          <p class="section-subtext">
-            All residences are built to the SHER specification &mdash; natural materials,
-            conservation-aligned siting, HOA-managed maintenance, and optional rental
-            pool participation.
-          </p>
-        </div>
-
-        <div class="property-cards">
-
-          <!-- COTTAGE -->
-          <div class="property-card">
-            <span class="eyebrow">Hillside Cottages</span>
-            <h3>The Cottage</h3>
-            <p class="card-sub">6 units available &nbsp;&middot;&nbsp; Starting from US$280,000</p>
-
-            <div class="cottage-type-a-gallery">
-              <figure>
-                <img src="../images/cottage-type-a/01_Exterior_Nature_Veranda_web.jpg"
-                     alt="Photorealistic design-intent rendering of cottage type a - exterior nature / veranda view for SHER Cottage Type A at Savannes Bay, Saint Lucia"
-                     loading="lazy"
-                     data-lightbox="../images/cottage-type-a/01_Exterior_Nature_Veranda_web.jpg"
-                     data-lightbox-group="cottage-type-a-gallery">
-                <figcaption>Exterior &middot; Nature and veranda view</figcaption>
-              </figure>
-              <figure>
-                <img src="../images/cottage-type-a/02_Interior_Sleeping_Lounge_Veranda_web.jpg"
-                     alt="Photorealistic design-intent rendering of cottage type a - interior sleeping lounge / veranda view for SHER Cottage Type A at Savannes Bay, Saint Lucia"
-                     loading="lazy"
-                     data-lightbox="../images/cottage-type-a/02_Interior_Sleeping_Lounge_Veranda_web.jpg"
-                     data-lightbox-group="cottage-type-a-gallery">
-                <figcaption>Interior &middot; Sleeping lounge and veranda</figcaption>
-              </figure>
-              <figure>
-                <img src="../images/cottage-type-a/03_Dusk_Exterior_Low_Lighting_web.jpg"
-                     alt="Photorealistic design-intent rendering of cottage type a - dusk exterior / low-level lighting for SHER Cottage Type A at Savannes Bay, Saint Lucia"
-                     loading="lazy"
-                     data-lightbox="../images/cottage-type-a/03_Dusk_Exterior_Low_Lighting_web.jpg"
-                     data-lightbox-group="cottage-type-a-gallery">
-                <figcaption>Dusk &middot; Low-level evening lighting</figcaption>
-              </figure>
-              <figure>
-                <img src="../images/cottage-type-a/04_Bathroom_Outdoor_Shower_Court_web.jpg"
-                     alt="Photorealistic design-intent rendering of cottage type a - bathroom / private outdoor shower court for SHER Cottage Type A at Savannes Bay, Saint Lucia"
-                     loading="lazy"
-                     data-lightbox="../images/cottage-type-a/04_Bathroom_Outdoor_Shower_Court_web.jpg"
-                     data-lightbox-group="cottage-type-a-gallery">
-                <figcaption>Bathroom &middot; Private outdoor shower court</figcaption>
-              </figure>
-            </div>
-            <p class="cottage-gallery-disclaimer">Artist&rsquo;s impression / design intent. Final design subject to professional drawings, statutory approvals, site conditions and environmental review. Document reference: SHER-CTA-005-R02.</p>
-
-            <div class="video-slot aspect-16-9" style="margin-bottom:1.25rem"
-                 data-vimeo-src="REPLACE_WITH_VIMEO_COTTAGE_URL"
-                 tabindex="0" role="button" aria-label="Play cottage walkthrough">
-              <img class="video-slot__poster"
-                   src="../images/bay-eastern-shoreline-4.jpg"
-                   alt="Hillside Cottage walkthrough poster" loading="lazy">
-              <div class="video-slot__play" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-              </div>
-              <div class="video-slot__label">Hillside Cottage &mdash; Virtual Walkthrough</div>
-            </div>
-
-            <dl class="spec-list">
-              <div class="spec-item"><dt>Type</dt><dd>Cottage Type A &mdash; Linear Sanctuary Plan</dd></div>
-              <div class="spec-item"><dt>Residences</dt><dd>6 units &mdash; C-01 to C-06</dd></div>
-              <div class="spec-item"><dt>Enclosed area</dt><dd>Approx. 600&ndash;725 sf</dd></div>
-              <div class="spec-item"><dt>Total experience area</dt><dd>Approx. 825&ndash;1,050 sf incl. veranda and outdoor living</dd></div>
-              <div class="spec-item"><dt>Bedrooms</dt><dd>1 king sleeping suite</dd></div>
-              <div class="spec-item"><dt>Outdoor</dt><dd>Private covered veranda &middot; Private outdoor shower court</dd></div>
-              <div class="spec-item"><dt>Construction</dt><dd>Butterfly roof &middot; marine-protected steel frame &middot; stone &middot; timber &middot; lime/mineral render</dd></div>
-              <div class="spec-item"><dt>Programme</dt><dd>Sleeping/lounge sanctuary &middot; luxury bathroom &middot; wardrobe/storage &middot; screened-glazed indoor-outdoor living</dd></div>
-              <div class="spec-item"><dt>HOA Rental Pool</dt><dd>Eligible</dd></div>
-              <div class="spec-item"><dt>Price</dt><dd>Available in the next section &mdash; request Tier 2 access below</dd></div>
-            </dl>
-
-            <p class="card-why">
-              Cottages are the entry point to ownership at SHER &mdash; compact, precisely
-              designed, and positioned within the hillside vegetation to minimise their
-              footprint and maximise natural screening. For buyers who want a personal
-              retreat with genuine conservation credentials, or for those entering through
-              the rental pool as an income-generating asset.
-            </p>
-          </div>
-
-          <!-- CONDOMINIUM -->
-          <div class="property-card">
-            <span class="eyebrow">Coastal Condominiums</span>
-            <h3>The Condominium</h3>
-            <p class="card-sub">6 units available &nbsp;&middot;&nbsp; Starting from US$380,000</p>
-
-            <div class="video-slot aspect-16-9" style="margin-bottom:1.25rem"
-                 data-vimeo-src="REPLACE_WITH_VIMEO_CONDO_URL"
-                 tabindex="0" role="button" aria-label="Play condominium walkthrough">
-              <img class="video-slot__poster"
-                   src="../images/bay-eastern-shoreline-5.jpg"
-                   alt="Coastal Condominium walkthrough poster" loading="lazy">
-              <div class="video-slot__play" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-              </div>
-              <div class="video-slot__label">Coastal Condominium &mdash; Virtual Walkthrough</div>
-            </div>
-
-            <dl class="spec-list">
-              <div class="spec-item"><dt>Type</dt><dd>Boutique Condominium</dd></div>
-              <div class="spec-item"><dt>Residences</dt><dd>8 units &mdash; Lot E</dd></div>
-              <div class="spec-item"><dt>Title</dt><dd>Separate condominium title &mdash; own legal and financing pathway</dd></div>
-              <div class="spec-item"><dt>Programme</dt><dd>To be confirmed in Tier 2</dd></div>
-              <div class="spec-item"><dt>HOA Rental Pool</dt><dd>Eligible</dd></div>
-              <div class="spec-item"><dt>Price</dt><dd>Available in the next section &mdash; request Tier 2 access below</dd></div>
-            </dl>
-            <p style="font-size:12px;font-style:italic;color:var(--gold);line-height:1.65;margin-top:0.75rem">
-              The Coastal Condominium is structured under a separate legal instrument from the villa and cottage products. Financing and legal pathways are discussed personally in Tier 2.
-            </p>
-
-            <p class="card-why">
-              Condominiums occupy the coastal edge of the estate &mdash; open-plan living,
-              broad ocean-facing terraces, and the highest rental yield potential in the
-              collection. Built from compressed earth, they maintain the estate&rsquo;s
-              thermal and material standards while delivering the volume and outlook that
-              coastal buyers expect at this price point.
-            </p>
-          </div>
-
-          <!-- VILLA -->
-          <div class="property-card">
-            <span class="eyebrow">Sanctuary Villas</span>
-            <h3>The Villa</h3>
-            <p class="card-sub">6 units available &nbsp;&middot;&nbsp; Starting from US$980,000</p>
-
-            <div class="video-slot aspect-16-9" style="margin-bottom:1.25rem"
-                 data-vimeo-src="REPLACE_WITH_VIMEO_VILLA_URL"
-                 tabindex="0" role="button" aria-label="Play villa walkthrough">
-              <img class="video-slot__poster"
-                   src="../images/sher_calm_reflections.jpg"
-                   alt="Sanctuary Villa walkthrough poster" loading="lazy">
-              <div class="video-slot__play" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-              </div>
-              <div class="video-slot__label">Sanctuary Villa &mdash; Virtual Walkthrough</div>
-            </div>
-
-            <dl class="spec-list">
-              <div class="spec-item"><dt>Type</dt><dd>Luxury Villa &mdash; Type A and Flagship Type B grouped</dd></div>
-              <div class="spec-item"><dt>Residences</dt><dd>6 units &mdash; V-01 to V-06</dd></div>
-              <div class="spec-item"><dt>Configurations</dt><dd>Type A1 Estate Villa (V-01, V-02) &middot; Type A2 Sanctuary Villa (V-03 to V-05) &middot; Flagship Villa (V-06)</dd></div>
-              <div class="spec-item"><dt>Enclosed area</dt><dd>Approx. 1,800&ndash;2,800 sf depending on configuration</dd></div>
-              <div class="spec-item"><dt>Bedrooms</dt><dd>2&ndash;3 bedrooms plus flexible spaces</dd></div>
-              <div class="spec-item"><dt>Outdoor</dt><dd>Private pool &middot; covered terrace &middot; deep landscape privacy</dd></div>
-              <div class="spec-item"><dt>Construction</dt><dd>Reclaimed timber &middot; clay brick &middot; natural stone &middot; low-slung tropical pavilion roof</dd></div>
-              <div class="spec-item"><dt>HOA Rental Pool</dt><dd>Eligible</dd></div>
-              <div class="spec-item"><dt>Price</dt><dd>Available in the next section &mdash; request Tier 2 access below</dd></div>
-            </dl>
-
-            <p class="card-why">
-              The four Sanctuary Villas are the most private, most spatially generous
-              residences on the estate. Positioned at the mangrove boundary, they carry
-              the conservation covenant most directly &mdash; their plunge pools face the
-              protected wetland, bordered on two sides by land that will never be
-              developed. For buyers who want a principal Caribbean residence with complete
-              seclusion and a conservation legacy they can name.
-            </p>
-          </div>
-
-        </div>
-
-        <!-- PHOTO GALLERY -->
-        <div class="media-zone">
-          <h3 style="font-family:var(--font-display);font-size:22px;margin-bottom:1rem;color:var(--green)">Estate Photography</h3>
-          <div class="photo-gallery">
-            <img src="../images/bay-eastern-shoreline-1.jpg" alt="Bay eastern shoreline" loading="lazy"
-                 data-lightbox="../images/bay-eastern-shoreline-1.jpg"
-                 style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:var(--radius);cursor:zoom-in">
-            <img src="../images/bay-south-mangrove-arch.jpg" alt="South mangrove arch" loading="lazy"
-                 data-lightbox="../images/bay-south-mangrove-arch.jpg"
-                 style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:var(--radius);cursor:zoom-in">
-            <img src="../images/sher_calm_reflections.jpg" alt="Calm reflections" loading="lazy"
-                 data-lightbox="../images/sher_calm_reflections.jpg"
-                 style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:var(--radius);cursor:zoom-in">
-            <img src="../images/nature-trail-mangrove.jpg" alt="Nature trail through mangrove" loading="lazy"
-                 data-lightbox="../images/nature-trail-mangrove.jpg"
-                 style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:var(--radius);cursor:zoom-in">
-            <img src="../images/table-deau-waters-edge.jpg" alt="Table d'Eau at water's edge" loading="lazy"
-                 data-lightbox="../images/table-deau-waters-edge.jpg"
-                 style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:var(--radius);cursor:zoom-in">
-            <img src="../images/guests-nature-trail.jpg" alt="Guests on nature trail" loading="lazy"
-                 data-lightbox="../images/guests-nature-trail.jpg"
-                 style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:var(--radius);cursor:zoom-in">
-          </div>
-          <p style="font-size:12px;color:var(--text-muted);margin-top:0.5rem">Click any image to enlarge.</p>
-        </div>
-
       </div>
     </section>
 
@@ -1684,6 +1590,81 @@
         <p>Nature whispers. Souls listen.</p>
       </div>
 
+    </section>
+
+
+    <!-- SECTION: PROCESS STEPS -->
+    <section class="section section--green">
+      <div class="container">
+
+        <div class="section__header">
+          <span class="tier-badge">Buyer Access Unlocked</span>
+          <h2 class="section-heading section-heading--white" style="margin-top:1.25rem">The Property Buyer Programme</h2>
+          <p class="section-subtext" style="color:var(--cream-muted)">
+            Twenty residences are being offered as part of the SHER estate. Each is designed
+            with the same materials, philosophy and conservation covenant that defines the
+            whole project. Ownership here is not a transaction &mdash; it is an alignment
+            of values made permanent in land.
+          </p>
+        </div>
+
+        <div class="steps">
+
+          <div class="step-card">
+            <div class="step-number">01</div>
+            <div class="step-content">
+              <h4>Review the available residences</h4>
+              <p>Three residence types are offered &mdash; Hillside Cottages, Coastal
+              Condominiums and Sanctuary Villas. Read the specifications, watch the
+              virtual walkthroughs, and identify which aligns best with how you intend
+              to use the property.</p>
+            </div>
+          </div>
+
+          <div class="step-card">
+            <div class="step-number">02</div>
+            <div class="step-content">
+              <h4>Complete the buyer discovery form</h4>
+              <p>We ask every prospective buyer about their intent, their use case, and
+              their relationship to the kind of place SHER is building. This is not a
+              formality &mdash; it ensures that every owner shares the values that make
+              the estate work as a whole.</p>
+            </div>
+          </div>
+
+          <div class="step-card">
+            <div class="step-number">03</div>
+            <div class="step-content">
+              <h4>A personal response from SHER</h4>
+              <p>Every submission is reviewed personally. If your profile is a fit, you
+              will hear from us within 48 hours to arrange the next step. We do not
+              send automated responses to prospective buyers at this stage.</p>
+            </div>
+          </div>
+
+          <div class="step-card">
+            <div class="step-number">04</div>
+            <div class="step-content">
+              <h4>Site visit or virtual consultation</h4>
+              <p>We will arrange a visit to the estate or a private virtual consultation
+              with the SHER team &mdash; whichever works for you. This is where questions
+              about the site, the construction, and the community are answered in full.</p>
+            </div>
+          </div>
+
+          <div class="step-card">
+            <div class="step-number">05</div>
+            <div class="step-content">
+              <h4>Hold agreement and formal reservation</h4>
+              <p>A hold agreement secures your interest in a specific residence while you
+              complete due diligence. Purchase agreements follow on terms negotiated
+              directly with SHER and reviewed by your legal advisor.</p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
     </section>
 
 
@@ -2255,8 +2236,50 @@
       document.addEventListener('keydown', e => { if (e.key === 'Escape' && lb.classList.contains('open')) closeLightbox(); });
     }
 
+    /* ── BAY SLIDER ─────────────────────────────────────────────── */
+    function initBaySlider() {
+      const track = document.querySelector('.bay-slider__track');
+      if (!track) return;
+      const total = track.children.length;
+      let cur = 0, timer;
+      const dots = [...document.querySelectorAll('.bay-slider__dot')];
+
+      function go(n) {
+        cur = (n + total) % total;
+        track.style.transform = `translateX(-${cur * 100}%)`;
+        dots.forEach((d, i) => d.classList.toggle('bay-slider__dot--active', i === cur));
+      }
+
+      document.querySelector('.bay-slider__btn--prev')
+        .addEventListener('click', () => { clearInterval(timer); go(cur - 1); start(); });
+      document.querySelector('.bay-slider__btn--next')
+        .addEventListener('click', () => { clearInterval(timer); go(cur + 1); start(); });
+      dots.forEach((d, i) => d.addEventListener('click', () => { clearInterval(timer); go(i); start(); }));
+
+      let tx = 0;
+      track.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
+      track.addEventListener('touchend', e => {
+        const dx = tx - e.changedTouches[0].clientX;
+        if (Math.abs(dx) > 40) { clearInterval(timer); go(cur + (dx > 0 ? 1 : -1)); start(); }
+      }, { passive: true });
+
+      const slider = track.closest('.bay-slider');
+      slider.addEventListener('mouseenter', () => clearInterval(timer));
+      slider.addEventListener('mouseleave', start);
+
+      function start() { timer = setInterval(() => go(cur + 1), 5500); }
+      start();
+    }
+
     /* ── INIT ───────────────────────────────────────────────────── */
     document.addEventListener('DOMContentLoaded', () => {
+      const pubNav = document.querySelector('.pub-nav');
+      if (pubNav) {
+        const onScroll = () => pubNav.classList.toggle('scrolled', window.scrollY > 55);
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+      }
+
       const form = document.getElementById('password-form');
       if (form) form.addEventListener('submit', handlePasswordSubmit);
       populateCountrySelect();
@@ -2264,6 +2287,7 @@
       wireBuyerForm();
       initLightbox();
       initVideoSlots();
+      initBaySlider();
     });
 
   </script>
