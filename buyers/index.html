@@ -815,46 +815,53 @@
     .pub-cards {
       display: grid;
       grid-template-columns: repeat(3,1fr);
-      gap: 1.5rem;
+      gap: 1.25rem;
     }
     .pub-card {
       background: var(--white);
       border-radius: var(--radius-lg);
       overflow: hidden;
-      box-shadow: var(--shadow-card);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.09);
+      border: 1px solid rgba(201,168,103,0.13);
+      transition: box-shadow 0.35s ease, transform 0.35s ease;
     }
-    .pub-card__img { width:100%; aspect-ratio:4/3; object-fit:cover; display:block; }
-    .pub-card__body { padding: 1.5rem 1.5rem 1.75rem; }
+    .pub-card:hover {
+      box-shadow: 0 14px 52px rgba(0,0,0,0.15);
+      transform: translateY(-4px);
+    }
+    .pub-card__img { width:100%; aspect-ratio:3/4; object-fit:cover; display:block; }
+    .pub-card__body { padding: 1.75rem 1.75rem 2.25rem; }
     .pub-card__eyebrow {
       display: block;
       font-size: 10px;
       font-weight: 600;
-      letter-spacing: 0.14em;
+      letter-spacing: 0.16em;
       text-transform: uppercase;
       color: var(--gold);
-      margin-bottom: 0.35rem;
+      margin-bottom: 0.5rem;
     }
     .pub-card__name {
       font-family: var(--font-display);
-      font-size: 24px;
+      font-size: 30px;
+      line-height: 1.15;
       color: var(--green);
-      margin-bottom: 0.2rem;
+      margin-bottom: 0.3rem;
     }
-    .pub-card__count { font-size: 12px; color: var(--text-muted); margin-bottom: 0.3rem; }
+    .pub-card__count { font-size: 12px; color: var(--text-muted); margin-bottom: 0.4rem; }
     .pub-card__price {
       font-family: var(--font-display);
-      font-size: 17px; font-weight: 500;
-      color: var(--green); margin-bottom: 0.75rem;
+      font-size: 19px; font-weight: 500;
+      color: var(--green); margin-bottom: 0.9rem;
     }
     .pub-card__materials {
-      font-size: 12px;
+      font-size: 11.5px;
       color: var(--gold-dark);
-      letter-spacing: 0.04em;
+      letter-spacing: 0.06em;
       border-top: 1px solid rgba(201,168,103,0.3);
-      padding-top: 0.75rem;
-      margin-bottom: 0.75rem;
+      padding-top: 0.85rem;
+      margin-bottom: 0.85rem;
     }
-    .pub-card__copy { font-size: 13px; color: var(--text-muted); line-height: 1.65; }
+    .pub-card__copy { font-size: 13.5px; color: var(--text-muted); line-height: 1.7; }
     .pub-disclaimer {
       text-align: center;
       font-size: 11.5px;
@@ -1234,7 +1241,7 @@
             <p class="pub-card__name">Coastal Condominium</p>
             <p class="pub-card__count">8 residences</p>
             <p class="pub-card__price">From US$380,000</p>
-            <p class="pub-card__materials">Compressed earth &middot; lime render</p>
+            <p class="pub-card__materials">Butterfly roof &middot; timber &middot; stone &middot; lime render</p>
             <p class="pub-card__copy">Eight boutique residences on Lot E, structured under a separate condominium title with its own legal and financing pathway.</p>
           </div>
         </div>
@@ -1248,7 +1255,7 @@
             <p class="pub-card__name">Sanctuary Villa</p>
             <p class="pub-card__count">6 residences</p>
             <p class="pub-card__price">From US$980,000</p>
-            <p class="pub-card__materials">Reclaimed timber &middot; clay brick &middot; natural stone</p>
+            <p class="pub-card__materials">Butterfly roof &middot; timber &middot; stone &middot; lime render</p>
             <p class="pub-card__copy">Six luxury residences across two configurations, each with private pool, open living pavilion and deep landscape privacy on the southern estate.</p>
           </div>
         </div>
@@ -1431,28 +1438,18 @@
   <div id="buyer-panel" class="buyer-panel">
 
     <!-- SECTION: WELCOME INTRO -->
-    <section class="section section--green" style="padding:4.5rem 0 5rem">
+    <section class="section section--green" style="padding:5rem 0 5.5rem">
       <div class="container--narrow" style="text-align:center">
         <img src="../images/SHER-CREAM-300px.png" alt="SHER Sanctuary"
-             style="width:100px;height:auto;display:block;margin:0 auto 2rem;opacity:0.92">
-        <span class="eyebrow" style="letter-spacing:0.18em;font-size:11px">Welcome to the Property Collection</span>
-        <p style="font-family:var(--font-display);font-size:20px;color:var(--cream);line-height:1.85;max-width:680px;margin:1.75rem auto 0">
-          What follows is a considered introduction to the SHER residential collection &mdash; not a sales catalogue. Each residence has been designed from the land outward, governed by the SHER Design and Experience Charter, and built on the principle that luxury is sensed through proportion, privacy and craft rather than conspicuous excess.
-        </p>
-        <p style="font-family:var(--font-display);font-size:20px;color:var(--cream);line-height:1.85;max-width:680px;margin:1.25rem auto 0">
-          Take your time. When you are ready, complete the buyer discovery form at the bottom of this page and we will respond personally within 48 hours.
-        </p>
+             style="width:170px;height:auto;display:block;margin:0 auto 2.5rem;opacity:0.95">
+        <span class="eyebrow" style="letter-spacing:0.2em;font-size:10.5px;color:var(--gold)">The Concept</span>
+        <h2 style="font-family:var(--font-display);font-size:clamp(36px,5vw,54px);font-weight:400;color:var(--cream);margin:1rem auto 0;line-height:1.15;max-width:640px">Living at SHER Sanctuary</h2>
       </div>
     </section>
 
 
     <!-- SECTION: LIVING AT SHER SANCTUARY -->
     <section class="lifestyle-section">
-
-      <div class="lifestyle-header">
-        <span class="eyebrow">A Property Owner&rsquo;s Life in Savannes Bay</span>
-        <h2 class="section-heading section-heading--white">Living at SHER Sanctuary</h2>
-      </div>
 
       <!-- 01 — The Arrival -->
       <div class="lifestyle-scene">
