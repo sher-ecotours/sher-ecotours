@@ -1067,6 +1067,87 @@
       line-height: 1.6;
       margin: 0.25rem 0 1.25rem;
     }
+
+    /* ── CONDO TYPE A GALLERY ───────────────────────────────────── */
+    .condo-type-a-gallery {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px;
+      margin: 0.75rem 0 1rem;
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .condo-type-a-gallery figure { margin: 0; }
+    .condo-type-a-gallery img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      cursor: zoom-in;
+      display: block;
+      transition: opacity 0.2s;
+    }
+    .condo-type-a-gallery img:hover { opacity: 0.88; }
+    .condo-type-a-gallery figcaption {
+      font-size: 10px;
+      font-style: italic;
+      color: var(--text-muted);
+      text-align: center;
+      padding: 0.25rem 0.35rem 0.4rem;
+      background: var(--cream);
+      line-height: 1.4;
+    }
+
+    /* ── RESIDENCE GALLERY SECTION ──────────────────────────────── */
+    .res-gallery-section { background: var(--offwhite); padding: 5rem 0; }
+    .res-gallery-section .section__header { text-align: center; margin-bottom: 4rem; }
+    .res-detail { margin-bottom: 4.5rem; }
+    .res-detail:last-child { margin-bottom: 0; }
+    .res-detail__head {
+      display: flex;
+      align-items: baseline;
+      gap: 1.5rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid rgba(201,168,103,0.25);
+    }
+    .res-detail__eyebrow {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    .res-detail__name {
+      font-family: var(--font-display);
+      font-size: 26px;
+      font-weight: 400;
+      color: var(--green);
+      margin: 0;
+    }
+    .res-detail__materials {
+      font-size: 11px;
+      color: var(--gold-dark);
+      letter-spacing: 0.05em;
+      margin: 0 0 0.75rem;
+    }
+    @media (max-width: 640px) {
+      .condo-type-a-gallery {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        border-radius: 0;
+        gap: 6px;
+      }
+      .condo-type-a-gallery figure {
+        flex: 0 0 85%;
+        scroll-snap-align: start;
+        border-radius: var(--radius);
+        overflow: hidden;
+      }
+      .condo-type-a-gallery img { aspect-ratio: 16/9; }
+      .res-detail__head { flex-direction: column; gap: 0.25rem; }
+    }
     @media (max-width: 640px) {
       .cottage-type-a-gallery {
         display: flex;
@@ -1575,6 +1656,82 @@
         <p>Nature whispers. Souls listen.</p>
       </div>
 
+    </section>
+
+
+    <!-- SECTION: RESIDENCE GALLERIES -->
+    <section class="res-gallery-section">
+      <div class="container">
+
+        <div class="section__header">
+          <span class="eyebrow" style="color:var(--gold)">A Closer Look</span>
+          <h2 class="section-heading" style="color:var(--green);margin-top:0.6rem">The Residences</h2>
+          <p class="section-subtext" style="margin-top:0.5rem">Design intent renders — artist's impression only.</p>
+        </div>
+
+        <!-- Cottage Type A -->
+        <div class="res-detail">
+          <div class="res-detail__head">
+            <span class="res-detail__eyebrow">Cottage Type A</span>
+            <h3 class="res-detail__name">Hillside Cottage</h3>
+          </div>
+          <p class="res-detail__materials">Butterfly roof &middot; timber &middot; stone &middot; lime render &nbsp;&mdash;&nbsp; 6 residences &nbsp;&middot;&nbsp; From US$280,000</p>
+          <div class="cottage-type-a-gallery">
+            <figure>
+              <img src="../images/cottage-type-a/01_Exterior_Nature_Veranda_web.jpg"
+                   alt="Hillside Cottage — exterior nature veranda at golden hour" loading="lazy">
+              <figcaption>Exterior — nature veranda</figcaption>
+            </figure>
+            <figure>
+              <img src="../images/cottage-type-a/02_Interior_Sleeping_Lounge_Veranda_web.jpg"
+                   alt="Hillside Cottage — interior sleeping lounge opening to veranda" loading="lazy">
+              <figcaption>Interior — sleeping lounge &amp; veranda</figcaption>
+            </figure>
+            <figure>
+              <img src="../images/cottage-type-a/03_Dusk_Exterior_Low_Lighting_web.jpg"
+                   alt="Hillside Cottage — dusk exterior with low-glare lantern lighting" loading="lazy">
+              <figcaption>Dusk — exterior low lighting</figcaption>
+            </figure>
+            <figure>
+              <img src="../images/cottage-type-a/04_Bathroom_Outdoor_Shower_Court_web.jpg"
+                   alt="Hillside Cottage — private outdoor shower court" loading="lazy">
+              <figcaption>Bathroom — outdoor shower court</figcaption>
+            </figure>
+          </div>
+        </div>
+
+        <!-- Coastal Condominium -->
+        <div class="res-detail">
+          <div class="res-detail__head">
+            <span class="res-detail__eyebrow">Boutique Condominium</span>
+            <h3 class="res-detail__name">Coastal Condominium</h3>
+          </div>
+          <p class="res-detail__materials">Butterfly roof &middot; timber &middot; stone &middot; lime render &nbsp;&mdash;&nbsp; 8 residences &nbsp;&middot;&nbsp; From US$380,000</p>
+          <div class="condo-type-a-gallery">
+            <figure>
+              <img src="../images/condo-type-a/01_Exterior_Hillside_web.jpg"
+                   alt="Coastal Condominium — hillside exterior view" loading="lazy">
+              <figcaption>Exterior — hillside setting</figcaption>
+            </figure>
+            <figure>
+              <img src="../images/condo-type-a/02_Exterior_Night_web.jpg"
+                   alt="Coastal Condominium — evening illumination" loading="lazy">
+              <figcaption>Exterior — night illumination</figcaption>
+            </figure>
+            <figure>
+              <img src="../images/condo-type-a/03_Exterior_Pool_web.jpg"
+                   alt="Coastal Condominium — pool and terrace" loading="lazy">
+              <figcaption>Exterior — pool &amp; terrace</figcaption>
+            </figure>
+            <figure>
+              <img src="../images/condo-type-a/04_Exterior_Terrain_web.jpg"
+                   alt="Coastal Condominium — flatter terrain site view" loading="lazy">
+              <figcaption>Site — terrain overview</figcaption>
+            </figure>
+          </div>
+        </div>
+
+      </div>
     </section>
 
 
