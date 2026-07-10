@@ -710,6 +710,43 @@
       line-height: 1.7;
     }
 
+    /* ── LEGAL DISCLAIMER PANEL ─────────────────────────────────── */
+    .legal-disclaimer {
+      background: var(--cream);
+      border-top: 2px solid rgba(201,168,103,0.35);
+      border-bottom: 2px solid rgba(201,168,103,0.35);
+    }
+    .legal-disclaimer__toggle {
+      width: 100%; background: none; border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.85rem 2rem;
+      font-family: var(--font-body); font-size: 12px; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase; color: var(--green);
+    }
+    .legal-disclaimer__toggle:hover { background: rgba(201,168,103,0.08); }
+    .legal-disclaimer__toggle svg { width: 14px; height: 14px; transition: transform 0.25s; flex-shrink: 0; }
+    .legal-disclaimer__toggle[aria-expanded="true"] svg { transform: rotate(180deg); }
+    .legal-disclaimer__body {
+      max-height: 0; overflow: hidden; transition: max-height 0.35s ease;
+      font-size: 11.5px; color: var(--text-muted); line-height: 1.7;
+    }
+    .legal-disclaimer__body.open { max-height: 800px; }
+    .legal-disclaimer__inner { padding: 0 2rem 1.25rem; }
+    .legal-disclaimer__inner p { margin-bottom: 0.5rem; }
+    .legal-disclaimer__inner a { color: var(--green); text-decoration: underline; }
+
+    /* ── CONSENT NOTICE ──────────────────────────────────────────── */
+    .consent-notice {
+      display: flex; align-items: flex-start; gap: 0.75rem;
+      background: rgba(245,240,232,0.7);
+      border: 1px solid rgba(201,168,103,0.3);
+      border-radius: 5px; padding: 0.85rem 1rem;
+      margin-bottom: 1rem; font-size: 11.5px; color: var(--text-muted);
+      line-height: 1.65;
+    }
+    .consent-notice svg { width: 15px; height: 15px; flex-shrink: 0; margin-top: 1px; color: var(--gold-dark); }
+    .consent-notice a { color: var(--green); text-decoration: underline; }
+
     /* ── ANIMATIONS ─────────────────────────────────────────────── */
     @keyframes fadeIn  { from { opacity: 0; } to { opacity: 1; } }
     @keyframes shake   { 0%,100%{transform:translateX(0)} 15%{transform:translateX(-7px)} 30%{transform:translateX(7px)} 45%{transform:translateX(-5px)} 60%{transform:translateX(5px)} 75%{transform:translateX(-3px)} }
@@ -1382,6 +1419,26 @@
       <div class="pub-hero__scroll-line"></div>
     </div>
   </section>
+
+  <!-- ── LEGAL DISCLAIMER PANEL (always visible) ── -->
+  <div class="legal-disclaimer" role="region" aria-label="Legal disclaimer">
+    <button class="legal-disclaimer__toggle" aria-expanded="false" aria-controls="buyer-disc-body" onclick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true'); document.getElementById('buyer-disc-body').classList.toggle('open');">
+      <span>Pre-Sale Disclaimer &amp; Buyer Access Terms — Please Read</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6,9 12,15 18,9"/></svg>
+    </button>
+    <div class="legal-disclaimer__body" id="buyer-disc-body">
+      <div class="legal-disclaimer__inner">
+        <p><strong>Pre-sale materials:</strong> All information in this portal relates to a development project that has not yet received full DCA planning approval. Nothing here constitutes a binding offer for sale, a Sale and Purchase Agreement, or a confirmed reservation.</p>
+        <p><strong>Design &amp; pricing:</strong> All renders, floor plans, specifications, and pricing are design intent and indicative only. Final designs and prices are confirmed in the Sale and Purchase Agreement. Exchange rate risk is the buyer's own.</p>
+        <p><strong>Alien Landholding Licence:</strong> Non-Saint Lucian citizens must obtain an ALHL under the Alien Landholding (Licensing) Act No. 1 of 2020. SHER does not provide legal advice. Independent Saint Lucia legal counsel required.</p>
+        <p><strong>Rental income:</strong> Any yield or rental income indications are illustrative only and do not constitute a guarantee. No return is guaranteed. &nbsp;
+          <a href="../docs/legal/SHER-LEGAL-004-R01.pdf" target="_blank" rel="noopener">Full Buyer Portal Disclaimer (SHER-LEGAL-004-R01) ↗</a>
+          &nbsp;&middot;&nbsp;
+          <a href="../legal/" target="_blank" rel="noopener">All Legal Notices ↗</a>
+        </p>
+      </div>
+    </div>
+  </div>
 
   <!-- SECTION B — THE RESIDENCES ────────────────────────────────── -->
   <section class="pub-residences">
@@ -2236,6 +2293,10 @@
           </fieldset>
 
           <div class="mt-4">
+            <div class="consent-notice">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <p>By submitting this form you confirm: <strong>(1)</strong> the information provided is accurate; <strong>(2)</strong> you consent to Safeport Security Services Limited processing your data for buyer assessment, per our <a href="../docs/legal/SHER-LEGAL-002-R01.pdf" target="_blank" rel="noopener">Privacy Policy</a>; <strong>(3)</strong> submission does not constitute a reservation or commitment by SHER; <strong>(4)</strong> you are not acting on behalf of a regulated financial intermediary without authorisation. Governed by the Saint Lucia Data Protection Act Cap.&nbsp;8:18.</p>
+            </div>
             <button type="submit" class="btn btn--primary btn--full">SUBMIT MY BUYER PROFILE</button>
           </div>
 
@@ -2395,10 +2456,18 @@
   <!-- ── FOOTER ────────────────────────────────────────────────── -->
   <footer class="site-footer">
     <p>
-      This page is private and confidential. It does not constitute a sales contract,
-      prospectus, or commitment of any kind by SHER. All figures are indicative and
-      subject to independent verification. Access is restricted to persons who have
-      been personally invited by SHER Sanctuary Experiences.&nbsp;&nbsp;&middot;&nbsp;&nbsp;shersanctuary.com
+      This page is private and confidential. It does not constitute a sales contract, prospectus, or commitment of any kind by SHER. All figures are indicative and subject to independent verification. Access is restricted to persons personally invited by SHER Sanctuary Experiences.
+      &nbsp;&nbsp;&middot;&nbsp;&nbsp;
+      <a href="../legal/" style="color:inherit;text-decoration:underline">Legal Notices</a>
+      &nbsp;&middot;&nbsp;
+      <a href="../docs/legal/SHER-LEGAL-001-R01.pdf" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">Terms of Use</a>
+      &nbsp;&middot;&nbsp;
+      <a href="../docs/legal/SHER-LEGAL-002-R01.pdf" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">Privacy Policy</a>
+      &nbsp;&middot;&nbsp;
+      <a href="../docs/legal/SHER-LEGAL-007-R01.pdf" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">Cookie Policy</a>
+      &nbsp;&middot;&nbsp;
+      <a href="../docs/legal/SHER-LEGAL-004-R01.pdf" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">Buyer Disclaimer</a>
+      &nbsp;&nbsp;&middot;&nbsp;&nbsp;shersanctuary.com
     </p>
   </footer>
 

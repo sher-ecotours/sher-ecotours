@@ -124,7 +124,10 @@ function _buildFooter() {
         <ul class="footer-col-links">
           <li><a href="mailto:bookings@shersanctuary.com">Email Us</a></li>
           <li><a href="https://wa.me/17587165206" target="_blank" rel="noopener">WhatsApp</a></li>
-          <li><a href="${_R}${_P}privacy-policy.html">Privacy Policy</a></li>
+          <li><a href="${_R}legal/">Legal Notices</a></li>
+          <li><a href="${_R}docs/legal/SHER-LEGAL-001-R01.pdf" target="_blank" rel="noopener">Terms of Use</a></li>
+          <li><a href="${_R}docs/legal/SHER-LEGAL-002-R01.pdf" target="_blank" rel="noopener">Privacy Policy</a></li>
+          <li><a href="${_R}docs/legal/SHER-LEGAL-007-R01.pdf" target="_blank" rel="noopener">Cookie Policy</a></li>
           <li><a href="${_R}${_P}booking-terms.html">Booking Terms</a></li>
           <li><a href="${_R}${_P}safety-standards.html">Safety Standards</a></li>
           <li><a href="${_R}${_P}environmental-policy.html">Environmental Policy</a></li>
@@ -136,7 +139,9 @@ function _buildFooter() {
     <div class="footer-bottom">
       <span>© 2026 SHER Sanctuary Experiences. Savannes Bay, Micoud, Saint Lucia. Operated by Safeport Security Services Limited.</span>
       <div class="footer-bottom-links">
-        <a href="${_R}${_P}privacy-policy.html">Privacy Policy</a>
+        <a href="${_R}legal/">Legal</a>
+        <a href="${_R}docs/legal/SHER-LEGAL-002-R01.pdf" target="_blank" rel="noopener">Privacy Policy</a>
+        <a href="${_R}docs/legal/SHER-LEGAL-007-R01.pdf" target="_blank" rel="noopener">Cookie Policy</a>
         <a href="${_R}${_P}booking-terms.html">Booking T&amp;Cs</a>
       </div>
     </div>

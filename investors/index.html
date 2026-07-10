@@ -810,6 +810,46 @@
       text-align: center;
     }
 
+    /* ── LEGAL DISCLAIMER PANEL ──────────────────────────────── */
+    .legal-disclaimer {
+      background: var(--cream);
+      border-top: 2px solid rgba(201,168,103,0.35);
+      border-bottom: 2px solid rgba(201,168,103,0.35);
+      padding: 0;
+    }
+    .legal-disclaimer__toggle {
+      width: 100%; background: none; border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.85rem 2rem;
+      font-family: var(--font-body); font-size: 12px; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase; color: var(--green);
+    }
+    .legal-disclaimer__toggle:hover { background: rgba(201,168,103,0.08); }
+    .legal-disclaimer__toggle svg { width: 14px; height: 14px; transition: transform 0.25s; flex-shrink: 0; }
+    .legal-disclaimer__toggle[aria-expanded="true"] svg { transform: rotate(180deg); }
+    .legal-disclaimer__body {
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.35s ease;
+      font-size: 11.5px; color: var(--text-muted);
+      line-height: 1.7;
+    }
+    .legal-disclaimer__body.open { max-height: 800px; }
+    .legal-disclaimer__inner { padding: 0 2rem 1.25rem; }
+    .legal-disclaimer__inner p { margin-bottom: 0.5rem; }
+    .legal-disclaimer__inner a { color: var(--green); text-decoration: underline; }
+
+    /* ── CONSENT NOTICE ──────────────────────────────────────── */
+    .consent-notice {
+      display: flex; align-items: flex-start; gap: 0.75rem;
+      background: rgba(245,240,232,0.7);
+      border: 1px solid rgba(201,168,103,0.3);
+      border-radius: 5px; padding: 0.85rem 1rem;
+      margin-bottom: 1rem; font-size: 11.5px; color: var(--text-muted);
+      line-height: 1.65;
+    }
+    .consent-notice__icon { width: 15px; height: 15px; flex-shrink: 0; margin-top: 1px; color: var(--gold-dark); }
+    .consent-notice a { color: var(--green); text-decoration: underline; }
+
     /* ── ANIMATIONS ────────────────────────────────────────────── */
     @keyframes shake {
       0%,100% { transform: translateX(0); }
@@ -1730,6 +1770,10 @@
         </div>
 
         <div class="mt-4">
+          <div class="consent-notice">
+            <svg class="consent-notice__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <p>By submitting this form you confirm: <strong>(1)</strong> the information provided is accurate; <strong>(2)</strong> you consent to Safeport Security Services Limited processing your data for investor assessment, per our <a href="../docs/legal/SHER-LEGAL-002-R01.pdf" target="_blank" rel="noopener">Privacy Policy</a>; <strong>(3)</strong> submission does not create any obligation on either party; <strong>(4)</strong> you are not acting on behalf of a regulated financial intermediary without authorisation. Governed by the Saint Lucia Data Protection Act Cap.&nbsp;8:18.</p>
+          </div>
           <button type="submit" id="discovery-submit"
                   class="btn btn--primary btn--full">
             SUBMIT MY DISCOVERY PROFILE
@@ -1786,6 +1830,27 @@
 
     </div>
   </section>
+
+  <!-- ── LEGAL DISCLAIMER PANEL (always visible) ── -->
+  <div class="legal-disclaimer" role="region" aria-label="Legal disclaimer">
+    <button class="legal-disclaimer__toggle" aria-expanded="false" aria-controls="legal-disc-body" onclick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true'); document.getElementById('legal-disc-body').classList.toggle('open');">
+      <span>Legal Disclaimer &amp; Access Terms — Read Before Proceeding</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6,9 12,15 18,9"/></svg>
+    </button>
+    <div class="legal-disclaimer__body" id="legal-disc-body">
+      <div class="legal-disclaimer__inner">
+        <p><strong>Confidential &amp; Restricted:</strong> The materials in this portal are confidential and are made available solely to persons personally invited by Safeport Security Services Limited. Unauthorised access, reproduction, or distribution is prohibited.</p>
+        <p><strong>Not a prospectus or securities offering:</strong> Nothing in this portal constitutes a prospectus, regulated financial promotion, or offer of securities. No regulatory authority has reviewed or approved these materials. Financial projections are forward-looking statements subject to significant risk and may not be achieved. No return is guaranteed.</p>
+        <p><strong>Independent advice:</strong> Prospective investors must obtain independent financial, legal, and tax advice before making any investment decision. SHER does not provide financial or legal advice.</p>
+        <p><strong>Tier 3 NDA:</strong> Access to Tier 3 materials is subject to execution of the Non-Disclosure Agreement (SHER-LEGAL-006-R01). Access constitutes acceptance of its terms.</p>
+        <p><strong>Governing law:</strong> Saint Lucia. Courts of Saint Lucia have exclusive jurisdiction. &nbsp;
+          <a href="../docs/legal/SHER-LEGAL-003-R01.pdf" target="_blank" rel="noopener">Full Investor Portal Disclaimer (SHER-LEGAL-003-R01) ↗</a>
+          &nbsp;&middot;&nbsp;
+          <a href="../legal/" target="_blank" rel="noopener">All Legal Notices ↗</a>
+        </p>
+      </div>
+    </div>
+  </div>
 
 
   <!-- ============================================================
@@ -2123,6 +2188,10 @@
                       rows="2" placeholder="Optional"></textarea>
           </div>
 
+          <div class="consent-notice" style="margin-top:1rem">
+            <svg class="consent-notice__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <p>By submitting you confirm your response is accurate and you consent to your data being processed for investor assessment. See our <a href="../docs/legal/SHER-LEGAL-002-R01.pdf" target="_blank" rel="noopener">Privacy Policy</a>. Submission does not constitute a binding offer or commitment by either party.</p>
+          </div>
           <button type="submit" class="btn btn--primary">
             Submit Tier 1 Response &rarr;
           </button>
@@ -2506,6 +2575,10 @@
                       rows="2" placeholder="Optional"></textarea>
           </div>
 
+          <div class="consent-notice" style="margin-top:1rem">
+            <svg class="consent-notice__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <p>By submitting you confirm your response is accurate and you consent to your data being processed for investor assessment. See our <a href="../docs/legal/SHER-LEGAL-002-R01.pdf" target="_blank" rel="noopener">Privacy Policy</a>. Submission does not constitute a binding offer or commitment by either party.</p>
+          </div>
           <button type="submit" class="btn btn--primary">
             Submit Tier 2 Response &rarr;
           </button>
@@ -2816,6 +2889,10 @@
                       rows="3" placeholder="Anything you want the decision-maker to know before your call."></textarea>
           </div>
 
+          <div class="consent-notice" style="margin-top:1rem">
+            <svg class="consent-notice__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <p>By submitting you confirm your response is accurate and you consent to your data being processed for investor assessment. See our <a href="../docs/legal/SHER-LEGAL-002-R01.pdf" target="_blank" rel="noopener">Privacy Policy</a>. Note: Tier 3 access is subject to execution of the Non-Disclosure Agreement (SHER-LEGAL-006-R01).</p>
+          </div>
           <button type="submit" class="btn btn--primary">
             Submit Investment Profile &rarr;
           </button>
@@ -2861,12 +2938,18 @@
        ============================================================ -->
   <footer class="site-footer">
     <p>
-      This page is private and confidential. It does not constitute a prospectus, securities
-      offering, valuation, legal opinion or lending commitment. All financial figures are
-      preliminary working models subject to independent verification. Access is restricted to
-      persons who have identified themselves as sophisticated, professional or institutional
-      investors. By accessing this page you confirm that characterisation applies to
-      you.&nbsp;&nbsp;&middot;&nbsp;&nbsp;shersanctuary.com
+      This page is private and confidential. It does not constitute a prospectus, securities offering, valuation, legal opinion or lending commitment. All financial figures are preliminary working models subject to independent verification. Access is restricted to persons who have identified themselves as sophisticated, professional or institutional investors. By accessing this page you confirm that characterisation applies to you.
+      &nbsp;&nbsp;&middot;&nbsp;&nbsp;
+      <a href="../legal/" style="color:inherit;text-decoration:underline">Legal Notices</a>
+      &nbsp;&middot;&nbsp;
+      <a href="../docs/legal/SHER-LEGAL-001-R01.pdf" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">Terms of Use</a>
+      &nbsp;&middot;&nbsp;
+      <a href="../docs/legal/SHER-LEGAL-002-R01.pdf" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">Privacy Policy</a>
+      &nbsp;&middot;&nbsp;
+      <a href="../docs/legal/SHER-LEGAL-007-R01.pdf" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">Cookie Policy</a>
+      &nbsp;&middot;&nbsp;
+      <a href="../docs/legal/SHER-LEGAL-003-R01.pdf" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">Investor Disclaimer</a>
+      &nbsp;&nbsp;&middot;&nbsp;&nbsp;shersanctuary.com
     </p>
   </footer>
 
