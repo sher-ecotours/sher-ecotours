@@ -1298,6 +1298,26 @@
     }
 
 
+    /* ── CONCEPT IMAGE BAND ────────────────────────────────────── */
+    .concept-band { width: 100%; overflow: hidden; }
+    .concept-band img {
+      width: 100%;
+      height: 60vh;
+      min-height: 320px;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+    .concept-band__note {
+      text-align: center;
+      font-size: 11px;
+      font-style: italic;
+      color: var(--text-muted);
+      padding: 0.75rem 2rem;
+      background: var(--cream);
+      line-height: 1.6;
+    }
+
     /* ── LIFESTYLE SECTION (Phase 3) ───────────────────────────── */
     .lifestyle-section { background: var(--green); overflow: hidden; }
     .lifestyle-header {
@@ -2007,6 +2027,15 @@
     </section>
 
 
+    <!-- ── CONCEPT IMAGE BAND ──────────────────────────────────────── -->
+    <div class="concept-band">
+      <img src="../images/concept/sher-concept-point-dusk.jpg"
+           alt="Design concept — dock and waterway at dusk, Savannes Bay"
+           loading="lazy">
+      <p class="concept-band__note">Design concept &mdash; illustrative vision only. Not a rendering of the approved SHER design. Actual development subject to DCA approval and owner confirmation.</p>
+    </div>
+
+
     <!-- ══ BEFORE & VISION ══════════════════════════════════════════ -->
     <section class="bv-section" aria-label="The Estate — Before and Vision">
     <style>
@@ -2238,16 +2267,16 @@
               <div class="bv-panel-label">TODAY &mdash; SOUTHERN TIP, LOT 3 &mdash; SCORPION ISLET BEYOND</div>
             </div>
             <div class="bv-panel">
-              <!-- Stage 5D plan — dedicated V-06 render will replace this panel when available -->
-              <img src="../images/plans/09_Stage5D_Lot3_Villa_Cottages_Utilities_P01.png"
-                   alt="Approved site plan — Lot 3: Sanctuary Villa V-06 southernmost parcel position"
+              <img src="../images/concept/sher-concept-villa-south.jpg"
+                   alt="Design concept — overwater sanctuary villas on Savannes Bay southern waterfront"
                    loading="lazy">
-              <div class="bv-panel-label">VISION — SANCTUARY VILLA V-06, LOT 3</div>
+              <div class="bv-panel-label">VISION — SANCTUARY VILLA V-06 &middot; SOUTHERN WATERFRONT</div>
             </div>
           </div>
           <div class="bv-text">
             <h3>Sanctuary Villa &mdash; V-06 &middot; Lot 3</h3>
             <p>One residence. 5,813 sf individual title on the southernmost parcel of the estate, with a 12.4 &times; 8.0 m building envelope and two private parking spaces. Scorpion Islet is visible from this position &mdash; the private islet where SHER limits access to one landing per day. This is the most secluded plot on the estate and will not be replicated.</p>
+            <span class="bv-portal-cap" style="color:rgba(201,168,103,0.75);font-size:10.5px">Design concept &mdash; illustrative vision only. Not a rendering of the approved SHER design.</span>
             <span class="bv-portal-cap">Pricing and payment terms for this residence type are in the Tier 2 document vault.</span>
           </div>
         </div>
