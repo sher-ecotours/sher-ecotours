@@ -11,6 +11,17 @@ const path = require('path');
 const OUT_DIR  = __dirname;
 const LOGO_B64 = fs.readFileSync(path.join(__dirname, '../buyer-tier2/logo-b64.txt'), 'utf8').trim();
 const TODAY    = '11 July 2026';
+
+const PLANS_DIR = path.join(__dirname, '../../images/plans');
+function planB64(fn) {
+  const buf = fs.readFileSync(path.join(PLANS_DIR, fn));
+  return 'data:image/png;base64,' + buf.toString('base64');
+}
+const PLAN_S4  = planB64('05_Stage4_Detailed_18_Parcel_Subdivision_P01.png');
+const PLAN_S5A = planB64('06_Stage5A_Lot890_Hospitality_Gateway_P01.png');
+const PLAN_S5B = planB64('07_Stage5B_LotE_Condo_Villas_Site_Plan_P01.png');
+const PLAN_S5C = planB64('08_Stage5C_LotF_Villas_Cottages_Site_Plan_P01.png');
+const PLAN_S5D = planB64('09_Stage5D_Lot3_Villa_Cottages_Utilities_P01.png');
 const ENTITY   = 'Safeport Security Services Limited';
 const REG      = 'Reg. 2016-C251 · Saint Lucia';
 const SITE     = 'shersanctuary.com';
@@ -243,6 +254,10 @@ function shell(docRef, docTitle, content, opts = {}) {
     font-size: 8pt; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
     padding: 4px 12px; border-radius: 3px; margin-bottom: 16px;
   }
+  .plan-img { width: 100%; display: block; border: 1.5px solid var(--border); border-radius: 4px; margin: 10px 0 4px; }
+  .plan-cap { font-size: 7pt; color: var(--muted); font-style: italic; text-align: center; line-height: 1.6; margin-bottom: 12px; }
+  .plan-stamp { font-weight: 700; color: var(--gold-dk); font-style: normal; letter-spacing: 0.08em; text-transform: uppercase; }
+  .plan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 10px 0; }
   .page-break { page-break-after: always; }
   .image-frame {
     border: 1.5px solid var(--border); border-radius: 6px;
@@ -415,15 +430,19 @@ ${footer('SHER-INV-T1-001-R01')}
 
 <h2>The Five Parcels</h2>
 <table>
-  <thead><tr><th>Parcel</th><th>Role</th><th>Area</th><th>Acquisition Status</th></tr></thead>
+  <thead><tr><th>Parcel</th><th>Role &amp; Residences</th><th>Gross Area</th><th>Acquisition Status</th></tr></thead>
   <tbody>
-    <tr><td><strong>Lot 890</strong></td><td>Anchor gateway — reception pavilion, café, estate services, solar infrastructure, wastewater management, staff facilities</td><td>Estate services zone</td><td class="status-confirmed">Purchased · title registration in progress</td></tr>
-    <tr><td><strong>Lot 897</strong></td><td>Upper residential zone — Cottage Type A cluster (northern), primary estate road and landscaping</td><td>Residential / infrastructure</td><td class="status-mou">Under acquisition agreement</td></tr>
-    <tr><td><strong>Lot 905</strong></td><td>Mid-slope — secondary residential zone (Cottages and Villas, southern cluster); <strong>voluntary no-build conservation covenant applies to conservation portion</strong></td><td>Residential + conservation</td><td class="status-mou">Under acquisition agreement</td></tr>
-    <tr><td><strong>Parcel 12</strong></td><td>Lower coastal access corridor — mangrove buffer, conservation trail, kayak launch, raised boardwalk. No permanent foundations.</td><td>Conservation / access</td><td class="status-negotiation">Under negotiation</td></tr>
-    <tr><td><strong>Parcel 13</strong></td><td>Waterfront — bay edge, mangrove fringe, tidal zone. Conservation only.</td><td>Conservation · no build</td><td class="status-negotiation">Under negotiation</td></tr>
+    <tr><td><strong>Lot 890 / Parcel D</strong></td><td>Anchor gateway — reception pavilion, café, solar infrastructure, wastewater management, estate services. No residential units.</td><td>15,139 sf · 0.35 ac</td><td class="status-confirmed">Purchased · title registration in progress</td></tr>
+    <tr><td><strong>Lot E / Map Lot 12</strong></td><td>Coastal residential — CNO-01 boutique condominium (8 units); V-01 and V-02 individually titled villas. 16 parking spaces; drop-off loop; stormwater reserve. Drawing: SHER-S5B-001.</td><td>40,941 sf · 0.94 ac</td><td class="status-mou">Under acquisition agreement</td></tr>
+    <tr><td><strong>Lot F / Map Lot 13</strong></td><td>Mid-estate residential — V-03, V-04, V-05 individually titled villas (5,490 sf each); C-01, C-02, C-03 HOA/strata exclusive-use cottage sites (1,541 sf each); 4-space shared cottage court; 6 m common access lane. Drawing: SHER-S5C-001.</td><td>28,841 sf · 0.66 ac</td><td class="status-mou">Under acquisition agreement</td></tr>
+    <tr><td><strong>Lot (3) / Southern Extension</strong></td><td>Southern residential — V-06 Premium Villa individual title (5,813 sf, 12.4 × 8.0 m envelope); C-04 to C-10 HOA/strata cottage sites (1,292 sf each); U-01 utility/service parcel (2,368 sf); 6 m fire lane + 22 m turning head. Drawing: SHER-S5D-001.</td><td>23,372 sf · 0.54 ac</td><td class="status-mou">Under acquisition agreement</td></tr>
+    <tr><td><strong>Parcel 905 / Lot (2)</strong></td><td><strong>Conservation zone — voluntary corporate no-build covenant.</strong> 95,374 sf will never carry a building, road, or permanent infrastructure. Permanent wetland buffer between the residential estate and Savannes Bay. Zero residential allocation.</td><td>95,374 sf · 2.19 ac<br><em>46.7% of total estate</em></td><td class="status-mou">Under acquisition agreement</td></tr>
   </tbody>
 </table>
+
+<div class="callout">
+  <p><strong>Approved drawings:</strong> Stage 4 (full estate parcel overview), Stage 5A (Lot 890), Stage 5B (Lot E), Stage 5C (Lot F), and Stage 5D (Lot 3) architectural site plans are reproduced in SHER-INV-T1-003-R01 (Estate Location Map). All drawings: Rev P01, 20 Jun 2026, Status — For Owner Approval, Not for Construction.</p>
+</div>
 
 <div class="callout">
   <p><strong>Conservation covenant — Lot 905:</strong> The no-build conservation commitment on the conservation portion of Lot 905 is a voluntary corporate decision by Safeport Security Services Limited. It is not a condition imposed by any regulatory authority, nor is it the result of planning restrictions. It is a statement of conservation discipline: this land will not be offered for development regardless of any future planning permission that might theoretically allow it. This permanence is the source of the conservation covenant's value — it is irreversible by design.</p>
@@ -753,10 +772,12 @@ ${footer('SHER-INV-T1-001-R01')}
 <table>
   <thead><tr><th>Parcel</th><th>Status</th><th>Note</th></tr></thead>
   <tbody>
-    <tr><td><strong>Lot 890</strong> — Gateway anchor parcel</td><td class="status-confirmed">Purchased</td><td>Title registration in progress. This is the estate's operational core — reception, services, infrastructure.</td></tr>
-    <tr><td><strong>Lot 897</strong> — Upper residential</td><td class="status-mou">Under acquisition agreement</td><td>MOU / heads of terms agreed. Full acquisition subject to legal completion.</td></tr>
-    <tr><td><strong>Lot 905</strong> — Mid-slope residential + conservation</td><td class="status-mou">Under acquisition agreement</td><td>Conservation covenant applies to conservation portion. Full acquisition subject to legal completion.</td></tr>
-    <tr><td><strong>Parcels 12 &amp; 13</strong> — Conservation corridor + waterfront</td><td class="status-negotiation">Under negotiation</td><td>Conservation-only use. No permanent structures.</td></tr>
+    <tr><td><strong>Lot 890 / Parcel D</strong> — Gateway anchor parcel</td><td class="status-confirmed">Purchased</td><td>15,139 sf. Title registration in progress. Estate's operational core — reception pavilion, café, solar, wastewater, estate services.</td></tr>
+    <tr><td><strong>Lot E / Map Lot 12</strong> — Coastal residential</td><td class="status-mou">Under acquisition agreement</td><td>40,941 sf gross. MOU agreed. Contains CNO-01 condominium parcel (8 units) + V-01 and V-02 individually titled villas.</td></tr>
+    <tr><td><strong>Lot F / Map Lot 13</strong> — Mid-estate residential</td><td class="status-mou">Under acquisition agreement</td><td>28,841 sf gross. MOU agreed. Contains V-03, V-04, V-05 villas + C-01, C-02, C-03 cottage sites.</td></tr>
+    <tr><td><strong>Lot (3) / Southern Extension</strong> — Southern residential</td><td class="status-mou">Under acquisition agreement</td><td>23,372 sf gross. MOU agreed. Contains V-06 Premium Villa + C-04 to C-10 cottage sites + U-01 utility parcel.</td></tr>
+    <tr><td><strong>Parcel 905 / Lot (2)</strong> — Conservation zone</td><td class="status-mou">Under acquisition agreement</td><td>95,374 sf. Voluntary corporate no-build covenant applies in perpetuity. Zero residential allocation on this parcel.</td></tr>
+    <tr><td><strong>Crown Land corridor</strong> — Nature trail &amp; waterfront access</td><td class="status-negotiation">Access subject to Crown approval</td><td>Conservation trail, kayak launch, boardwalk, and waterfront edge access through Crown Land adjacent to the estate. No permanent structures proposed.</td></tr>
   </tbody>
 </table>
 
@@ -1154,26 +1175,31 @@ ${footer('SHER-INV-T1-003-R01')}
       <text x="65" y="205" font-family="Arial, sans-serif" font-size="7.5" fill="#1B3B36">Reception · Services · Solar</text>
       <text x="65" y="216" font-family="Arial, sans-serif" font-size="7" fill="#C9A867" font-weight="600">PURCHASED ✓</text>
 
-      <!-- Lot 897 (upper residential) -->
-      <rect x="160" y="75" width="130" height="85" rx="4" fill="rgba(201,168,103,0.1)" stroke="#C9A867" stroke-width="1.5" stroke-dasharray="5,3"/>
-      <text x="172" y="95" font-family="Arial, sans-serif" font-size="8.5" font-weight="700" fill="#1B3B36">Lot 897</text>
-      <text x="172" y="106" font-family="Arial, sans-serif" font-size="7.5" fill="#1B3B36">Upper Residential</text>
-      <text x="172" y="117" font-family="Arial, sans-serif" font-size="7.5" fill="#1B3B36">C-01 · C-02 · C-03</text>
-      <text x="172" y="128" font-family="Arial, sans-serif" font-size="7.5" fill="#1B3B36">Cottage Type A cluster</text>
-      <text x="172" y="142" font-family="Arial, sans-serif" font-size="7" fill="#A88540" font-weight="600">Under agreement</text>
+      <!-- Lot F / Map Lot 13 — mid-estate residential (replaces erroneously named Lot 897) -->
+      <rect x="160" y="75" width="130" height="90" rx="4" fill="rgba(201,168,103,0.1)" stroke="#C9A867" stroke-width="1.5" stroke-dasharray="5,3"/>
+      <text x="172" y="93" font-family="Arial, sans-serif" font-size="8.5" font-weight="700" fill="#1B3B36">Lot F / Map Lot 13</text>
+      <text x="172" y="104" font-family="Arial, sans-serif" font-size="7.5" fill="#1B3B36">Mid-Estate Residential</text>
+      <text x="172" y="115" font-family="Arial, sans-serif" font-size="7.5" fill="#1B3B36">V-03 · V-04 · V-05</text>
+      <text x="172" y="126" font-family="Arial, sans-serif" font-size="7.5" fill="#1B3B36">C-01 · C-02 · C-03</text>
+      <text x="172" y="137" font-family="Arial, sans-serif" font-size="7.5" fill="#1B3B36">28,841 sf · SHER-S5C-001</text>
+      <text x="172" y="152" font-family="Arial, sans-serif" font-size="7" fill="#A88540" font-weight="600">Under agreement</text>
 
-      <!-- Lot 905 (mid-slope — conservation portion shown separately) -->
-      <rect x="295" y="90" width="130" height="95" rx="4" fill="rgba(27,59,54,0.07)" stroke="#1B3B36" stroke-width="1.5" stroke-dasharray="5,3"/>
-      <text x="305" y="110" font-family="Arial, sans-serif" font-size="8.5" font-weight="700" fill="#1B3B36">Lot 905</text>
-      <text x="305" y="121" font-family="Arial, sans-serif" font-size="7.5" fill="#1B3B36">Mid-slope · Residential</text>
-      <text x="305" y="132" font-family="Arial, sans-serif" font-size="7.5" fill="#1B3B36">C-04–C-10 · V-01–V-06</text>
-      <text x="305" y="143" font-family="Arial, sans-serif" font-size="7.5" fill="#1B3B36">+ Conservation Covenant</text>
-      <text x="305" y="154" font-family="Arial, sans-serif" font-size="7" fill="#1B3B36" font-style="italic">95,374 sf conservation zone</text>
-      <text x="305" y="168" font-family="Arial, sans-serif" font-size="7" fill="#A88540" font-weight="600">Under agreement</text>
+      <!-- Lot (3) / Southern Extension — replaces incorrectly labelled Lot 905 residential box -->
+      <rect x="295" y="75" width="130" height="90" rx="4" fill="rgba(201,168,103,0.07)" stroke="#C9A867" stroke-width="1.5" stroke-dasharray="5,3"/>
+      <text x="305" y="93" font-family="Arial, sans-serif" font-size="8.5" font-weight="700" fill="#1B3B36">Lot (3) · Southern Ext.</text>
+      <text x="305" y="104" font-family="Arial, sans-serif" font-size="7.5" fill="#1B3B36">Southern Residential</text>
+      <text x="305" y="115" font-family="Arial, sans-serif" font-size="7.5" fill="#1B3B36">V-06 Premium Villa</text>
+      <text x="305" y="126" font-family="Arial, sans-serif" font-size="7.5" fill="#1B3B36">C-04 to C-10 · U-01</text>
+      <text x="305" y="137" font-family="Arial, sans-serif" font-size="7.5" fill="#1B3B36">23,372 sf · SHER-S5D-001</text>
+      <text x="305" y="152" font-family="Arial, sans-serif" font-size="7" fill="#A88540" font-weight="600">Under agreement</text>
 
-      <!-- Conservation hatch on Lot 905 (right portion) -->
-      <rect x="390" y="95" width="30" height="85" rx="2" fill="none" stroke="#1B3B36" stroke-width="1" stroke-dasharray="3,3" opacity="0.5"/>
-      <text x="394" y="135" font-family="Arial, sans-serif" font-size="7" fill="#1B3B36" font-style="italic" transform="rotate(90,394,135)">NO BUILD</text>
+      <!-- Parcel 905 / Lot (2) — CONSERVATION ZONE (no residences) -->
+      <rect x="430" y="130" width="120" height="80" rx="4" fill="rgba(27,59,54,0.08)" stroke="#1B3B36" stroke-width="1.5" stroke-dasharray="4,3"/>
+      <text x="438" y="148" font-family="Arial, sans-serif" font-size="8" font-weight="700" fill="#1B3B36">Parcel 905 / Lot (2)</text>
+      <text x="438" y="159" font-family="Arial, sans-serif" font-size="7.5" fill="#1B3B36">CONSERVATION ZONE</text>
+      <text x="438" y="170" font-family="Arial, sans-serif" font-size="7.5" fill="#1B3B36">No-build covenant</text>
+      <text x="438" y="181" font-family="Arial, sans-serif" font-size="7" fill="#1B3B36" font-style="italic">95,374 sf · NO BUILD</text>
+      <text x="438" y="199" font-family="Arial, sans-serif" font-size="7" fill="#A88540" font-weight="600">Under agreement</text>
 
       <!-- Parcel 12 (conservation corridor) -->
       <rect x="160" y="185" width="105" height="38" rx="4" fill="rgba(27,59,54,0.08)" stroke="#1B3B36" stroke-width="1.2" stroke-dasharray="4,3"/>
@@ -1209,18 +1235,122 @@ ${footer('SHER-INV-T1-003-R01')}
 
 <h2>Parcel Register</h2>
 <table>
-  <thead><tr><th>Parcel</th><th>Area</th><th>Role</th><th>Acquisition Status</th></tr></thead>
+  <thead><tr><th>Parcel</th><th>Gross Area</th><th>Role &amp; Residences</th><th>Status</th></tr></thead>
   <tbody>
-    <tr><td><strong>Lot 890</strong></td><td>Gateway services zone</td><td>Anchor parcel — reception, café, solar, wastewater, estate services. No residential units.</td><td class="status-confirmed">Purchased · title registration in progress</td></tr>
-    <tr><td><strong>Lot E</strong></td><td>Coastal condo parcel</td><td>Condo Type A · 8 boutique units · Closest to conservation trail and kayak launch</td><td class="status-mou">Subject to planning</td></tr>
-    <tr><td><strong>Lot 897</strong></td><td>Upper residential zone</td><td>Cottage Type A northern cluster (C-01–C-03). Estate road Phase 1.</td><td class="status-mou">Under acquisition agreement</td></tr>
-    <tr><td><strong>Lot 905</strong></td><td>2.50 ac (residential) + 2.19 ac (conservation)</td><td>Southern residential — C-04–C-10, V-01–V-06. Conservation covenant applies to conservation portion (95,374 sf). No build covenant is corporate, not regulatory.</td><td class="status-mou">Under acquisition agreement</td></tr>
-    <tr><td><strong>Parcels 12 &amp; 13</strong></td><td>Lower coastal corridor</td><td>Mangrove buffer, kayak launch, conservation trail, raised boardwalk, wetland edge. No permanent foundations on any part of this parcel.</td><td class="status-negotiation">Under negotiation</td></tr>
+    <tr><td><strong>Lot 890 / Parcel D</strong></td><td>15,139 sf · 0.35 ac</td><td>Gateway anchor — reception pavilion, café, solar, wastewater, estate services. No residential units. Drawing: SHER-S5A-001.</td><td class="status-confirmed">Purchased · title registration in progress</td></tr>
+    <tr><td><strong>Lot E / Map Lot 12</strong></td><td>40,941 sf · 0.94 ac</td><td>Coastal residential — CNO-01 condominium (8 units, 22,000 sf parcel); V-01 individual title (9,482 sf); V-02 individual title (9,482 sf). 16 parking spaces, drop-off loop. Drawing: SHER-S5B-001.</td><td class="status-mou">Under acquisition agreement</td></tr>
+    <tr><td><strong>Lot F / Map Lot 13</strong></td><td>28,841 sf · 0.66 ac</td><td>Mid-estate residential — V-03, V-04, V-05 individual title villas (5,490 sf each); C-01, C-02, C-03 HOA/strata cottage sites (1,541 sf each); 4-space shared cottage court; 6 m common lane. Drawing: SHER-S5C-001.</td><td class="status-mou">Under acquisition agreement</td></tr>
+    <tr><td><strong>Lot (3) / Southern Extension</strong></td><td>23,372 sf · 0.54 ac</td><td>Southern residential — V-06 Premium Villa individual title (5,813 sf, 12.4 × 8.0 m envelope); C-04 to C-10 HOA/strata cottage sites (1,292 sf each); U-01 utility/service parcel; 6 m fire lane + 22 m turning head. Drawing: SHER-S5D-001.</td><td class="status-mou">Under acquisition agreement</td></tr>
+    <tr><td><strong>Parcel 905 / Lot (2)</strong></td><td>95,374 sf · 2.19 ac<br>46.7% of estate</td><td><strong>Conservation zone only.</strong> Voluntary corporate no-build covenant — no buildings, no roads, no permanent infrastructure. Ever. This is the wetland buffer between the residential estate and Savannes Bay. Zero residential allocation.</td><td class="status-mou">Under acquisition agreement</td></tr>
+    <tr><td><strong>Crown Land corridor</strong></td><td>~14,781 sf (DCA context)</td><td>Nature trail access, kayak launch, conservation boardwalk, and waterfront edge adjacent to the estate. Subject to Crown Land approval. No permanent SHER structures proposed.</td><td class="status-negotiation">Crown approval required</td></tr>
   </tbody>
 </table>
 
 <div class="callout">
+  <p><strong>Survey note:</strong> Gross areas are survey-confirmed from Stage 3 Gross-to-Net Study (Drawing SHER-S3-001). Net planning envelopes after fixed controls and ecological buffers are: Lot E ~30,904 sf, Lot F ~17,403 sf, Lot (3) ~14,580 sf. Full survey documentation — registered parcel boundaries, area calculations confirmed by a licensed surveyor, and title search results — is available at Tier 3 subject to NDA execution.</p>
+</div>
+
+<div class="callout">
   <p><strong>Survey note:</strong> Full survey plans and title documentation — including registered parcel boundaries, area calculations confirmed by a licensed surveyor, and title search results — are available at Tier 3 subject to NDA execution (SHER-LEGAL-006-R01). Boundaries shown here are indicative and schematic. They do not constitute a survey, a title document, or a planning drawing.</p>
+</div>
+
+</div>
+${footer('SHER-INV-T1-003-R01')}
+
+<div class="page-break"></div>
+
+<!-- ── DRAWING PAGE 3 — STAGE 4 MASTER PARCEL PLAN ── -->
+<div class="doc-header">
+  <img src="${LOGO_B64}" alt="SHER Sanctuary">
+  <div class="doc-header-right">
+    <span class="tier-badge">Tier 1 · Investor</span>
+    <span class="ref">SHER-INV-T1-003-R01 · Rev R01 · ${TODAY}</span>
+    <div class="title">Estate Location Map</div>
+  </div>
+</div>
+<div class="doc-body">
+
+<span class="eyebrow">Section 3 · Approved Site Plans — For Reference</span>
+<h2>Stage 4 — Detailed 18-Parcel Subdivision</h2>
+<p>Owner-approved master parcel control plan for the entire SHER estate. This drawing establishes the definitive boundary, parcel identity, tenure, and access structure for all 18 development parcels plus Parcel 905 conservation zone. Drawing SHER-S4-001 · Rev P01 · 20 Jun 2026 · For Owner Approval · Not for Construction.</p>
+
+<img src="${PLAN_S4}" alt="Stage 4 — Detailed 18-Parcel Subdivision (SHER-S4-001)" class="plan-img">
+<p class="plan-cap">
+  <span class="plan-stamp">SHER-S4-001 · Rev P01 · 20 Jun 2026</span><br>
+  Stage 4 · Detailed 18-Parcel Subdivision · Scale 1:1000 @ A3<br>
+  STATUS: FOR OWNER APPROVAL — NOT FOR CONSTRUCTION<br>
+  Yellow boundary = Owner-confirmed SHER cadastral control. Blue = Condo parcel. Gold = Villa parcels. Green = Cottage HOA/strata sites. Hatched lower-left = Parcel 905 Conservation Zone (no-build).
+</p>
+
+</div>
+${footer('SHER-INV-T1-003-R01')}
+
+<div class="page-break"></div>
+
+<!-- ── DRAWING PAGE 4 — STAGE 5B (LOT E) + STAGE 5C (LOT F) ── -->
+<div class="doc-header">
+  <img src="${LOGO_B64}" alt="SHER Sanctuary">
+  <div class="doc-header-right">
+    <span class="tier-badge">Tier 1 · Investor</span>
+    <span class="ref">SHER-INV-T1-003-R01 · Rev R01 · ${TODAY}</span>
+    <div class="title">Estate Location Map</div>
+  </div>
+</div>
+<div class="doc-body">
+
+<h2>Stage 5B — Lot E (Condo + Villas V-01, V-02) &nbsp;&amp;&nbsp; Stage 5C — Lot F (Villas V-03–05 + Cottages C-01–03)</h2>
+
+<div class="plan-grid">
+  <div>
+    <img src="${PLAN_S5B}" alt="Stage 5B — Lot E Architectural Site Plan (SHER-S5B-001)" class="plan-img">
+    <p class="plan-cap">
+      <span class="plan-stamp">SHER-S5B-001 · Rev P01 · 20 Jun 2026</span><br>
+      Stage 5B · Lot E · Condo + Two Villas · Lot E gross 40,941 sf<br>
+      CNO-01 condo 22,000 sf (8 units, 16 spaces) · V-01 &amp; V-02 each 9,482 sf<br>
+      FOR OWNER APPROVAL — NOT FOR CONSTRUCTION
+    </p>
+  </div>
+  <div>
+    <img src="${PLAN_S5C}" alt="Stage 5C — Lot F Architectural Site Plan (SHER-S5C-001)" class="plan-img">
+    <p class="plan-cap">
+      <span class="plan-stamp">SHER-S5C-001 · Rev P01 · 20 Jun 2026</span><br>
+      Stage 5C · Lot F · Three Villas + Three Cottages · Lot F gross 28,841 sf<br>
+      V-03, V-04, V-05 each 5,490 sf · C-01, C-02, C-03 each 1,541 sf<br>
+      FOR OWNER APPROVAL — NOT FOR CONSTRUCTION
+    </p>
+  </div>
+</div>
+
+</div>
+${footer('SHER-INV-T1-003-R01')}
+
+<div class="page-break"></div>
+
+<!-- ── DRAWING PAGE 5 — STAGE 5D (LOT 3) ── -->
+<div class="doc-header">
+  <img src="${LOGO_B64}" alt="SHER Sanctuary">
+  <div class="doc-header-right">
+    <span class="tier-badge">Tier 1 · Investor</span>
+    <span class="ref">SHER-INV-T1-003-R01 · Rev R01 · ${TODAY}</span>
+    <div class="title">Estate Location Map</div>
+  </div>
+</div>
+<div class="doc-body">
+
+<h2>Stage 5D — Lot (3) Southern Extension: Premium Villa V-06 + Cottages C-04–C-10</h2>
+<p>The southern residential zone contains one premium individually titled villa (V-06), seven cottage HOA/strata sites (C-04 to C-10), and one utility/service parcel (U-01). Cottages C-07 to C-10 are SHER-retained and form the estate hospitality programme — they are not available for individual sale.</p>
+
+<img src="${PLAN_S5D}" alt="Stage 5D — Lot (3) Architectural Site Plan (SHER-S5D-001)" class="plan-img">
+<p class="plan-cap">
+  <span class="plan-stamp">SHER-S5D-001 · Rev P01 · 20 Jun 2026</span><br>
+  Stage 5D · Lot (3) Southern Extension · Premium Villa + 7 Cottages + Utility · Lot (3) gross 23,372 sf<br>
+  V-06 individual title 5,813 sf (12.4 × 8.0 m envelope) · C-04–C-10 HOA/strata each 1,292 sf · U-01 utility 2,368 sf<br>
+  PLANNING CONFLICT NOTE: Full 7-cottage parking target requires HOA common easement — resolution required before Stage 6.<br>
+  FOR OWNER APPROVAL — NOT FOR CONSTRUCTION
+</p>
+
+<div class="callout">
+  <p><strong>Stage 5A (Lot 890 Gateway) drawings</strong> are available on request. The Lot 890 reception pavilion footprint is 12.5 × 6.2 m (834 sf); separate toilet building 5.0 × 4.3 m (231 sf); covered veranda/deck 334 sf. Gross lot area 15,139 sf; net planning envelope after Private Reserve B and access buffers ~5,031 sf. Drawing: SHER-S5A-001 · Rev P01 · 20 Jun 2026.</p>
 </div>
 
 </div>
@@ -1398,9 +1528,10 @@ ${footer('SHER-INV-T1-004-R01')}
 // ══════════════════════════════════════════════════════════════════════════
 // RENDER ALL DOCS
 // ══════════════════════════════════════════════════════════════════════════
+// T1-002 is generated separately by generate-tier1-002-renders.js (has real gallery images)
+// Do NOT include it here — running this script must not overwrite the renders version.
 const DOCS = [
   { filename: 'SHER-INV-T1-001-R01.pdf', html: shell('SHER-INV-T1-001-R01', 'Project Overview & Vision', doc1Content) },
-  { filename: 'SHER-INV-T1-002-R01.pdf', html: shell('SHER-INV-T1-002-R01', 'Concept Renders & Site Impressions', doc2Content) },
   { filename: 'SHER-INV-T1-003-R01.pdf', html: shell('SHER-INV-T1-003-R01', 'Estate Location Map', doc3Content) },
   { filename: 'SHER-INV-T1-004-R01.pdf', html: shell('SHER-INV-T1-004-R01', 'Project Brief — Materials & Conservation Covenant', doc4Content) },
 ];

@@ -221,6 +221,10 @@
     font-size: 8pt; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
     padding: 4px 12px; border-radius: 3px; margin-bottom: 16px;
   }
+  .plan-img { width: 100%; display: block; border: 1.5px solid var(--border); border-radius: 4px; margin: 10px 0 4px; }
+  .plan-cap { font-size: 7pt; color: var(--muted); font-style: italic; text-align: center; line-height: 1.6; margin-bottom: 12px; }
+  .plan-stamp { font-weight: 700; color: var(--gold-dk); font-style: normal; letter-spacing: 0.08em; text-transform: uppercase; }
+  .plan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 10px 0; }
   .page-break { page-break-after: always; }
   .image-frame {
     border: 1.5px solid var(--border); border-radius: 6px;
@@ -381,15 +385,19 @@
 
 <h2>The Five Parcels</h2>
 <table>
-  <thead><tr><th>Parcel</th><th>Role</th><th>Area</th><th>Acquisition Status</th></tr></thead>
+  <thead><tr><th>Parcel</th><th>Role &amp; Residences</th><th>Gross Area</th><th>Acquisition Status</th></tr></thead>
   <tbody>
-    <tr><td><strong>Lot 890</strong></td><td>Anchor gateway — reception pavilion, café, estate services, solar infrastructure, wastewater management, staff facilities</td><td>Estate services zone</td><td class="status-confirmed">Purchased · title registration in progress</td></tr>
-    <tr><td><strong>Lot 897</strong></td><td>Upper residential zone — Cottage Type A cluster (northern), primary estate road and landscaping</td><td>Residential / infrastructure</td><td class="status-mou">Under acquisition agreement</td></tr>
-    <tr><td><strong>Lot 905</strong></td><td>Mid-slope — secondary residential zone (Cottages and Villas, southern cluster); <strong>voluntary no-build conservation covenant applies to conservation portion</strong></td><td>Residential + conservation</td><td class="status-mou">Under acquisition agreement</td></tr>
-    <tr><td><strong>Parcel 12</strong></td><td>Lower coastal access corridor — mangrove buffer, conservation trail, kayak launch, raised boardwalk. No permanent foundations.</td><td>Conservation / access</td><td class="status-negotiation">Under negotiation</td></tr>
-    <tr><td><strong>Parcel 13</strong></td><td>Waterfront — bay edge, mangrove fringe, tidal zone. Conservation only.</td><td>Conservation · no build</td><td class="status-negotiation">Under negotiation</td></tr>
+    <tr><td><strong>Lot 890 / Parcel D</strong></td><td>Anchor gateway — reception pavilion, café, solar infrastructure, wastewater management, estate services. No residential units.</td><td>15,139 sf · 0.35 ac</td><td class="status-confirmed">Purchased · title registration in progress</td></tr>
+    <tr><td><strong>Lot E / Map Lot 12</strong></td><td>Coastal residential — CNO-01 boutique condominium (8 units); V-01 and V-02 individually titled villas. 16 parking spaces; drop-off loop; stormwater reserve. Drawing: SHER-S5B-001.</td><td>40,941 sf · 0.94 ac</td><td class="status-mou">Under acquisition agreement</td></tr>
+    <tr><td><strong>Lot F / Map Lot 13</strong></td><td>Mid-estate residential — V-03, V-04, V-05 individually titled villas (5,490 sf each); C-01, C-02, C-03 HOA/strata exclusive-use cottage sites (1,541 sf each); 4-space shared cottage court; 6 m common access lane. Drawing: SHER-S5C-001.</td><td>28,841 sf · 0.66 ac</td><td class="status-mou">Under acquisition agreement</td></tr>
+    <tr><td><strong>Lot (3) / Southern Extension</strong></td><td>Southern residential — V-06 Premium Villa individual title (5,813 sf, 12.4 × 8.0 m envelope); C-04 to C-10 HOA/strata cottage sites (1,292 sf each); U-01 utility/service parcel (2,368 sf); 6 m fire lane + 22 m turning head. Drawing: SHER-S5D-001.</td><td>23,372 sf · 0.54 ac</td><td class="status-mou">Under acquisition agreement</td></tr>
+    <tr><td><strong>Parcel 905 / Lot (2)</strong></td><td><strong>Conservation zone — voluntary corporate no-build covenant.</strong> 95,374 sf will never carry a building, road, or permanent infrastructure. Permanent wetland buffer between the residential estate and Savannes Bay. Zero residential allocation.</td><td>95,374 sf · 2.19 ac<br><em>46.7% of total estate</em></td><td class="status-mou">Under acquisition agreement</td></tr>
   </tbody>
 </table>
+
+<div class="callout">
+  <p><strong>Approved drawings:</strong> Stage 4 (full estate parcel overview), Stage 5A (Lot 890), Stage 5B (Lot E), Stage 5C (Lot F), and Stage 5D (Lot 3) architectural site plans are reproduced in SHER-INV-T1-003-R01 (Estate Location Map). All drawings: Rev P01, 20 Jun 2026, Status — For Owner Approval, Not for Construction.</p>
+</div>
 
 <div class="callout">
   <p><strong>Conservation covenant — Lot 905:</strong> The no-build conservation commitment on the conservation portion of Lot 905 is a voluntary corporate decision by Safeport Security Services Limited. It is not a condition imposed by any regulatory authority, nor is it the result of planning restrictions. It is a statement of conservation discipline: this land will not be offered for development regardless of any future planning permission that might theoretically allow it. This permanence is the source of the conservation covenant's value — it is irreversible by design.</p>
@@ -775,10 +783,12 @@
 <table>
   <thead><tr><th>Parcel</th><th>Status</th><th>Note</th></tr></thead>
   <tbody>
-    <tr><td><strong>Lot 890</strong> — Gateway anchor parcel</td><td class="status-confirmed">Purchased</td><td>Title registration in progress. This is the estate's operational core — reception, services, infrastructure.</td></tr>
-    <tr><td><strong>Lot 897</strong> — Upper residential</td><td class="status-mou">Under acquisition agreement</td><td>MOU / heads of terms agreed. Full acquisition subject to legal completion.</td></tr>
-    <tr><td><strong>Lot 905</strong> — Mid-slope residential + conservation</td><td class="status-mou">Under acquisition agreement</td><td>Conservation covenant applies to conservation portion. Full acquisition subject to legal completion.</td></tr>
-    <tr><td><strong>Parcels 12 &amp; 13</strong> — Conservation corridor + waterfront</td><td class="status-negotiation">Under negotiation</td><td>Conservation-only use. No permanent structures.</td></tr>
+    <tr><td><strong>Lot 890 / Parcel D</strong> — Gateway anchor parcel</td><td class="status-confirmed">Purchased</td><td>15,139 sf. Title registration in progress. Estate's operational core — reception pavilion, café, solar, wastewater, estate services.</td></tr>
+    <tr><td><strong>Lot E / Map Lot 12</strong> — Coastal residential</td><td class="status-mou">Under acquisition agreement</td><td>40,941 sf gross. MOU agreed. Contains CNO-01 condominium parcel (8 units) + V-01 and V-02 individually titled villas.</td></tr>
+    <tr><td><strong>Lot F / Map Lot 13</strong> — Mid-estate residential</td><td class="status-mou">Under acquisition agreement</td><td>28,841 sf gross. MOU agreed. Contains V-03, V-04, V-05 villas + C-01, C-02, C-03 cottage sites.</td></tr>
+    <tr><td><strong>Lot (3) / Southern Extension</strong> — Southern residential</td><td class="status-mou">Under acquisition agreement</td><td>23,372 sf gross. MOU agreed. Contains V-06 Premium Villa + C-04 to C-10 cottage sites + U-01 utility parcel.</td></tr>
+    <tr><td><strong>Parcel 905 / Lot (2)</strong> — Conservation zone</td><td class="status-mou">Under acquisition agreement</td><td>95,374 sf. Voluntary corporate no-build covenant applies in perpetuity. Zero residential allocation on this parcel.</td></tr>
+    <tr><td><strong>Crown Land corridor</strong> — Nature trail &amp; waterfront access</td><td class="status-negotiation">Access subject to Crown approval</td><td>Conservation trail, kayak launch, boardwalk, and waterfront edge access through Crown Land adjacent to the estate. No permanent structures proposed.</td></tr>
   </tbody>
 </table>
 

@@ -421,7 +421,7 @@ const doc1 = shell('SHER-BUYER-001-R01', 'Schedule of Accommodation &amp; Pricin
     <span class="product-card__badge">For Sale · 5 Units</span>
   </div>
   <div class="product-card__body">
-    <p><strong>Plot references:</strong> V-01 to V-05 &nbsp;|&nbsp; <strong>Estate zone:</strong> Southern estate, Lot (3) — premium landscape privacy</p>
+    <p><strong>Plot references:</strong> V-01 to V-05 &nbsp;|&nbsp; <strong>Estate zones:</strong> Lot E (V-01, V-02 — coastal/northern) · Lot F (V-03, V-04, V-05 — mid-estate)</p>
     <table>
       <thead><tr><th>Space</th><th>Area (sq ft)</th><th>Notes</th></tr></thead>
       <tbody>
@@ -433,16 +433,16 @@ const doc1 = shell('SHER-BUYER-001-R01', 'Schedule of Accommodation &amp; Pricin
       </tbody>
     </table>
     <table>
-      <thead><tr><th>Plot</th><th>Position</th><th>Indicative Price (USD)</th><th>Status</th></tr></thead>
+      <thead><tr><th>Plot</th><th>Estate Zone &amp; Position</th><th>Indicative Price (USD)</th><th>Status</th></tr></thead>
       <tbody>
-        <tr><td>V-01</td><td>Southern estate — villa cluster</td><td class="status-poa">Price on application</td><td class="status-avail">Available</td></tr>
-        <tr><td>V-02</td><td>Southern estate — villa cluster</td><td class="status-poa">Price on application</td><td class="status-avail">Available</td></tr>
-        <tr><td>V-03</td><td>Southern estate — villa cluster</td><td class="status-poa">Price on application</td><td class="status-avail">Available</td></tr>
-        <tr><td>V-04</td><td>Southern estate — bay view</td><td class="status-poa">Price on application</td><td class="status-avail">Available</td></tr>
-        <tr><td>V-05</td><td>Southern estate — premium south position</td><td>From US$980,000</td><td class="status-avail">Available</td></tr>
+        <tr><td>V-01</td><td>Lot E — northern estate, coastal position, 9,482 sf plot, 2 parking spaces</td><td class="status-poa">Price on application</td><td class="status-avail">Available</td></tr>
+        <tr><td>V-02</td><td>Lot E — northern estate, coastal position, 9,482 sf plot, 2 parking spaces</td><td class="status-poa">Price on application</td><td class="status-avail">Available</td></tr>
+        <tr><td>V-03</td><td>Lot F — mid-estate villa cluster, 5,490 sf plot, shared lane access, 2 parking spaces</td><td class="status-poa">Price on application</td><td class="status-avail">Available</td></tr>
+        <tr><td>V-04</td><td>Lot F — mid-estate, bay orientation, 5,490 sf plot, shared lane access, 2 parking spaces</td><td class="status-poa">Price on application</td><td class="status-avail">Available</td></tr>
+        <tr><td>V-05</td><td>Lot F — mid-estate, southern position, 5,490 sf plot, shared lane access, 2 parking spaces</td><td>From US$980,000</td><td class="status-avail">Available</td></tr>
       </tbody>
     </table>
-    <p style="font-size:8.5pt;color:var(--muted);font-style:italic">Formal pricing will be confirmed at reservation stage. "Price on application" units are priced individually according to plot position, view and configuration.</p>
+    <p style="font-size:8.5pt;color:var(--muted);font-style:italic">V-01 and V-02 share Lot E with the CNO-01 condominium and have direct road access. V-03, V-04, V-05 are on Lot F with shared private lane access. Formal pricing confirmed at reservation stage.</p>
   </div>
 </div>
 
