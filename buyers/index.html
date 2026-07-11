@@ -2007,6 +2007,274 @@
     </section>
 
 
+    <!-- ══ BEFORE & VISION ══════════════════════════════════════════ -->
+    <section class="bv-section" aria-label="The Estate — Before and Vision">
+    <style>
+    .bv-section {
+      background: var(--cream, #F5F0E8);
+      padding: 5rem 0 5.5rem;
+    }
+    .bv-section__hdr {
+      text-align: center;
+      max-width: 680px;
+      margin: 0 auto 3.25rem;
+      padding: 0 1.5rem;
+    }
+    .bv-eyebrow {
+      display: block;
+      font-family: 'Inter', sans-serif;
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold, #C9A867);
+      margin-bottom: 0.75rem;
+    }
+    .bv-heading {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: clamp(28px, 3.5vw, 44px);
+      font-weight: 400;
+      color: var(--green, #1B3B36);
+      line-height: 1.1;
+      margin: 0 0 1rem;
+    }
+    .bv-subhead {
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      line-height: 1.8;
+      color: #3d4f49;
+      margin: 0;
+    }
+    .bv-cards {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+    @media (max-width: 768px) { .bv-cards { padding: 0 1.25rem; } }
+    .bv-divider {
+      border: none;
+      border-top: 1px solid rgba(201,168,103,0.4);
+      margin: 3.25rem 0;
+    }
+    .bv-card {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .bv-card.bv--visible { opacity: 1; transform: translateY(0); }
+    @media (prefers-reduced-motion: reduce) {
+      .bv-card { opacity: 1 !important; transform: none !important; transition: none !important; }
+    }
+    .bv-panels {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 28px rgba(27,59,54,0.12);
+    }
+    @media (max-width: 700px) { .bv-panels { grid-template-columns: 1fr; } }
+    .bv-panel {
+      position: relative;
+      aspect-ratio: 16 / 10;
+      overflow: hidden;
+      background: #d5cec3;
+    }
+    .bv-panel img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .bv-panel-label {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 2.5rem 1rem 0.8rem;
+      background: linear-gradient(to top, rgba(16,30,24,0.82) 0%, transparent 100%);
+      font-family: 'Inter', sans-serif;
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #C9A867;
+      line-height: 1.3;
+    }
+    .bv-text { padding: 1.5rem 0.25rem 0; }
+    .bv-text h3 {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 22px; font-weight: 500; color: #1B3B36;
+      margin: 0 0 0.55rem; line-height: 1.25;
+    }
+    .bv-text p {
+      font-family: 'Inter', sans-serif;
+      font-size: 14px; line-height: 1.78;
+      color: #3d4f49; margin: 0 0 0.4rem;
+    }
+    .bv-portal-cap {
+      display: block; font-family: 'Inter', sans-serif;
+      font-size: 11px; color: #C9A867;
+      font-style: italic; margin-top: 0.6rem; line-height: 1.6;
+    }
+    .bv-conservation {
+      border: 1.5px solid #1B3B36;
+      border-radius: 8px;
+      padding: 2.25rem 2.5rem;
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .bv-conservation.bv--visible { opacity: 1; transform: translateY(0); }
+    @media (prefers-reduced-motion: reduce) {
+      .bv-conservation { opacity: 1 !important; transform: none !important; transition: none !important; }
+    }
+    @media (max-width: 700px) { .bv-conservation { padding: 1.75rem 1.5rem; } }
+    .bv-conservation h3 {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: clamp(20px, 2.8vw, 28px); font-weight: 400;
+      color: #1B3B36; margin: 0.5rem 0 0.75rem; line-height: 1.2;
+    }
+    .bv-conservation p {
+      font-family: 'Inter', sans-serif;
+      font-size: 15px; line-height: 1.78;
+      color: #3d4f49; max-width: 620px; margin: 0;
+    }
+    </style>
+
+      <div class="bv-section__hdr">
+        <span class="bv-eyebrow">The Estate</span>
+        <h2 class="bv-heading">The Estate &mdash; Before &amp; Vision</h2>
+        <p class="bv-subhead">Four aerial photographs of Savannes Bay as it exists today. Beside each, the approved design intent for that location. The land has not been altered for this photography &mdash; what you see is what we are building within.</p>
+      </div>
+
+      <div class="bv-cards">
+
+        <!-- ── CARD 1 — Boutique Condominium ── -->
+        <div class="bv-card" data-bv>
+          <div class="bv-panels">
+            <div class="bv-panel">
+              <img src="../images/estate/sher-estate-aerial-bay-overview.jpg"
+                   alt="Savannes Bay aerial overview — northern estate, Lot E"
+                   loading="lazy">
+              <div class="bv-panel-label">TODAY &mdash; NORTHERN ESTATE, LOT E</div>
+            </div>
+            <div class="bv-panel">
+              <!-- Stage 5B site plan: Lot E Condo CNO-01 + Villas V-01, V-02 -->
+              <img src="../images/plans/07_Stage5B_LotE_Condo_Villas_Site_Plan_P01.png"
+                   alt="Approved site plan — Lot E: Boutique Condominium CNO-01 and Villas V-01, V-02"
+                   loading="lazy">
+              <div class="bv-panel-label">VISION — BOUTIQUE CONDOMINIUM + VILLAS, LOT E</div>
+            </div>
+          </div>
+          <div class="bv-text">
+            <h3>Boutique Condominium &mdash; CNO-01 &middot; Lot E</h3>
+            <p>8 residences across a compact 2&ndash;3 storey building envelope on a 22,000 sf development parcel. Direct road access. 16 dedicated parking spaces. The mangrove buffer to the south and the bay to the east remain permanently protected.</p>
+            <span class="bv-portal-cap">Pricing and payment terms for this residence type are in the Tier 2 document vault.</span>
+          </div>
+        </div>
+
+        <hr class="bv-divider">
+
+        <!-- ── CARD 2 — Luxury Villa ── -->
+        <div class="bv-card" data-bv>
+          <div class="bv-panels">
+            <div class="bv-panel">
+              <img src="../images/estate/sher-peninsula-bay-overview.jpg"
+                   alt="Savannes Bay peninsula aerial — Lots E and F estate territory"
+                   loading="lazy">
+              <div class="bv-panel-label">TODAY &mdash; SAVANNES BAY PENINSULA, LOTS E &amp; F</div>
+            </div>
+            <div class="bv-panel">
+              <!-- Stage 5C site plan: Lot F Villas V-03, V-04, V-05 + Cottages C-01–C-03 -->
+              <img src="../images/plans/08_Stage5C_LotF_Villas_Cottages_Site_Plan_P01.png"
+                   alt="Approved site plan — Lot F: Villas V-03, V-04, V-05 and Cottages C-01, C-02, C-03"
+                   loading="lazy">
+              <div class="bv-panel-label">VISION — VILLAS V-03, V-04, V-05, LOT F</div>
+            </div>
+          </div>
+          <div class="bv-text">
+            <h3>Luxury Villa &mdash; V-03, V-04, V-05 &middot; Lot F</h3>
+            <p>Three individually titled villas at 5,490 sf each on Lot F. Each villa commands a private 18 &times; 8 m building envelope with 2 dedicated parking spaces. Shared lane access. The cottages at C-01, C-02, C-03 share this lot &mdash; villas and cottages are interspersed to maintain a village scale rather than resort density.</p>
+            <span class="bv-portal-cap">Pricing and payment terms for this residence type are in the Tier 2 document vault.</span>
+          </div>
+        </div>
+
+        <hr class="bv-divider">
+
+        <!-- ── CARD 3 — Hillside Cottage ── -->
+        <div class="bv-card" data-bv>
+          <div class="bv-panels">
+            <div class="bv-panel">
+              <img src="../images/estate/sher-estate-aerial-mangrove-canopy.jpg"
+                   alt="Estate interior aerial — mangrove canopy, Lots F and Lot 3 territory"
+                   loading="lazy">
+              <div class="bv-panel-label">TODAY &mdash; ESTATE INTERIOR, LOTS F &amp; LOT 3</div>
+            </div>
+            <div class="bv-panel">
+              <!-- Stage 5D site plan: Lot 3 cottages C-04 to C-10 + utility parcel -->
+              <img src="../images/plans/09_Stage5D_Lot3_Villa_Cottages_Utilities_P01.png"
+                   alt="Approved site plan — Lot 3: Cottages C-04 through C-10 and Premium Villa V-06"
+                   loading="lazy">
+              <div class="bv-panel-label">VISION — COTTAGES C-04 TO C-10, LOT 3</div>
+            </div>
+          </div>
+          <div class="bv-text">
+            <h3>Hillside Cottage &mdash; C-01 to C-10 &middot; Lots F &amp; 3</h3>
+            <p>Ten cottage sites across two lots. Each cottage envelope is 1,292&ndash;1,541 sf of HOA/strata exclusive-use courtyard. Clustered parking courts serve each group &mdash; golf cart is the primary movement mode within the estate. No conventional driveways. Cottages C-07 to C-10 are SHER-retained operational residences and are not available for purchase.</p>
+            <span class="bv-portal-cap">Pricing and payment terms for this residence type are in the Tier 2 document vault.</span>
+          </div>
+        </div>
+
+        <hr class="bv-divider">
+
+        <!-- ── CONSERVATION INTERLUDE ── -->
+        <div class="bv-conservation" data-bv-con>
+          <span class="bv-eyebrow">Parcel 905 &mdash; Conservation Zone</span>
+          <h3>95,374 sf will never be developed.</h3>
+          <p>Parcel 905 is subject to a voluntary corporate no-build covenant. No buildings, no parking, no utilities &mdash; ever. It exists as a permanent wetland buffer between the residential estate and Savannes Bay. This is not a planning condition. It is a decision.</p>
+        </div>
+
+        <hr class="bv-divider">
+
+        <!-- ── CARD 4 — Sanctuary Villa V-06 ── -->
+        <div class="bv-card" data-bv>
+          <div class="bv-panels">
+            <div class="bv-panel">
+              <img src="../images/estate/sher-scorpion-islet-caribbean.jpg"
+                   alt="Southern tip of Savannes Bay, Lot 3 — Scorpion Islet visible beyond"
+                   loading="lazy">
+              <div class="bv-panel-label">TODAY &mdash; SOUTHERN TIP, LOT 3 &mdash; SCORPION ISLET BEYOND</div>
+            </div>
+            <div class="bv-panel">
+              <!-- Stage 5D plan — dedicated V-06 render will replace this panel when available -->
+              <img src="../images/plans/09_Stage5D_Lot3_Villa_Cottages_Utilities_P01.png"
+                   alt="Approved site plan — Lot 3: Sanctuary Villa V-06 southernmost parcel position"
+                   loading="lazy">
+              <div class="bv-panel-label">VISION — SANCTUARY VILLA V-06, LOT 3</div>
+            </div>
+          </div>
+          <div class="bv-text">
+            <h3>Sanctuary Villa &mdash; V-06 &middot; Lot 3</h3>
+            <p>One residence. 5,813 sf individual title on the southernmost parcel of the estate, with a 12.4 &times; 8.0 m building envelope and two private parking spaces. Scorpion Islet is visible from this position &mdash; the private islet where SHER limits access to one landing per day. This is the most secluded plot on the estate and will not be replicated.</p>
+            <span class="bv-portal-cap">Pricing and payment terms for this residence type are in the Tier 2 document vault.</span>
+          </div>
+        </div>
+
+      </div><!-- /bv-cards -->
+
+      <script>
+      (function () {
+        var mo = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (mo) return;
+        var targets = document.querySelectorAll('[data-bv],[data-bv-con]');
+        if (!('IntersectionObserver' in window)) {
+          targets.forEach(function (el) { el.classList.add('bv--visible'); });
+          return;
+        }
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) { e.target.classList.add('bv--visible'); io.unobserve(e.target); }
+          });
+        }, { threshold: 0.08 });
+        targets.forEach(function (el) { io.observe(el); });
+      })();
+      </script>
+
+    </section><!-- /bv-section -->
+
+
     <!-- BUYER DISCOVERY FORM -->
     <div class="progression-wrapper">
       <div class="container">
