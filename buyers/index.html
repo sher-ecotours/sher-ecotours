@@ -234,8 +234,125 @@
     .password-error-msg.visible { display: block; }
 
     /* ── FINANCIAL PANEL ─────────────────────────────────────────── */
-    .financial-panel { max-height: 0; overflow: hidden; opacity: 0; transition: max-height 0.5s ease, opacity 0.4s ease; }
+    .financial-panel { max-height: 0; overflow: hidden; opacity: 0; transition: max-height 0.8s ease, opacity 0.6s ease; }
     .financial-panel.revealed { max-height: 99999px; opacity: 1; }
+
+    /* ── BUYER ACCESS GATE ──────────────────────────────────────── */
+    .buyer-access-gate {
+      background: var(--cream);
+      border: 1px solid var(--green);
+      border-radius: var(--radius-lg);
+      max-width: 480px;
+      margin: 3rem auto 4rem;
+      padding: 2.75rem 2.5rem;
+      text-align: center;
+    }
+    .buyer-access-gate .eyebrow { display: block; margin-bottom: 0.75rem; }
+    .buyer-access-gate__heading {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 500;
+      color: var(--green);
+      margin-bottom: 0.75rem;
+      line-height: 1.2;
+    }
+    .buyer-access-gate__body {
+      font-family: var(--font-body);
+      font-size: 14px;
+      color: rgba(27,59,54,0.7);
+      line-height: 1.7;
+      margin-bottom: 1.75rem;
+    }
+    .buyer-access-gate__input {
+      width: 100%;
+      padding: 0.875rem 1rem;
+      border: 1.5px solid var(--green);
+      border-radius: var(--radius);
+      font-family: var(--font-body);
+      font-size: 16px;
+      color: var(--text);
+      background: var(--cream);
+      text-align: center;
+      letter-spacing: 0.06em;
+      transition: border-color var(--transition), box-shadow var(--transition);
+      margin-bottom: 0;
+    }
+    .buyer-access-gate__input:focus {
+      outline: none;
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(201,168,103,0.15);
+    }
+    .buyer-access-gate__input::placeholder { color: rgba(27,59,54,0.35); font-style: italic; letter-spacing: 0.01em; }
+    .buyer-access-gate__input.error { border-color: var(--error); animation: shake 0.4s ease; }
+    .buyer-access-gate__error {
+      font-size: 12px;
+      color: var(--error);
+      margin-top: 0.5rem;
+      margin-bottom: 1rem;
+      display: none;
+      line-height: 1.5;
+    }
+    .buyer-access-gate__error.visible { display: block; }
+    .buyer-access-gate__btn {
+      width: 100%;
+      margin-top: 1.25rem;
+      padding: 1rem 2rem;
+      background: var(--gold);
+      border: none;
+      border-radius: var(--radius);
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--green);
+      cursor: pointer;
+      transition: background var(--transition), transform 0.15s ease;
+      letter-spacing: 0.02em;
+    }
+    .buyer-access-gate__btn:hover { background: var(--gold-dark); transform: translateY(-1px); }
+    .buyer-access-gate__btn:active { transform: translateY(0); }
+    .buyer-access-gate__btn.btn--loading { opacity: 0.65; pointer-events: none; }
+
+    /* ── BUYER CONFIRM STATE ────────────────────────────────────── */
+    .buyer-confirm {
+      background: var(--green);
+      border-radius: var(--radius-lg);
+      padding: 3rem 2.5rem;
+      text-align: center;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .buyer-confirm__eyebrow {
+      display: block;
+      font-family: var(--font-body);
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.25rem;
+    }
+    .buyer-confirm__heading {
+      font-family: var(--font-display);
+      font-size: 36px;
+      font-weight: 400;
+      color: var(--cream);
+      line-height: 1.15;
+      margin-bottom: 1.25rem;
+    }
+    .buyer-confirm__body {
+      font-family: var(--font-body);
+      font-size: 16px;
+      color: rgba(245,240,232,0.82);
+      line-height: 1.8;
+      margin-bottom: 1.25rem;
+    }
+    .buyer-confirm__note {
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-style: italic;
+      color: rgba(245,240,232,0.6);
+      line-height: 1.65;
+    }
 
     /* ── DOCUMENT VAULT ──────────────────────────────────────────── */
     .doc-vault { display: flex; flex-direction: column; gap: 0.65rem; }
@@ -1394,6 +1511,7 @@
         Request Access to the Property Collection
       </a>
       <span class="pub-hero__note">Access is by personal introduction. Responses within 24 hours.</span>
+      <a href="#financial-access" style="display:block;margin-top:1.5rem;font-family:var(--font-body);font-size:13px;color:rgba(245,240,232,0.6);text-decoration:none;letter-spacing:0.01em">Already have your access code? Skip to Financial Overview &#8594;</a>
     </div>
     <div class="pub-hero__scroll" aria-hidden="true">
       <span>Discover</span>
@@ -1743,10 +1861,11 @@
       <div class="container">
 
         <div id="buyer-success" class="success-state">
-          <div class="success-card success-card--green">
-            <h3>Your buyer profile has been received.</h3>
-            <p>The Financial Overview is now accessible below &mdash; including residence pricing, payment structure, HOA rental income summary, and mortgage partnership details.</p>
-            <p>We review every submission personally and will be in touch within 48 hours if your profile is a fit.</p>
+          <div class="buyer-confirm">
+            <span class="buyer-confirm__eyebrow">Application Received</span>
+            <h3 class="buyer-confirm__heading">Thank you &mdash; your buyer profile is with us.</h3>
+            <p class="buyer-confirm__body">We review every submission personally. If your interest and the project are aligned, you will receive a personal access code by email within 48 hours. Your code unlocks the Financial Overview &mdash; pricing, payment terms, specifications, and the full site plan.</p>
+            <p class="buyer-confirm__note">Check your inbox at the email address you provided. If you have not heard within 48 hours, write to <a href="mailto:bookings@shersanctuary.com" style="color:rgba(245,240,232,0.6);text-decoration:underline">bookings@shersanctuary.com</a></p>
           </div>
         </div>
 
@@ -1759,9 +1878,9 @@
         </p>
 
         <div style="background:var(--cream);border-radius:var(--radius-lg);padding:2.5rem 2rem;max-width:640px;margin:0 auto 3rem;text-align:center;">
-          <h4 style="font-family:var(--font-display);font-size:28px;font-weight:500;color:var(--green);margin-bottom:1rem;line-height:1.2">Unlock the Financial Overview</h4>
+          <h4 style="font-family:var(--font-display);font-size:28px;font-weight:500;color:var(--green);margin-bottom:1rem;line-height:1.2">Begin the Buyer Discovery Process</h4>
           <p style="font-size:15px;color:var(--text-muted);line-height:1.8;font-family:var(--font-body)">
-            Submit your buyer profile below to unlock immediate access to the Financial Overview &mdash; including residence pricing, payment structure, HOA rental income summary, and mortgage partnership details.
+            Submit your buyer profile below. We review every submission personally. If your interest and the project are aligned, you will receive a personal access code by email within 48 hours to unlock the Financial Overview.
           </p>
         </div>
 
@@ -2025,7 +2144,7 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
               <p>By submitting this form you confirm: <strong>(1)</strong> the information provided is accurate; <strong>(2)</strong> you consent to Safeport Security Services Limited processing your data for buyer assessment, per our <a href="../docs/legal/SHER-LEGAL-002-R01.pdf" target="_blank" rel="noopener">Privacy Policy</a>; <strong>(3)</strong> submission does not constitute a reservation or commitment by SHER; <strong>(4)</strong> you are not acting on behalf of a regulated financial intermediary without authorisation. Governed by the Saint Lucia Data Protection Act Cap.&nbsp;8:18.</p>
             </div>
-            <button type="submit" class="btn btn--primary btn--full">Submit to Unlock the Financial Overview</button>
+            <button type="submit" class="btn btn--primary btn--full">Submit My Buyer Profile</button>
           </div>
 
         </form>
@@ -2034,8 +2153,28 @@
     </div>
 
 
+  <!-- ── ACCESS CODE GATE ─────────────────────────────────────────── -->
+  <div class="progression-wrapper" style="padding-bottom:0">
+    <div class="container">
+      <div id="financial-access" class="buyer-access-gate">
+        <span class="eyebrow" style="color:var(--gold);letter-spacing:0.18em;font-size:10.5px">Financial Overview Access</span>
+        <h2 class="buyer-access-gate__heading">Enter Your Personal Access Code</h2>
+        <p class="buyer-access-gate__body">Your access code was sent to the email address on your buyer profile.</p>
+        <input type="text" id="financial-access-input" class="buyer-access-gate__input"
+               placeholder="Your personal access code"
+               autocomplete="off" spellcheck="false"
+               oninput="document.getElementById('financial-access-error').classList.remove('visible');this.classList.remove('error');">
+        <p id="financial-access-error" class="buyer-access-gate__error">That code is not recognised. Check your email or write to bookings@shersanctuary.com</p>
+        <button type="button" id="financial-access-btn" class="buyer-access-gate__btn"
+                onclick="handleFinancialAccess()">
+          Unlock Financial Overview &#8594;
+        </button>
+      </div>
+    </div>
+  </div>
 
-  <!-- ── FINANCIAL PANEL (revealed on form submission) ─────────── -->
+
+  <!-- ── FINANCIAL PANEL (revealed on correct access code) ─────────── -->
   <div id="financial-panel" class="financial-panel">
 
     <!-- ══ BEFORE & VISION ══════════════════════════════════════════ -->
@@ -2530,11 +2669,10 @@
           });
           if (res.ok) {
             showSuccess(form, success);
-            const panel = document.getElementById('financial-panel');
-            if (panel) {
-              panel.classList.add('revealed');
-              setTimeout(() => panel.scrollIntoView({ behavior: 'smooth', block: 'start' }), 600);
-            }
+            setTimeout(() => {
+              const gate = document.getElementById('financial-access');
+              if (gate) gate.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 600);
           } else {
             alert('There was a problem submitting your form. Please try again or email bookings@shersanctuary.com.');
           }
@@ -2542,6 +2680,60 @@
           alert('There was a problem submitting your form. Please try again or email bookings@shersanctuary.com.');
         }
       });
+    }
+
+    /* ── FINANCIAL OVERVIEW ACCESS CODE ────────────────────────── */
+    // To change: generate SHA-256 hash of new code and replace value below.
+    // Current placeholder code: SHERbuyeraccess
+    // Change before issuing first real buyer codes.
+    const BUYER_FINANCIAL_HASH = '13a2d261e0b37d8c037c81c4571a8aae02e0913f402dd475a963446cc8834228';
+
+    async function hashPassword(raw) {
+      const data   = new TextEncoder().encode(raw);
+      const buffer = await window.crypto.subtle.digest('SHA-256', data);
+      return Array.from(new Uint8Array(buffer))
+        .map(b => b.toString(16).padStart(2, '0'))
+        .join('');
+    }
+
+    async function handleFinancialAccess() {
+      const input = document.getElementById('financial-access-input');
+      const btn   = document.getElementById('financial-access-btn');
+      const error = document.getElementById('financial-access-error');
+      if (!input || !btn) return;
+
+      const raw = input.value.trim();
+      if (!raw) { input.focus(); return; }
+
+      btn.classList.add('btn--loading');
+      btn.textContent = 'Checking…';
+
+      try {
+        const hash = await hashPassword(raw);
+        if (hash === BUYER_FINANCIAL_HASH) {
+          input.classList.remove('error');
+          error.classList.remove('visible');
+          const gate  = document.getElementById('financial-access');
+          const panel = document.getElementById('financial-panel');
+          if (gate)  gate.style.transition  = 'opacity 0.4s ease';
+          if (gate)  gate.style.opacity     = '0';
+          if (panel) panel.classList.add('revealed');
+          setTimeout(() => {
+            if (gate)  gate.style.display = 'none';
+            if (panel) panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 420);
+        } else {
+          input.classList.add('error');
+          error.classList.add('visible');
+          setTimeout(() => input.classList.remove('error'), 2100);
+          btn.classList.remove('btn--loading');
+          btn.textContent = 'Unlock Financial Overview →';
+        }
+      } catch (err) {
+        console.error('Hash error:', err);
+        btn.classList.remove('btn--loading');
+        btn.textContent = 'Unlock Financial Overview →';
+      }
     }
 
     /* ── VIDEO CLICK-TO-PLAY ────────────────────────────────────── */
