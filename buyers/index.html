@@ -941,14 +941,18 @@
       margin-bottom: 2.25rem;
     }
     .pub-chip {
-      background: rgba(27,59,54,0.65);
+      background: rgba(27,59,54,0.82);
+      border: 1px solid rgba(201,168,103,0.65);
       color: var(--gold);
-      font-size: 10px;
+      font-size: 11px;
       font-weight: 600;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
-      padding: 0.4rem 1rem;
+      padding: 0.5rem 1.25rem;
       border-radius: 999px;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      text-shadow: 0 1px 4px rgba(0,0,0,0.4);
     }
     .pub-hero__note {
       display: block;
@@ -1217,7 +1221,7 @@
     @media (max-width: 380px) {
       .pub-hero__headline { font-size: 26px; }
       .pub-hero__eyebrow { font-size: 9px; letter-spacing: 0.12em; }
-      .pub-chip { font-size: 9px; padding: 0.3rem 0.7rem; }
+      .pub-chip { font-size: 10px; padding: 0.4rem 0.9rem; }
     }
 
 
@@ -1479,7 +1483,7 @@
   <nav class="pub-nav" aria-label="SHER Sanctuary navigation">
     <div class="pub-nav__inner">
       <img src="../images/SHER-nav-logo.png" alt="SHER Sanctuary" class="pub-nav__logo">
-      <a href="mailto:info@shersanctuary.com?subject=Property%20Collection%20Access%20Request" class="pub-nav__contact">Request Access</a>
+      <a href="#buyer-form" class="pub-nav__contact">Request Access</a>
     </div>
   </nav>
 
@@ -1506,7 +1510,7 @@
         <span class="pub-chip">15 Minutes &middot; Hewanorra International Airport</span>
         <span class="pub-chip">Nature Whispers &middot; Souls Listen</span>
       </div>
-      <a href="mailto:info@shersanctuary.com?subject=Property%20Collection%20Access%20Request&body=I%20would%20like%20to%20request%20access%20to%20the%20SHER%20Property%20Collection.%0A%0AMy%20name%20is%3A%0A%0ACountry%20of%20residence%3A%0A%0AType%20of%20property%20I%20am%20interested%20in%20(Cottage%2C%20Condominium%20or%20Villa)%3A%0A%0AHow%20I%20heard%20about%20SHER%3A"
+      <a href="#buyer-form"
          class="btn btn--gold" style="border-radius:999px;padding:1rem 2.25rem;font-size:13px">
         Request Access to the Property Collection
       </a>
@@ -1684,7 +1688,7 @@
         <p>This is not a speculative position. It is an early, well-located stake in an area that institutional hospitality investment has already validated.</p>
       </div>
       <div class="pub-validation__cta">
-        <a href="mailto:info@shersanctuary.com?subject=Property%20Collection%20Access%20Request&body=I%20would%20like%20to%20request%20access%20to%20the%20SHER%20Property%20Collection.%0A%0AMy%20name%20is%3A%0A%0ACountry%20of%20residence%3A%0A%0AType%20of%20property%20I%20am%20interested%20in%20(Cottage%2C%20Condominium%20or%20Villa)%3A%0A%0AHow%20I%20heard%20about%20SHER%3A"
+        <a href="#buyer-form"
            class="btn btn--gold" style="border-radius:999px;padding:1rem 2.25rem;font-size:13px">
           Request Access to the Property Collection
         </a>
@@ -1857,7 +1861,7 @@
 
 
     <!-- BUYER DISCOVERY FORM -->
-    <div class="progression-wrapper">
+    <div id="buyer-form" class="progression-wrapper">
       <div class="container">
 
         <div id="buyer-success" class="success-state">

@@ -732,12 +732,12 @@ const doc4 = shell('SHER-BUYER-004-R01', 'Mortgage Partnership Note', `
 
 <div class="green-band">
   <p><strong>Preferred Mortgage Partner:</strong> Republic Bank (Saint Lucia) Limited</p>
-  <p><strong>Branch:</strong> Micoud, Saint Lucia</p>
+  <p><strong>Branch:</strong> #6 William Peter Boulevard, Castries, Saint Lucia</p>
   <p><strong>Relationship type:</strong> Preferred lender — SHER will facilitate introductions for pre-qualified buyers</p>
 </div>
 
 <h2>About the Partnership</h2>
-<p>SHER Sanctuary has engaged with Republic Bank (Saint Lucia) Limited — Micoud branch — as part of its commitment to providing accessible financing pathways for eligible property buyers, including foreign nationals and diaspora purchasers. The bank's Marketing Representative has provided preliminary guidance on lending parameters applicable to SHER residential products.</p>
+<p>SHER Sanctuary has engaged with Republic Bank (Saint Lucia) Limited — Castries branch (#6 William Peter Boulevard) — as part of its commitment to providing accessible financing pathways for eligible property buyers, including foreign nationals and diaspora purchasers. The bank's Marketing Representative has provided preliminary guidance on lending parameters applicable to SHER residential products.</p>
 <p>This relationship means that:</p>
 <ul>
   <li>SHER will make a formal introduction on behalf of pre-qualified buyers who request mortgage support</li>
@@ -787,7 +787,7 @@ const doc4 = shell('SHER-BUYER-004-R01', 'Mortgage Partnership Note', `
 
 <h2>SHER's Role in the Mortgage Process</h2>
 <ul>
-  <li>SHER will provide a formal letter of introduction to Republic Bank (Saint Lucia) Limited — Micoud, on request, for pre-qualified buyers</li>
+  <li>SHER will provide a formal letter of introduction to Republic Bank (Saint Lucia) Limited — Castries (#6 William Peter Boulevard), on request, for pre-qualified buyers</li>
   <li>SHER will issue certified stage completion certificates promptly to support drawdown requests</li>
   <li>SHER's project team is available to liaise with the bank's appointed valuer when required</li>
   <li>SHER does not act as mortgage broker and does not receive any fee or commission from Republic Bank in connection with buyer mortgage applications</li>
@@ -798,7 +798,7 @@ const doc4 = shell('SHER-BUYER-004-R01', 'Mortgage Partnership Note', `
 </div>
 
 <div class="callout">
-  <p><strong>To request an introduction:</strong> Notify your SHER buyer contact in writing that you wish to be introduced to Republic Bank — Micoud. SHER will arrange the connection once your buyer discovery profile has been reviewed and your interest in a specific unit confirmed.</p>
+  <p><strong>To request an introduction:</strong> Notify your SHER buyer contact in writing that you wish to be introduced to Republic Bank — Castries (#6 William Peter Boulevard, Castries). SHER will arrange the connection once your buyer discovery profile has been reviewed and your interest in a specific unit confirmed.</p>
 </div>
 `);
 
