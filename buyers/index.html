@@ -2851,5 +2851,79 @@
 
   </script>
 
+  <!-- ── FLOATING ACTION BUTTON ──────────────────────────────────── -->
+  <style>
+    .sher-fab-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.15);z-index:9998;opacity:0;pointer-events:none;transition:opacity 0.2s ease}
+    .sher-fab-overlay.active{opacity:1;pointer-events:all}
+    .sher-fab{position:fixed;bottom:32px;right:32px;z-index:9999;display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+    .sher-fab-menu{display:flex;flex-direction:column;gap:8px;align-items:flex-end;transform:translateY(8px);opacity:0;pointer-events:none;transition:transform 0.2s ease,opacity 0.2s ease}
+    .sher-fab.open .sher-fab-menu{transform:translateY(0);opacity:1;pointer-events:all}
+    .sher-fab-pill{display:inline-block;padding:10px 20px;border-radius:24px;font-family:var(--font-body,'Inter',sans-serif);font-size:14px;font-weight:500;text-decoration:none;white-space:nowrap;cursor:pointer;border:none;outline:none;line-height:1.4;transition:filter 0.15s ease}
+    .sher-fab-pill:hover{filter:brightness(1.07)}
+    .sher-fab-pill--unlock{background:var(--green,#1B3B36);color:var(--gold,#C9A867)}
+    .sher-fab-pill--unlock.unlocked{background:#2d5a3d;color:rgba(245,240,232,0.9)}
+    .sher-fab-pill--nav{background:var(--gold,#C9A867);color:var(--green,#1B3B36)}
+    .sher-fab-btn{width:56px;height:56px;border-radius:50%;background:var(--green,#1B3B36);border:1.5px solid var(--gold,#C9A867);box-shadow:0 4px 16px rgba(0,0,0,0.18);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:0}
+    .sher-fab-btn svg{width:22px;height:22px;stroke:var(--gold,#C9A867);transition:transform 0.2s ease;overflow:visible}
+    .sher-fab.open .sher-fab-btn svg{transform:rotate(45deg)}
+    .sher-fab.fab-hidden{opacity:0;pointer-events:none;transition:opacity 0.2s ease}
+    @media(max-width:480px){.sher-fab{bottom:20px;right:20px}.sher-fab-btn{width:48px;height:48px}.sher-fab-pill{font-size:13px;padding:8px 16px}}
+  </style>
+  <div class="sher-fab-overlay" id="sher-fab-overlay"></div>
+  <div class="sher-fab" id="sher-fab" aria-label="Quick navigation menu">
+    <div class="sher-fab-menu" id="sher-fab-menu" aria-hidden="true">
+      <button class="sher-fab-pill sher-fab-pill--unlock" id="sher-fab-unlock">Unlock Access &rarr;</button>
+      <a class="sher-fab-pill sher-fab-pill--nav" href="/investors/">Capital Investor Portal &rarr;</a>
+    </div>
+    <button class="sher-fab-btn" id="sher-fab-btn" aria-label="Quick navigation menu" aria-expanded="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round">
+        <line x1="12" y1="5" x2="12" y2="19"/>
+        <line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+    </button>
+  </div>
+  <script>
+  (function(){
+    var fab=document.getElementById('sher-fab'),
+        btn=document.getElementById('sher-fab-btn'),
+        ov=document.getElementById('sher-fab-overlay'),
+        pill=document.getElementById('sher-fab-unlock'),
+        menu=document.getElementById('sher-fab-menu');
+    if(!fab||!btn)return;
+    var unlocked=false;
+    function open(){fab.classList.add('open');ov.classList.add('active');btn.setAttribute('aria-expanded','true');menu.setAttribute('aria-hidden','false')}
+    function close(){fab.classList.remove('open');ov.classList.remove('active');btn.setAttribute('aria-expanded','false');menu.setAttribute('aria-hidden','true')}
+    btn.addEventListener('click',function(){fab.classList.contains('open')?close():open()});
+    ov.addEventListener('click',close);
+    pill.addEventListener('click',function(){
+      var t=document.getElementById(unlocked?'financial-panel':'financial-access');
+      if(t)t.scrollIntoView({behavior:'smooth',block:'start'});
+      close();
+    });
+    var panel=document.getElementById('financial-panel');
+    if(panel&&window.MutationObserver){
+      var mo=new MutationObserver(function(){
+        if(!unlocked&&panel.classList.contains('revealed')){
+          unlocked=true;
+          pill.textContent='Content Unlocked ✓';
+          pill.classList.add('unlocked');
+          mo.disconnect();
+        }
+      });
+      mo.observe(panel,{attributes:true,attributeFilter:['class']});
+    }
+    function checkHide(){
+      var hide=false;
+      document.querySelectorAll('button[type="submit"],.btn--primary').forEach(function(b){
+        var r=b.getBoundingClientRect();
+        if(r.top<window.innerHeight&&r.bottom>0&&window.innerHeight-r.top<100)hide=true;
+      });
+      fab.classList.toggle('fab-hidden',hide);
+    }
+    window.addEventListener('scroll',checkHide,{passive:true});
+    checkHide();
+  })();
+  </script>
+
 </body>
 </html>

@@ -1265,6 +1265,13 @@
              alt="Turquoise clear water and mangrove edge, Savannes Bay" loading="lazy">
       </div>
 
+      <div style="background:var(--cream,#F5F0E8);padding:2rem 2.5rem;border-radius:var(--radius,6px);text-align:center;margin:0 0 2rem">
+        <span style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:0.75rem;font-family:var(--font-body),sans-serif">The Property Collection</span>
+        <h3 style="font-family:var(--font-display),serif;font-size:28px;color:var(--green);font-weight:500;line-height:1.2;margin:0 0 1rem">Interested in purchasing a residence rather than investing capital?</h3>
+        <p style="font-size:16px;color:rgba(27,59,54,0.7);line-height:1.75;max-width:560px;margin:0 auto 1.5rem">The SHER Property Collection includes 20 residences across three categories — Boutique Condominium, Luxury Villa, and Hillside Cottage. Pricing, specifications, and availability are presented in the Buyer Portal.</p>
+        <a href="/buyers/" style="display:inline-block;background:var(--gold,#C9A867);color:var(--green,#1B3B36);font-family:var(--font-display),serif;font-size:17px;font-weight:500;padding:14px 36px;border-radius:var(--radius,6px);text-decoration:none">View the Property Collection &rarr;</a>
+      </div>
+
       <div class="act1-con-cols">
         <div class="act1-con-col">
           <span style="font-family:var(--font-display),serif;font-size:42px;color:var(--gold);display:block;line-height:1;margin-bottom:0.75rem">2002</span>
@@ -1326,11 +1333,13 @@
           <span style="font-family:var(--font-display),serif;font-size:42px;color:var(--green);display:block;line-height:1;margin-bottom:0.5rem">2.9&times;</span>
           <span style="font-size:10.5px;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:0.875rem">Gross Revenue Multiple</span>
           <p style="font-size:14px;color:var(--text-muted,#4a5568);line-height:1.7;margin:0">US$3.5M working capital requirement. US$10.2M base for-sale revenue. A 2.9&times; gross revenue-to-capital ratio at the base model. This is a development return, not a yield.</p>
+          <em style="display:block;font-family:var(--font-body),sans-serif;font-size:11px;color:rgba(27,59,54,0.6);font-style:italic;margin-top:0.625rem">Subject to financial model — available to qualified investors.</em>
         </div>
         <div class="act2-card">
           <span style="font-family:var(--font-display),serif;font-size:42px;color:var(--green);display:block;line-height:1;margin-bottom:0.5rem">9&ndash;22%</span>
           <span style="font-size:10.5px;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:0.875rem">Target Return Range</span>
           <p style="font-size:14px;color:var(--text-muted,#4a5568);line-height:1.7;margin:0">Senior secured lending at 9&ndash;11% p.a. with a charge over titled land. Preferred equity targeting 18&ndash;22% IRR with waterfall priority. Participating equity at project upside. Three structures, one asset.</p>
+          <em style="display:block;font-family:var(--font-body),sans-serif;font-size:11px;color:rgba(27,59,54,0.6);font-style:italic;margin-top:0.625rem">Subject to financial model — available to qualified investors.</em>
         </div>
         <div class="act2-card">
           <span style="font-family:var(--font-display),serif;font-size:42px;color:var(--green);display:block;line-height:1;margin-bottom:0.5rem">0%</span>
@@ -1358,10 +1367,11 @@
        ============================================================ -->
   <section class="section section--green" style="text-align:center">
     <div class="container--narrow">
-      <!-- Portrait placeholder — replace the div below with an <img> when a portrait photo is available:
-           <img src="../images/kemble-emanuel-portrait.jpg" alt="Kemble Emanuel — Founder, SHER"
-                loading="lazy" style="width:120px;height:120px;border-radius:50%;object-fit:cover;
-                border:1.5px solid var(--gold);margin:0 auto 2rem;display:block">
+      <!-- FOUNDER PORTRAIT: place founder-portrait.jpg in images/ and update src here
+           When ready, replace the KE monogram div below with:
+           <img src="../images/founder-portrait.jpg" alt="Kemble Emanuel — Founder, SHER"
+                loading="lazy" style="width:180px;height:180px;border-radius:50%;object-fit:cover;
+                object-position:center top;border:2px solid var(--gold,#C9A867);margin:0 auto 2rem;display:block">
       -->
       <div style="width:120px;height:120px;border-radius:50%;background:rgba(201,168,103,0.12);border:1.5px solid rgba(201,168,103,0.35);margin:0 auto 2rem;display:flex;align-items:center;justify-content:center">
         <span style="font-family:var(--font-display),serif;font-size:40px;color:var(--gold);line-height:1">KE</span>
@@ -3780,6 +3790,80 @@
       initVideoSlots();
     });
 
+  </script>
+
+  <!-- ── FLOATING ACTION BUTTON ──────────────────────────────────── -->
+  <style>
+    .sher-fab-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.15);z-index:9998;opacity:0;pointer-events:none;transition:opacity 0.2s ease}
+    .sher-fab-overlay.active{opacity:1;pointer-events:all}
+    .sher-fab{position:fixed;bottom:32px;right:32px;z-index:9999;display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+    .sher-fab-menu{display:flex;flex-direction:column;gap:8px;align-items:flex-end;transform:translateY(8px);opacity:0;pointer-events:none;transition:transform 0.2s ease,opacity 0.2s ease}
+    .sher-fab.open .sher-fab-menu{transform:translateY(0);opacity:1;pointer-events:all}
+    .sher-fab-pill{display:inline-block;padding:10px 20px;border-radius:24px;font-family:var(--font-body,'Inter',sans-serif);font-size:14px;font-weight:500;text-decoration:none;white-space:nowrap;cursor:pointer;border:none;outline:none;line-height:1.4;transition:filter 0.15s ease}
+    .sher-fab-pill:hover{filter:brightness(1.07)}
+    .sher-fab-pill--unlock{background:var(--green,#1B3B36);color:var(--gold,#C9A867)}
+    .sher-fab-pill--unlock.unlocked{background:#2d5a3d;color:rgba(245,240,232,0.9)}
+    .sher-fab-pill--nav{background:var(--gold,#C9A867);color:var(--green,#1B3B36)}
+    .sher-fab-btn{width:56px;height:56px;border-radius:50%;background:var(--green,#1B3B36);border:1.5px solid var(--gold,#C9A867);box-shadow:0 4px 16px rgba(0,0,0,0.18);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:0}
+    .sher-fab-btn svg{width:22px;height:22px;stroke:var(--gold,#C9A867);transition:transform 0.2s ease;overflow:visible}
+    .sher-fab.open .sher-fab-btn svg{transform:rotate(45deg)}
+    .sher-fab.fab-hidden{opacity:0;pointer-events:none;transition:opacity 0.2s ease}
+    @media(max-width:480px){.sher-fab{bottom:20px;right:20px}.sher-fab-btn{width:48px;height:48px}.sher-fab-pill{font-size:13px;padding:8px 16px}}
+  </style>
+  <div class="sher-fab-overlay" id="sher-fab-overlay"></div>
+  <div class="sher-fab" id="sher-fab" aria-label="Quick navigation menu">
+    <div class="sher-fab-menu" id="sher-fab-menu" aria-hidden="true">
+      <button class="sher-fab-pill sher-fab-pill--unlock" id="sher-fab-unlock">Unlock Access &rarr;</button>
+      <a class="sher-fab-pill sher-fab-pill--nav" href="/buyers/">View Residences &rarr;</a>
+    </div>
+    <button class="sher-fab-btn" id="sher-fab-btn" aria-label="Quick navigation menu" aria-expanded="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round">
+        <line x1="12" y1="5" x2="12" y2="19"/>
+        <line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+    </button>
+  </div>
+  <script>
+  (function(){
+    var fab=document.getElementById('sher-fab'),
+        btn=document.getElementById('sher-fab-btn'),
+        ov=document.getElementById('sher-fab-overlay'),
+        pill=document.getElementById('sher-fab-unlock'),
+        menu=document.getElementById('sher-fab-menu');
+    if(!fab||!btn)return;
+    var unlocked=false;
+    function open(){fab.classList.add('open');ov.classList.add('active');btn.setAttribute('aria-expanded','true');menu.setAttribute('aria-hidden','false')}
+    function close(){fab.classList.remove('open');ov.classList.remove('active');btn.setAttribute('aria-expanded','false');menu.setAttribute('aria-hidden','true')}
+    btn.addEventListener('click',function(){fab.classList.contains('open')?close():open()});
+    ov.addEventListener('click',close);
+    pill.addEventListener('click',function(){
+      var t=document.getElementById(unlocked?'tier1':'login');
+      if(t)t.scrollIntoView({behavior:'smooth',block:'start'});
+      close();
+    });
+    var tier1=document.getElementById('tier1');
+    if(tier1&&window.MutationObserver){
+      var mo=new MutationObserver(function(){
+        if(!unlocked&&tier1.classList.contains('revealed')){
+          unlocked=true;
+          pill.textContent='Content Unlocked ✓';
+          pill.classList.add('unlocked');
+          mo.disconnect();
+        }
+      });
+      mo.observe(tier1,{attributes:true,attributeFilter:['class']});
+    }
+    function checkHide(){
+      var hide=false;
+      document.querySelectorAll('button[type="submit"],.btn--primary').forEach(function(b){
+        var r=b.getBoundingClientRect();
+        if(r.top<window.innerHeight&&r.bottom>0&&window.innerHeight-r.top<100)hide=true;
+      });
+      fab.classList.toggle('fab-hidden',hide);
+    }
+    window.addEventListener('scroll',checkHide,{passive:true});
+    checkHide();
+  })();
   </script>
 
 </body>
