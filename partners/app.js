@@ -15,6 +15,8 @@ let _conciergeData = null;  // row from concierges table
 let _experiences  = [];
 let _activePanel  = null;
 
+const SLNT_LEVY_RATE = 0.07;
+
 /* ── Helpers ── */
 const $  = id  => document.getElementById(id);
 const el = tag => document.createElement(tag);
@@ -260,11 +262,12 @@ function renderRoleBadge() {
 
 /* ── Tab bar ── */
 const PARTNER_TABS    = [
-  { id:'experiences', label:'Experiences' },
-  { id:'book',        label:'New Booking' },
-  { id:'bookings',    label:'Bookings'    },
-  { id:'earn',        label:'Commission'  },
-  { id:'action',      label:'Payouts'     },
+  { id:'experiences',  label:'Experiences'  },
+  { id:'book',         label:'New Booking'  },
+  { id:'bookings',     label:'Bookings'     },
+  { id:'earn',         label:'Commission'   },
+  { id:'action',       label:'Payouts'      },
+  { id:'conservation', label:'Conservation' },
 ];
 const CONCIERGE_TABS_BASE = [
   { id:'bookings', label:'My Bookings' },
@@ -302,7 +305,7 @@ function renderTabBar() {
 
 function switchTab(panelId) {
   // Hide all panels
-  ['experiences','book','bookings','earn','action'].forEach(id => {
+  ['experiences','book','bookings','earn','action','conservation'].forEach(id => {
     $('panel-' + id).hidden = true;
   });
   // Deactivate tabs
@@ -317,11 +320,12 @@ function switchTab(panelId) {
 
   // Load content
   switch (panelId) {
-    case 'experiences': loadExperiencesTab();  break;
-    case 'book':        loadBookTab();          break;
-    case 'bookings':    loadBookingsTab();      break;
-    case 'earn':        _role === 'partner' ? loadCommissionTab() : loadRipplesTab(); break;
-    case 'action':      _role === 'partner' ? loadPayoutsTab()    : loadRedeemTab();  break;
+    case 'experiences':  loadExperiencesTab();  break;
+    case 'book':         loadBookTab();          break;
+    case 'bookings':     loadBookingsTab();      break;
+    case 'earn':         _role === 'partner' ? loadCommissionTab() : loadRipplesTab(); break;
+    case 'action':       _role === 'partner' ? loadPayoutsTab()    : loadRedeemTab();  break;
+    case 'conservation': loadConservationTab(); break;
   }
 }
 
@@ -593,7 +597,7 @@ async function loadBookingsTab() {
        ripples_ledger(ripples_awarded, created_at)`
     : `id, booking_ref, status, booking_date, group_size,
        lead_name, lead_email, created_at, occasion_type, source,
-       experiences(name)`;
+       experiences(name, public_price_usd)`;
 
   let query = sb
     .from('bookings')
@@ -651,7 +655,12 @@ async function loadBookingsTab() {
       </div>`;
     }
 
-    return baseCard + '</div>';
+    const gross = ['confirmed','completed','paid_in_full'].includes(bk.status)
+      ? (bk.experiences?.public_price_usd || 0) * (bk.group_size || 0)
+      : 0;
+    return baseCard +
+      (gross > 0 ? `<div class="bk-levy">Conservation levy: ${fmtMoney(gross * SLNT_LEVY_RATE)} → SLNT</div>` : '') +
+      '</div>';
   }).join('');
 
   cont.innerHTML =
@@ -1043,6 +1052,128 @@ window.submitRedemption = async function(optId) {
   // Reload to show updated balance and history
   setTimeout(() => loadRedeemTab(), 1200);
 };
+
+/* ════════════════════════════════════════════════════════
+   CONSERVATION FUND TAB  (partner only)
+════════════════════════════════════════════════════════ */
+async function loadConservationTab() {
+  const cont = $('content-conservation');
+  cont.innerHTML = '<p class="panel-subtitle">Conservation Fund — SLNT</p><p class="empty">Loading…</p>';
+
+  function quarterLabel(dateStr) {
+    if (!dateStr) return null;
+    const d = new Date(dateStr);
+    return `Q${Math.floor(d.getMonth() / 3) + 1} ${d.getFullYear()}`;
+  }
+
+  function nextDisbDate() {
+    const now = new Date();
+    const end = new Date(now.getFullYear(), (Math.floor(now.getMonth() / 3) + 1) * 3, 0);
+    return end.toLocaleDateString('en-LC', { day:'numeric', month:'long', year:'numeric' });
+  }
+
+  const QUALIFIED = ['confirmed', 'completed', 'paid_in_full'];
+
+  const [{ data: bookings, error: bkErr }, { data: disbursements }] = await Promise.all([
+    sb.from('bookings')
+      .select('id, booking_ref, booking_date, group_size, status, lead_name, experiences(name, public_price_usd)')
+      .in('status', QUALIFIED)
+      .order('booking_date', { ascending: false })
+      .limit(500),
+    sb.from('conservation_disbursements')
+      .select('id, period_label, quarter_start, total_net_revenue_usd, levy_usd, disbursed_at, reference')
+      .order('quarter_start', { ascending: false })
+      .limit(20),
+  ]);
+
+  if (bkErr) {
+    cont.innerHTML = `<p class="panel-subtitle">Conservation Fund — SLNT</p>
+      <div class="form-error">Could not load fund data: ${esc(bkErr.message)}</div>`;
+    return;
+  }
+
+  const rows = (bookings || []).map(bk => {
+    const gross = (bk.experiences?.public_price_usd || 0) * (bk.group_size || 0);
+    return { ...bk, gross, levy: gross * SLNT_LEVY_RATE };
+  });
+
+  // Group by quarter
+  const quarterMap = {};
+  rows.forEach(r => {
+    const key = quarterLabel(r.booking_date);
+    if (!key) return;
+    if (!quarterMap[key]) quarterMap[key] = { label: key, revenue: 0, levy: 0, count: 0 };
+    quarterMap[key].revenue += r.gross;
+    quarterMap[key].levy    += r.levy;
+    quarterMap[key].count   += 1;
+  });
+  const quarters = Object.values(quarterMap);
+
+  const now         = new Date();
+  const currentQKey = quarterLabel(now.toISOString());
+  const currentQ    = quarterMap[currentQKey] || { revenue: 0, levy: 0, count: 0 };
+  const ytdLevy     = rows
+    .filter(r => r.booking_date && new Date(r.booking_date).getFullYear() === now.getFullYear())
+    .reduce((a, r) => a + r.levy, 0);
+
+  const disbMap = {};
+  (disbursements || []).forEach(d => { if (d.period_label) disbMap[d.period_label] = d; });
+
+  cont.innerHTML = `
+    <p class="panel-subtitle">Conservation Fund — SLNT</p>
+
+    <div class="slnt-hero">
+      <div class="slnt-eyebrow">Saint Lucia National Trust</div>
+      <div class="slnt-title">Guest Conservation Stewardship Fund</div>
+      <div class="slnt-summary">
+        <div class="slnt-stat">
+          <div class="slnt-stat-val">${fmtMoney(currentQ.levy)}</div>
+          <div class="slnt-stat-lbl">Quarter to date</div>
+        </div>
+        <div class="slnt-stat">
+          <div class="slnt-stat-val">${fmtMoney(ytdLevy)}</div>
+          <div class="slnt-stat-lbl">Year to date ${now.getFullYear()}</div>
+        </div>
+      </div>
+      <div class="slnt-next">
+        <strong>7%</strong> of net tour revenue &nbsp;&middot;&nbsp; Next disbursement: ${nextDisbDate()}
+      </div>
+    </div>
+
+    <p class="panel-subtitle" style="margin-top:4px">Quarterly Accumulation</p>
+
+    <div class="slnt-quarter-list">
+      ${quarters.length ? quarters.map(q => {
+        const disb       = disbMap[q.label];
+        const isDisbursed = !!(disb?.disbursed_at);
+        return `
+          <div class="slnt-quarter-row">
+            <div class="slnt-qr-top">
+              <div>
+                <div class="slnt-qr-label">${esc(q.label)}</div>
+                <div class="slnt-qr-rev">${q.count} booking${q.count !== 1 ? 's' : ''} &nbsp;&middot;&nbsp; revenue ${fmtMoney(q.revenue)}</div>
+              </div>
+              <div style="text-align:right">
+                <div class="slnt-qr-levy">${fmtMoney(q.levy)}</div>
+                <span class="slnt-qr-status ${isDisbursed ? 'disbursed' : 'pending'}">
+                  ${isDisbursed ? 'Disbursed' : 'Accumulating'}
+                </span>
+              </div>
+            </div>
+            ${isDisbursed ? `<div class="slnt-qr-disb">
+              Disbursed ${fmtDate(disb.disbursed_at)}${disb.reference ? ' &nbsp;&middot;&nbsp; Ref: ' + esc(disb.reference) : ''}
+            </div>` : ''}
+          </div>`;
+      }).join('') : '<p class="empty" style="padding:24px 0">No confirmed bookings on record yet.</p>'}
+    </div>
+
+    <p style="font-size:12px;color:var(--muted);margin-top:20px;padding:12px;background:var(--surface);border-radius:8px;line-height:1.6">
+      Conservation levy calculated at 7% of net tour revenue (gross price less FYGARO processing fee).
+      Disbursed quarterly to the Saint Lucia National Trust in support of Pointe Sable Environmental Protection Area &amp; Savannes Bay.
+      Figures shown are based on gross booking value until FYGARO net revenue data is integrated.
+    </p>
+  `;
+}
 
 /* ── Init ── */
 (async () => {

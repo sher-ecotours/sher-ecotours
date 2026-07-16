@@ -331,6 +331,52 @@ select.field-input  { cursor:pointer; }
   color:var(--muted); margin-bottom:14px;
 }
 
+/* ── Conservation Fund ── */
+.slnt-hero {
+  background: var(--surface-2);
+  border: 1px solid rgba(76,175,125,0.25);
+  border-radius: 14px;
+  padding: 24px 20px;
+  margin-bottom: 20px;
+}
+.slnt-eyebrow {
+  font-size: 9px; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--green); margin-bottom: 10px;
+}
+.slnt-title { font-size: 17px; font-weight: 500; margin-bottom: 18px; }
+.slnt-summary { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+.slnt-stat {
+  background: rgba(0,0,0,0.2); border-radius: 10px; padding: 14px; text-align: center;
+}
+.slnt-stat-val { font-size: 22px; font-weight: 300; color: var(--gold); }
+.slnt-stat-lbl { font-size: 11px; color: var(--muted); margin-top: 4px; }
+.slnt-next {
+  font-size: 12px; color: var(--muted); text-align: center;
+  padding: 10px; background: rgba(255,255,255,0.03); border-radius: 8px;
+}
+.slnt-quarter-list { display: flex; flex-direction: column; gap: 10px; }
+.slnt-quarter-row {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 16px;
+}
+.slnt-qr-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+.slnt-qr-label { font-size: 15px; font-weight: 500; margin-bottom: 4px; }
+.slnt-qr-rev   { font-size: 12px; color: var(--muted); }
+.slnt-qr-levy  { font-size: 18px; font-weight: 400; color: var(--gold); margin-bottom: 4px; }
+.slnt-qr-status {
+  font-size: 11px; padding: 3px 9px; border-radius: 20px; display: inline-block;
+}
+.slnt-qr-status.pending   { background: var(--amber-bg); color: var(--amber); }
+.slnt-qr-status.disbursed { background: var(--green-bg); color: var(--green); }
+.slnt-qr-disb {
+  font-size: 12px; color: var(--muted);
+  margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border);
+}
+.bk-levy {
+  font-size: 12px; color: var(--green);
+  margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border);
+}
+
 /* ── Small phones (< 380px) ── */
 @media (max-width:380px) {
   body { font-size:15px; }
