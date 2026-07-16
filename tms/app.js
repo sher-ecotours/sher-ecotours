@@ -1666,16 +1666,163 @@ async function renderEquipment() {
 
 async function renderConservation() {
   setContent('<div class="loading">Loading…</div>');
-  const { data, error } = await sb.from('conservation_contributions')
-    .select('*,bookings(booking_ref,lead_name)')
-    .order('created_at', { ascending:false });
 
-  const total = (data||[]).reduce((s,c) => s + Number(c.amount_xcd||0), 0);
+  const QUALIFIED = ['confirmed', 'completed', 'paid_in_full'];
+  const SLNT_RATE = 0.07;
+  const fmtUSD   = n => '$' + Number(n || 0).toFixed(2);
+
+  const [
+    { data: bookings     },
+    { data: disbursements },
+    { data: contributions },
+  ] = await Promise.all([
+    sb.from('bookings')
+      .select('booking_date, group_size, experiences(public_price_usd)')
+      .in('status', QUALIFIED).order('booking_date', { ascending: false }).limit(500),
+    sb.from('conservation_disbursements')
+      .select('*').order('quarter_start', { ascending: false }).limit(20),
+    sb.from('conservation_contributions')
+      .select('*,bookings(booking_ref,lead_name)').order('created_at', { ascending: false }),
+  ]);
+
+  function qLabel(dateStr) {
+    if (!dateStr) return null;
+    const d = new Date(dateStr);
+    return `Q${Math.floor(d.getMonth() / 3) + 1} ${d.getFullYear()}`;
+  }
+  function qStart(dateStr) {
+    const d = new Date(dateStr);
+    const q = Math.floor(d.getMonth() / 3);
+    return new Date(d.getFullYear(), q * 3, 1).toISOString().split('T')[0];
+  }
+
+  // Group confirmed bookings by quarter
+  const quarterMap = {};
+  (bookings || []).forEach(bk => {
+    const key = qLabel(bk.booking_date);
+    if (!key) return;
+    const gross = (bk.experiences?.public_price_usd || 0) * (bk.group_size || 0);
+    if (!quarterMap[key]) quarterMap[key] = { label: key, start: qStart(bk.booking_date), revenue: 0, levy: 0, count: 0 };
+    quarterMap[key].revenue += gross;
+    quarterMap[key].levy    += gross * SLNT_RATE;
+    quarterMap[key].count   += 1;
+  });
+  const quarters        = Object.values(quarterMap);
+  const disbursedLabels = new Set((disbursements || []).map(d => d.period_label));
+  const undisbursed     = quarters.filter(q => !disbursedLabels.has(q.label));
+
+  const contTotal = (contributions || []).reduce((s, c) => s + Number(c.amount_xcd || 0), 0);
+  const inp = `background:var(--bg);border:1px solid var(--border);border-radius:5px;color:var(--text);font-size:13px;padding:9px 12px;width:100%;margin-top:4px`;
 
   setContent(`
-    <div class="cons-hero">
-      <div class="cons-total">EC$${total.toFixed(2)}</div>
-      <div class="cons-label">Total contributed to PSEPA Stewardship Fund</div>
+    <div class="sh" style="margin-bottom:16px">
+      <h3>SLNT Stewardship Levy — 7% of Net Tour Revenue</h3>
+    </div>
+
+    <div style="display:grid;grid-template-columns:360px 1fr;gap:20px;align-items:start;margin-bottom:40px">
+
+      <div class="detail-panel" style="padding:20px">
+        <div class="sh" style="margin-bottom:14px"><h3>Record Disbursement</h3></div>
+        <div id="disb-msg" style="font-size:12px;margin-bottom:10px"></div>
+
+        <div style="margin-bottom:12px">
+          <div class="df-label">Quarter</div>
+          <select id="disb-quarter" style="${inp};cursor:pointer" onchange="_prefillDisbursement()">
+            <option value="">— Select quarter —</option>
+            ${undisbursed.map(q =>
+              `<option value="${esc(q.label)}" data-start="${q.start}" data-revenue="${q.revenue.toFixed(2)}" data-levy="${q.levy.toFixed(2)}">${q.label} — levy ${fmtUSD(q.levy)}</option>`
+            ).join('')}
+            <option value="__manual__">Enter manually</option>
+          </select>
+        </div>
+
+        <div style="margin-bottom:12px">
+          <div class="df-label">Quarter Start Date</div>
+          <input id="disb-start" type="date" style="${inp}">
+        </div>
+
+        <div style="margin-bottom:12px">
+          <div class="df-label">Net Revenue USD <span style="color:var(--muted);font-weight:400;font-size:10px">— gross shown, update if FYGARO net differs</span></div>
+          <input id="disb-revenue" type="number" step="0.01" min="0" style="${inp}" placeholder="0.00" oninput="_recalcLevy()">
+        </div>
+
+        <div style="margin-bottom:12px">
+          <div class="df-label">Levy Amount USD — 7%</div>
+          <input id="disb-levy" type="number" step="0.01" min="0" style="${inp}" placeholder="0.00">
+        </div>
+
+        <div style="margin-bottom:12px">
+          <div class="df-label">Date Disbursed</div>
+          <input id="disb-date" type="date" style="${inp}" value="${today()}">
+        </div>
+
+        <div style="margin-bottom:12px">
+          <div class="df-label">Bank Reference / Transfer ID</div>
+          <input id="disb-ref" style="${inp}" placeholder="e.g. SLNT-Q3-2026-001">
+        </div>
+
+        <div style="margin-bottom:16px">
+          <div class="df-label">Notes (optional)</div>
+          <textarea id="disb-notes" style="${inp};resize:vertical;min-height:54px"></textarea>
+        </div>
+
+        <button class="btn btn-primary" onclick="_recordDisbursement()">Record Disbursement</button>
+      </div>
+
+      <div>
+        <div class="sh" style="margin-bottom:12px"><h3>Disbursement History</h3></div>
+        <div class="table-wrap" style="margin-bottom:28px">
+          <table class="tms-table">
+            <thead><tr>
+              <th>Quarter</th><th>Net Revenue</th><th>Levy (7%)</th><th>Disbursed</th><th>Reference</th>
+            </tr></thead>
+            <tbody>
+              ${(disbursements || []).length
+                ? (disbursements || []).map(d => `
+                    <tr>
+                      <td style="font-weight:600;color:var(--gold)">${d.period_label}</td>
+                      <td style="color:var(--muted)">${d.total_net_revenue_usd ? fmtUSD(d.total_net_revenue_usd) : '—'}</td>
+                      <td style="color:var(--gold);font-weight:600">${d.levy_usd ? fmtUSD(d.levy_usd) : '—'}</td>
+                      <td style="color:var(--muted);font-size:12px">${d.disbursed_at ? fmtDate(d.disbursed_at) : '—'}</td>
+                      <td style="font-size:12px;color:var(--muted)">${d.reference || '—'}</td>
+                    </tr>`).join('')
+                : '<tr><td colspan="5" class="empty">No disbursements recorded yet.</td></tr>'}
+            </tbody>
+          </table>
+        </div>
+
+        <div class="sh" style="margin-bottom:12px"><h3>Quarterly Accumulation</h3></div>
+        <div class="table-wrap">
+          <table class="tms-table">
+            <thead><tr>
+              <th>Quarter</th><th>Bookings</th><th>Revenue (gross)</th><th>7% Levy</th><th>Status</th>
+            </tr></thead>
+            <tbody>
+              ${quarters.length
+                ? quarters.map(q => {
+                    const isD = disbursedLabels.has(q.label);
+                    return `
+                      <tr>
+                        <td style="font-weight:600">${q.label}</td>
+                        <td style="color:var(--muted)">${q.count}</td>
+                        <td style="color:var(--muted)">${fmtUSD(q.revenue)}</td>
+                        <td style="color:var(--gold);font-weight:600">${fmtUSD(q.levy)}</td>
+                        <td><span class="badge ${isD ? 'b-confirmed' : 'b-enquiry'}">${isD ? 'Disbursed' : 'Accumulating'}</span></td>
+                      </tr>`;
+                  }).join('')
+                : '<tr><td colspan="5" class="empty">No confirmed bookings yet</td></tr>'}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="sh" style="margin-bottom:12px">
+      <h3>Guest Stewardship Contributions</h3>
+    </div>
+    <div class="cons-hero" style="margin-bottom:16px">
+      <div class="cons-total">EC$${contTotal.toFixed(2)}</div>
+      <div class="cons-label">Total voluntary contributions to PSEPA Stewardship Fund</div>
     </div>
     <div class="table-wrap">
       <table class="tms-table">
@@ -1684,22 +1831,87 @@ async function renderConservation() {
           <th>Amount EC$</th><th>Certificate</th><th>Transferred</th>
         </tr></thead>
         <tbody>
-          ${(data||[]).map(c => `
+          ${(contributions || []).map(c => `
             <tr>
               <td style="color:var(--muted);font-size:12px">${fmtDT(c.created_at)}</td>
               <td>
-                <div style="color:var(--gold);font-size:11px;font-weight:600">${c.bookings?.booking_ref||'—'}</div>
-                <div style="font-size:11px;color:var(--muted)">${c.bookings?.lead_name||''}</div>
+                <div style="color:var(--gold);font-size:11px;font-weight:600">${c.bookings?.booking_ref || '—'}</div>
+                <div style="font-size:11px;color:var(--muted)">${c.bookings?.lead_name || ''}</div>
               </td>
               <td><span class="badge b-enquiry">${c.contribution_type}</span></td>
-              <td style="color:var(--gold)">$${Number(c.amount_xcd||0).toFixed(2)}</td>
-              <td>${c.certificate_issued?'<span style="color:var(--green)">✓</span>':'<span style="color:var(--muted)">—</span>'}</td>
-              <td style="color:var(--muted);font-size:12px">${c.transfer_date?fmtDate(c.transfer_date):'—'}</td>
+              <td style="color:var(--gold)">$${Number(c.amount_xcd || 0).toFixed(2)}</td>
+              <td>${c.certificate_issued ? '<span style="color:var(--green)">✓</span>' : '<span style="color:var(--muted)">—</span>'}</td>
+              <td style="color:var(--muted);font-size:12px">${c.transfer_date ? fmtDate(c.transfer_date) : '—'}</td>
             </tr>`).join('')
             || '<tr><td colspan="6" class="empty">No contributions recorded yet</td></tr>'}
         </tbody>
       </table>
-    </div>`);
+    </div>
+  `);
+}
+
+function _prefillDisbursement() {
+  const sel = document.getElementById('disb-quarter');
+  const opt = sel ? sel.options[sel.selectedIndex] : null;
+  if (!opt || !opt.value || opt.value === '__manual__') {
+    const s = document.getElementById('disb-start');
+    if (s) s.value = '';
+    return;
+  }
+  const start   = document.getElementById('disb-start');
+  const revenue = document.getElementById('disb-revenue');
+  const levy    = document.getElementById('disb-levy');
+  if (start)   start.value   = opt.dataset.start   || '';
+  if (revenue) revenue.value = opt.dataset.revenue || '';
+  if (levy)    levy.value    = opt.dataset.levy    || '';
+}
+
+function _recalcLevy() {
+  const rev  = parseFloat(document.getElementById('disb-revenue')?.value || 0);
+  const levEl = document.getElementById('disb-levy');
+  if (levEl) levEl.value = (rev * 0.07).toFixed(2);
+}
+
+async function _recordDisbursement() {
+  const msg     = document.getElementById('disb-msg');
+  const selVal  = document.getElementById('disb-quarter')?.value || '';
+  const start   = document.getElementById('disb-start')?.value  || '';
+  const revenue = parseFloat(document.getElementById('disb-revenue')?.value || 0);
+  const levy    = parseFloat(document.getElementById('disb-levy')?.value    || 0);
+  const date    = document.getElementById('disb-date')?.value   || '';
+  const ref     = (document.getElementById('disb-ref')?.value   || '').trim();
+  const notes   = (document.getElementById('disb-notes')?.value || '').trim();
+
+  let label = selVal === '__manual__' ? prompt('Enter quarter label (e.g. Q3 2026):') : selVal;
+  if (!label) { msg.textContent = 'Quarter label is required.'; msg.style.color = 'var(--red)'; return; }
+  if (!start) { msg.textContent = 'Quarter start date is required.'; msg.style.color = 'var(--red)'; return; }
+  if (!date)  { msg.textContent = 'Disbursement date is required.'; msg.style.color = 'var(--red)'; return; }
+
+  const btn = document.querySelector('[onclick="_recordDisbursement()"]');
+  if (btn) { btn.disabled = true; btn.textContent = 'Saving…'; }
+  msg.textContent = ''; msg.style.color = '';
+
+  const { error } = await sb.from('conservation_disbursements').insert({
+    period_label:          label.trim(),
+    quarter_start:         start,
+    total_net_revenue_usd: revenue || null,
+    levy_usd:              levy    || null,
+    disbursed_at:          new Date(date).toISOString(),
+    reference:             ref   || null,
+    notes:                 notes || null,
+  });
+
+  if (btn) { btn.disabled = false; btn.textContent = 'Record Disbursement'; }
+
+  if (error) {
+    msg.textContent = 'Error: ' + error.message;
+    msg.style.color = 'var(--red)';
+    return;
+  }
+
+  msg.textContent = `Disbursement for ${label.trim()} recorded.`;
+  msg.style.color = 'var(--green)';
+  setTimeout(() => renderConservation(), 1200);
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
