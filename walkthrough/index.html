@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>SHER Eco Sanctuary — Virtual Walkthrough</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Jost:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: #000;
+      overflow: hidden;
+      font-family: 'Jost', 'Gill Sans', system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Slideshow wrapper ── */
+    #wt {
+      position: relative;
+      width: 100%; height: 100%;
+      overflow: hidden;
+    }
+
+    /* ── Individual slide ── */
+    .slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      z-index: 0;
+      transition: opacity 1.4s ease;
+    }
+    .slide.active {
+      opacity: 1;
+      z-index: 10;
+    }
+
+    /* ── Background image (Ken Burns target) ── */
+    .slide-bg {
+      position: absolute;
+      inset: -4%;
+      background-size: cover;
+      background-position: center;
+      will-change: transform;
+    }
+
+    /* ── Ken Burns keyframes ── */
+    @keyframes kb-zoom-in {
+      from { transform: scale(1.00); }
+      to   { transform: scale(1.12); }
+    }
+    @keyframes kb-zoom-out {
+      from { transform: scale(1.12); }
+      to   { transform: scale(1.00); }
+    }
+    @keyframes kb-pan-left {
+      from { transform: scale(1.08) translateX(2.5%); }
+      to   { transform: scale(1.08) translateX(-2.5%); }
+    }
+    @keyframes kb-pan-right {
+      from { transform: scale(1.08) translateX(-2.5%); }
+      to   { transform: scale(1.08) translateX(2.5%); }
+    }
+
+    /* ── Gradient vignette ── */
+    .slide-overlay {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to top,    rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.0) 52%),
+        linear-gradient(to bottom, rgba(0,0,0,0.36) 0%, transparent 22%);
+    }
+
+    /* ── Slide text ── */
+    .slide-text {
+      position: absolute;
+      bottom: 92px;
+      left: 52px;
+      right: 52px;
+      max-width: 620px;
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.9s ease 0.55s, transform 0.9s ease 0.55s;
+    }
+    .slide.active .slide-text {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .slide-eyebrow {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.34em;
+      text-transform: uppercase;
+      color: #C9A867;
+      margin-bottom: 10px;
+    }
+    .slide-title {
+      font-family: 'Cormorant Garamond', 'Garamond', 'Georgia', serif;
+      font-size: clamp(36px, 5.5vw, 64px);
+      font-weight: 300;
+      line-height: 1.1;
+      color: #F5F0E8;
+      margin-bottom: 14px;
+    }
+    .slide-caption {
+      font-size: clamp(13px, 1.4vw, 15px);
+      font-weight: 300;
+      line-height: 1.65;
+      color: rgba(245,240,232,0.66);
+      max-width: 440px;
+    }
+
+    /* ── Closing card ── */
+    .slide-close {
+      background: radial-gradient(ellipse at 50% 40%, #0e1f10 0%, #050c06 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .close-inner {
+      text-align: center;
+      padding: 48px 40px;
+    }
+    .slide-close.active .close-inner {
+      animation: fadeUp 1s ease 0.3s both;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .close-logo {
+      height: 50px;
+      margin-bottom: 30px;
+    }
+    .close-rule {
+      width: 44px;
+      height: 1px;
+      background: #C9A867;
+      margin: 0 auto 26px;
+    }
+    .close-tagline {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(22px, 2.8vw, 36px);
+      font-weight: 300;
+      color: #F5F0E8;
+      letter-spacing: 0.03em;
+      margin-bottom: 8px;
+    }
+    .close-sub {
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: #C9A867;
+      margin-bottom: 40px;
+    }
+    .close-cta {
+      display: inline-block;
+      padding: 15px 42px;
+      border: 1px solid rgba(201,168,103,0.6);
+      color: #C9A867;
+      text-decoration: none;
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      transition: background 0.3s, color 0.3s, border-color 0.3s;
+    }
+    .close-cta:hover {
+      background: #C9A867;
+      color: #050c06;
+      border-color: #C9A867;
+    }
+
+    /* ── SHER logo (top-left) ── */
+    #wt-logo {
+      position: fixed;
+      top: 26px;
+      left: 40px;
+      z-index: 200;
+      height: 30px;
+      opacity: 0;
+      transition: opacity 1s ease 0.8s;
+      pointer-events: none;
+      user-select: none;
+    }
+    body.loaded #wt-logo { opacity: 0.9; }
+
+    /* ── Progress bar ── */
+    #prog-track {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: rgba(255,255,255,0.1);
+      z-index: 200;
+    }
+    #prog-fill {
+      height: 100%;
+      background: #C9A867;
+      width: 0%;
+    }
+
+    /* ── Nav arrows ── */
+    .nav-btn {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 200;
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(0,0,0,0.34);
+      color: rgba(255,255,255,0.82);
+      font-size: 16px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0;
+      transition: opacity 0.25s, border-color 0.2s, background 0.2s, color 0.2s;
+    }
+    #wt:hover .nav-btn { opacity: 1; }
+    .nav-btn:hover {
+      border-color: #C9A867;
+      background: rgba(201,168,103,0.16);
+      color: #C9A867;
+    }
+    #nav-prev { left: 18px; }
+    #nav-next { right: 18px; }
+
+    /* ── HUD (bottom-right) ── */
+    #hud {
+      position: fixed;
+      bottom: 26px; right: 40px;
+      z-index: 200;
+      display: flex; align-items: center; gap: 14px;
+    }
+    #hud-counter {
+      font-size: 10px;
+      font-weight: 300;
+      letter-spacing: 0.16em;
+      color: rgba(255,255,255,0.42);
+      transition: opacity 0.4s;
+    }
+    #hud-play {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.26);
+      background: rgba(0,0,0,0.38);
+      color: rgba(255,255,255,0.82);
+      font-size: 11px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color 0.2s, background 0.2s, color 0.2s;
+    }
+    #hud-play:hover {
+      border-color: #C9A867;
+      background: rgba(201,168,103,0.16);
+      color: #C9A867;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 640px) {
+      .slide-text   { left: 24px; right: 24px; bottom: 80px; }
+      #wt-logo      { left: 20px; top: 18px; height: 24px; }
+      #hud          { right: 20px; bottom: 18px; }
+      .nav-btn      { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <img id="wt-logo" src="../images/SHER-homepage-white-gold-transparent.png" alt="SHER Eco Sanctuary"/>
+
+  <div id="prog-track"><div id="prog-fill"></div></div>
+
+  <button class="nav-btn" id="nav-prev" aria-label="Previous slide">&#8592;</button>
+  <button class="nav-btn" id="nav-next" aria-label="Next slide">&#8594;</button>
+
+  <div id="hud">
+    <span id="hud-counter">1 / 10</span>
+    <button id="hud-play" aria-label="Pause">&#10074;&#10074;</button>
+  </div>
+
+  <div id="wt">
+
+    <!-- 01 — Opening aerial -->
+    <div class="slide" data-kb="zoom-in">
+      <div class="slide-bg" style="background-image:url('../images/lifestyle-night-aerial.jpg')"></div>
+      <div class="slide-overlay"></div>
+      <div class="slide-text">
+        <div class="slide-eyebrow">Saint Lucia &middot; Caribbean</div>
+        <div class="slide-title">SHER<br>Eco Sanctuary</div>
+        <div class="slide-caption">A private eco-sanctuary on the protected shores of Savannes Bay</div>
+      </div>
+    </div>
+
+    <!-- 02 — Arrival gate -->
+    <div class="slide" data-kb="pan-left">
+      <div class="slide-bg" style="background-image:url('../images/lifestyle-arrival-gate.jpg')"></div>
+      <div class="slide-overlay"></div>
+      <div class="slide-text">
+        <div class="slide-eyebrow">Arrival</div>
+        <div class="slide-title">Where forest<br>meets the bay</div>
+        <div class="slide-caption">Perched above Savannes Bay, your private gate opens to 14 acres of protected landscape</div>
+      </div>
+    </div>
+
+    <!-- 03 — Welcome pavilion -->
+    <div class="slide" data-kb="zoom-in">
+      <div class="slide-bg" style="background-image:url('../images/lifestyle-welcome-pavilion.jpg')"></div>
+      <div class="slide-overlay"></div>
+      <div class="slide-text">
+        <div class="slide-eyebrow">Welcome</div>
+        <div class="slide-title">Your sanctuary<br>awaits</div>
+        <div class="slide-caption">Reception &middot; Caf&eacute; &middot; Concierge &mdash; all set within the forest canopy, overlooking the bay</div>
+      </div>
+    </div>
+
+    <!-- 04 — Garden path -->
+    <div class="slide" data-kb="pan-right">
+      <div class="slide-bg" style="background-image:url('../images/lifestyle-garden-path.jpg')"></div>
+      <div class="slide-overlay"></div>
+      <div class="slide-text">
+        <div class="slide-eyebrow">The Estate</div>
+        <div class="slide-title">Private villas<br>within the forest</div>
+        <div class="slide-caption">Each residence is set within the landscape &mdash; not above it. Stone paths connect you to your world</div>
+      </div>
+    </div>
+
+    <!-- 05 — Villa interior -->
+    <div class="slide" data-kb="zoom-out">
+      <div class="slide-bg" style="background-image:url('../images/lifestyle-villa-morning.jpg')"></div>
+      <div class="slide-overlay"></div>
+      <div class="slide-text">
+        <div class="slide-eyebrow">The Villa</div>
+        <div class="slide-title">Open living &middot;<br>Bay views</div>
+        <div class="slide-caption">Fold-back walls dissolve the boundary between inside and Savannes Bay</div>
+      </div>
+    </div>
+
+    <!-- 06 — Condo veranda -->
+    <div class="slide" data-kb="zoom-in">
+      <div class="slide-bg" style="background-image:url('../images/lifestyle-condo-veranda.jpg')"></div>
+      <div class="slide-overlay"></div>
+      <div class="slide-text">
+        <div class="slide-eyebrow">The Condominium</div>
+        <div class="slide-title">Elevated living<br>above the canopy</div>
+        <div class="slide-caption">Boutique hillside condominiums with wraparound terraces and uninterrupted bay panoramas</div>
+      </div>
+    </div>
+
+    <!-- 07 — Evening dining -->
+    <div class="slide" data-kb="pan-left">
+      <div class="slide-bg" style="background-image:url('../images/lifestyle-evening-dining.jpg')"></div>
+      <div class="slide-overlay"></div>
+      <div class="slide-text">
+        <div class="slide-eyebrow">Dining</div>
+        <div class="slide-title">L&rsquo;Aube &middot;<br>L&rsquo;Estuaire</div>
+        <div class="slide-caption">Farm-to-bay cuisine under the open Caribbean sky &mdash; at the water&rsquo;s edge</div>
+      </div>
+    </div>
+
+    <!-- 08 — Nature trail -->
+    <div class="slide" data-kb="zoom-in">
+      <div class="slide-bg" style="background-image:url('../images/lifestyle-nature-trail.jpg')"></div>
+      <div class="slide-overlay"></div>
+      <div class="slide-text">
+        <div class="slide-eyebrow">The Reserve</div>
+        <div class="slide-title">The mangrove<br>corridor</div>
+        <div class="slide-caption">11 acres of protected wetland &mdash; home to herons, frigate birds, and sea turtles</div>
+      </div>
+    </div>
+
+    <!-- 09 — Bay kayak (close) -->
+    <div class="slide" data-kb="pan-right">
+      <div class="slide-bg" style="background-image:url('../images/lifestyle-bay-kayak.jpg')"></div>
+      <div class="slide-overlay"></div>
+      <div class="slide-text">
+        <div class="slide-eyebrow">Savannes Bay</div>
+        <div class="slide-title">Paddle at<br>golden hour</div>
+        <div class="slide-caption">Guided eco-tours through the mangroves &mdash; a protected wetland reserve unique in the Caribbean</div>
+      </div>
+    </div>
+
+    <!-- 10 — Bay wide (sunset) -->
+    <div class="slide" data-kb="zoom-out">
+      <div class="slide-bg" style="background-image:url('../images/lifestyle-cottage-hillside.jpg')"></div>
+      <div class="slide-overlay"></div>
+      <div class="slide-text">
+        <div class="slide-eyebrow">Savannes Bay</div>
+        <div class="slide-title">The bay is<br>your backyard</div>
+        <div class="slide-caption">Step from your residence onto the water. Savannes Bay is yours to explore</div>
+      </div>
+    </div>
+
+    <!-- Closing card -->
+    <div class="slide slide-close">
+      <div class="close-inner">
+        <img class="close-logo" src="../images/SHER-homepage-white-gold-transparent.png" alt="SHER Eco Sanctuary"/>
+        <div class="close-rule"></div>
+        <div class="close-tagline">Live within the sanctuary</div>
+        <div class="close-sub">Savannes Bay &middot; Saint Lucia</div>
+        <a href="../index.html" class="close-cta">Explore the Sanctuary</a>
+      </div>
+    </div>
+
+  </div><!-- /#wt -->
+
+  <script>
+    const DURATION = 7000;
+    const TRANS_MS = 1400;
+
+    const slideEls     = Array.from(document.querySelectorAll('.slide'));
+    const contentCount = slideEls.length - 1;
+    const fill         = document.getElementById('prog-fill');
+    const counter      = document.getElementById('hud-counter');
+    const playBtn      = document.getElementById('hud-play');
+
+    const KB = {
+      'zoom-in'  : `kb-zoom-in   ${DURATION + TRANS_MS}ms linear both`,
+      'zoom-out' : `kb-zoom-out  ${DURATION + TRANS_MS}ms linear both`,
+      'pan-left' : `kb-pan-left  ${DURATION + TRANS_MS}ms linear both`,
+      'pan-right': `kb-pan-right ${DURATION + TRANS_MS}ms linear both`,
+    };
+
+    let current = 0;
+    let timer   = null;
+    let playing = true;
+
+    function show(index) {
+      slideEls.forEach(s => s.classList.remove('active'));
+      const s = slideEls[index];
+      s.classList.add('active');
+
+      const bg = s.querySelector('.slide-bg');
+      if (bg) {
+        const kb = s.dataset.kb || 'zoom-in';
+        bg.style.animation = 'none';
+        bg.offsetHeight;
+        bg.style.animation = KB[kb];
+      }
+
+      const isClose = s.classList.contains('slide-close');
+      counter.style.opacity = isClose ? '0' : '1';
+      if (!isClose) counter.textContent = `${index + 1} – ${contentCount}`;
+    }
+
+    function startProgress() {
+      fill.style.transition = 'none';
+      fill.style.width = '0%';
+      fill.offsetHeight;
+      fill.style.transition = `width ${DURATION}ms linear`;
+      fill.style.width = '100%';
+    }
+
+    function stopProgress() {
+      fill.style.transition = 'none';
+      fill.style.width = '0%';
+    }
+
+    function advance() {
+      current = (current + 1) % slideEls.length;
+      show(current);
+      if (current < contentCount) startProgress();
+      else stopProgress();
+    }
+
+    function go(delta) {
+      clearInterval(timer);
+      current = (current + delta + slideEls.length) % slideEls.length;
+      show(current);
+      if (playing) {
+        startProgress();
+        timer = setInterval(advance, DURATION);
+      }
+    }
+
+    function togglePlay() {
+      playing = !playing;
+      playBtn.innerHTML = playing ? '&#10074;&#10074;' : '&#9654;';
+      if (playing) {
+        timer = setInterval(advance, DURATION);
+        startProgress();
+      } else {
+        clearInterval(timer);
+        stopProgress();
+      }
+    }
+
+    // Init
+    show(0);
+    startProgress();
+    timer = setInterval(advance, DURATION);
+    requestAnimationFrame(() => document.body.classList.add('loaded'));
+
+    // Controls
+    document.getElementById('nav-prev').addEventListener('click', () => go(-1));
+    document.getElementById('nav-next').addEventListener('click', () => go(+1));
+    playBtn.addEventListener('click', togglePlay);
+
+    // Keyboard: space/k = pause, arrows/j/l = navigate, Esc = restart
+    document.addEventListener('keydown', e => {
+      if (e.key === ' ' || e.key === 'k') { e.preventDefault(); togglePlay(); }
+      if (e.key === 'ArrowRight' || e.key === 'l') go(+1);
+      if (e.key === 'ArrowLeft'  || e.key === 'j') go(-1);
+      if (e.key === 'Escape') { current = -1; go(+1); }
+    });
+
+    // Touch swipe
+    let tx = 0;
+    document.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
+    document.addEventListener('touchend',   e => {
+      const dx = e.changedTouches[0].clientX - tx;
+      if (Math.abs(dx) > 48) go(dx < 0 ? +1 : -1);
+    });
+  </script>
+
+</body>
+</html>
