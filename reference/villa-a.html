@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>SHER Villa Type A — Approved Source of Truth</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green:  #1B3B36;
+      --gold:   #C9A867;
+      --cream:  #F5F0E8;
+      --stone:  #E8E2D8;
+      --ink:    #1A1A18;
+      --muted:  #6B6558;
+      --rule:   #D4CEC4;
+    }
+
+    body {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      background: #fff;
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Header ── */
+    .doc-header {
+      background: var(--green);
+      padding: 28px 48px 24px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .doc-org {
+      font-family: 'Arial', sans-serif;
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+    .doc-title {
+      font-size: 22px;
+      font-weight: 400;
+      color: var(--cream);
+      line-height: 1.25;
+      letter-spacing: 0.02em;
+    }
+    .doc-title strong {
+      display: block;
+      color: #fff;
+      font-size: 26px;
+    }
+    .doc-header-right {
+      text-align: right;
+      flex-shrink: 0;
+    }
+    .doc-ref {
+      font-family: 'Arial', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      color: rgba(245,240,232,0.55);
+      margin-bottom: 6px;
+    }
+    .doc-status {
+      font-family: 'Arial', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      background: rgba(201,168,103,0.14);
+      padding: 4px 10px;
+      border: 1px solid rgba(201,168,103,0.4);
+    }
+
+    /* ── Notice bar ── */
+    .doc-notice {
+      background: var(--cream);
+      border-bottom: 1px solid var(--rule);
+      padding: 10px 48px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .doc-notice-label {
+      font-family: 'Arial', sans-serif;
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--green);
+      white-space: nowrap;
+    }
+    .doc-notice-text {
+      font-family: 'Arial', sans-serif;
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* ── Page body ── */
+    .doc-body {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 52px 48px 80px;
+    }
+
+    /* ── Section headers ── */
+    .section {
+      margin-bottom: 64px;
+    }
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+      margin-bottom: 28px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--rule);
+    }
+    .section-number {
+      font-family: 'Arial', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    .section-title {
+      font-size: 18px;
+      font-weight: 400;
+      color: var(--green);
+      letter-spacing: 0.03em;
+    }
+    .section-note {
+      margin-left: auto;
+      font-family: 'Arial', sans-serif;
+      font-size: 10.5px;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    /* ── Full-width hero image ── */
+    .img-hero {
+      width: 100%;
+      margin-bottom: 24px;
+    }
+    .img-hero img {
+      width: 100%;
+      display: block;
+      max-height: 600px;
+      object-fit: cover;
+      object-position: center 40%;
+    }
+
+    /* ── 2-col grid ── */
+    .img-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    /* ── 3-col grid ── */
+    .img-grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 20px;
+    }
+
+    /* ── Image card ── */
+    .img-card { display: flex; flex-direction: column; }
+    .img-card img {
+      width: 100%;
+      display: block;
+      object-fit: cover;
+    }
+    .img-card.ratio-landscape img { aspect-ratio: 16 / 10; }
+    .img-card.ratio-portrait  img { aspect-ratio: 4 / 3; }
+
+    .img-label { padding: 14px 0 0; }
+    .img-label-code {
+      font-family: 'Arial', sans-serif;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 4px;
+    }
+    .img-label-title {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--ink);
+      margin-bottom: 6px;
+      letter-spacing: 0.01em;
+    }
+    .img-label-desc {
+      font-family: 'Arial', sans-serif;
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+    .img-label-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+    .tag {
+      font-family: 'Arial', sans-serif;
+      font-size: 9px;
+      font-weight: 400;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: var(--stone);
+      padding: 3px 8px;
+    }
+    .tag.primary {
+      color: var(--green);
+      background: rgba(27,59,54,0.1);
+    }
+    .tag.differs {
+      color: #7a3a00;
+      background: rgba(201,168,103,0.18);
+    }
+
+    /* ── Difference callout ── */
+    .differs-callout {
+      background: rgba(201,168,103,0.1);
+      border-left: 3px solid var(--gold);
+      padding: 14px 18px;
+      margin-top: 16px;
+      font-family: 'Arial', sans-serif;
+      font-size: 11px;
+      color: var(--ink);
+      line-height: 1.6;
+    }
+    .differs-callout strong {
+      display: block;
+      font-size: 9px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 6px;
+    }
+
+    /* ── Villa vs Cottage comparison ── */
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border: 1px solid var(--rule);
+      margin-top: 0;
+    }
+    .compare-col {
+      padding: 24px 28px;
+    }
+    .compare-col + .compare-col {
+      border-left: 1px solid var(--rule);
+    }
+    .compare-col-label {
+      font-family: 'Arial', sans-serif;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 14px;
+    }
+    .compare-list {
+      list-style: none;
+      padding: 0;
+    }
+    .compare-list li {
+      font-family: 'Arial', sans-serif;
+      font-size: 11.5px;
+      color: var(--ink);
+      padding: 7px 0 7px 16px;
+      border-bottom: 1px solid var(--rule);
+      position: relative;
+      line-height: 1.5;
+    }
+    .compare-list li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: var(--gold);
+    }
+
+    /* ── Intent list ── */
+    .intent-list {
+      list-style: none;
+      padding: 0;
+      columns: 2;
+      column-gap: 48px;
+    }
+    .intent-list li {
+      font-family: 'Arial', sans-serif;
+      font-size: 11.5px;
+      color: var(--ink);
+      padding: 8px 0 8px 18px;
+      border-bottom: 1px solid var(--rule);
+      position: relative;
+      line-height: 1.5;
+      break-inside: avoid;
+    }
+    .intent-list li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: var(--gold);
+    }
+
+    /* ── Footer ── */
+    .doc-footer {
+      background: var(--green);
+      padding: 18px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .doc-footer-left {
+      font-family: 'Arial', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(245,240,232,0.5);
+    }
+    .doc-footer-right {
+      font-family: 'Arial', sans-serif;
+      font-size: 10px;
+      color: rgba(201,168,103,0.7);
+      letter-spacing: 0.1em;
+    }
+
+    @media (max-width: 900px) {
+      .doc-header { padding: 24px; }
+      .doc-notice { padding: 10px 24px; }
+      .doc-body   { padding: 36px 24px 60px; }
+      .doc-footer { padding: 16px 24px; }
+      .img-grid-2,
+      .img-grid-3,
+      .compare-grid { grid-template-columns: 1fr; }
+      .compare-col + .compare-col { border-left: none; border-top: 1px solid var(--rule); }
+      .intent-list { columns: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Document Header ── -->
+  <header class="doc-header">
+    <div class="doc-header-left">
+      <div class="doc-org">SHER Sanctuary Experiences &middot; Saint Lucia</div>
+      <div class="doc-title">
+        <strong>Villa Type A</strong>
+        Approved Source of Truth &mdash; Photorealistic Reference Set
+      </div>
+    </div>
+    <div class="doc-header-right">
+      <div class="doc-ref">VTA-R01 &middot; Visual Reference Series</div>
+      <div class="doc-status">Approved for Use</div>
+    </div>
+  </header>
+
+  <div class="doc-notice">
+    <div class="doc-notice-label">Source of Truth</div>
+    <div class="doc-notice-text">
+      These are the five approved photorealistic reference images for Villa Type A at SHER Eco Sanctuary.
+      All Estate Walkthrough imagery depicting Villa A must be consistent with this reference set.
+      The Villa is architecturally distinct from Cottage A — key differences are called out in each image label.
+    </div>
+  </div>
+
+  <div class="doc-body">
+
+    <!-- ── Section 1: Primary Exterior — Linear View ── -->
+    <section class="section">
+      <div class="section-header">
+        <span class="section-number">01</span>
+        <span class="section-title">Primary Exterior &mdash; Linear View</span>
+        <span class="section-note">The definitive side elevation: butterfly roof, pool terrace and open veranda</span>
+      </div>
+
+      <div class="img-hero">
+        <div class="img-card ratio-landscape">
+          <img src="../images/villa-type-a/VTA-R01-01_Linear_View_Villa_Exterior_Base.jpg"
+               alt="Villa A — Linear Side Exterior, Daytime"/>
+        </div>
+      </div>
+      <div class="img-label">
+        <div class="img-label-code">VTA-R01-01 &middot; Linear Exterior Base &middot; Daytime</div>
+        <div class="img-label-title">Full Side Elevation &mdash; Butterfly Roof, Pool Terrace, Open Veranda</div>
+        <div class="img-label-desc">
+          The primary reference for Villa A's exterior character. Shows the full side elevation with the butterfly roof
+          at its clearest angle. The villa sits on a raised stone plinth accessed by wide stone steps. The living wing
+          is fully glazed across the facade — sliding glass doors open to the deep covered veranda. Infinity pool
+          visible on the right terrace edge, extending toward Savannes Bay in the distance. Vertical timber slat
+          cladding on the end wings. Open courtyard passage visible between bedroom wing (left) and living wing (right).
+          Bay visible on the right horizon.
+        </div>
+        <div class="img-label-tags">
+          <span class="tag primary">Primary Reference</span>
+          <span class="tag">Butterfly Roof</span>
+          <span class="tag">Pool Terrace</span>
+          <span class="tag">Stone Plinth</span>
+          <span class="tag">Split-Wing Layout</span>
+          <span class="tag">Bay View</span>
+          <span class="tag">Daytime</span>
+        </div>
+        <div class="differs-callout">
+          <strong>Differs from Cottage A</strong>
+          Villa A is larger, raised on a stone plinth, and has a private pool. The split-wing plan creates an open
+          courtyard between bedroom and living zones. The facade is full-height glazed sliding doors — not louvered
+          bi-folds as in the Cottage. Timber vertical slat cladding replaces the Cottage's stone-and-lime render end walls.
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Section 2: Courtyard & Second Exterior Angle ── -->
+    <section class="section">
+      <div class="section-header">
+        <span class="section-number">02</span>
+        <span class="section-title">Courtyard &amp; Split-Wing Exterior</span>
+        <span class="section-note">Right-elevation showing the courtyard between bedroom and living wings</span>
+      </div>
+
+      <div class="img-card ratio-landscape">
+        <img src="../images/villa-type-a/VTA-R01-02_Courtyard_SplitWing_Villa_Premium_Exterior.jpg"
+             alt="Villa A — Courtyard Split-Wing Exterior"/>
+      </div>
+      <div class="img-label" style="margin-top:14px;">
+        <div class="img-label-code">VTA-R01-02 &middot; Courtyard / Split-Wing &middot; Daytime</div>
+        <div class="img-label-title">Right-Side Elevation &mdash; Open Courtyard Between Wings</div>
+        <div class="img-label-desc">
+          Right-side view revealing the split-wing plan in full. The bedroom wing (left, with solid-panel sliding doors
+          and vertical timber slat cladding) is separated from the open living wing (right) by a planted open courtyard.
+          Stone base with tropical planting between the two wings. Wide stone staircase at centre. Living wing veranda
+          extends right with pool terrace beyond. Bay visible on far right horizon. The courtyard creates the sense of
+          a private outdoor room between interior zones.
+        </div>
+        <div class="img-label-tags">
+          <span class="tag primary">Key Plan Reference</span>
+          <span class="tag">Courtyard</span>
+          <span class="tag">Bedroom Wing</span>
+          <span class="tag">Living Wing</span>
+          <span class="tag">Timber Slat Cladding</span>
+          <span class="tag">Bay View</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Section 3: Interiors ── -->
+    <section class="section">
+      <div class="section-header">
+        <span class="section-number">03</span>
+        <span class="section-title">Interior Views</span>
+        <span class="section-note">Open-plan living / veranda and primary bedroom with garden access</span>
+      </div>
+
+      <div class="img-grid-2">
+
+        <div class="img-card ratio-landscape">
+          <img src="../images/villa-type-a/VTA-R01-03_Main_Living_Veranda_Interior.jpg"
+               alt="Villa A — Main Living and Veranda Interior"/>
+          <div class="img-label">
+            <div class="img-label-code">VTA-R01-03 &middot; Main Living / Veranda Interior</div>
+            <div class="img-label-title">Open-Plan Living, Kitchen &amp; Veranda</div>
+            <div class="img-label-desc">
+              Large open-plan space: living room foreground with linen sectional and timber coffee table, kitchen and
+              dining behind left, full-height glazed doors sliding open to the deep covered veranda. Veranda seating
+              frames a view of landscape and bay beyond. Timber V-profile ceiling, polished concrete floor, jute rugs.
+              Ceiling fans throughout. Bamboo/reed screen visible right. Demonstrates the indoor-outdoor continuity
+              that defines the Villa A experience.
+            </div>
+            <div class="img-label-tags">
+              <span class="tag primary">Interior Reference</span>
+              <span class="tag">Open Plan</span>
+              <span class="tag">Kitchen / Dining</span>
+              <span class="tag">Veranda Connection</span>
+              <span class="tag">Bay View</span>
+              <span class="tag">Timber Ceiling</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="img-card ratio-landscape">
+          <img src="../images/villa-type-a/VTA-R01-05_Bedroom_Garden_View_Sanctuary.jpg"
+               alt="Villa A — Primary Bedroom with Garden Courtyard View"/>
+          <div class="img-label">
+            <div class="img-label-code">VTA-R01-05 &middot; Bedroom / Garden Courtyard View</div>
+            <div class="img-label-title">Primary Bedroom &mdash; Garden &amp; Courtyard Outlook</div>
+            <div class="img-label-desc">
+              King bedroom with timber ceiling, neutral linen, sliding panel opens to the private courtyard garden.
+              Rattan screen / sheer curtain layering. En suite bathroom visible through archway right, with round
+              mirror and timber vanity. Timber low-platform bed, bedside pendants, dresser unit left. Woven seagrass
+              rug. Courtyard planting (tree ferns, palms) seen through the sliding panel — the bedroom sits in a
+              landscape pocket rather than facing the bay directly.
+            </div>
+            <div class="img-label-tags">
+              <span class="tag primary">Interior Reference</span>
+              <span class="tag">Bedroom</span>
+              <span class="tag">Courtyard Garden</span>
+              <span class="tag">Private Outlook</span>
+              <span class="tag">Timber Ceiling</span>
+              <span class="tag">En Suite Access</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── Section 4: Twilight Atmosphere ── -->
+    <section class="section">
+      <div class="section-header">
+        <span class="section-number">04</span>
+        <span class="section-title">Twilight &amp; Evening Atmosphere</span>
+        <span class="section-note">Night ambiance render — the villa lit against a dusk sky</span>
+      </div>
+
+      <div class="img-card ratio-landscape">
+        <img src="../images/villa-type-a/VTA-R01-04_Twilight_Exterior_Atmosphere.jpg"
+             alt="Villa A — Twilight Exterior Atmosphere"/>
+      </div>
+      <div class="img-label" style="margin-top:14px;">
+        <div class="img-label-code">VTA-R01-04 &middot; Twilight / Evening Light</div>
+        <div class="img-label-title">Right-Side Elevation at Dusk &mdash; Warm Interior Light Against Purple Sky</div>
+        <div class="img-label-desc">
+          Same right-elevation angle as VTA-R01-02 but at twilight. Deep purple-blue sky with pink horizon cloud.
+          Warm amber light pours from interior through the living wing glazing and the courtyard. Path lighting and
+          uplights illuminate the courtyard garden tree and approach steps. Interior artwork and furniture clearly
+          visible through the open facade. Pool terrace visible right. The warm-light-against-dusk-sky mood is the
+          reference for any evening/night exterior shot of Villa A.
+        </div>
+        <div class="img-label-tags">
+          <span class="tag primary">Atmosphere Reference</span>
+          <span class="tag">Twilight / Dusk</span>
+          <span class="tag">Interior Lighting</span>
+          <span class="tag">Path Lighting</span>
+          <span class="tag">Courtyard Garden</span>
+          <span class="tag">Bay Horizon</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Section 5: Key Differences vs Cottage A ── -->
+    <section class="section">
+      <div class="section-header">
+        <span class="section-number">05</span>
+        <span class="section-title">Villa A vs Cottage A &mdash; Key Distinctions</span>
+        <span class="section-note">Critical differences for correct Estate Walkthrough imagery</span>
+      </div>
+
+      <div class="compare-grid">
+        <div class="compare-col">
+          <div class="compare-col-label">Villa Type A</div>
+          <ul class="compare-list">
+            <li>Split-wing plan — open courtyard between bedroom and living</li>
+            <li>Raised on stone plinth, wide stone approach steps</li>
+            <li>Private infinity pool on terrace deck</li>
+            <li>Full-height sliding glass doors across living facade</li>
+            <li>Vertical timber slat cladding on end walls</li>
+            <li>Open veranda with timber post structure (no solid roof soffit at edge)</li>
+            <li>Butterfly roof reads as two planes with a valley between wings</li>
+            <li>Bay + ocean views from veranda and pool terrace</li>
+            <li>Open-plan kitchen / dining / living — single great room</li>
+            <li>Bedroom looks onto private courtyard garden, not the bay</li>
+          </ul>
+        </div>
+        <div class="compare-col">
+          <div class="compare-col-label">Cottage Type A</div>
+          <ul class="compare-list">
+            <li>Linear plan — single bar with all rooms in sequence</li>
+            <li>Ground-level plinth, stepped stone approach path</li>
+            <li>No pool — outdoor shower court is the exterior water feature</li>
+            <li>Louvered timber bi-fold doors across living facade</li>
+            <li>Stone and lime render walls throughout</li>
+            <li>Deep covered veranda with solid soffit, ceiling fan</li>
+            <li>Butterfly roof reads as one continuous form over the bar</li>
+            <li>Landscape and mangrove views; bay glimpsed beyond</li>
+            <li>Separate living and bedroom zones visible through open plan</li>
+            <li>Bedroom faces the landscape / bay through louvered wall</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Section 6: Visual Intent ── -->
+    <section class="section">
+      <div class="section-header">
+        <span class="section-number">06</span>
+        <span class="section-title">Visual Intent &amp; Rendering Rules</span>
+        <span class="section-note">Applies to all Villa A imagery used in the Estate Walkthrough</span>
+      </div>
+
+      <ul class="intent-list">
+        <li>The butterfly roof must be visible and clearly legible in all exterior shots</li>
+        <li>Pool must be present in exterior views that show the terrace</li>
+        <li>No people in primary exterior images</li>
+        <li>Natural daylight or soft warm evening light only — no harsh mid-day overexposure</li>
+        <li>Bay and ocean must be visible on the horizon in exterior renders</li>
+        <li>Vegetation must be realistic and native to Saint Lucia</li>
+        <li>No visible water tanks, pumps, cisterns or service infrastructure</li>
+        <li>Courtyard garden must contain tropical planting — not left bare or hardscaped</li>
+        <li>Interior renders: polished concrete or large-format stone tile floors throughout</li>
+        <li>All glazing to read as open or operable — not dark reflective glass</li>
+        <li>Timber ceiling profile must be visible in interior renders</li>
+        <li>The villa should feel generously proportioned — larger than its footprint</li>
+      </ul>
+    </section>
+
+  </div>
+
+  <!-- ── Footer ── -->
+  <footer class="doc-footer">
+    <div class="doc-footer-left">SHER Villa Type A &middot; Approved Source of Truth &middot; VTA-R01</div>
+    <div class="doc-footer-right">For internal use &mdash; Estate Walkthrough Redesign Reference</div>
+  </footer>
+
+</body>
+</html>
