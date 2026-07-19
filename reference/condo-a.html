@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>SHER Condo Type A — Approved Source of Truth</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green:  #1B3B36;
+      --gold:   #C9A867;
+      --cream:  #F5F0E8;
+      --stone:  #E8E2D8;
+      --ink:    #1A1A18;
+      --muted:  #6B6558;
+      --rule:   #D4CEC4;
+    }
+
+    body {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      background: #fff;
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Header ── */
+    .doc-header {
+      background: var(--green);
+      padding: 28px 48px 24px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .doc-org {
+      font-family: 'Arial', sans-serif;
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+    .doc-title {
+      font-size: 22px;
+      font-weight: 400;
+      color: var(--cream);
+      line-height: 1.25;
+      letter-spacing: 0.02em;
+    }
+    .doc-title strong {
+      display: block;
+      color: #fff;
+      font-size: 26px;
+    }
+    .doc-header-right { text-align: right; flex-shrink: 0; }
+    .doc-ref {
+      font-family: 'Arial', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      color: rgba(245,240,232,0.55);
+      margin-bottom: 6px;
+    }
+    .doc-status {
+      font-family: 'Arial', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      background: rgba(201,168,103,0.14);
+      padding: 4px 10px;
+      border: 1px solid rgba(201,168,103,0.4);
+    }
+
+    /* ── Notice bar ── */
+    .doc-notice {
+      background: var(--cream);
+      border-bottom: 1px solid var(--rule);
+      padding: 10px 48px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .doc-notice-label {
+      font-family: 'Arial', sans-serif;
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--green);
+      white-space: nowrap;
+    }
+    .doc-notice-text {
+      font-family: 'Arial', sans-serif;
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* ── Page body ── */
+    .doc-body {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 52px 48px 80px;
+    }
+
+    /* ── Section headers ── */
+    .section { margin-bottom: 64px; }
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+      margin-bottom: 28px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--rule);
+    }
+    .section-number {
+      font-family: 'Arial', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    .section-title {
+      font-size: 18px;
+      font-weight: 400;
+      color: var(--green);
+      letter-spacing: 0.03em;
+    }
+    .section-note {
+      margin-left: auto;
+      font-family: 'Arial', sans-serif;
+      font-size: 10.5px;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    /* ── Variant label strip ── */
+    .variant-strip {
+      display: flex;
+      gap: 0;
+      margin-bottom: 28px;
+      border: 1px solid var(--rule);
+    }
+    .variant-pill {
+      flex: 1;
+      padding: 12px 20px;
+      font-family: 'Arial', sans-serif;
+    }
+    .variant-pill + .variant-pill { border-left: 1px solid var(--rule); }
+    .variant-pill-label {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 4px;
+    }
+    .variant-pill-text {
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* ── Image cards ── */
+    .img-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    .img-card { display: flex; flex-direction: column; }
+    .img-card img {
+      width: 100%;
+      display: block;
+      object-fit: cover;
+    }
+    .img-card.ratio-landscape img { aspect-ratio: 4 / 3; }
+    .img-card.ratio-wide      img { aspect-ratio: 16 / 9; }
+    .img-card.ratio-square    img { aspect-ratio: 1 / 1; }
+
+    .img-label { padding: 14px 0 0; }
+    .img-label-code {
+      font-family: 'Arial', sans-serif;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 4px;
+    }
+    .img-label-title {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+    .img-label-desc {
+      font-family: 'Arial', sans-serif;
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .img-label-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+    .tag {
+      font-family: 'Arial', sans-serif;
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: var(--stone);
+      padding: 3px 8px;
+    }
+    .tag.primary { color: var(--green); background: rgba(27,59,54,0.1); }
+    .tag.night   { color: #2a2060; background: rgba(42,32,96,0.1); }
+
+    /* ── Callout ── */
+    .callout {
+      background: rgba(201,168,103,0.08);
+      border-left: 3px solid var(--gold);
+      padding: 14px 18px;
+      margin-top: 16px;
+      font-family: 'Arial', sans-serif;
+      font-size: 11px;
+      color: var(--ink);
+      line-height: 1.6;
+    }
+    .callout strong {
+      display: block;
+      font-size: 9px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 6px;
+    }
+
+    /* ── Overview composite ── */
+    .overview-wrap {
+      border: 1px solid var(--rule);
+      overflow: hidden;
+    }
+    .overview-wrap img {
+      width: 100%;
+      display: block;
+    }
+    .overview-caption {
+      background: var(--stone);
+      padding: 12px 16px;
+      font-family: 'Arial', sans-serif;
+      font-size: 10.5px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* ── 3-col distinction table ── */
+    .distinction-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 0;
+      border: 1px solid var(--rule);
+    }
+    .distinction-col { padding: 22px 24px; }
+    .distinction-col + .distinction-col { border-left: 1px solid var(--rule); }
+    .distinction-label {
+      font-family: 'Arial', sans-serif;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 14px;
+    }
+    .distinction-list {
+      list-style: none;
+      padding: 0;
+    }
+    .distinction-list li {
+      font-family: 'Arial', sans-serif;
+      font-size: 11px;
+      color: var(--ink);
+      padding: 7px 0 7px 16px;
+      border-bottom: 1px solid var(--rule);
+      position: relative;
+      line-height: 1.5;
+    }
+    .distinction-list li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: var(--gold);
+    }
+
+    /* ── Intent list ── */
+    .intent-list {
+      list-style: none;
+      padding: 0;
+      columns: 2;
+      column-gap: 48px;
+    }
+    .intent-list li {
+      font-family: 'Arial', sans-serif;
+      font-size: 11.5px;
+      color: var(--ink);
+      padding: 8px 0 8px 18px;
+      border-bottom: 1px solid var(--rule);
+      position: relative;
+      line-height: 1.5;
+      break-inside: avoid;
+    }
+    .intent-list li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: var(--gold);
+    }
+
+    /* ── Footer ── */
+    .doc-footer {
+      background: var(--green);
+      padding: 18px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .doc-footer-left {
+      font-family: 'Arial', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(245,240,232,0.5);
+    }
+    .doc-footer-right {
+      font-family: 'Arial', sans-serif;
+      font-size: 10px;
+      color: rgba(201,168,103,0.7);
+      letter-spacing: 0.1em;
+    }
+
+    @media (max-width: 900px) {
+      .doc-header, .doc-notice, .doc-body, .doc-footer { padding-left: 24px; padding-right: 24px; }
+      .img-grid-2, .distinction-grid { grid-template-columns: 1fr; }
+      .distinction-col + .distinction-col { border-left: none; border-top: 1px solid var(--rule); }
+      .variant-strip { flex-direction: column; }
+      .variant-pill + .variant-pill { border-left: none; border-top: 1px solid var(--rule); }
+      .intent-list { columns: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="doc-header">
+    <div class="doc-header-left">
+      <div class="doc-org">SHER Sanctuary Experiences &middot; Saint Lucia</div>
+      <div class="doc-title">
+        <strong>Condo Type A</strong>
+        Approved Source of Truth &mdash; Photorealistic Reference Set
+      </div>
+    </div>
+    <div class="doc-header-right">
+      <div class="doc-ref">CTA-R01 &middot; Visual Reference Series</div>
+      <div class="doc-status">Approved for Use</div>
+    </div>
+  </header>
+
+  <div class="doc-notice">
+    <div class="doc-notice-label">Source of Truth</div>
+    <div class="doc-notice-text">
+      Four approved photorealistic renders for Condo Type A at SHER Eco Sanctuary, covering two deployment
+      variants (hillside terraced and flatter terrain courtyard), a shared pool terrace view, and a night
+      atmosphere render. The Condo is the only two-storey residence type on the estate.
+    </div>
+  </div>
+
+  <div class="doc-body">
+
+    <!-- ── Section 1: Two Deployment Variants ── -->
+    <section class="section">
+      <div class="section-header">
+        <span class="section-number">01</span>
+        <span class="section-title">Hillside Variant &mdash; Aerial Dusk</span>
+        <span class="section-note">Primary reference for condos on terraced hillside sites with bay views</span>
+      </div>
+
+      <div class="variant-strip">
+        <div class="variant-pill">
+          <div class="variant-pill-label">Variant A &mdash; Hillside Terraced</div>
+          <div class="variant-pill-text">Units step down the slope on stone retaining terraces. Dramatic bay and ocean views. Stone retaining walls between levels. Stepped approach paths connect units.</div>
+        </div>
+        <div class="variant-pill">
+          <div class="variant-pill-label">Variant B &mdash; Flatter Terrain Courtyard</div>
+          <div class="variant-pill-text">Pairs of units face each other across a central landscaped courtyard path. No terracing. Suitable for the lower, flatter portions of the estate near the bay edge.</div>
+        </div>
+      </div>
+
+      <div class="img-card ratio-landscape" style="margin-bottom:14px;">
+        <img src="../images/condo-type-a/approved-01-hillside-aerial-dusk.jpg"
+             alt="Condo A — Hillside Aerial Dusk"/>
+      </div>
+      <div class="img-label">
+        <div class="img-label-code">CTA-R01-01 &middot; Hillside Variant &middot; Aerial Dusk</div>
+        <div class="img-label-title">Two-Building Hillside Cluster &mdash; Golden Hour, Savannes Bay Behind</div>
+        <div class="img-label-desc">
+          Aerial view of two condo buildings set side by side on the terraced hillside, Savannes Bay visible on
+          the left horizon. Each building is two storeys with butterfly roofs, vertical timber slat screening across
+          both floors, and wrap-around upper balconies. Stone retaining walls step the ground between the two
+          buildings. Path and steps between. Both units face the bay. Lush tropical planting fills the gaps between
+          stone retaining walls and around the base of each building.
+        </div>
+        <div class="img-label-tags">
+          <span class="tag primary">Primary Hillside Reference</span>
+          <span class="tag">Two Storeys</span>
+          <span class="tag">Bay View</span>
+          <span class="tag">Butterfly Roof</span>
+          <span class="tag">Timber Slat Screen</span>
+          <span class="tag">Stone Retaining Walls</span>
+          <span class="tag">Cluster of 2</span>
+        </div>
+        <div class="callout">
+          <strong>Critical detail — two storeys</strong>
+          The Condo is the only two-storey residence type at SHER. Both the ground floor and the upper floor
+          have their own lounge / terrace access. The upper floor wraps around as a full-width balcony with glass
+          or solid balustrade. The butterfly roof sits above the upper level — taller and more dramatic than the
+          single-storey Villa and Cottage forms.
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Section 2: Night Render ── -->
+    <section class="section">
+      <div class="section-header">
+        <span class="section-number">02</span>
+        <span class="section-title">Hillside Variant &mdash; Night Atmosphere</span>
+        <span class="section-note">Evening reference: warm interior light against deep blue dusk sky</span>
+      </div>
+
+      <div class="img-card ratio-landscape" style="margin-bottom:14px;">
+        <img src="../images/condo-type-a/approved-02-hillside-night.jpg"
+             alt="Condo A — Hillside Night Atmosphere"/>
+      </div>
+      <div class="img-label">
+        <div class="img-label-code">CTA-R01-02 &middot; Hillside Variant &middot; Night / Dusk</div>
+        <div class="img-label-title">Two-Building Hillside Cluster &mdash; Deep Blue Dusk, Warm Interior Light</div>
+        <div class="img-label-desc">
+          Same hillside cluster angle as CTA-R01-01 but at night. Deep blue-purple sky with clouds. Warm amber
+          interior light glows through the timber slat screens on both floors of both buildings. Uplights illuminate
+          the stone retaining walls and tropical planting. Central stepped path is lit. The timber screening creates
+          a lantern-like effect — warm light filtered rather than exposed. The butterfly roofs are clearly
+          silhouetted against the sky.
+        </div>
+        <div class="img-label-tags">
+          <span class="tag primary">Night Atmosphere Reference</span>
+          <span class="tag night">Deep Blue Sky</span>
+          <span class="tag">Warm Interior Light</span>
+          <span class="tag">Uplight Planting</span>
+          <span class="tag">Lantern Effect</span>
+          <span class="tag">Roof Silhouette</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Section 3: Flatter Terrain + Pool ── -->
+    <section class="section">
+      <div class="section-header">
+        <span class="section-number">03</span>
+        <span class="section-title">Flatter Terrain Courtyard &amp; Pool Terrace</span>
+        <span class="section-note">Variant B courtyard arrangement and the shared communal pool</span>
+      </div>
+
+      <div class="img-grid-2">
+
+        <div class="img-card ratio-landscape">
+          <img src="../images/condo-type-a/approved-03-flatter-terrain-courtyard.jpg"
+               alt="Condo A — Flatter Terrain Courtyard"/>
+          <div class="img-label">
+            <div class="img-label-code">CTA-R01-03 &middot; Flatter Terrain Variant &middot; Courtyard</div>
+            <div class="img-label-title">Facing-Unit Courtyard Arrangement &mdash; Daytime</div>
+            <div class="img-label-desc">
+              Two condo buildings face each other across a central planted courtyard path — the flatter terrain
+              deployment. Ground-level units have stepped entries; upper balconies face inward across the shared
+              space. The butterfly roofs are especially prominent from this close, ground-level angle — the angular
+              peaks of all four rooflines frame the sky. Central path is stone cobble with tropical planting either
+              side, stone bollards and lanterns. No terracing — all units on the same level.
+            </div>
+            <div class="img-label-tags">
+              <span class="tag primary">Flatter Terrain Reference</span>
+              <span class="tag">Courtyard Plan</span>
+              <span class="tag">Facing Units</span>
+              <span class="tag">Prominent Roofline</span>
+              <span class="tag">Daytime</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="img-card ratio-landscape">
+          <img src="../images/condo-type-a/approved-04-pool-terrace-daytime.jpg"
+               alt="Condo A — Shared Pool Terrace"/>
+          <div class="img-label">
+            <div class="img-label-code">CTA-R01-04 &middot; Shared Pool Terrace &middot; Daytime</div>
+            <div class="img-label-title">Communal Pool &mdash; Two Buildings, Stone Retaining Wall, Sun Deck</div>
+            <div class="img-label-desc">
+              Shared communal pool in the foreground — longer than a private pool, suitable for lap swimming,
+              with stone retaining wall below and pool deck level above. Two sun loungers and a parasol on the
+              right. Two condo buildings rise behind the pool, full facade visible: ground-floor terraces, upper
+              balconies with glass balustrade, timber slat screens, butterfly roofs. Lush planting between and
+              behind buildings. Blue sky.
+            </div>
+            <div class="img-label-tags">
+              <span class="tag primary">Pool Reference</span>
+              <span class="tag">Communal Pool</span>
+              <span class="tag">Stone Retaining Wall</span>
+              <span class="tag">Sun Deck</span>
+              <span class="tag">Glass Balustrade</span>
+              <span class="tag">Daytime</span>
+            </div>
+            <div class="callout">
+              <strong>Shared vs private pool</strong>
+              The Condo pool is communal — shared between the cluster of units. It is distinctly different from
+              Villa A's private terrace pool. In walkthrough imagery, the pool should read as a shared resort
+              amenity, not a private residence pool.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── Section 4: Overview Composite Sheet ── -->
+    <section class="section">
+      <div class="section-header">
+        <span class="section-number">04</span>
+        <span class="section-title">Overview &mdash; Four-View Composite Sheet</span>
+        <span class="section-note">All four approved angles shown together for quick cross-reference</span>
+      </div>
+
+      <div class="overview-wrap">
+        <img src="../images/condo-type-a/05_Exterior_Overview_web.png"
+             alt="Condo A — Four-View Overview Composite"/>
+        <div class="overview-caption">
+          <strong>Clockwise from top-left:</strong>
+          (1) Hillside aerial dusk — bay behind, two buildings, stone retaining walls.
+          (2) Flatter terrain courtyard — butterfly roofs prominent, facing units, cobble path.
+          (3) Pool terrace daytime — communal pool, two buildings, sun deck.
+          (4) Hillside night — warm interior light filtered through timber screens against deep blue sky.
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Section 5: Three-Way Distinction ── -->
+    <section class="section">
+      <div class="section-header">
+        <span class="section-number">05</span>
+        <span class="section-title">Condo A vs Villa A vs Cottage A &mdash; Key Distinctions</span>
+        <span class="section-note">Critical for correct Estate Walkthrough imagery — each type must read as clearly different</span>
+      </div>
+
+      <div class="distinction-grid">
+        <div class="distinction-col">
+          <div class="distinction-label">Condo Type A</div>
+          <ul class="distinction-list">
+            <li>Two storeys — the only multi-storey residence type</li>
+            <li>Deployed in clusters of 2+ units sharing a building</li>
+            <li>Communal shared pool — not private</li>
+            <li>Upper balcony wraps full width, glass or solid balustrade</li>
+            <li>Timber vertical slat screening as primary facade element</li>
+            <li>Two butterfly roofs per building — paired peaks visible from front</li>
+            <li>Stone retaining walls for hillside terracing between units</li>
+            <li>Both hillside and flatter terrain deployment variants</li>
+            <li>Bay views from upper balcony — ground floor more sheltered</li>
+          </ul>
+        </div>
+        <div class="distinction-col">
+          <div class="distinction-label">Villa Type A</div>
+          <ul class="distinction-list">
+            <li>Single storey — ground level only</li>
+            <li>Individual standalone residence</li>
+            <li>Private infinity pool on personal terrace</li>
+            <li>Open veranda — no upper floor or balcony</li>
+            <li>Timber slat cladding on end walls only</li>
+            <li>One butterfly roof — two planes over a split-wing plan</li>
+            <li>Raised on stone plinth, courtyard between wings</li>
+            <li>Always hillside, always with bay panorama</li>
+            <li>Full bay view from living and veranda</li>
+          </ul>
+        </div>
+        <div class="distinction-col">
+          <div class="distinction-label">Cottage Type A</div>
+          <ul class="distinction-list">
+            <li>Single storey — ground level only</li>
+            <li>Individual standalone residence</li>
+            <li>No pool — outdoor shower court instead</li>
+            <li>Deep covered veranda, no upper floor</li>
+            <li>Stone and lime render walls throughout</li>
+            <li>One butterfly roof — single form over linear bar plan</li>
+            <li>Ground-level, embedded in the landscape</li>
+            <li>More sheltered — tucked into planting pockets</li>
+            <li>Landscape views, bay glimpsed beyond greenery</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Section 6: Visual Intent ── -->
+    <section class="section">
+      <div class="section-header">
+        <span class="section-number">06</span>
+        <span class="section-title">Visual Intent &amp; Rendering Rules</span>
+        <span class="section-note">Applies to all Condo A imagery in the Estate Walkthrough</span>
+      </div>
+
+      <ul class="intent-list">
+        <li>Both storeys must be visible and legible in exterior renders</li>
+        <li>Butterfly rooflines must read clearly above the upper floor</li>
+        <li>Timber slat screening must be present and prominent on both floors</li>
+        <li>Stone retaining walls visible in hillside variant images</li>
+        <li>Communal pool must not be mistaken for a private villa pool</li>
+        <li>Bay visible on horizon in hillside variant renders</li>
+        <li>No people in primary exterior images</li>
+        <li>Night renders: warm amber interior light filtered through timber screens</li>
+        <li>Vegetation must be realistic and native to Saint Lucia</li>
+        <li>No visible water tanks, pumps or service infrastructure</li>
+        <li>Upper balcony glazing must read as open — not dark reflective glass</li>
+        <li>Courtyard variant: central path and planting must be well-composed, not sparse</li>
+      </ul>
+    </section>
+
+  </div>
+
+  <footer class="doc-footer">
+    <div class="doc-footer-left">SHER Condo Type A &middot; Approved Source of Truth &middot; CTA-R01</div>
+    <div class="doc-footer-right">For internal use &mdash; Estate Walkthrough Redesign Reference</div>
+  </footer>
+
+</body>
+</html>
