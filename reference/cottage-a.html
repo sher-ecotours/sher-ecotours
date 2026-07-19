@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>SHER Cottage Type A — Approved Source of Truth</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green:  #1B3B36;
+      --gold:   #C9A867;
+      --cream:  #F5F0E8;
+      --stone:  #E8E2D8;
+      --ink:    #1A1A18;
+      --muted:  #6B6558;
+      --rule:   #D4CEC4;
+    }
+
+    body {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      background: #fff;
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Header ── */
+    .doc-header {
+      background: var(--green);
+      padding: 28px 48px 24px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .doc-header-left {}
+    .doc-org {
+      font-family: 'Arial', sans-serif;
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+    .doc-title {
+      font-size: 22px;
+      font-weight: 400;
+      color: var(--cream);
+      line-height: 1.25;
+      letter-spacing: 0.02em;
+    }
+    .doc-title strong {
+      display: block;
+      color: #fff;
+      font-size: 26px;
+    }
+    .doc-header-right {
+      text-align: right;
+      flex-shrink: 0;
+    }
+    .doc-ref {
+      font-family: 'Arial', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      color: rgba(245,240,232,0.55);
+      margin-bottom: 6px;
+    }
+    .doc-status {
+      font-family: 'Arial', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      background: rgba(201,168,103,0.14);
+      padding: 4px 10px;
+      border: 1px solid rgba(201,168,103,0.4);
+    }
+
+    /* ── Notice bar ── */
+    .doc-notice {
+      background: var(--cream);
+      border-bottom: 1px solid var(--rule);
+      padding: 10px 48px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .doc-notice-label {
+      font-family: 'Arial', sans-serif;
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--green);
+      white-space: nowrap;
+    }
+    .doc-notice-text {
+      font-family: 'Arial', sans-serif;
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* ── Page body ── */
+    .doc-body {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 52px 48px 80px;
+    }
+
+    /* ── Section headers ── */
+    .section {
+      margin-bottom: 64px;
+    }
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+      margin-bottom: 28px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--rule);
+    }
+    .section-number {
+      font-family: 'Arial', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    .section-title {
+      font-size: 18px;
+      font-weight: 400;
+      color: var(--green);
+      letter-spacing: 0.03em;
+    }
+    .section-note {
+      margin-left: auto;
+      font-family: 'Arial', sans-serif;
+      font-size: 10.5px;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    /* ── Image cards ── */
+    .img-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    .img-grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 20px;
+    }
+    .img-card {
+      display: flex;
+      flex-direction: column;
+    }
+    .img-card img {
+      width: 100%;
+      display: block;
+      object-fit: cover;
+    }
+    .img-card.tall img { aspect-ratio: 4/3; }
+    .img-card.wide img { aspect-ratio: 16/9; }
+    .img-card.square img { aspect-ratio: 1/1; }
+
+    .img-label {
+      padding: 14px 0 0;
+    }
+    .img-label-code {
+      font-family: 'Arial', sans-serif;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 4px;
+    }
+    .img-label-title {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--ink);
+      margin-bottom: 6px;
+      letter-spacing: 0.01em;
+    }
+    .img-label-desc {
+      font-family: 'Arial', sans-serif;
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+    .img-label-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+    .tag {
+      font-family: 'Arial', sans-serif;
+      font-size: 9px;
+      font-weight: 400;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: var(--stone);
+      padding: 3px 8px;
+    }
+    .tag.primary {
+      color: var(--green);
+      background: rgba(27,59,54,0.1);
+    }
+
+    /* ── Specs table ── */
+    .specs-block {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-top: 0;
+    }
+    .specs-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: 'Arial', sans-serif;
+      font-size: 11.5px;
+    }
+    .specs-table th {
+      text-align: left;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 0 12px 8px 0;
+      border-bottom: 1px solid var(--rule);
+    }
+    .specs-table td {
+      padding: 9px 12px 9px 0;
+      border-bottom: 1px solid var(--rule);
+      color: var(--ink);
+      vertical-align: top;
+    }
+    .specs-table td:first-child {
+      color: var(--muted);
+      white-space: nowrap;
+      padding-right: 20px;
+    }
+    .specs-table tr.approved td {
+      font-weight: 700;
+      color: var(--green);
+    }
+    .specs-table tr.approved td:first-child {
+      color: var(--green);
+    }
+
+    .intent-list {
+      list-style: none;
+      padding: 0;
+    }
+    .intent-list li {
+      font-family: 'Arial', sans-serif;
+      font-size: 11.5px;
+      color: var(--ink);
+      padding: 8px 0 8px 18px;
+      border-bottom: 1px solid var(--rule);
+      position: relative;
+      line-height: 1.5;
+    }
+    .intent-list li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: var(--gold);
+    }
+
+    /* ── Brief image ── */
+    .brief-img-wrap {
+      border: 1px solid var(--rule);
+      overflow: hidden;
+    }
+    .brief-img-wrap img {
+      width: 100%;
+      display: block;
+    }
+    .brief-caption {
+      background: var(--stone);
+      padding: 12px 16px;
+      font-family: 'Arial', sans-serif;
+      font-size: 10.5px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* ── Footer ── */
+    .doc-footer {
+      background: var(--green);
+      padding: 18px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .doc-footer-left {
+      font-family: 'Arial', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(245,240,232,0.5);
+    }
+    .doc-footer-right {
+      font-family: 'Arial', sans-serif;
+      font-size: 10px;
+      color: rgba(201,168,103,0.7);
+      letter-spacing: 0.1em;
+    }
+
+    @media (max-width: 900px) {
+      .doc-header { padding: 24px; }
+      .doc-notice { padding: 10px 24px; }
+      .doc-body   { padding: 36px 24px 60px; }
+      .doc-footer { padding: 16px 24px; }
+      .img-grid-2,
+      .img-grid-3 { grid-template-columns: 1fr; }
+      .specs-block { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Document Header ── -->
+  <header class="doc-header">
+    <div class="doc-header-left">
+      <div class="doc-org">SHER Sanctuary Experiences &middot; Saint Lucia</div>
+      <div class="doc-title">
+        <strong>Cottage Type A</strong>
+        Approved Source of Truth &mdash; Photorealistic Reference Set
+      </div>
+    </div>
+    <div class="doc-header-right">
+      <div class="doc-ref">SHER-CTA-005-R01 &middot; Gate 5</div>
+      <div class="doc-status">Approved for Use</div>
+    </div>
+  </header>
+
+  <div class="doc-notice">
+    <div class="doc-notice-label">Source of Truth</div>
+    <div class="doc-notice-text">
+      These are the approved photorealistic design intent visuals for Cottage Type A — Option A Linear Sanctuary Plan.
+      All Estate Walkthrough imagery depicting Cottage A must be consistent with this reference set.
+      No elements may be changed or added without written owner approval.
+    </div>
+  </div>
+
+  <div class="doc-body">
+
+    <!-- ── Section 1: Exterior Views ── -->
+    <section class="section">
+      <div class="section-header">
+        <span class="section-number">01</span>
+        <span class="section-title">Exterior Views</span>
+        <span class="section-note">Two approved exterior angles — dusk aerial and daytime ground-level front</span>
+      </div>
+
+      <div class="img-grid-2">
+
+        <div class="img-card tall">
+          <img src="../images/cottage-type-a/approved-01-exterior-aerial-dusk.jpg"
+               alt="Cottage A — Front Aerial View at Dusk"/>
+          <div class="img-label">
+            <div class="img-label-code">Ref A-EXT-01 &middot; Dusk Aerial</div>
+            <div class="img-label-title">Front Aerial View &mdash; Dusk / Evening Light</div>
+            <div class="img-label-desc">
+              Elevated angle revealing the full butterfly roof profile, outdoor shower court (stone-walled enclosure, right),
+              open veranda living and the landscaped approach with lit stepping-stone path. Shows the relationship between
+              structure, garden planting and outdoor rooms at dusk ambiance.
+            </div>
+            <div class="img-label-tags">
+              <span class="tag primary">Primary Reference</span>
+              <span class="tag">Butterfly Roof</span>
+              <span class="tag">Outdoor Shower Court</span>
+              <span class="tag">Landscape Setting</span>
+              <span class="tag">Dusk / Warm Light</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="img-card tall">
+          <img src="../images/cottage-type-a/approved-05-exterior-front-day.jpg"
+               alt="Cottage A — Front View at Day"/>
+          <div class="img-label">
+            <div class="img-label-code">Ref A-EXT-02 &middot; Daytime Ground Level</div>
+            <div class="img-label-title">Front View &mdash; Late Afternoon / Natural Light</div>
+            <div class="img-label-desc">
+              Ground-level front elevation showing the full-width louvered bi-fold facade fully open, butterfly roofline
+              against blue sky, stone shower court wall (right), and landscaped stone approach. Interior bedroom and
+              living volumes visible through open facade. Ferns, tropical ground cover and lantern lighting at path edge.
+            </div>
+            <div class="img-label-tags">
+              <span class="tag primary">Primary Reference</span>
+              <span class="tag">Open Facade</span>
+              <span class="tag">Louvered Bi-folds</span>
+              <span class="tag">Daytime</span>
+              <span class="tag">Approach / Entry</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── Section 2: Interior Views ── -->
+    <section class="section">
+      <div class="section-header">
+        <span class="section-number">02</span>
+        <span class="section-title">Interior Views</span>
+        <span class="section-note">Three approved interior angles — bedroom, living room, bathroom</span>
+      </div>
+
+      <div class="img-grid-3">
+
+        <div class="img-card tall">
+          <img src="../images/cottage-type-a/approved-04-bedroom-interior.jpg"
+               alt="Cottage A — Bedroom Interior"/>
+          <div class="img-label">
+            <div class="img-label-code">Ref A-INT-01 &middot; Bedroom</div>
+            <div class="img-label-title">Primary Bedroom</div>
+            <div class="img-label-desc">
+              King bed with linen, timber ceiling, louvered shutters, direct terrace access with landscape and hillside views.
+              En suite bathroom visible through archway left. Natural light, seagrass rug, timber and stone palette.
+            </div>
+            <div class="img-label-tags">
+              <span class="tag">Timber Ceiling</span>
+              <span class="tag">Louvered Shutters</span>
+              <span class="tag">Terrace Access</span>
+              <span class="tag">Natural Light</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="img-card tall">
+          <img src="../images/cottage-type-a/approved-03-living-room-interior.jpg"
+               alt="Cottage A — Living Room Interior"/>
+          <div class="img-label">
+            <div class="img-label-code">Ref A-INT-02 &middot; Living Room</div>
+            <div class="img-label-title">Open-Plan Living &amp; Lounge</div>
+            <div class="img-label-desc">
+              Open-plan living with timber ceiling, fold-back louvered walls open to veranda and landscape views.
+              Rattan and timber furniture, jute rug, ceiling fan. Bedroom zone visible left. Afternoon light.
+            </div>
+            <div class="img-label-tags">
+              <span class="tag">Open Plan</span>
+              <span class="tag">Fold-back Walls</span>
+              <span class="tag">Veranda Connection</span>
+              <span class="tag">Landscape Views</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="img-card tall">
+          <img src="../images/cottage-type-a/approved-02-bathroom-interior.jpg"
+               alt="Cottage A — Bathroom Interior"/>
+          <div class="img-label">
+            <div class="img-label-code">Ref A-INT-03 &middot; Bathroom</div>
+            <div class="img-label-title">Bathroom &amp; Outdoor Shower Court</div>
+            <div class="img-label-desc">
+              Travertine floors and walls, timber floating vanity, timber soaking tub (right), matte black fittings.
+              Louvered screen opens directly to stone-walled outdoor shower court with tropical planting. Interior and
+              exterior bathing zones read as one continuous space.
+            </div>
+            <div class="img-label-tags">
+              <span class="tag">Travertine / Limestone</span>
+              <span class="tag">Timber Soaking Tub</span>
+              <span class="tag">Outdoor Shower</span>
+              <span class="tag">Stone Court Wall</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── Section 3: Specifications ── -->
+    <section class="section">
+      <div class="section-header">
+        <span class="section-number">03</span>
+        <span class="section-title">Approved Specifications &amp; Design Intent</span>
+        <span class="section-note">Extracted from SHER-CTA-005-R01</span>
+      </div>
+
+      <div class="specs-block">
+
+        <div>
+          <table class="specs-table">
+            <thead>
+              <tr>
+                <th>Option</th>
+                <th>Enclosed (ft)</th>
+                <th>Veranda (ft)</th>
+                <th>Shower (ft)</th>
+                <th>Total (sq ft)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="approved">
+                <td>Standard &#10003;</td>
+                <td>28 &times; 24</td>
+                <td>24 &times; 8</td>
+                <td>8 &times; 9</td>
+                <td>~972</td>
+              </tr>
+              <tr>
+                <td>Expanded A</td>
+                <td>32 &times; 28</td>
+                <td>28 &times; 10</td>
+                <td>8 &times; 10</td>
+                <td>~1,340</td>
+              </tr>
+              <tr>
+                <td>Expanded B</td>
+                <td>36 &times; 30</td>
+                <td>30 &times; 10</td>
+                <td>8 &times; 10</td>
+                <td>~1,580</td>
+              </tr>
+              <tr>
+                <td>Expanded C</td>
+                <td>40 &times; 32</td>
+                <td>32 &times; 10</td>
+                <td>8 &times; 10</td>
+                <td>~1,740</td>
+              </tr>
+            </tbody>
+          </table>
+          <p style="font-family:Arial,sans-serif;font-size:10.5px;color:var(--muted);margin-top:10px;line-height:1.5;">
+            Bold row is the approved standard build. Expanded options maintain the same concept, proportions and
+            sanctuary experience while providing more generous interior space and veranda depth.
+          </p>
+        </div>
+
+        <div>
+          <ul class="intent-list">
+            <li>Spacious, airy and open — connected to nature from every room</li>
+            <li>Premium eco-luxury materials and craftsmanship throughout</li>
+            <li>Light, ventilation and views from multiple directions</li>
+            <li>Strong indoor&ndash;outdoor flow with full privacy from neighbouring units</li>
+            <li>Quiet service systems — no visible tanks, pumps or plumbing</li>
+            <li>Architecture that feels larger than its footprint</li>
+            <li>Natural daylight and soft warm evening light in all renders</li>
+            <li>No people in primary exterior images</li>
+            <li>Vegetation must be realistic and native to Saint Lucia</li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── Section 4: Architectural Brief Document ── -->
+    <section class="section">
+      <div class="section-header">
+        <span class="section-number">04</span>
+        <span class="section-title">Architectural Context &amp; Layout</span>
+        <span class="section-note">SHER-CTA-005-R01 &mdash; Option A: Linear Sanctuary Plan &mdash; Page 1 of 2</span>
+      </div>
+
+      <div class="brief-img-wrap">
+        <img src="../images/cottage-type-a/approved-00-architectural-brief.png"
+             alt="Cottage Type A — Controlled Photorealistic Rendering Brief and Visual Test Set"/>
+        <div class="brief-caption">
+          <strong>SHER-CTA-005-R01 &middot; Gate 5 &middot; Visual Validation Before Final Design Freeze.</strong>
+          This document is the architectural and rendering control brief for all Cottage Type A photorealistic visuals.
+          Site layout shows: Cottage Type A (linear plan), shower court beside, cistern partly beneath / alongside,
+          pump/filter vault 8&ndash;15 ft away on service path. All composition, material and rendering rules
+          shown apply to all Cottage A imagery used in the Estate Walkthrough.
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- ── Footer ── -->
+  <footer class="doc-footer">
+    <div class="doc-footer-left">SHER Cottage Type A &middot; Approved Source of Truth &middot; SHER-CTA-005-R01</div>
+    <div class="doc-footer-right">For internal use &mdash; Estate Walkthrough Redesign Reference</div>
+  </footer>
+
+</body>
+</html>
