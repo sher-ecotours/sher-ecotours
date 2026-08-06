@@ -58,6 +58,30 @@
   to   = "/command/index.html"
   status = 200
 
+# ── La Collection Papiyon — proactive 301s for retired names ─────────────────
+# "Papiyòt" / "Papiyot" was the incorrect early name; "Papiyon" is canonical.
+# "La Blanche de Cuba" / Cuban White (Ganyra menciae) retired at Rev B.
+# These paths were never published but are guarded against future link rot.
+[[redirects]]
+  from   = "/cottages/la-blanche-de-cuba"
+  to     = "/buyers/"
+  status = 301
+
+[[redirects]]
+  from   = "/cottage/la-blanche-de-cuba"
+  to     = "/buyers/"
+  status = 301
+
+[[redirects]]
+  from   = "/cottages/papiyot*"
+  to     = "/buyers/"
+  status = 301
+
+[[redirects]]
+  from   = "/la-collection-papiyot*"
+  to     = "/buyers/"
+  status = 301
+
 # ── Main site: catch-all for SPA-style direct links ──────────────────────────
 [[redirects]]
   from = "/*"
