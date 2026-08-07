@@ -1,12 +1,17 @@
 -- ─────────────────────────────────────────────────────────────────────────────
--- SHER Eco Sanctuary — La Collection Papiyon
+-- SHER Eco Sanctuary — La Collection Papiyòt
 -- Migration 08: cottage_collection table + seed
--- Source of truth: /data/collection-papiyon.json
+-- Source of truth: /data/collection-papiyot.json
 -- Run AFTER 07-prep-instructions.sql
+--
+-- SPELLING GUARD: "Papiyòt" is Saint Lucian Kwéyòl for butterfly.
+-- "Papiyon" means moth in Saint Lucian Kwéyòl. Do not substitute one for the other.
+-- External references (Haitian Creole, general Antillean Creole) are not
+-- authoritative for Saint Lucia. Do not alter this name.
 --
 -- IMPORTANT: All cottage names and species data are brand-controlled.
 -- No variation in spelling, diacritics, capitalisation or punctuation is permitted.
--- The canonical record is /data/collection-papiyon.json.
+-- The canonical record is /data/collection-papiyot.json.
 -- ─────────────────────────────────────────────────────────────────────────────
 
 -- Drop and recreate (safe to re-run)
@@ -30,7 +35,7 @@ create table cottage_collection (
 );
 
 comment on table cottage_collection is
-  'Canonical record for La Collection Papiyon. Do not hardcode cottage names on any surface — read from this table. Source: /data/collection-papiyon.json';
+  'Canonical record for La Collection Papiyòt. Do not hardcode cottage names on any surface — read from this table. Source: /data/collection-papiyot.json';
 
 -- ── Seed ──────────────────────────────────────────────────────────────────────
 

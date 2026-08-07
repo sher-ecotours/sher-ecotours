@@ -1,6 +1,13 @@
 {
-  "collectionName": "La Collection Papiyon",
-  "collectionSlug": "la-collection-papiyon",
+  "_guard": {
+    "warning": "DO NOT ALTER THE COLLECTION NAME OR SPELLING WITHOUT CHECKING THIS NOTE.",
+    "papiyot": "Papiyòt is the Saint Lucian Kwéyòl word for butterfly. This is the canonical spelling for this collection.",
+    "papiyon": "Papiyon means moth in Saint Lucian Kwéyòl. It is NOT used for butterfly in Saint Lucia. Do not use 'papiyon' to mean butterfly anywhere in this codebase or its published content.",
+    "authority": "Saint Lucian Kwéyòl (not Haitian Creole or general Antillean Creole). External references that give 'papiyon' for butterfly are not authoritative for Saint Lucia.",
+    "lastVerified": "2026-08"
+  },
+  "collectionName": "La Collection Papiyòt",
+  "collectionSlug": "la-collection-papiyot",
   "tagline": "Ten cottages. Ten butterflies. One sanctuary.",
   "signatureRef": "C-06",
   "cottages": [
@@ -104,7 +111,7 @@
       "saintLuciaStatus": "Lesser Antillean race",
       "isSignature": false,
       "colourToken": "#4A72B8",
-      "colourNote": "Iridescent violet-blue of the dorsal wing surface; 'Hanno Blue' is West Indian usage, current preferred name is Ceraunus Blue",
+      "colourNote": "Iridescent violet-blue of the dorsal wing surface",
       "forSale": false,
       "sherRetained": true,
       "phase": null,
@@ -134,7 +141,7 @@
       "saintLuciaStatus": "recorded",
       "isSignature": false,
       "colourToken": "#C84A14",
-      "colourNote": "Bright reddish-orange of the dorsal wing; silver-spotted underside gives the West Indian name 'argenté'",
+      "colourNote": "Bright reddish-orange of the dorsal wing",
       "forSale": false,
       "sherRetained": true,
       "phase": null,

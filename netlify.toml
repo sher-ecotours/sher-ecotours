@@ -58,20 +58,28 @@
   to   = "/command/index.html"
   status = 200
 
-# ── La Collection Papiyon — proactive 301s for retired names ─────────────────
-# "Papiyòt" / "Papiyot" was the incorrect early name; "Papiyon" is canonical.
+# ── La Collection Papiyòt — proactive 301s for wrong names ──────────────────
+# SPELLING: "Papiyòt" = butterfly in Saint Lucian Kwéyòl (CORRECT — use this).
+#           "Papiyon" = moth in Saint Lucian Kwéyòl (WRONG — do not use).
+# These are NOT interchangeable. Haitian/general Antillean Creole give "papiyon"
+# for butterfly, but Saint Lucian Kwéyòl does not. Those sources are not
+# authoritative here.
+#
 # "La Blanche de Cuba" / Cuban White (Ganyra menciae) retired at Rev B.
-# These paths were never published but are guarded against future link rot.
+# "papiyot" (no accent) is an ASCII approximation of "Papiyòt"; catch it too.
+
+# Guard: wrong name "papiyon" (moth) used as butterfly — send to buyers
 [[redirects]]
-  from   = "/cottages/la-blanche-de-cuba"
+  from   = "/la-collection-papiyon*"
   to     = "/buyers/"
   status = 301
 
 [[redirects]]
-  from   = "/cottage/la-blanche-de-cuba"
+  from   = "/cottages/papiyon*"
   to     = "/buyers/"
   status = 301
 
+# Guard: unaccented ASCII approximation of correct name — send to buyers
 [[redirects]]
   from   = "/cottages/papiyot*"
   to     = "/buyers/"
@@ -79,6 +87,17 @@
 
 [[redirects]]
   from   = "/la-collection-papiyot*"
+  to     = "/buyers/"
+  status = 301
+
+# Guard: retired species name — send to buyers
+[[redirects]]
+  from   = "/cottages/la-blanche-de-cuba"
+  to     = "/buyers/"
+  status = 301
+
+[[redirects]]
+  from   = "/cottage/la-blanche-de-cuba"
   to     = "/buyers/"
   status = 301
 
