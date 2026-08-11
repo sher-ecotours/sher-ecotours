@@ -3,13 +3,25 @@
     {
       "id": "SHER-BUYER-ORIENT-001",
       "title": "La Collection Papiyòt — International Buyer Orientation Package",
+      "path": "docs/buyer-tier1/SHER-BUYER-ORIENT-001-RevF.pdf",
+      "version": "Rev F",
+      "date": "2026-08-11",
+      "sha256": "2e453bc36b9a312fd5c1a6b997aacf0fa82b68e52ff3dd1eea3f7ba172b43989",
+      "status": "current",
+      "audience": "buyer",
+      "tier": "public"
+    },
+    {
+      "id": "SHER-BUYER-ORIENT-001-REVD",
+      "title": "La Collection Papiyòt — International Buyer Orientation Package",
       "path": "docs/buyer-tier1/SHER-BUYER-ORIENT-001-RevD.pdf",
       "version": "Rev D",
       "date": "2026-08",
       "sha256": "0d2bbfd33bfd29c91cd6947859ec744f9065df46ddbf1f3118c7b003300f113b",
-      "status": "current",
+      "status": "superseded",
+      "supersededBy": "SHER-BUYER-ORIENT-001",
       "audience": "buyer",
-      "tier": "public"
+      "tier": "archived"
     },
     {
       "id": "SHER-BUYER-ORIENT-001-REVB",
@@ -19,7 +31,7 @@
       "date": "2026-08",
       "sha256": "9f288ab2aa853ea7167b92c7108bf411ca2e7cbc3b2c16afda28a9c150d599e2",
       "status": "superseded",
-      "supersededBy": "SHER-BUYER-ORIENT-001",
+      "supersededBy": "SHER-BUYER-ORIENT-001-REVD",
       "audience": "buyer",
       "tier": "archived"
     },
