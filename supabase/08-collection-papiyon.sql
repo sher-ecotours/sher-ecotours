@@ -67,7 +67,7 @@ values
    '#E07818', true,  false, 'Phase 1'),
 
   -- C-06 is the collection signature: endemic subspecies found only in Saint Lucia.
-  ('C-06', 'Le Polydamas',         'Polydamas Swallowtail',   'Battus polydamas lucianus',
+  ('C-06', 'Le Polydamas',         'Polydamas (Gold Rim) Swallowtail',   'Battus polydamas lucianus',
    'le-polydamas',         'FOUND ONLY IN SAINT LUCIA', true,
    'B. p. lucianus is a subspecies described from Saint Lucia and found nowhere else in the world. Collection signature.',
    '#C9A22A', true,  false, 'Phase 1'),
