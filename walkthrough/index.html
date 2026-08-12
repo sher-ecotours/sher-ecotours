@@ -408,6 +408,40 @@
       background: rgba(201,168,103,0.16);
       color: #C9A867;
     }
+    #hud-speed {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.22);
+      background: rgba(0,0,0,0.38);
+      color: rgba(255,255,255,0.58);
+      font-size: 10px; font-weight: 500; letter-spacing: 0.04em;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color 0.2s, background 0.2s, color 0.2s;
+    }
+    #hud-speed:hover { border-color: #C9A867; background: rgba(201,168,103,0.14); color: #C9A867; }
+    #hud-speed.fast  { border-color: rgba(201,168,103,0.7); color: #C9A867; }
+
+    /* ── Persistent "get your code" CTA ── */
+    #wt-cta {
+      position: fixed;
+      top: 14px; right: 18px;
+      z-index: 200;
+      padding: 8px 20px;
+      border: 1px solid rgba(201,168,103,0.5);
+      background: rgba(5,12,6,0.55);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      color: #C9A867;
+      font-family: 'Jost', system-ui, sans-serif;
+      font-size: 9.5px; font-weight: 500;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      cursor: pointer; border-radius: 999px;
+      transition: background 0.3s, border-color 0.3s;
+      display: flex; align-items: center; gap: 6px;
+    }
+    #wt-cta:hover { background: rgba(201,168,103,0.18); border-color: #C9A867; }
+    #wt-cta.hidden { opacity: 0; pointer-events: none; }
 
     /* ── Responsive ── */
     @media (max-width: 640px) {
@@ -422,6 +456,10 @@
 
   <img id="wt-logo" src="../images/SHER-homepage-white-gold-transparent.png" alt="SHER Eco Sanctuary"/>
 
+  <button id="wt-cta" onclick="openFormOverlay()" aria-label="Request your access code">
+    Request Access Code &#8594;
+  </button>
+
   <div id="prog-track"><div id="prog-fill"></div></div>
 
   <button class="nav-btn" id="nav-prev" aria-label="Previous slide">&#8592;</button>
@@ -429,6 +467,7 @@
 
   <div id="hud">
     <span id="hud-counter" aria-live="polite">1 / 10</span>
+    <button id="hud-speed" type="button" aria-label="Speed up slideshow">2&times;</button>
     <button id="hud-play" type="button" aria-label="Pause slideshow">&#10074;&#10074;</button>
   </div>
 
@@ -826,13 +865,17 @@
   <script>
     sessionStorage.setItem('wt_seen', '1');
     const DURATION = 7000;
+    const FAST_DUR = 3000;
     const TRANS_MS = 1400;
+    let activeDur  = DURATION;
 
     const slideEls     = Array.from(document.querySelectorAll('.slide'));
     const contentCount = slideEls.length - 1;
     const fill         = document.getElementById('prog-fill');
     const counter      = document.getElementById('hud-counter');
     const playBtn      = document.getElementById('hud-play');
+    const speedBtn     = document.getElementById('hud-speed');
+    const wtCta        = document.getElementById('wt-cta');
 
     const KB = {
       'zoom-in'  : `kb-zoom-in   ${DURATION + TRANS_MS}ms linear both`,
@@ -861,13 +904,14 @@
       const isClose = s.classList.contains('slide-close');
       counter.style.opacity = isClose ? '0' : '1';
       if (!isClose) counter.textContent = `${index + 1} – ${contentCount}`;
+      if (wtCta) wtCta.classList.toggle('hidden', isClose);
     }
 
     function startProgress() {
       fill.style.transition = 'none';
       fill.style.width = '0%';
       fill.offsetHeight;
-      fill.style.transition = `width ${DURATION}ms linear`;
+      fill.style.transition = `width ${activeDur}ms linear`;
       fill.style.width = '100%';
     }
 
@@ -889,7 +933,7 @@
       show(current);
       if (playing) {
         startProgress();
-        timer = setInterval(advance, DURATION);
+        timer = setInterval(advance, activeDur);
       }
     }
 
@@ -897,7 +941,7 @@
       playing = !playing;
       playBtn.innerHTML = playing ? '&#10074;&#10074;' : '&#9654;';
       if (playing) {
-        timer = setInterval(advance, DURATION);
+        timer = setInterval(advance, activeDur);
         startProgress();
       } else {
         clearInterval(timer);
@@ -905,16 +949,30 @@
       }
     }
 
+    function toggleSpeed() {
+      activeDur = activeDur === DURATION ? FAST_DUR : DURATION;
+      const fast = activeDur === FAST_DUR;
+      speedBtn.textContent = fast ? '1×' : '2×';
+      speedBtn.setAttribute('aria-label', fast ? 'Normal speed' : 'Speed up slideshow');
+      speedBtn.classList.toggle('fast', fast);
+      if (playing) {
+        clearInterval(timer);
+        timer = setInterval(advance, activeDur);
+        startProgress();
+      }
+    }
+
     // Init
     show(0);
     startProgress();
-    timer = setInterval(advance, DURATION);
+    timer = setInterval(advance, activeDur);
     requestAnimationFrame(() => document.body.classList.add('loaded'));
 
     // Controls
     document.getElementById('nav-prev').addEventListener('click', () => go(-1));
     document.getElementById('nav-next').addEventListener('click', () => go(+1));
     playBtn.addEventListener('click', togglePlay);
+    speedBtn.addEventListener('click', toggleSpeed);
 
     // Keyboard: space/k = pause, arrows/j/l = navigate, Esc = restart
     document.addEventListener('keydown', e => {
