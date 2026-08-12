@@ -249,6 +249,8 @@
     /* ── FINANCIAL PANEL ─────────────────────────────────────────── */
     .financial-panel { max-height: 0; overflow: hidden; opacity: 0; transition: max-height 0.8s ease, opacity 0.6s ease; }
     .financial-panel.revealed { max-height: 99999px; opacity: 1; }
+    .gated-content { max-height: 0; overflow: hidden; opacity: 0; transition: max-height 1.2s ease, opacity 0.8s ease; }
+    .gated-content.revealed { max-height: 999999px; opacity: 1; }
 
     /* ── BUYER ACCESS GATE ──────────────────────────────────────── */
     .buyer-access-gate {
@@ -1564,12 +1566,13 @@
   </style>
 </head>
 <body>
+  <script>if(!sessionStorage.getItem('wt_seen'))window.location.replace('/walkthrough/');</script>
 
   <!-- ── STICKY NAV ───────────────────────────────────────────── -->
   <nav class="pub-nav" aria-label="SHER Sanctuary navigation">
     <div class="pub-nav__inner">
       <img src="../images/SHER-nav-logo.png" alt="SHER Sanctuary" class="pub-nav__logo">
-      <a href="#buyer-form" class="pub-nav__contact">Request Access</a>
+      <a href="#financial-access" class="pub-nav__contact">Enter Code</a>
     </div>
   </nav>
 
@@ -1596,12 +1599,12 @@
         <span class="pub-chip">15 Minutes &middot; Hewanorra International Airport</span>
         <span class="pub-chip">Nature Whispers &middot; Souls Listen</span>
       </div>
-      <a href="#buyer-form"
+      <a href="/walkthrough/"
          class="btn btn--gold" style="border-radius:999px;padding:1rem 2.25rem;font-size:13px">
-        Request Access to the Property Collection
+        Watch the Estate Walkthrough
       </a>
       <span class="pub-hero__note">Access is by personal introduction. Responses within 24 hours.</span>
-      <a href="#financial-access" style="display:block;margin-top:1rem;font-family:var(--font-body);font-size:13px;color:rgba(245,240,232,0.6);text-decoration:none;letter-spacing:0.01em">Already have your access code? Skip to Financial Overview &#8594;</a>
+      <a href="#financial-access" style="display:block;margin-top:1rem;font-family:var(--font-body);font-size:13px;color:rgba(245,240,232,0.6);text-decoration:none;letter-spacing:0.01em">Already have your access code? Enter it below &#8594;</a>
     </div>
     <div class="pub-hero__scroll" aria-hidden="true">
       <span>Discover</span>
@@ -1628,6 +1631,9 @@
       </div>
     </div>
   </div>
+
+  <!-- ══ GATED CONTENT — revealed when access code is entered correctly ══ -->
+  <div id="gated-content" class="gated-content">
 
   <!-- SECTION B — THE RESIDENCES ────────────────────────────────── -->
   <section class="pub-residences">
@@ -2321,6 +2327,8 @@
         </dl>
       </div>
     </section>
+
+  </div><!-- /gated-content -->
 
     <!-- BUYER DISCOVERY FORM -->
     <div class="progression-wrapper">
@@ -3182,14 +3190,16 @@
         if (hash === BUYER_FINANCIAL_HASH) {
           input.classList.remove('error');
           error.classList.remove('visible');
-          const gate  = document.getElementById('financial-access');
-          const panel = document.getElementById('financial-panel');
-          if (gate)  gate.style.transition  = 'opacity 0.4s ease';
-          if (gate)  gate.style.opacity     = '0';
-          if (panel) panel.classList.add('revealed');
+          const gate    = document.getElementById('financial-access');
+          const panel   = document.getElementById('financial-panel');
+          const content = document.getElementById('gated-content');
+          if (gate)    gate.style.transition = 'opacity 0.4s ease';
+          if (gate)    gate.style.opacity    = '0';
+          if (content) content.classList.add('revealed');
+          if (panel)   panel.classList.add('revealed');
           setTimeout(() => {
-            if (gate)  gate.style.display = 'none';
-            if (panel) panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            if (gate)    gate.style.display = 'none';
+            if (content) content.scrollIntoView({ behavior: 'smooth', block: 'start' });
           }, 420);
         } else {
           input.classList.add('error');

@@ -175,6 +175,154 @@
       color: #050c06;
       border-color: #C9A867;
     }
+    .close-cta--secondary {
+      display: block;
+      margin-top: 0.85rem;
+      padding: 0;
+      border: none;
+      background: none;
+      color: rgba(201,168,103,0.45);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: color 0.3s;
+      cursor: pointer;
+    }
+    .close-cta--secondary:hover { color: rgba(201,168,103,0.8); }
+    .close-disclaimer {
+      margin-top: 2.5rem;
+      font-size: 9.5px;
+      color: rgba(245,240,232,0.28);
+      letter-spacing: 0.06em;
+      line-height: 1.6;
+    }
+
+    /* ── Request Access overlay ── */
+    #request-overlay {
+      position: fixed; inset: 0; z-index: 10000;
+      background: #050c06;
+      display: flex; flex-direction: column;
+      transform: translateY(100%);
+      transition: transform 0.5s cubic-bezier(0.22,1,0.36,1);
+      overflow: hidden;
+    }
+    #request-overlay.open { transform: translateY(0); }
+    .ov-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.1rem 1.75rem;
+      border-bottom: 1px solid rgba(201,168,103,0.15);
+      flex-shrink: 0;
+      background: #050c06;
+    }
+    .ov-logo { height: 28px; }
+    .ov-close {
+      background: none; border: none; color: rgba(245,240,232,0.5);
+      font-size: 30px; line-height: 1; cursor: pointer;
+      padding: 2px 8px; transition: color 0.25s;
+    }
+    .ov-close:hover { color: #C9A867; }
+    .ov-body {
+      flex: 1; overflow-y: auto;
+      padding: 2.5rem 1.5rem 5rem;
+    }
+    .ov-body-inner {
+      max-width: 660px; margin: 0 auto; width: 100%;
+    }
+    .ov-intro { text-align: center; margin-bottom: 2.75rem; }
+    .ov-intro h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(26px, 3.5vw, 40px); font-weight: 300;
+      color: #F5F0E8; margin-bottom: 0.85rem; letter-spacing: 0.02em;
+    }
+    .ov-intro p {
+      font-size: 14px; color: rgba(245,240,232,0.5); line-height: 1.8; max-width: 480px; margin: 0 auto;
+    }
+    #ov-form fieldset {
+      border: none; padding: 0; margin: 0 0 2.25rem;
+    }
+    #ov-form legend {
+      font-size: 10px; font-weight: 500; letter-spacing: 0.25em;
+      text-transform: uppercase; color: #C9A867;
+      margin-bottom: 1.35rem; display: block; width: 100%;
+      padding-bottom: 0.65rem; border-bottom: 1px solid rgba(201,168,103,0.15);
+    }
+    .ov-label {
+      display: block; font-size: 13px; color: rgba(245,240,232,0.65);
+      margin-bottom: 0.45rem; font-weight: 400;
+    }
+    .ov-req { color: #C9A867; }
+    #ov-form input[type="text"],
+    #ov-form input[type="email"],
+    #ov-form input[type="tel"],
+    #ov-form select,
+    #ov-form textarea {
+      width: 100%; background: rgba(245,240,232,0.04);
+      border: 1px solid rgba(201,168,103,0.2);
+      color: #F5F0E8; padding: 0.72rem 1rem;
+      font-family: 'Jost', system-ui, sans-serif; font-size: 14px;
+      border-radius: 3px; margin-bottom: 1.1rem;
+      transition: border-color 0.25s;
+      -webkit-appearance: none; appearance: none;
+    }
+    #ov-form input:focus, #ov-form select:focus, #ov-form textarea:focus {
+      outline: none; border-color: rgba(201,168,103,0.55);
+    }
+    #ov-form select option { background: #0a1a0c; }
+    .ov-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 0 1.25rem;
+    }
+    @media(max-width: 560px) { .ov-grid { grid-template-columns: 1fr; } }
+    .ov-checkbox-group, .ov-radio-group {
+      display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1.1rem;
+    }
+    .ov-radio-group--row { flex-direction: row; flex-wrap: wrap; gap: 0.6rem 1.5rem; }
+    .ov-check-item, .ov-radio-item {
+      display: flex; align-items: flex-start; gap: 0.65rem;
+      font-size: 13.5px; color: rgba(245,240,232,0.65); line-height: 1.5; cursor: pointer;
+    }
+    .ov-check-item input, .ov-radio-item input { margin-top: 3px; flex-shrink: 0; accent-color: #C9A867; }
+    .ov-val-msg { font-size: 11.5px; color: #e06820; margin-top: -0.6rem; margin-bottom: 0.75rem; display: none; }
+    .ov-val-msg.visible { display: block; }
+    .ov-declarations { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.5rem; }
+    .ov-consent {
+      display: flex; gap: 0.75rem; align-items: flex-start;
+      background: rgba(201,168,103,0.05);
+      border: 1px solid rgba(201,168,103,0.12);
+      border-radius: 5px; padding: 1rem 1.2rem; margin-bottom: 1.25rem;
+    }
+    .ov-consent svg { width: 17px; height: 17px; flex-shrink: 0; margin-top: 2px; stroke: #C9A867; }
+    .ov-consent p { font-size: 11.5px; color: rgba(245,240,232,0.45); line-height: 1.65; margin: 0; }
+    .ov-consent a { color: rgba(201,168,103,0.65); }
+    .ov-submit-btn {
+      width: 100%; padding: 1.05rem; background: #C9A867; color: #050c06;
+      border: none; font-family: 'Jost', system-ui, sans-serif; font-size: 11.5px;
+      font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase;
+      cursor: pointer; transition: background 0.25s; border-radius: 3px;
+    }
+    .ov-submit-btn:hover { background: #dfc07a; }
+    #ov-success {
+      display: none; text-align: center;
+      padding: 5rem 1.5rem 3rem;
+    }
+    #ov-success.visible { display: block; }
+    #ov-success h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(28px, 3.5vw, 42px); font-weight: 300;
+      color: #F5F0E8; margin-bottom: 1rem;
+    }
+    #ov-success p {
+      font-size: 14px; color: rgba(245,240,232,0.5); line-height: 1.8;
+      max-width: 420px; margin: 0 auto 2.5rem;
+    }
+    .ov-return-btn {
+      background: none; border: 1px solid rgba(201,168,103,0.55);
+      color: #C9A867; padding: 14px 42px;
+      font-family: 'Jost', system-ui, sans-serif; font-size: 11px;
+      letter-spacing: 0.22em; text-transform: uppercase; cursor: pointer;
+      transition: background 0.3s, color 0.3s;
+    }
+    .ov-return-btn:hover { background: #C9A867; color: #050c06; }
 
     /* ── SHER logo (top-left) ── */
     #wt-logo {
@@ -458,13 +606,225 @@
         <div class="close-rule"></div>
         <div class="close-tagline">Live within the sanctuary</div>
         <div class="close-sub">Savannes Bay &middot; Saint Lucia</div>
-        <a href="../buyers/" class="close-cta">Explore the Sanctuary</a>
+        <button class="close-cta" onclick="openFormOverlay()">Request Access Code</button>
+        <a href="../buyers/" class="close-cta--secondary">Already have a code? Enter it &#8594;</a>
+        <p class="close-disclaimer">Hero imagery: owner-approved conceptual visual intent.<br>Photographs of the Savannes Bay estate are authentic.</p>
       </div>
     </div>
 
   </div><!-- /#wt -->
 
+  <!-- ── REQUEST ACCESS CODE OVERLAY ─────────────────────────────── -->
+  <div id="request-overlay" role="dialog" aria-modal="true" aria-label="Request your personal access code">
+    <div class="ov-header">
+      <img src="../images/SHER-nav-logo.png" alt="SHER Sanctuary" class="ov-logo">
+      <button class="ov-close" onclick="closeFormOverlay()" aria-label="Close">&times;</button>
+    </div>
+    <div class="ov-body">
+      <div class="ov-body-inner">
+
+        <!-- Success state -->
+        <div id="ov-success">
+          <img src="../images/SHER-homepage-white-gold-transparent.png" alt="SHER Eco Sanctuary" style="height:52px;margin-bottom:2rem">
+          <h2>Your profile is with us.</h2>
+          <p>We review every submission personally. If your interest and the project are aligned, you will receive a personal access code by email within 48 hours. Check your inbox at the address you provided. If you have not heard within 48 hours, write to <a href="mailto:bookings@shersanctuary.com" style="color:rgba(201,168,103,0.6)">bookings@shersanctuary.com</a></p>
+          <button class="ov-return-btn" onclick="closeFormOverlay()">Return to SHER &#8594;</button>
+        </div>
+
+        <!-- Form -->
+        <div id="ov-form-wrap">
+          <div class="ov-intro">
+            <h2>Request Your Access Code</h2>
+            <p>Tell us about yourself and your interest in SHER. A personal access code unlocks the full estate collection — residences, the Curated Ownership Journey, and the document vault.</p>
+          </div>
+
+          <form id="ov-form" name="property-buyer-discovery" data-netlify="true" netlify-honeypot="bot-field" novalidate>
+            <input type="hidden" name="form-name" value="property-buyer-discovery">
+            <p style="display:none"><label>Don&rsquo;t fill this in: <input name="bot-field" tabindex="-1"></label></p>
+
+            <!-- PART A -->
+            <fieldset>
+              <legend>Part A &mdash; Who You Are</legend>
+              <div class="ov-grid">
+                <div>
+                  <label class="ov-label" for="ov-name">Full legal name <span class="ov-req">*</span></label>
+                  <input type="text" id="ov-name" name="full_name" required autocomplete="name">
+                </div>
+                <div>
+                  <label class="ov-label" for="ov-email">Email address <span class="ov-req">*</span></label>
+                  <input type="email" id="ov-email" name="email" required autocomplete="email">
+                </div>
+              </div>
+              <div class="ov-grid">
+                <div>
+                  <label class="ov-label" for="ov-phone">Phone number (with country code) <span class="ov-req">*</span></label>
+                  <input type="tel" id="ov-phone" name="phone" required autocomplete="tel" placeholder="+1 555 000 0000">
+                </div>
+                <div>
+                  <label class="ov-label" for="ov-country">Country of residence <span class="ov-req">*</span></label>
+                  <select id="ov-country" name="country_residence" required>
+                    <option value="">&#8212; Select country &#8212;</option>
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label class="ov-label" for="ov-nature">How do you relate to natural environments in your personal life? <span class="ov-req">*</span></label>
+                <select id="ov-nature" name="nature_relationship" required>
+                  <option value="">&#8212; Select one &#8212;</option>
+                  <option value="Nature is central to how I live and make decisions">I actively seek time in nature &mdash; it is central to how I live</option>
+                  <option value="I make deliberate choices to engage with natural environments">I value nature and make deliberate choices to protect it where I can</option>
+                  <option value="I appreciate nature but it does not drive my decisions">I appreciate natural settings but it is not a primary driver for me</option>
+                  <option value="I have no particular connection to natural environments">I have no particular relationship with the natural world</option>
+                </select>
+              </div>
+            </fieldset>
+
+            <!-- PART B -->
+            <fieldset>
+              <legend>Part B &mdash; Your Property Interest</legend>
+              <div>
+                <label class="ov-label">Which residence type interests you? (Select all that apply) <span class="ov-req">*</span></label>
+                <div class="ov-checkbox-group">
+                  <label class="ov-check-item"><input type="checkbox" name="property_interest[]" value="Hillside Cottage"><span>Hillside Cottage &mdash; Cottage Type A &middot; 6 residences</span></label>
+                  <label class="ov-check-item"><input type="checkbox" name="property_interest[]" value="Coastal Condominium"><span>Coastal Condominium &mdash; Boutique &middot; 8 residences</span></label>
+                  <label class="ov-check-item"><input type="checkbox" name="property_interest[]" value="Sanctuary Villa"><span>Sanctuary Villa &mdash; Luxury Villa &middot; 6 residences</span></label>
+                </div>
+              </div>
+              <div>
+                <label class="ov-label" for="ov-budget">Your confirmed budget for this purchase: <span class="ov-req">*</span></label>
+                <select id="ov-budget" name="budget_range" required>
+                  <option value="">&#8212; Select one &#8212;</option>
+                  <option value="Up to US$300,000">Up to US$300,000</option>
+                  <option value="US$300,000 – US$499,999">US$300,000 &ndash; US$499,999</option>
+                  <option value="US$500,000 – US$799,999">US$500,000 &ndash; US$799,999</option>
+                  <option value="US$800,000 – US$999,999">US$800,000 &ndash; US$999,999</option>
+                  <option value="US$1,000,000 or above">US$1,000,000 or above</option>
+                </select>
+              </div>
+              <div>
+                <label class="ov-label">Are you purchasing as an individual, jointly, or through an entity?</label>
+                <div class="ov-radio-group">
+                  <label class="ov-radio-item"><input type="radio" name="purchase_entity" value="Individual"><span>Individual</span></label>
+                  <label class="ov-radio-item"><input type="radio" name="purchase_entity" value="Jointly with a partner or spouse"><span>Jointly with a partner or spouse</span></label>
+                  <label class="ov-radio-item"><input type="radio" name="purchase_entity" value="Through a company, trust or holding entity"><span>Through a company, trust or holding entity</span></label>
+                </div>
+              </div>
+              <div>
+                <label class="ov-label" for="ov-referrer">How did you hear about SHER Sanctuary? <span class="ov-req">*</span></label>
+                <select id="ov-referrer" name="referral_source" required>
+                  <option value="">&#8212; Select one &#8212;</option>
+                  <option value="Personal introduction from someone I know">Personal introduction from someone I know</option>
+                  <option value="A professional referral (agent, lawyer, advisor)">A professional referral (agent, lawyer, advisor)</option>
+                  <option value="Referral from a SHER investor">Referral from a SHER investor</option>
+                  <option value="Social media or online">Social media or online</option>
+                  <option value="Media coverage">Media coverage</option>
+                  <option value="An event or presentation">An event or presentation</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+            </fieldset>
+
+            <!-- PART C -->
+            <fieldset>
+              <legend>Part C &mdash; Purchase Intent &amp; Use</legend>
+              <div>
+                <label class="ov-label">How do you primarily intend to use the property? <span class="ov-req">*</span></label>
+                <div class="ov-radio-group">
+                  <label class="ov-radio-item"><input type="radio" name="primary_intent" value="As a principal Caribbean residence — full-time or extended stays" required><span>As a principal Caribbean residence &mdash; I will occupy it full-time or for extended stays</span></label>
+                  <label class="ov-radio-item"><input type="radio" name="primary_intent" value="As a vacation home — seasonal use, 1–3 months per year"><span>As a vacation home &mdash; I will use it seasonally, likely 1&ndash;3 months per year</span></label>
+                  <label class="ov-radio-item"><input type="radio" name="primary_intent" value="Primarily as an investment — in the HOA rental pool most of the year"><span>Primarily as an investment &mdash; I want it in the HOA rental pool most of the year</span></label>
+                  <label class="ov-radio-item"><input type="radio" name="primary_intent" value="A combination — personal use for part of the year, rental pool for the rest"><span>A combination &mdash; personal use for part of the year, rental pool for the rest</span></label>
+                </div>
+              </div>
+              <div>
+                <label class="ov-label">Is this your first property in the Caribbean? <span class="ov-req">*</span></label>
+                <div class="ov-radio-group ov-radio-group--row">
+                  <label class="ov-radio-item"><input type="radio" name="first_caribbean" value="Yes" required><span>Yes</span></label>
+                  <label class="ov-radio-item"><input type="radio" name="first_caribbean" value="No — I have or have had other Caribbean property"><span>No &mdash; I have or have had other Caribbean property</span></label>
+                </div>
+              </div>
+              <div>
+                <label class="ov-label" for="ov-timeline">What is your realistic purchase timeline? <span class="ov-req">*</span></label>
+                <select id="ov-timeline" name="purchase_timeline" required>
+                  <option value="">&#8212; Select one &#8212;</option>
+                  <option value="Immediate — ready to proceed now">Immediate &mdash; I am ready to proceed now</option>
+                  <option value="Within 3 months">Within 3 months</option>
+                  <option value="Within 6 months">Within 6 months</option>
+                  <option value="Within 12 months">Within 12 months</option>
+                  <option value="Exploring — no firm timeline yet">Exploring &mdash; no firm timeline yet</option>
+                </select>
+              </div>
+              <div>
+                <label class="ov-label" for="ov-why">In your own words, why does SHER appeal to you as a place to own property? <span class="ov-req">*</span></label>
+                <textarea id="ov-why" name="why_sher" rows="4" required placeholder="What draws you to this specific type of development over conventional resort or residential property?"></textarea>
+                <p id="ov-why-msg" class="ov-val-msg">Please expand &mdash; a minimum of 20 words is required.</p>
+              </div>
+            </fieldset>
+
+            <!-- PART D -->
+            <fieldset>
+              <legend>Part D &mdash; HOA Rental Pool</legend>
+              <div>
+                <label class="ov-label">Are you interested in the HOA Rental Pool programme? <span class="ov-req">*</span></label>
+                <div class="ov-radio-group">
+                  <label class="ov-radio-item"><input type="radio" name="rental_pool_interest" value="Yes — rental income is a significant part of my investment case" required><span>Yes &mdash; rental income is a significant part of my investment case</span></label>
+                  <label class="ov-radio-item"><input type="radio" name="rental_pool_interest" value="Possibly — I would like to understand the terms first"><span>Possibly &mdash; I would like to understand the terms first</span></label>
+                  <label class="ov-radio-item"><input type="radio" name="rental_pool_interest" value="No — I intend to use the property personally"><span>No &mdash; I intend to use the property personally and manage it privately if needed</span></label>
+                </div>
+              </div>
+              <div>
+                <label class="ov-label" for="ov-months">If participating in the rental pool, how many months per year would you want for personal use?</label>
+                <select id="ov-months" name="personal_months_per_year">
+                  <option value="">&#8212; Select &#8212;</option>
+                  <option value="1–2 months">1&ndash;2 months</option>
+                  <option value="3–4 months">3&ndash;4 months</option>
+                  <option value="5–6 months">5&ndash;6 months</option>
+                  <option value="More than 6 months">More than 6 months</option>
+                  <option value="Flexible — not decided yet">Flexible &mdash; not decided yet</option>
+                </select>
+              </div>
+            </fieldset>
+
+            <!-- PART E -->
+            <fieldset>
+              <legend>Part E &mdash; How to Proceed</legend>
+              <div>
+                <label class="ov-label">What would you like as the next step? <span class="ov-req">*</span></label>
+                <div class="ov-radio-group">
+                  <label class="ov-radio-item"><input type="radio" name="next_step" value="I would like to arrange a visit to the estate" required><span>I would like to arrange a visit to the estate</span></label>
+                  <label class="ov-radio-item"><input type="radio" name="next_step" value="I would like a private virtual consultation with the SHER team"><span>I would like a private virtual consultation with the SHER team</span></label>
+                  <label class="ov-radio-item"><input type="radio" name="next_step" value="Please send me a detailed information pack first"><span>Please send me a detailed information pack first</span></label>
+                  <label class="ov-radio-item"><input type="radio" name="next_step" value="Simply respond to my submission — I will take it from there"><span>Simply respond to my submission &mdash; I will take it from there</span></label>
+                </div>
+              </div>
+              <div>
+                <label class="ov-label" for="ov-agent">Are you working with a property agent or representative?</label>
+                <input type="text" id="ov-agent" name="agent_name" placeholder="Name and firm (leave blank if not applicable)">
+              </div>
+              <div>
+                <label class="ov-label" for="ov-message">Anything else you would like us to know:</label>
+                <textarea id="ov-message" name="message" rows="3" placeholder="Optional &mdash; questions, constraints, accessibility needs, or anything that helps us respond well"></textarea>
+              </div>
+              <div class="ov-declarations">
+                <label class="ov-check-item"><input type="checkbox" name="decl_accurate" value="Confirmed — information is accurate" required><span>I confirm that the information provided is accurate and given in good faith.</span></label>
+                <label class="ov-check-item"><input type="checkbox" name="decl_no_offer" value="Confirmed — understood, form is not a sales contract" required><span>I understand that this form is not a sales contract, reservation, or commitment of any kind by SHER.</span></label>
+              </div>
+            </fieldset>
+
+            <div class="ov-consent">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <p>By submitting you confirm: <strong>(1)</strong> the information provided is accurate; <strong>(2)</strong> you consent to Safeport Security Services Limited processing your data for buyer assessment, per our <a href="../docs/legal/SHER-LEGAL-002-R01.pdf" target="_blank" rel="noopener">Privacy Policy</a>; <strong>(3)</strong> submission does not constitute a reservation or commitment by SHER; <strong>(4)</strong> you are not acting on behalf of a regulated financial intermediary without authorisation. Governed by the Saint Lucia Data Protection Act Cap.&nbsp;8:18.</p>
+            </div>
+            <button type="submit" class="ov-submit-btn">Submit My Buyer Profile</button>
+          </form>
+        </div><!-- /ov-form-wrap -->
+
+      </div><!-- /ov-body-inner -->
+    </div><!-- /ov-body -->
+  </div><!-- /request-overlay -->
+
   <script>
+    sessionStorage.setItem('wt_seen', '1');
     const DURATION = 7000;
     const TRANS_MS = 1400;
 
@@ -561,7 +921,11 @@
       if (e.key === ' ' || e.key === 'k') { e.preventDefault(); togglePlay(); }
       if (e.key === 'ArrowRight' || e.key === 'l') go(+1);
       if (e.key === 'ArrowLeft'  || e.key === 'j') go(-1);
-      if (e.key === 'Escape') { current = -1; go(+1); }
+      if (e.key === 'Escape') {
+        const ov = document.getElementById('request-overlay');
+        if (ov && ov.classList.contains('open')) { closeFormOverlay(); return; }
+        current = -1; go(+1);
+      }
     });
 
     // Touch swipe
@@ -571,6 +935,97 @@
       const dx = e.changedTouches[0].clientX - tx;
       if (Math.abs(dx) > 48) go(dx < 0 ? +1 : -1);
     });
+
+    /* ── REQUEST ACCESS OVERLAY ─────────────────────────────── */
+    function openFormOverlay() {
+      const ov = document.getElementById('request-overlay');
+      if (!ov) return;
+      ov.classList.add('open');
+      populateCountrySelectOverlay();
+    }
+    function closeFormOverlay() {
+      const ov = document.getElementById('request-overlay');
+      if (ov) ov.classList.remove('open');
+    }
+
+    const OV_COUNTRIES = [
+      'Afghanistan','Albania','Algeria','Andorra','Angola','Antigua and Barbuda',
+      'Argentina','Armenia','Australia','Austria','Azerbaijan','Bahamas','Bahrain',
+      'Bangladesh','Barbados','Belarus','Belgium','Belize','Benin','Bhutan',
+      'Bolivia','Bosnia and Herzegovina','Botswana','Brazil','Brunei','Bulgaria',
+      'Burkina Faso','Burundi','Cabo Verde','Cambodia','Cameroon','Canada',
+      'Central African Republic','Chad','Chile','China','Colombia','Comoros',
+      'Congo (Brazzaville)','Congo (Kinshasa)','Costa Rica',
+      'Croatia','Cuba','Cyprus','Czech Republic','Denmark','Djibouti','Dominica',
+      'Dominican Republic','Ecuador','Egypt','El Salvador','Equatorial Guinea',
+      'Eritrea','Estonia','Eswatini','Ethiopia','Fiji','Finland','France','Gabon',
+      'Gambia','Georgia','Germany','Ghana','Greece','Grenada','Guatemala','Guinea',
+      'Guinea-Bissau','Guyana','Haiti','Honduras','Hungary','Iceland','India',
+      'Indonesia','Iran','Iraq','Ireland','Israel','Italy','Jamaica','Japan',
+      'Jordan','Kazakhstan','Kenya','Kiribati','Kosovo','Kuwait','Kyrgyzstan',
+      'Laos','Latvia','Lebanon','Lesotho','Liberia','Libya','Liechtenstein',
+      'Lithuania','Luxembourg','Madagascar','Malawi','Malaysia','Maldives','Mali',
+      'Malta','Marshall Islands','Mauritania','Mauritius','Mexico','Micronesia',
+      'Moldova','Monaco','Mongolia','Montenegro','Morocco','Mozambique','Myanmar',
+      'Namibia','Nauru','Nepal','Netherlands','New Zealand','Nicaragua','Niger',
+      'Nigeria','North Korea','North Macedonia','Norway','Oman','Pakistan','Palau',
+      'Palestine','Panama','Papua New Guinea','Paraguay','Peru','Philippines',
+      'Poland','Portugal','Qatar','Romania','Russia','Rwanda',
+      'Saint Kitts and Nevis','Saint Lucia','Saint Vincent and the Grenadines',
+      'Samoa','San Marino','São Tomé and Príncipe','Saudi Arabia',
+      'Senegal','Serbia','Seychelles','Sierra Leone','Singapore','Slovakia',
+      'Slovenia','Solomon Islands','Somalia','South Africa','South Korea',
+      'South Sudan','Spain','Sri Lanka','Sudan','Suriname','Sweden','Switzerland',
+      'Syria','Taiwan','Tajikistan','Tanzania','Thailand','Timor-Leste','Togo',
+      'Tonga','Trinidad and Tobago','Tunisia','Turkey','Turkmenistan','Tuvalu',
+      'Uganda','Ukraine','United Arab Emirates','United Kingdom','United States',
+      'Uruguay','Uzbekistan','Vanuatu','Vatican City','Venezuela','Vietnam',
+      'Yemen','Zambia','Zimbabwe'
+    ];
+    function populateCountrySelectOverlay() {
+      const el = document.getElementById('ov-country');
+      if (!el || el.options.length > 1) return;
+      OV_COUNTRIES.forEach(name => {
+        const opt = document.createElement('option');
+        opt.value = name; opt.textContent = name;
+        el.appendChild(opt);
+      });
+    }
+
+    (function wireBuyerFormOverlay() {
+      const form    = document.getElementById('ov-form');
+      const success = document.getElementById('ov-success');
+      const wrap    = document.getElementById('ov-form-wrap');
+      if (!form) return;
+
+      const ta  = document.getElementById('ov-why');
+      const msg = document.getElementById('ov-why-msg');
+      if (ta && msg) {
+        const wc = s => s.trim().split(/\s+/).filter(Boolean).length;
+        ta.addEventListener('blur',  () => { if (wc(ta.value) < 20) msg.classList.add('visible'); else msg.classList.remove('visible'); });
+        ta.addEventListener('input', () => { if (wc(ta.value) >= 20) msg.classList.remove('visible'); });
+      }
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const data = new FormData(form);
+        try {
+          const res = await fetch('/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams(data).toString(),
+          });
+          if (res.ok) {
+            if (wrap)    wrap.style.display = 'none';
+            if (success) success.classList.add('visible');
+          } else {
+            alert('There was a problem submitting. Please try again or email bookings@shersanctuary.com.');
+          }
+        } catch {
+          alert('There was a problem submitting. Please try again or email bookings@shersanctuary.com.');
+        }
+      });
+    })();
   </script>
 
 </body>
