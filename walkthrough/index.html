@@ -133,9 +133,9 @@
       to   { opacity: 1; transform: translateY(0); }
     }
     .close-logo {
-      height: 100px;
+      height: 160px;
       margin-bottom: 30px;
-      filter: drop-shadow(0 0 6px rgba(4,12,6,0.9));
+      filter: drop-shadow(0 0 8px rgba(4,12,6,0.95));
     }
     .close-rule {
       width: 44px;
@@ -328,17 +328,17 @@
     /* ── SHER logo (top-left) ── */
     #wt-logo {
       position: fixed;
-      top: 22px;
-      left: 36px;
+      top: 18px;
+      left: 28px;
       z-index: 200;
-      height: 54px;
+      height: 90px;
       opacity: 0;
       transition: opacity 1s ease 0.8s;
       pointer-events: none;
       user-select: none;
-      filter: drop-shadow(0 0 4px rgba(4,12,6,0.85));
+      filter: drop-shadow(0 0 6px rgba(4,12,6,0.95));
     }
-    body.loaded #wt-logo { opacity: 0.92; }
+    body.loaded #wt-logo { opacity: 1; }
 
     /* ── Progress bar ── */
     #prog-track {
@@ -448,7 +448,7 @@
     /* ── Responsive ── */
     @media (max-width: 640px) {
       .slide-text   { left: 24px; right: 24px; bottom: 80px; }
-      #wt-logo      { left: 16px; top: 14px; height: 40px; }
+      #wt-logo      { left: 14px; top: 12px; height: 64px; }
       #hud          { right: 20px; bottom: 18px; }
       .nav-btn      { display: none; }
     }
