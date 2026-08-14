@@ -133,8 +133,9 @@
       to   { opacity: 1; transform: translateY(0); }
     }
     .close-logo {
-      height: 50px;
+      height: 100px;
       margin-bottom: 30px;
+      filter: drop-shadow(0 0 6px rgba(4,12,6,0.9));
     }
     .close-rule {
       width: 44px;
@@ -327,16 +328,17 @@
     /* ── SHER logo (top-left) ── */
     #wt-logo {
       position: fixed;
-      top: 26px;
-      left: 40px;
+      top: 22px;
+      left: 36px;
       z-index: 200;
-      height: 30px;
+      height: 54px;
       opacity: 0;
       transition: opacity 1s ease 0.8s;
       pointer-events: none;
       user-select: none;
+      filter: drop-shadow(0 0 4px rgba(4,12,6,0.85));
     }
-    body.loaded #wt-logo { opacity: 0.9; }
+    body.loaded #wt-logo { opacity: 0.92; }
 
     /* ── Progress bar ── */
     #prog-track {
@@ -446,7 +448,7 @@
     /* ── Responsive ── */
     @media (max-width: 640px) {
       .slide-text   { left: 24px; right: 24px; bottom: 80px; }
-      #wt-logo      { left: 20px; top: 18px; height: 24px; }
+      #wt-logo      { left: 16px; top: 14px; height: 40px; }
       #hud          { right: 20px; bottom: 18px; }
       .nav-btn      { display: none; }
     }
@@ -454,7 +456,7 @@
 </head>
 <body>
 
-  <img id="wt-logo" src="../images/SHER-homepage-white-gold-transparent.png" alt="SHER Eco Sanctuary"/>
+  <img id="wt-logo" src="../images/sher_logo_3d.png" alt="SHER Eco Sanctuary"/>
 
   <button id="wt-cta" onclick="openFormOverlay()" aria-label="Request your access code">
     Request Access Code &#8594;
@@ -608,7 +610,7 @@
     <!-- Closing card -->
     <div class="slide slide-close">
       <div class="close-inner">
-        <img class="close-logo" src="../images/SHER-homepage-white-gold-transparent.png" alt="SHER Eco Sanctuary"/>
+        <img class="close-logo" src="../images/sher_logo_3d.png" alt="SHER Eco Sanctuary"/>
         <div class="close-rule"></div>
         <div class="close-tagline">Live within the sanctuary</div>
         <div class="close-sub">Savannes Bay &middot; Saint Lucia</div>
@@ -631,7 +633,7 @@
 
         <!-- Success state -->
         <div id="ov-success">
-          <img src="../images/SHER-homepage-white-gold-transparent.png" alt="SHER Eco Sanctuary" style="height:52px;margin-bottom:2rem">
+          <img src="../images/sher_logo_3d.png" alt="SHER Eco Sanctuary" style="height:52px;margin-bottom:2rem">
           <h2>Your profile is with us.</h2>
           <p>We review every submission personally. If your interest and the project are aligned, you will receive a personal access code by email within 48 hours. Check your inbox at the address you provided. If you have not heard within 48 hours, write to <a href="mailto:bookings@shersanctuary.com" style="color:rgba(201,168,103,0.6)">bookings@shersanctuary.com</a></p>
           <button class="ov-return-btn" onclick="closeFormOverlay()">Return to SHER &#8594;</button>
